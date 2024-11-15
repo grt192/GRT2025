@@ -9,10 +9,9 @@ import com.revrobotics.CANSparkMax;
 //krakens drive, neo steer
 
 public class SwerveSubsystem extends SubsystemBase {
-
-    //constructor 
+    
     public SwerveSubsystem() {
-       return;
+       
     }
     
 }
