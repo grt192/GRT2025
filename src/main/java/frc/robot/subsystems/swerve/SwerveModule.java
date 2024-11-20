@@ -22,12 +22,7 @@ public class SwerveModule {
     private final KrakenDriveMotor driveMotor;
     private final CANSparkMax steerMotor;
 
-    private final SparkAbsoluteEncoder steerEncoder;
-    private final SparkPIDController steerPIDController;
-
     private double offsetRads;
-
-    private static final double DRIVE_ROTATIONS_PER_METER = 0; // temporary value
 
     private static final double DRIVE_P = 1; // temporary value
     private static final double DRIVE_I = 0;
@@ -50,27 +45,9 @@ public class SwerveModule {
     public SwerveModule(int drivePort, int steerPort, double offsetRads) {
 
         steerMotor = new CANSparkMax(steerPort, MotorType.kBrushless);
-        steerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 20); //increase position update frequency
-        steerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 20); //increase velocity update frequency
-
-        steerEncoder = steerMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
-        steerEncoder.setAverageDepth(8); //tune value as needed
-
-        steerPIDController = steerMotor.getPIDController();
-        steerPIDController.setFeedbackDevice(steerEncoder); //configure Steer to use the absolute encoder for closed loop PID feedback
-            steerPIDController.setP(STEER_P);
-            steerPIDController.setI(STEER_I);
-            steerPIDController.setD(STEER_D);
-            steerPIDController.setFF(STEER_FF);
-        steerPIDController.setPositionPIDWrappingEnabled(true); //enable PID wrapping
-            steerPIDController.setPositionPIDWrappingMinInput(0);
-            steerPIDController.setPositionPIDWrappingMaxInput(2 * Math.PI);
 
         driveMotor = new KrakenDriveMotor(drivePort);
         driveMotor.configPID(DRIVE_P, DRIVE_I, DRIVE_D, DRIVE_FF);
-
-        driveMotor.setPositionConversionFactor(DRIVE_ROTATIONS_PER_METER);
-        driveMotor.setVelocityConversionFactor(DRIVE_ROTATIONS_PER_METER / 60.0);
 
         this.offsetRads = offsetRads;
 
@@ -82,8 +59,7 @@ public class SwerveModule {
      */
     public void setDesiredState(SwerveModuleState state) {
         Rotation2d currentAngle = getWrappedAngle();
-        SwerveModuleState optimized = SwerveModuleState.optimize(state, currentAngle); // SIYONA ITS THIS LINE FOR THE MATH IN FACT UPDATE THIS WHOLE FUNCTION
-        //UPDATE ^^
+        SwerveModuleState optimized = SwerveModuleState.optimize(state, currentAngle);
 
         double targetAngleRads = optimized.angle.getRadians() - offsetRads;
         double angleErrorRads = optimized.angle.minus(currentAngle).getRadians();

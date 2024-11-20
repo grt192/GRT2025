@@ -1,16 +1,21 @@
 package frc.robot.subsystems.swerve;
 
+import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
+import edu.wpi.first.math.util.Units;
 
 public class KrakenDriveMotor {
     
     private TalonFX motor;
-    private double positionConversionFactor = 0;
-    private double driveRotPerMinPerMetersPerSec = 0;
     private VelocityVoltage request = new VelocityVoltage(0).withSlot(0);
     private double targetRps = 0;
+
+    private final TalonFXConfiguration motorConfig = new TalonFXConfiguration();
 
     /** A kraken drive motor for swerve.
      *
@@ -18,10 +23,24 @@ public class KrakenDriveMotor {
      */
     public KrakenDriveMotor(int canId) {
         motor = new TalonFX(canId);
+
+        motorConfig.TorqueCurrent.PeakForwardTorqueCurrent = 80.0;
+        motorConfig.TorqueCurrent.PeakReverseTorqueCurrent = -80.0;
+        motorConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.02;
+        motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+
+        motorConfig.Feedback.SensorToMechanismRatio = 6.923; //according to Samuel
+
+        // Apply configs, apparently this fails a lot
+        for (int i = 0; i < 4; i++) {
+            boolean error = motor.getConfigurator().apply(motorConfig, 0.1) == StatusCode.OK;
+            if (!error) break;
+    }
+
     }
 
     public void setVelocity(double metersPerSec) {
-        targetRps = metersPerSec * driveRotPerMinPerMetersPerSec / 60; 
+        targetRps = Units.radiansToRotations(metersPerSec);
         motor.setControl(request.withVelocity(targetRps));
     }
 
@@ -41,19 +60,11 @@ public class KrakenDriveMotor {
     }
 
     public double getDistance() {
-        return motor.getPosition().getValue() / positionConversionFactor;
+        return motor.getPosition().getValue();
     }
 
     public double getVelocity() {
-        return motor.getVelocity().getValue() / driveRotPerMinPerMetersPerSec; 
-    }
-
-    public void setVelocityConversionFactor(double factor) {
-        driveRotPerMinPerMetersPerSec = factor;
-    }
-
-    public void setPositionConversionFactor(double factor) {
-        positionConversionFactor = factor;
+        return motor.getVelocity().getValue(); 
     }
 
     public double getError() {
@@ -61,7 +72,7 @@ public class KrakenDriveMotor {
     }
 
     public double getSetpoint() {
-        return targetRps;
+        return Units.radiansToRotations(targetRps); //not proportional to actual swerve rn
     }
     
     public double getAmpDraw() {
