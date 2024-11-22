@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
 
 public class NeoSteerMotor {
 
@@ -31,6 +32,9 @@ public class NeoSteerMotor {
         motor.setSmartCurrentLimit(40);
         motor.enableVoltageCompensation(12.0);
 
+        motor.burnFlash();
+
+
     }
 
     public void configurePID(double p, double i, double d, double ff){
@@ -43,6 +47,18 @@ public class NeoSteerMotor {
             steerPIDController.setPositionPIDWrappingMinInput(0);
             steerPIDController.setPositionPIDWrappingMaxInput(2 * Math.PI);
     
+    }
+
+    public void setPosition(double targetRads) {
+        steerPIDController.setReference(targetRads, ControlType.kPosition);
+    }
+
+    public void setPower(double power) {
+        motor.set(power);
+    }
+
+    public double getPosition(){
+        return steerEncoder.getPosition();
     }
     
 }

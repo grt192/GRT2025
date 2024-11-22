@@ -1,26 +1,14 @@
 package frc.robot.subsystems.swerve;
 
-import com.ctre.phoenix6.configs.Slot0Configs;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkAbsoluteEncoder;
-import com.revrobotics.SparkAnalogSensor;
-import com.revrobotics.SparkMaxAlternateEncoder;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
-
 public class SwerveModule {
 
     private final KrakenDriveMotor driveMotor;
-    private final CANSparkMax steerMotor;
+    private final NeoSteerMotor steerMotor;
 
     private double offsetRads;
 
@@ -44,7 +32,8 @@ public class SwerveModule {
 
     public SwerveModule(int drivePort, int steerPort, double offsetRads) {
 
-        steerMotor = new CANSparkMax(steerPort, MotorType.kBrushless);
+        steerMotor = new NeoSteerMotor(steerPort);
+        steerMotor.configurePID(STEER_P, STEER_I, STEER_D, STEER_FF);
 
         driveMotor = new KrakenDriveMotor(drivePort);
         driveMotor.configPID(DRIVE_P, DRIVE_I, DRIVE_D, DRIVE_FF);
@@ -58,18 +47,17 @@ public class SwerveModule {
      * @param state The desired SwerveModuleState
      */
     public void setDesiredState(SwerveModuleState state) {
-        Rotation2d currentAngle = getWrappedAngle();
-        SwerveModuleState optimized = SwerveModuleState.optimize(state, currentAngle);
+        // Rotation2d currentAngle = getWrappedAngle();
+        // SwerveModuleState optimized = SwerveModuleState.optimize(state, currentAngle);
 
-        double targetAngleRads = optimized.angle.getRadians() - offsetRads;
-        double angleErrorRads = optimized.angle.minus(currentAngle).getRadians();
+        // double targetAngleRads = optimized.angle.getRadians() - offsetRads;
+        // double angleErrorRads = optimized.angle.minus(currentAngle).getRadians();
 
-        // Multiply by cos so we don't move quickly when the swerves are angled wrong
-        double targetVelocity = optimized.speedMetersPerSecond * Math.cos(angleErrorRads);
+        // // Multiply by cos so we don't move quickly when the swerves are angled wrong
+        // double targetVelocity = optimized.speedMetersPerSecond * Math.cos(angleErrorRads);
 
-        driveMotor.setVelocity(targetVelocity);
-
-        steerPIDController.setReference(targetAngleRads, ControlType.kPosition);
+        driveMotor.setVelocity(state.speedMetersPerSecond);
+        steerMotor.setPosition(state.angle.getRadians()); //OFSET RADS
     }
 
     /** Sets the raw powers of the swerve module.
@@ -79,7 +67,7 @@ public class SwerveModule {
      */
     public void setRawPowers(double drivePower, double steerPower) {
         driveMotor.setPower(drivePower);
-        steerMotor.set(steerPower);
+        steerMotor.setPower(steerPower);
     }
 
     /** Gets the current state of the swerve module.
@@ -98,7 +86,7 @@ public class SwerveModule {
      * @return Wrapped angle in radians from -pi to pi
      */
     public Rotation2d getWrappedAngle() {
-        double angleRads = steerEncoder.getPosition();
+        double angleRads = steerMotor.getPosition();
         double wrappedAngleRads = MathUtil.angleModulus(angleRads + offsetRads);
 
         return new Rotation2d(wrappedAngleRads);
