@@ -13,9 +13,6 @@ import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.ExtensionMethod;
 
-import frc.robot.util.EqualsUtil;
-import frc.robot.util.GeomUtil;
-
 /**
  * "Inspired" by FRC team 6328 who was "Inspired" by FRC team 254.
  *
