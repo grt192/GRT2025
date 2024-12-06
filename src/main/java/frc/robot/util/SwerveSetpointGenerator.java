@@ -13,6 +13,9 @@ import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.ExtensionMethod;
 
+import frc.robot.util.EqualsUtil;
+import frc.robot.util.GeomUtil;
+
 /**
  * "Inspired" by FRC team 6328 who was "Inspired" by FRC team 254.
  *
@@ -85,7 +88,7 @@ public class SwerveSetpointGenerator {
       double y_1,
       double f_1,
       int iterations_left) {
-    if (iterations_left < 0 || epsilonEquals(f_0, f_1)) {
+    if (iterations_left < 0 || EqualsUtil.epsilonEquals(f_0, f_1)) {
       return 1.0;
     }
     var s_guess = Math.max(0.0, Math.min(1.0, -f_0 / (f_1 - f_0)));
@@ -281,11 +284,11 @@ public class SwerveSetpointGenerator {
         continue;
       }
       overrideSteering.add(Optional.empty());
-      if (epsilonEquals(prevSetpoint.moduleStates()[i].speedMetersPerSecond, 0.0)) {
+      if (EqualsUtil.epsilonEquals(prevSetpoint.moduleStates()[i].speedMetersPerSecond, 0.0)) {
         // If module is stopped, we know that we will need to move straight to the final steering
         // angle, so limit based
         // purely on rotation in place.
-        if (epsilonEquals(desiredModuleState[i].speedMetersPerSecond, 0.0)) {
+        if (EqualsUtil.epsilonEquals(desiredModuleState[i].speedMetersPerSecond, 0.0)) {
           // Goal angle doesn't matter. Just leave module at its current angle.
           overrideSteering.set(i, Optional.of(prevSetpoint.moduleStates()[i].angle));
           continue;
