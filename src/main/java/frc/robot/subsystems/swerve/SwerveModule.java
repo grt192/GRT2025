@@ -42,23 +42,34 @@ public class SwerveModule {
 
     }
 
-    /** Sets the desired state of this swerve module through setting the PID targets.
+    /** Sets the un optimized desired state of this swerve module through setting the PID targets.
+     *
+     * @param state The desired SwerveModuleState
+     */
+    public void setUnoptimizedDesiredState(SwerveModuleState state) {
+        Rotation2d currentAngle = getWrappedAngle();
+        SwerveModuleState optimized = SwerveModuleState.optimize(state, currentAngle);
+
+        double targetAngleRads = optimized.angle.getRadians() - offsetRads;
+        double angleErrorRads = optimized.angle.minus(currentAngle).getRadians();
+
+        // Multiply by cos so we don't move quickly when the swerves are angled wrong
+        double targetVelocity = optimized.speedMetersPerSecond * Math.cos(angleErrorRads);
+
+        driveMotor.setVelocity(targetVelocity);
+        steerMotor.setPosition(targetAngleRads);
+    }
+
+    /** Sets the optimized desired state of this swerve module through setting the PID targets.
      *
      * @param state The desired SwerveModuleState
      */
     public void setDesiredState(SwerveModuleState state) {
-        // Rotation2d currentAngle = getWrappedAngle();
-        // SwerveModuleState optimized = SwerveModuleState.optimize(state, currentAngle);
-
-        // double targetAngleRads = optimized.angle.getRadians() - offsetRads;
-        // double angleErrorRads = optimized.angle.minus(currentAngle).getRadians();
-
-        // // Multiply by cos so we don't move quickly when the swerves are angled wrong
-        // double targetVelocity = optimized.speedMetersPerSecond * Math.cos(angleErrorRads);
-
         driveMotor.setVelocity(state.speedMetersPerSecond);
-        steerMotor.setPosition(state.angle.getRadians()); //OFSET RADS
+        steerMotor.setPosition(state.angle.getRadians()); 
     }
+
+    
 
     /** Sets the raw powers of the swerve module.
      *
