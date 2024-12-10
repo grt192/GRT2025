@@ -3,6 +3,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.SwerveSetpoint;
 import frc.robot.util.SwerveSetpointGenerator;
@@ -27,6 +28,7 @@ import static frc.robot.Constants.SwerveConstants.FR_STEER;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 
 //krakens drive, neo steer
@@ -34,6 +36,8 @@ import com.revrobotics.CANSparkMax;
 public class SwerveSubsystem extends SubsystemBase {
 
     private final SwerveModule frontLeftModule, frontRightModule, backLeftModule, backRightModule;
+
+    private final AHRS ahrs;
 
     private ChassisSpeeds desiredSpeeds = new ChassisSpeeds();
 
@@ -50,6 +54,8 @@ public class SwerveSubsystem extends SubsystemBase {
     private final SwerveSetpointGenerator setpointGenerator;
     
     public SwerveSubsystem() {
+
+        ahrs = new AHRS(SPI.Port.kMXP);
 
         frontLeftModule = new SwerveModule(FL_DRIVE, FL_STEER, FL_OFFSET);
         frontRightModule = new SwerveModule(FR_DRIVE, FR_STEER, FR_OFFSET);
