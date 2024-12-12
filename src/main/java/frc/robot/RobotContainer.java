@@ -5,9 +5,14 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
+import frc.robot.subsystems.swerve.SingleModuleSwerveSubsystem;
+import frc.robot.subsystems.swerve.SwerveModule;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -16,9 +21,17 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+
+  int drivePort = 1;
+  int steerPort = 2;
+  int offsetRads = 3;
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private final XboxController mechController =
+      new XboxController(OperatorConstants.kDriverControllerPort);
+
+  SwerveModule mod = new SwerveModule(drivePort, steerPort, offsetRads);
+  SingleModuleSwerveSubsystem singleModuleSwerve = new SingleModuleSwerveSubsystem(mod);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -37,7 +50,48 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
+
+
   }
+
+
+  singleModuleSwerve.setDefaultCommand(new InstantCommand(() -> {
+      
+      int controllerSwitch = 4;
+
+      if(mechController.getAButtonPressed()) {
+        controllerSwitch = 0;
+      } else if(mechController.getBButtonPressed()) {
+        controllerSwitch = 1;
+      } else if(mechController.getXButtonPressed()) {
+        controllerSwitch = 2;
+      } else if(mechController.getYButtonPressed()) {
+        controllerSwitch = 3;
+      }
+
+      switch (controllerSwitch) {
+          case 0: 
+              singleModuleSwerve.setRawPowers(0.1, 0.1);
+              break;
+
+          case 1:
+              singleModuleSwerve.setRawPowers(0.2, 0.2);
+              break;
+
+          case 2:
+              singleModuleSwerve.setRawPowers(0.3, 0.3);
+              break;
+
+          case 3:
+              singleModuleSwerve.setRawPowers(0.4, 0.4);
+              break;
+
+          default:
+              break;
+      }
+    }, singleModuleSwerve));
+
+  
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

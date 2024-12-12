@@ -15,13 +15,13 @@ import lombok.experimental.ExtensionMethod;
 
 /**
  * "Inspired" by FRC team 6328 who was "Inspired" by FRC team 254.
- *
  * <p>Takes a prior setpoint (ChassisSpeeds), a desired setpoint (from a driver, or from a path
  * follower), and outputs a new setpoint that respects all of the kinematic constraints on module
  * rotation speed and wheel velocity/acceleration. By generating a new setpoint every iteration, the
  * robot will converge to the desired setpoint quickly while avoiding any intermediate state that is
  * kinematically infeasible (and can result in wheel slip or robot heading drift as a result).
  */
+
 @Builder
 @RequiredArgsConstructor
 @ExtensionMethod({GeomUtil.class, EqualsUtil.GeomExtensions.class})
