@@ -5,12 +5,13 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-
+import frc.robot.subsystems.IAmDyingSubsystem;
 import frc.robot.subsystems.swerve.SingleModuleSwerveSubsystem;
 import frc.robot.subsystems.swerve.SwerveModule;
 
@@ -24,17 +25,25 @@ public class RobotContainer {
 
   int drivePort = 1;
   int steerPort = 2;
-  int offsetRads = 3;
+  int offsetRads = 0;
+
+  public double count;
+
+            
+  int controllerSwitch = 0;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final XboxController mechController =
       new XboxController(OperatorConstants.kDriverControllerPort);
 
   SwerveModule mod = new SwerveModule(drivePort, steerPort, offsetRads);
+  // IAmDyingSubsystem pls = new IAmDyingSubsystem();
   SingleModuleSwerveSubsystem singleModuleSwerve = new SingleModuleSwerveSubsystem(mod);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    double count = 0;
+    // pls.configurePID(.5, 0, 0, 0); 
     // Configure the trigger bindings
     configureBindings();
   }
@@ -50,46 +59,48 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
+    singleModuleSwerve.setDefaultCommand(new InstantCommand(() -> {
+      System.out.println(mod.getWrappedAngle());
+      if(mechController.getAButtonPressed()) {
+        singleModuleSwerve.setState(0, controllerSwitch);
+      } // else if(mechController.getRightBumperPressed()) {
+    //     if (controllerSwitch == 4) {
+    //       controllerSwitch = 0;
+    //     }
+    //     else {
+    //       controllerSwitch += 1;
+    //     }
+    //   }
 
+    //   switch (controllerSwitch) {
+    //       case 1: 
+    //           // singleModuleSwerve.setRawPowers(.2, 0);
+    //           singleModuleSwerve.setState(0, Units.degreesToRadians(90));
+    //           break;
+
+    //       // case 2:
+    //       //     // singleModuleSwerve.setRawPowers(-.2, 0);
+    //       //     singleModuleSwerve.setState(0, Units.degreesToRadians(180));
+    //       //     break;
+
+    //       // case 3:
+    //       //     singleModuleSwerve.setRawPowers(0, .2);
+    //       //     break;
+
+    //       // case 4:
+    //       //     singleModuleSwerve.setRawPowers(0, -.2);
+    //       //     break;
+              
+    //       case 0:
+    //           singleModuleSwerve.setState(0, 0);
+    //           break;
+
+    //       default:
+    //           break;
+    //   }
+    }, singleModuleSwerve));
 
   }
-
-
-  singleModuleSwerve.setDefaultCommand(new InstantCommand(() -> {
-      
-      int controllerSwitch = 4;
-
-      if(mechController.getAButtonPressed()) {
-        controllerSwitch = 0;
-      } else if(mechController.getBButtonPressed()) {
-        controllerSwitch = 1;
-      } else if(mechController.getXButtonPressed()) {
-        controllerSwitch = 2;
-      } else if(mechController.getYButtonPressed()) {
-        controllerSwitch = 3;
-      }
-
-      switch (controllerSwitch) {
-          case 0: 
-              singleModuleSwerve.setRawPowers(0.1, 0.1);
-              break;
-
-          case 1:
-              singleModuleSwerve.setRawPowers(0.2, 0.2);
-              break;
-
-          case 2:
-              singleModuleSwerve.setRawPowers(0.3, 0.3);
-              break;
-
-          case 3:
-              singleModuleSwerve.setRawPowers(0.4, 0.4);
-              break;
-
-          default:
-              break;
-      }
-    }, singleModuleSwerve));
 
   
 

@@ -24,9 +24,9 @@ public class KrakenDriveMotor {
     public KrakenDriveMotor(int canId) {
         motor = new TalonFX(canId);
 
-        motorConfig.TorqueCurrent.PeakForwardTorqueCurrent = 80.0;
-        motorConfig.TorqueCurrent.PeakReverseTorqueCurrent = -80.0;
-        motorConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.02;
+        // motorConfig.TorqueCurrent.PeakForwardTorqueCurrent = 80.0;
+        // motorConfig.TorqueCurrent.PeakReverseTorqueCurrent = -80.0;
+        // motorConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.02;
         motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
         motorConfig.Feedback.SensorToMechanismRatio = 6.923; //according to Samuel

@@ -20,19 +20,19 @@ public class NeoSteerMotor {
 
         motor = new CANSparkMax(canId, MotorType.kBrushless);
         steerEncoder = motor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
-        steerEncoder.setAverageDepth(8); //tune value as needed
+        steerEncoder.setAverageDepth(64); //tune value as needed
 
         steerPIDController = motor.getPIDController();
 
-        motor.setCANTimeout(250);
+        // motor.setCANTimeout(250);
 
-        motor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 20); //increase position update frequency
-        motor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 20); //increase velocity update frequency
+        // motor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 20); //increase position update frequency
+        // motor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 20); //increase velocity update frequency
 
-        motor.setSmartCurrentLimit(40);
-        motor.enableVoltageCompensation(12.0);
+        // motor.setSmartCurrentLimit(40);
+        // motor.enableVoltageCompensation(12.0);
 
-        motor.burnFlash();
+        // motor.burnFlash();
 
 
     }
@@ -45,12 +45,15 @@ public class NeoSteerMotor {
         steerPIDController.setFF(ff);
         steerPIDController.setPositionPIDWrappingEnabled(true); //enable PID wrapping
             steerPIDController.setPositionPIDWrappingMinInput(0);
-            steerPIDController.setPositionPIDWrappingMaxInput(2 * Math.PI);
+            steerPIDController.setPositionPIDWrappingMaxInput(1);
     
     }
 
     public void setPosition(double targetRads) {
-        steerPIDController.setReference(targetRads, ControlType.kPosition);
+        double targetDouble = (targetRads + Math.PI) / (2. * Math.PI);
+        System.out.println("target" + targetDouble);
+        System.out.println("current" + steerEncoder.getPosition());
+        steerPIDController.setReference(0.5, ControlType.kPosition);
     }
 
     public void setPower(double power) {

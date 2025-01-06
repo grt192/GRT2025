@@ -10,14 +10,14 @@ public class SwerveModule {
     private final KrakenDriveMotor driveMotor;
     private final NeoSteerMotor steerMotor;
 
-    private double offsetRads;
+    private double offsetRads = 0;
 
     private static final double DRIVE_P = 1; // temporary value
     private static final double DRIVE_I = 0;
     private static final double DRIVE_D = 0;
     private static final double DRIVE_FF = 0;
 
-    private static final double STEER_P = 1; // temporary value
+    private static final double STEER_P = 0.1; // temporary value
     private static final double STEER_I = 0;
     private static final double STEER_D = 0;
     private static final double STEER_FF = 0;
@@ -56,6 +56,8 @@ public class SwerveModule {
         // Multiply by cos so we don't move quickly when the swerves are angled wrong
         double targetVelocity = optimized.speedMetersPerSecond * Math.cos(angleErrorRads);
 
+        // System.out.println("current angle" + currentAngle + "target angle" + targetAngleRads);
+
         driveMotor.setVelocity(targetVelocity);
         steerMotor.setPosition(targetAngleRads);
     }
@@ -79,6 +81,8 @@ public class SwerveModule {
     public void setRawPowers(double drivePower, double steerPower) {
         driveMotor.setPower(drivePower);
         steerMotor.setPower(steerPower);
+        // System.out.print(getWrappedAngle());
+        // System.out.println(steerMotor.getPosition());
     }
 
     /** Gets the current state of the swerve module.
@@ -97,10 +101,12 @@ public class SwerveModule {
      * @return Wrapped angle in radians from -pi to pi
      */
     public Rotation2d getWrappedAngle() {
-        double angleRads = steerMotor.getPosition();
-        double wrappedAngleRads = MathUtil.angleModulus(angleRads + offsetRads);
+        // returned a 0-1 value
+        double angleDouble = steerMotor.getPosition();
+        double angleRads = (2. * Math.PI * angleDouble) - Math.PI;
+        // double wrappedAngleRads = MathUtil.angleModulus(angleRads + offsetRads);
 
-        return new Rotation2d(wrappedAngleRads);
+        return new Rotation2d(angleRads);
     }
 
     
