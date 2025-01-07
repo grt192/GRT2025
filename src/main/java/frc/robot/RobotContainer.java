@@ -40,6 +40,8 @@ public class RobotContainer {
   // IAmDyingSubsystem pls = new IAmDyingSubsystem();
   SingleModuleSwerveSubsystem singleModuleSwerve = new SingleModuleSwerveSubsystem(mod);
 
+  int state = 0;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     double count = 0;
@@ -61,43 +63,53 @@ public class RobotContainer {
 
     singleModuleSwerve.setDefaultCommand(new InstantCommand(() -> {
       System.out.println(mod.getWrappedAngle());
-      if(mechController.getAButtonPressed()) {
-        singleModuleSwerve.setState(0, controllerSwitch);
-      } // else if(mechController.getRightBumperPressed()) {
-    //     if (controllerSwitch == 4) {
-    //       controllerSwitch = 0;
-    //     }
-    //     else {
-    //       controllerSwitch += 1;
-    //     }
-    //   }
+      if(mechController.getRightBumperPressed()) {
+        if (state == 7) {
+          state = 0;
+        }
+        else {
+          state += 1;
+        }
+      }
 
-    //   switch (controllerSwitch) {
-    //       case 1: 
-    //           // singleModuleSwerve.setRawPowers(.2, 0);
-    //           singleModuleSwerve.setState(0, Units.degreesToRadians(90));
-    //           break;
+      switch (state) {
+          case 1: 
+              singleModuleSwerve.setRawPowers(.5, 0);
+              // singleModuleSwerve.setState(0, Units.degreesToRadians(180));
+              break;
 
-    //       // case 2:
-    //       //     // singleModuleSwerve.setRawPowers(-.2, 0);
-    //       //     singleModuleSwerve.setState(0, Units.degreesToRadians(180));
-    //       //     break;
+          case 2:
+              singleModuleSwerve.setRawPowers(-.5, 0);
+              // singleModuleSwerve.setState(0, Units.degreesToRadians(180));
+              break;
 
-    //       // case 3:
-    //       //     singleModuleSwerve.setRawPowers(0, .2);
-    //       //     break;
+          case 3:
+              singleModuleSwerve.setRawPowers(0, .5);
+              break;
 
-    //       // case 4:
-    //       //     singleModuleSwerve.setRawPowers(0, -.2);
-    //       //     break;
+          case 4:
+              singleModuleSwerve.setRawPowers(0, -.5);
+              break;
+
+          case 5:
+              singleModuleSwerve.setState(0, Units.degreesToRadians(45));
+              break;
+
+          case 6:
+              singleModuleSwerve.setState(0, Units.degreesToRadians(90));
+              break;
+          
+          case 7:
+              singleModuleSwerve.setState(0, Units.degreesToRadians(135));
+              break;
               
-    //       case 0:
-    //           singleModuleSwerve.setState(0, 0);
-    //           break;
+          case 0:
+              singleModuleSwerve.setRawPowers(0, 0);
+              break;
 
-    //       default:
-    //           break;
-    //   }
+          default:
+              break;
+      }
     }, singleModuleSwerve));
 
   }

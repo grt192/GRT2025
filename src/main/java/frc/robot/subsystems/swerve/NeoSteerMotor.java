@@ -21,6 +21,7 @@ public class NeoSteerMotor {
         motor = new CANSparkMax(canId, MotorType.kBrushless);
         steerEncoder = motor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
         steerEncoder.setAverageDepth(64); //tune value as needed
+        steerEncoder.setInverted(true);
 
         steerPIDController = motor.getPIDController();
 
@@ -53,7 +54,7 @@ public class NeoSteerMotor {
         double targetDouble = (targetRads + Math.PI) / (2. * Math.PI);
         System.out.println("target" + targetDouble);
         System.out.println("current" + steerEncoder.getPosition());
-        steerPIDController.setReference(0.5, ControlType.kPosition);
+        steerPIDController.setReference(targetDouble, ControlType.kPosition);
     }
 
     public void setPower(double power) {
