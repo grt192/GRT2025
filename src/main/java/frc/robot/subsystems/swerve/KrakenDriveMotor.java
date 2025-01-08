@@ -29,7 +29,7 @@ public class KrakenDriveMotor {
         // motorConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.02;
         motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-        motorConfig.Feedback.SensorToMechanismRatio = 6.923; //according to Samuel
+        motorConfig.Feedback.SensorToMechanismRatio = 3. * 26. / 20. * 3.; //according to Samuel
 
         // Apply configs, apparently this fails a lot
         for (int i = 0; i < 4; i++) {

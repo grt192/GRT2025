@@ -46,7 +46,7 @@ public class SwerveModule {
      *
      * @param state The desired SwerveModuleState
      */
-    public void setUnoptimizedDesiredState(SwerveModuleState state) {
+    public void setDesiredState(SwerveModuleState state) {
         Rotation2d currentAngle = getWrappedAngle();
         SwerveModuleState optimized = SwerveModuleState.optimize(state, currentAngle);
 
@@ -66,7 +66,7 @@ public class SwerveModule {
      *
      * @param state The desired SwerveModuleState
      */
-    public void setDesiredState(SwerveModuleState state) {
+    public void setOptomizedDesiredState(SwerveModuleState state) {
         driveMotor.setVelocity(state.speedMetersPerSecond);
         steerMotor.setPosition(state.angle.getRadians()); 
     }
