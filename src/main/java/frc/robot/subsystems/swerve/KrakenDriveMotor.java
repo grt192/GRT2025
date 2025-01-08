@@ -8,6 +8,9 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class KrakenDriveMotor {
     
@@ -16,6 +19,16 @@ public class KrakenDriveMotor {
     private double targetRps = 0;
 
     private final TalonFXConfiguration motorConfig = new TalonFXConfiguration();
+
+    private NetworkTableInstance ntInstance;
+    private NetworkTable swerveStatsTable;
+    private NetworkTableEntry deviceTempEntry;
+    private NetworkTableEntry processorTempEntry;
+    private NetworkTableEntry ampDrawEntry;
+    private NetworkTableEntry statorCurrentEntry;
+    private NetworkTableEntry supplyCurrentEntry;
+    private NetworkTableEntry supplyVoltageEntry;
+
 
     /** A kraken drive motor for swerve.
      *
@@ -35,8 +48,36 @@ public class KrakenDriveMotor {
         for (int i = 0; i < 4; i++) {
             boolean error = motor.getConfigurator().apply(motorConfig, 0.1) == StatusCode.OK;
             if (!error) break;
+        }
+
+        initNT(canId);
+    }
+    
+    /**
+     * initializes network table and entries
+     * @param canId motor's CAN ID
+     */
+    private void initNT(int canId){
+        ntInstance = NetworkTableInstance.getDefault();
+        swerveStatsTable = ntInstance.getTable("swerveStats");
+        deviceTempEntry = swerveStatsTable.getEntry(canId + "deviceTemp");
+        processorTempEntry = swerveStatsTable.getEntry(canId + "processorTemp");
+        ampDrawEntry = swerveStatsTable.getEntry(canId + "ampDraw");
+        statorCurrentEntry = swerveStatsTable.getEntry(canId + "statorCurrent");
+        supplyCurrentEntry = swerveStatsTable.getEntry(canId + "supplyCurrena");
+        supplyVoltageEntry = swerveStatsTable.getEntry(canId + "supplyVoltage");
     }
 
+    /**
+     * updates motor stats to network tables
+     */
+    private void updateNT(){
+        deviceTempEntry.setDouble(getDeviceTemp());
+        processorTempEntry.setDouble(getProcessorTemp());
+        ampDrawEntry.setDouble(getAmpDraw());
+        statorCurrentEntry.setDouble(getStatorCurrent());
+        supplyCurrentEntry.setDouble(getSupplyCurrent());
+        supplyVoltageEntry.setDouble(getSupplyVoltage());
     }
 
     public void setVelocity(double metersPerSec) {
@@ -78,4 +119,25 @@ public class KrakenDriveMotor {
     public double getAmpDraw() {
         return motor.getSupplyCurrent().getValueAsDouble();
     }
+
+    public double getDeviceTemp() {
+        return motor.getDeviceTemp().getValueAsDouble();
+    }
+
+    public double getProcessorTemp() {
+        return motor.getProcessorTemp().getValueAsDouble();
+    }
+
+    public double getStatorCurrent() {
+        return motor.getStatorCurrent().getValueAsDouble();
+    }
+
+    public double getSupplyCurrent() {
+        return motor.getSupplyCurrent().getValueAsDouble();
+    }
+
+    public double getSupplyVoltage() {
+        return motor.getSupplyVoltage().getValueAsDouble();
+    }
+
 }
