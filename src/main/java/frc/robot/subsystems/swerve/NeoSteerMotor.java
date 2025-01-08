@@ -1,29 +1,44 @@
 package frc.robot.subsystems.swerve;
 
-import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkAbsoluteEncoder;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.ClosedLoopConfig;
+import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.SparkAbsoluteEncoder;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkBase.ControlType;
 
 public class NeoSteerMotor {
 
-    private final CANSparkMax motor;
+    private final SparkMax motor;
 
     private final SparkAbsoluteEncoder steerEncoder;
-    private final SparkPIDController steerPIDController;
+    private final SparkBaseConfig sparkMaxConfig;
+    private final EncoderConfig encoderConfig;
+    private final ClosedLoopConfig closedLoopConfig;
+
+    private final SparkClosedLoopController steerPIDController;
 
     public NeoSteerMotor(int canId) {
 
-        motor = new CANSparkMax(canId, MotorType.kBrushless);
-        steerEncoder = motor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
-        steerEncoder.setAverageDepth(64); //tune value as needed
-        steerEncoder.setInverted(true);
+        motor = new SparkMax(canId, MotorType.kBrushless);
+        steerPIDController = motor.getClosedLoopController();
 
-        steerPIDController = motor.getPIDController();
+        encoderConfig = new EncoderConfig();
+        encoderConfig.inverted(true);
+
+        closedLoopConfig = new ClosedLoopConfig();
+
+        steerEncoder = motor.getAbsoluteEncoder();
+        
+        sparkMaxConfig = new SparkMaxConfig();
+        sparkMaxConfig.apply(encoderConfig);
+
+        motor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         // motor.setCANTimeout(250);
 
@@ -39,15 +54,9 @@ public class NeoSteerMotor {
     }
 
     public void configurePID(double p, double i, double d, double ff){
-        steerPIDController.setFeedbackDevice(steerEncoder); //configure Steer to use the absolute encoder for closed loop PID feedback
-        steerPIDController.setP(p);
-        steerPIDController.setI(i);
-        steerPIDController.setD(d);
-        steerPIDController.setFF(ff);
-        steerPIDController.setPositionPIDWrappingEnabled(true); //enable PID wrapping
-            steerPIDController.setPositionPIDWrappingMinInput(0);
-            steerPIDController.setPositionPIDWrappingMaxInput(1);
-    
+        closedLoopConfig.pid(p, i, d);
+        sparkMaxConfig.apply(closedLoopConfig);
+        motor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
     public void setPosition(double targetRads) {

@@ -60,11 +60,11 @@ public class KrakenDriveMotor {
     }
 
     public double getDistance() {
-        return motor.getPosition().getValue();
+        return motor.getPosition().getValueAsDouble();
     }
 
     public double getVelocity() {
-        return motor.getVelocity().getValue(); 
+        return motor.getVelocity().getValueAsDouble(); 
     }
 
     public double getError() {
