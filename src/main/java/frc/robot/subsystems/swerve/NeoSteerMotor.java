@@ -29,9 +29,12 @@ public class NeoSteerMotor {
         steerPIDController = motor.getClosedLoopController();
 
         encoderConfig = new EncoderConfig();
-        encoderConfig.inverted(true);
+        // encoderConfig.inverted(true);
 
         closedLoopConfig = new ClosedLoopConfig();
+        closedLoopConfig.minOutput(0);
+        closedLoopConfig.maxOutput(1);
+        closedLoopConfig.positionWrappingEnabled(true);
 
         steerEncoder = motor.getAbsoluteEncoder();
         
