@@ -48,13 +48,13 @@ public class SwerveModule {
      */
     public void setDesiredState(SwerveModuleState state) {
         Rotation2d currentAngle = getWrappedAngle();
-        SwerveModuleState optimized = SwerveModuleState.optimize(state, currentAngle);
+        state.optimize(currentAngle);
 
-        double targetAngleRads = optimized.angle.getRadians() - offsetRads;
-        double angleErrorRads = optimized.angle.minus(currentAngle).getRadians();
+        double targetAngleRads = state.angle.getRadians() - offsetRads;
+        double angleErrorRads = state.angle.minus(currentAngle).getRadians();
 
         // Multiply by cos so we don't move quickly when the swerves are angled wrong
-        double targetVelocity = optimized.speedMetersPerSecond * Math.cos(angleErrorRads);
+        double targetVelocity = state.speedMetersPerSecond * Math.cos(angleErrorRads);
 
         // System.out.println("current angle" + currentAngle + "target angle" + targetAngleRads);
 

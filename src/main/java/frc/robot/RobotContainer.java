@@ -61,9 +61,9 @@ public class RobotContainer {
   private void configureBindings() {
 
     singleModuleSwerve.setDefaultCommand(new InstantCommand(() -> {
-      // System.out.println(mod.getWrappedAngle());
+      System.out.println(mod.getWrappedAngle());
       if(mechController.getRightBumperPressed()) {
-        if (state == 7) {
+        if (state == 3) {
           state = 0;
         }
         else {
@@ -72,33 +72,33 @@ public class RobotContainer {
       }
 
       switch (state) {
-          case 1: 
-              singleModuleSwerve.setRawPowers(.5, 0);
-              // singleModuleSwerve.setState(0, Units.degreesToRadians(180));
-              break;
+          // case 1: 
+          //     singleModuleSwerve.setRawPowers(.5, 0);
+          //     // singleModuleSwerve.setState(0, Units.degreesToRadians(180));
+          //     break;
 
-          case 2:
-              singleModuleSwerve.setRawPowers(-.5, 0);
-              // singleModuleSwerve.setState(0, Units.degreesToRadians(180));
-              break;
+          // case 2:
+          //     singleModuleSwerve.setRawPowers(-.5, 0);
+          //     // singleModuleSwerve.setState(0, Units.degreesToRadians(180));
+          //     break;
 
-          case 3:
-              singleModuleSwerve.setRawPowers(0, .5);
-              break;
+          // case 3:
+          //     singleModuleSwerve.setRawPowers(0, .5);
+          //     break;
 
-          case 4:
-              singleModuleSwerve.setRawPowers(0, -.5);
-              break;
+          // case 4:
+          //     singleModuleSwerve.setRawPowers(0, -.5);
+          //     break;
 
-          case 5:
+          case 1:
               singleModuleSwerve.setState(0, Units.degreesToRadians(45));
               break;
 
-          case 6:
+          case 2:
               singleModuleSwerve.setState(0, Units.degreesToRadians(90));
               break;
           
-          case 7:
+          case 3:
               singleModuleSwerve.setState(0, Units.degreesToRadians(135));
               break;
               
