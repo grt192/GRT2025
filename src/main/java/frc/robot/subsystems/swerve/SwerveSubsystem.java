@@ -98,10 +98,13 @@ public class SwerveSubsystem extends SubsystemBase {
             getDriverHeading()
         );
 
+        // System.out.println(speeds);
+
         states = kinematics.toSwerveModuleStates(speeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(
             states, speeds,
             MAX_VEL, MAX_VEL, MAX_OMEGA);
+        System.out.println(states[0]);
     }
 
     /**

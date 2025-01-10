@@ -17,7 +17,7 @@ public class SwerveModule {
     private static final double DRIVE_D = 0;
     private static final double DRIVE_FF = 0;
 
-    private static final double STEER_P = 8;
+    private static final double STEER_P = 7;
     private static final double STEER_I = 0;
     private static final double STEER_D = 5;
     private static final double STEER_FF = 0;

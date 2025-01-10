@@ -22,7 +22,7 @@ public class KrakenDriveMotor {
      * @param canId The canId of the motor.
      */
     public KrakenDriveMotor(int canId) {
-        motor = new TalonFX(canId);
+        motor = new TalonFX(canId, "can");
 
         // motorConfig.TorqueCurrent.PeakForwardTorqueCurrent = 80.0;
         // motorConfig.TorqueCurrent.PeakReverseTorqueCurrent = -80.0;
@@ -40,7 +40,7 @@ public class KrakenDriveMotor {
     }
 
     public void setVelocity(double metersPerSec) {
-        targetRps = Units.radiansToRotations(metersPerSec);
+        targetRps = metersPerSec / 0.3192;
         motor.setControl(request.withVelocity(targetRps));
     }
 
