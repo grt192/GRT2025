@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.FieldManagementSubsystem.FieldManagementSubsystem;
+import frc.robot.subsystems.PhoenixLoggingSubsystem.PhoenixLoggingSubsystem;
 import frc.robot.subsystems.swerve.SingleModuleSwerveSubsystem;
 import frc.robot.subsystems.swerve.SwerveModule;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
@@ -64,6 +65,7 @@ public class RobotContainer {
   // IAmDyingSubsystem pls = new IAmDyingSubsystem();
   // SingleModuleSwerveSubsystem singleModuleSwerve = new SingleModuleSwerveSubsystem(mod);
   FieldManagementSubsystem fieldManagementSubsystem = new FieldManagementSubsystem();
+  PhoenixLoggingSubsystem phoenixLoggingSubsystem = new PhoenixLoggingSubsystem(fieldManagementSubsystem);
   int state = 0;
 
   private NetworkTableInstance ntInstance;

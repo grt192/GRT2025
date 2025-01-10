@@ -12,6 +12,8 @@ public class FieldManagementSubsystem extends SubsystemBase {
     private boolean isRed;
     private boolean connectedToFMS;
     private MatchStatus matchStatus;
+    private boolean matchStarted = false;
+    private RobotStatus robotStatus;
 
     private NetworkTableInstance FMSNTInstance;
     private NetworkTable FMSNTTable;
@@ -30,7 +32,7 @@ public class FieldManagementSubsystem extends SubsystemBase {
 
         isRed = false;
         connectedToFMS = false;
-        matchStatus = MatchStatus.DORMANT;
+        matchStatus = MatchStatus.NOTSTARTED;
 
         FMSNTInstance = NetworkTableInstance.getDefault();
         FMSNTTable = FMSNTInstance.getTable("FMS");
@@ -73,12 +75,26 @@ public class FieldManagementSubsystem extends SubsystemBase {
 
         if (DriverStation.isAutonomous()) { 
             matchStatus = MatchStatus.AUTON; 
+            matchStarted = true;
         }
-        if (DriverStation.isTeleop()) { 
+        else if (DriverStation.isTeleop()) { 
             matchStatus = MatchStatus.TELEOP; 
         }
-        if (DriverStation.isTeleopEnabled() && (DriverStation.getMatchTime() < 30)) { 
+        else if (DriverStation.isTeleopEnabled() && (DriverStation.getMatchTime() < 30)) { 
             matchStatus = MatchStatus.ENDGAME; // without an FMS, we will be in 'endgame' for the first 30 sec.
+        }
+        else if(DriverStation.getMatchTime() == 0 && matchStarted){
+            matchStatus = MatchStatus.ENDED;
+        }
+
+        if(DriverStation.isEnabled()){
+            robotStatus = RobotStatus.ENABLED;
+        }
+        else if(DriverStation.isEStopped()){
+            robotStatus = RobotStatus.ESTOPPED;
+        }
+        else if(DriverStation.isDisabled()){
+            robotStatus = RobotStatus.DISABLED;
         }
         
         stationNumberEntry.setInteger(DriverStation.getLocation().orElse(-1));
@@ -119,5 +135,14 @@ public class FieldManagementSubsystem extends SubsystemBase {
     public MatchStatus getMatchStatus() {
 
         return matchStatus;
+    }
+
+    /**
+     * Returns current robot status (ENABLED, DISABLED, ESTOPPED).
+     * @return current robot status
+     */
+    public RobotStatus getRobotStatus(){
+
+        return robotStatus;
     }
 }

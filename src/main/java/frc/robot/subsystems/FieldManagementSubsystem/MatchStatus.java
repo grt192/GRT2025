@@ -4,8 +4,9 @@ package frc.robot.subsystems.FieldManagementSubsystem;
  * Holds current state of match.
  */
 public enum MatchStatus {
-    DORMANT,
+    NOTSTARTED,
     AUTON, 
     TELEOP,
-    ENDGAME;
+    ENDGAME,
+    ENDED;
 }
