@@ -13,6 +13,9 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.SwerveSetpoint;
 
@@ -69,6 +72,9 @@ public class SwerveSubsystem extends SubsystemBase {
     private NetworkTableEntry swerveTestToggleEntry;
     private NetworkTableEntry swerveTestAngleEntry;
 
+    private final Field2d fieldVisual = new Field2d();
+    private final ShuffleboardTab tab = Shuffleboard.getTab("Swerve");
+
     // private final SwerveSetpointGenerator setpointGenerator;
     
     public SwerveSubsystem() {
@@ -100,28 +106,24 @@ public class SwerveSubsystem extends SubsystemBase {
         swerveTestToggleEntry = swerveTable.getEntry("TestToggle");
         swerveTestToggleEntry.setBoolean(false);
         swerveTestAngleEntry = swerveTable.getEntry("TestAngle");
+        
+        tab.add("Field", fieldVisual);
+        
     }
 
     @Override
     public void periodic() {
-        // if(!swerveTestToggleEntry.getBoolean(false)){
-            frontLeftModule.setDesiredState(states[0]);
-            frontRightModule.setDesiredState(states[1]);
-            backLeftModule.setDesiredState(states[2]);
-            backRightModule.setDesiredState(states[3]);
-            String[] strStates = new String[4];
-            for (int i = 0; i < 4; i++) {
-                strStates[i] = states[i].toString();
-            }
-            swerveDesiredStatesEntry.setStringArray(strStates);
-        // }
-        // else{
-        //     double angle = swerveTestAngleEntry.getDouble(0.);
-        //     frontLeftModule.steerMotor.setPosition(angle);
-            // frontRightModule.steerMotor.setPosition(angle);
-            // backLeftModule.steerMotor.setPosition(angle);
-            // frontLeftModule.steerMotor.setPosition(angle);
-        // }
+        frontLeftModule.setDesiredState(states[0]);
+        frontRightModule.setDesiredState(states[1]);
+        backLeftModule.setDesiredState(states[2]);
+        backRightModule.setDesiredState(states[3]);
+        String[] strStates = new String[4];
+        for (int i = 0; i < 4; i++) {
+            strStates[i] = states[i].toString();
+        }
+        swerveDesiredStatesEntry.setStringArray(strStates);
+        
+        fieldVisual.setRobotPose(getRobotPosition());
     }
 
     /**
