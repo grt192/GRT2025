@@ -18,7 +18,13 @@ import static frc.robot.Constants.SwerveConstants.FL_STEER;
 import static frc.robot.Constants.SwerveConstants.FR_DRIVE;
 import static frc.robot.Constants.SwerveConstants.FR_STEER;
 
+import java.util.EnumSet;
+
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableEvent;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -51,6 +57,9 @@ public class RobotContainer {
 
   int state = 0;
 
+  private NetworkTableInstance ntInstance;
+  private NetworkTable swerveTable;
+  private NetworkTableEntry swerveTestAngleEntry;
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     swerveSubsystem = new SwerveSubsystem();
@@ -60,6 +69,11 @@ public class RobotContainer {
     } else {
         driveController = new DualJoystickDriveController();
     }
+
+    ntInstance = NetworkTableInstance.getDefault();
+    swerveTable = ntInstance.getTable("Swerve");
+    swerveTestAngleEntry = swerveTable.getEntry("TestAngle");
+    swerveTestAngleEntry.setDouble(0);
     // pls.configurePID(.5, 0, 0, 0); 
     // Configure the trigger bindings
     configureBindings();
@@ -91,6 +105,14 @@ public class RobotContainer {
         swerveSubsystem.resetDriverHeading();
     }));
 
+    // swerveSubsystem.setDefaultCommand(new RunCommand(() -> {
+    //       swerveSubsystem.setTestAngle(driveController.getForwardPower());
+    //     }, swerveSubsystem
+    // ));
+
+    swerveTable.addListener("TestAngle", EnumSet.of(NetworkTableEvent.Kind.kValueAll), (table, key, event) -> {
+      swerveSubsystem.setTestAngle(event.valueData.value.getDouble());
+    });
 
     // singleModuleSwerve.setDefaultCommand(new InstantCommand(() -> {
     //   System.out.println(mod.getWrappedAngle());
