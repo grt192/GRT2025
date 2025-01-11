@@ -135,6 +135,21 @@ public class SwerveSubsystem extends SubsystemBase {
         return robotHeading.minus(driverHeadingOffset);
     }
 
+    /**
+     * Resets the driver heading.
+     *
+     * @param currentRotation The new driver heading.
+     */
+    public void resetDriverHeading(Rotation2d currentRotation) {
+        driverHeadingOffset = getGyroHeading().minus(currentRotation);
+    }
+
+    /** Resets the driver heading to 0. */
+    public void resetDriverHeading() {
+        resetDriverHeading(new Rotation2d());
+    }
+
+
     /** Gets the gyro heading.*/
     private Rotation2d getGyroHeading() {
         return Rotation2d.fromDegrees(ahrs.getAngle()); //might be flipped, tune

@@ -45,8 +45,7 @@ public class RobotContainer {
 
   private final BaseDriveController driveController;
 
-  // SwerveModule mod = new SwerveModule(BR_DRIVE, BR_STEER, offsetRads);
-  // IAmDyingSubsystem pls = new IAmDyingSubsystem();
+  // SwerveModule mod = new SwerveModule(BL_DRIVE, BL_STEER, offsetRads);
   // SingleModuleSwerveSubsystem singleModuleSwerve = new SingleModuleSwerveSubsystem(mod);
   private final SwerveSubsystem swerveSubsystem;
 
@@ -87,6 +86,11 @@ public class RobotContainer {
                 driveController.getRotatePower());
         }, swerveSubsystem));
 
+      /* Pressing the button resets the field axes to the current robot axes. */
+      driveController.getDriverHeadingResetButton().onTrue(new InstantCommand(() -> {
+        swerveSubsystem.resetDriverHeading();
+    }));
+
 
     // singleModuleSwerve.setDefaultCommand(new InstantCommand(() -> {
     //   System.out.println(mod.getWrappedAngle());
@@ -100,37 +104,37 @@ public class RobotContainer {
     //   }
 
     //   switch (state) {
-    //       case 1: 
-    //           singleModuleSwerve.setRawPowers(.5, 0);
-    //           // singleModuleSwerve.setState(0, Units.degreesToRadians(180));
-    //           break;
+          // case 1: 
+          //     singleModuleSwerve.setRawPowers(.5, 0);
+          //     // singleModuleSwerve.setState(0, Units.degreesToRadians(180));
+          //     break;
 
-    //       case 2:
-    //           singleModuleSwerve.setRawPowers(-.5, 0);
-    //           // singleModuleSwerve.setState(0, Units.degreesToRadians(180));
-    //           break;
+          // case 2:
+          //     singleModuleSwerve.setRawPowers(-.5, 0);
+          //     // singleModuleSwerve.setState(0, Units.degreesToRadians(180));
+          //     break;
 
-    //       case 3:
-    //           singleModuleSwerve.setRawPowers(0, .5);
-    //           break;
+          // case 0:
+          //     singleModuleSwerve.setRawPowers(0, .5);
+          //     break;
 
-    //       case 4:
-    //           singleModuleSwerve.setRawPowers(0, -.5);
-    //           break;
+          // case 4:
+          //     singleModuleSwerve.setRawPowers(0, -.5);
+          //     break;
 
-    //       case 5:
-    //           singleModuleSwerve.setState(0, Units.degreesToRadians(45));
-    //           break;
+          // case 5:
+          //     singleModuleSwerve.setState(0, Units.degreesToRadians(45));
+          //     break;
 
-    //       case 6:
-    //           singleModuleSwerve.setState(0, Units.degreesToRadians(90));
-    //           break;
+          // case 6:
+          //     singleModuleSwerve.setState(0, Units.degreesToRadians(90));
+          //     break;
           
-    //       case 7:
-    //           singleModuleSwerve.setState(0, Units.degreesToRadians(135));
-    //           break;
+          // case 7:
+          //     singleModuleSwerve.setState(0, Units.degreesToRadians(135));
+          //     break;
               
-    //       case 0:
+    //       case 3:
     //           singleModuleSwerve.setRawPowers(0, 0);
     //           break;
 

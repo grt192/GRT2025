@@ -39,8 +39,8 @@ public final class Constants {
 
       public static double MODULE_DIST = Units.inchesToMeters(30 / 2.0);
       public static final Translation2d FL_POS = new Translation2d(-MODULE_DIST, MODULE_DIST);
-      public static final Translation2d FR_POS = new Translation2d(-MODULE_DIST, -MODULE_DIST);
-      public static final Translation2d BL_POS = new Translation2d(MODULE_DIST, MODULE_DIST);
+      public static final Translation2d FR_POS = new Translation2d(MODULE_DIST, MODULE_DIST);
+      public static final Translation2d BL_POS = new Translation2d(-MODULE_DIST, -MODULE_DIST);
       public static final Translation2d BR_POS = new Translation2d(MODULE_DIST, -MODULE_DIST);
 
   }
