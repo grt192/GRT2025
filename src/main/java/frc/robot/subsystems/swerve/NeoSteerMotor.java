@@ -1,6 +1,7 @@
 package frc.robot.subsystems.swerve;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.AbsoluteEncoderConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.EncoderConfig;
 import com.revrobotics.spark.config.SparkBaseConfig;
@@ -9,6 +10,7 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkMaxAlternateEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -18,9 +20,9 @@ public class NeoSteerMotor {
     private final SparkMax motor;
 
     private final SparkAbsoluteEncoder steerEncoder;
-    private final SparkBaseConfig sparkMaxConfig;
-    private final EncoderConfig encoderConfig;
-    private final ClosedLoopConfig closedLoopConfig;
+    private SparkBaseConfig sparkMaxConfig;
+    private AbsoluteEncoderConfig encoderConfig;
+    private ClosedLoopConfig closedLoopConfig;
 
     private SparkClosedLoopController steerPIDController;
 
@@ -28,8 +30,8 @@ public class NeoSteerMotor {
 
         motor = new SparkMax(canId, MotorType.kBrushless);
 
-        encoderConfig = new EncoderConfig();
-        // encoderConfig.inverted(true);
+        encoderConfig = new AbsoluteEncoderConfig();
+        encoderConfig.inverted(true);
 
         closedLoopConfig = new ClosedLoopConfig();
         closedLoopConfig.feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
@@ -37,11 +39,11 @@ public class NeoSteerMotor {
                         .positionWrappingMinInput(0)
                         .positionWrappingMaxInput(1);
         
-        
         sparkMaxConfig = new SparkMaxConfig();
-        sparkMaxConfig.apply(encoderConfig)
-                      .apply(closedLoopConfig)
-                      .inverted(true);
+        sparkMaxConfig.apply(closedLoopConfig)
+                    //   .inverted(true)
+                      .apply(encoderConfig);
+                    //   .absoluteEncoder.setSparkMaxDataPortConfig().inverted(true);
 
         motor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         

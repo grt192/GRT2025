@@ -104,24 +104,24 @@ public class SwerveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if(!swerveTestToggleEntry.getBoolean(false)){
+        // if(!swerveTestToggleEntry.getBoolean(false)){
             frontLeftModule.setDesiredState(states[0]);
-            // frontRightModule.setDesiredState(states[1]);
-            // backLeftModule.setDesiredState(states[2]);
-            // backRightModule.setDesiredState(states[3]);
+            frontRightModule.setDesiredState(states[1]);
+            backLeftModule.setDesiredState(states[2]);
+            backRightModule.setDesiredState(states[3]);
             String[] strStates = new String[4];
             for (int i = 0; i < 4; i++) {
                 strStates[i] = states[i].toString();
             }
             swerveDesiredStatesEntry.setStringArray(strStates);
-        }
-        else{
-            double angle = swerveTestAngleEntry.getDouble(0.);
-            frontLeftModule.steerMotor.setPosition(angle);
+        // }
+        // else{
+        //     double angle = swerveTestAngleEntry.getDouble(0.);
+        //     frontLeftModule.steerMotor.setPosition(angle);
             // frontRightModule.steerMotor.setPosition(angle);
             // backLeftModule.steerMotor.setPosition(angle);
             // frontLeftModule.steerMotor.setPosition(angle);
-        }
+        // }
     }
 
     /**
