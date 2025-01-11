@@ -3,7 +3,9 @@ package frc.robot.controllers;
 import edu.wpi.first.util.concurrent.Event;
 import edu.wpi.first.wpilibj.PS5Controller;
 import edu.wpi.first.wpilibj.event.EventLoop;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class PS5DriveController extends BaseDriveController{
 
@@ -34,7 +36,7 @@ public class PS5DriveController extends BaseDriveController{
         if(Math.abs(rotatePower) > deadZone)
             return -driveController.getRightX();
         else
-            return 0;
+        return 0;
     }
 
     @Override
@@ -61,9 +63,14 @@ public class PS5DriveController extends BaseDriveController{
     public void bindDriverHeadingReset(
         Runnable command, Subsystem requiredSubsystem
     ){
-        EventLoop eventLoop = new EventLoop();
-        eventLoop.bind(command);
-        driveController.L1(eventLoop);
+        // EventLoop eventLoop = new EventLoop();
+        InstantCommand instantCommand = new InstantCommand(
+            command,
+            requiredSubsystem
+        );
+        // eventLoop.bind(command);
+        // driveController.L1(eventLoop);
+        new Trigger(this::getDriverHeadingResetButton).onTrue(instantCommand);
     }
 
     @Override

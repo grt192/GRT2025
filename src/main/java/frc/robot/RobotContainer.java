@@ -122,9 +122,14 @@ public class RobotContainer {
       )
     );
 
+    InstantCommand resetDriverHeadingCommand = new InstantCommand(() ->{ 
+        swerveSubsystem.resetDriverHeading();
+      },
+      swerveSubsystem
+    );
     /* Pressing the button resets the field axes to the current robot axes. */
     driveController.bindDriverHeadingReset(
-      () ->{ 
+      () ->{
         swerveSubsystem.resetDriverHeading();
       },
       swerveSubsystem
