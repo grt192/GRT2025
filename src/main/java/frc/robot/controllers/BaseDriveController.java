@@ -60,4 +60,6 @@ public abstract class BaseDriveController {
         Runnable command, Subsystem requiredSubsystem
     );
 
+    public abstract void setDeadZone(double deadZone);
+    
 }

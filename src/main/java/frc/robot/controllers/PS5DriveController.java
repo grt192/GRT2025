@@ -8,20 +8,33 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 public class PS5DriveController extends BaseDriveController{
 
     private final PS5Controller driveController = new PS5Controller(0);
+    private double deadZone = 0;
     
     @Override
     public double getForwardPower() {
-        return -driveController.getLeftY();
+        double forwardPower = -driveController.getLeftY();
+        if(Math.abs(forwardPower) > deadZone)
+            return -driveController.getLeftY();
+        else 
+            return 0;
     }
 
     @Override
     public double getLeftPower(){
-        return -driveController.getLeftX();
+        double leftPower = -driveController.getLeftX();
+        if(Math.abs(leftPower) > deadZone)
+            return -driveController.getLeftX();
+        else
+            return 0;
     }
 
     @Override
     public double getRotatePower(){
-        return -driveController.getRightX();
+        double rotatePower = -driveController.getRightX();
+        if(Math.abs(rotatePower) > deadZone)
+            return -driveController.getRightX();
+        else
+        return 0;
     }
 
     @Override
@@ -51,5 +64,10 @@ public class PS5DriveController extends BaseDriveController{
         EventLoop eventLoop = new EventLoop();
         eventLoop.bind(command);
         driveController.L1(eventLoop);
+    }
+
+    @Override
+    public void setDeadZone(double deadZone){
+        this.deadZone = deadZone;
     }
 }

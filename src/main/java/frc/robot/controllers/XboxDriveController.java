@@ -72,4 +72,9 @@ public class XboxDriveController extends BaseDriveController {
             requiredSubsystem
         ));
     }
+
+    @Override
+    public void setDeadZone(double deadZone){
+
+    }
 }

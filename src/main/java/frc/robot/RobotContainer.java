@@ -74,6 +74,7 @@ public class RobotContainer {
     else{
         driveController = new DualJoystickDriveController();
     }
+    driveController.setDeadZone(0.03);
 
     ntInstance = NetworkTableInstance.getDefault();
     swerveTable = ntInstance.getTable("Swerve");

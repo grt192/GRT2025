@@ -84,4 +84,9 @@ public class DualJoystickDriveController extends BaseDriveController {
     public void bindDriverHeadingReset(Runnable command, Subsystem requiredSubsystem) {
         rightTopButton.onTrue(new InstantCommand(command, requiredSubsystem));
     }
+
+    @Override
+    public void setDeadZone(double deadZone){
+
+    }
 }   
