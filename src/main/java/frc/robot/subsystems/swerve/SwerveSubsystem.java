@@ -123,6 +123,12 @@ public class SwerveSubsystem extends SubsystemBase {
         }
         swerveDesiredStatesEntry.setStringArray(strStates);
         
+        Rotation2d gyroAngle = getGyroHeading();
+        Pose2d estimate = poseEstimator.update(
+            gyroAngle,
+            getModulePositions()
+        );
+        
         fieldVisual.setRobotPose(getRobotPosition());
     }
 

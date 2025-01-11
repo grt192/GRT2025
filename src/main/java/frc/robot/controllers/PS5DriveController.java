@@ -34,7 +34,7 @@ public class PS5DriveController extends BaseDriveController{
         if(Math.abs(rotatePower) > deadZone)
             return -driveController.getRightX();
         else
-        return 0;
+            return 0;
     }
 
     @Override
