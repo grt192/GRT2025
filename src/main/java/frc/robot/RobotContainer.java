@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.controllers.BaseDriveController;
 import frc.robot.controllers.DualJoystickDriveController;
+import frc.robot.controllers.PS5DriveController;
 import frc.robot.controllers.XboxDriveController;
 
 import static frc.robot.Constants.SwerveConstants.BL_DRIVE;
@@ -64,9 +65,13 @@ public class RobotContainer {
   public RobotContainer() {
     swerveSubsystem = new SwerveSubsystem();
     
-    if (DriverStation.getJoystickName(0).equals("Controller (Xbox One For Windows)")) {
+    if(DriverStation.getJoystickName(0).equals("Controller (Xbox One For Windows)")) {
         driveController = new XboxDriveController();
-    } else {
+    }
+    else if(DriverStation.getJoystickName(0).equals("DualSense Wireless Controller")){
+        driveController = new PS5DriveController();
+    }
+    else{
         driveController = new DualJoystickDriveController();
     }
 
@@ -93,17 +98,25 @@ public class RobotContainer {
       * the robot is controlled along its own axes, otherwise controls apply to the field axes by default. If the
       * swerve aim button is held down, the robot will rotate automatically to always face a target, and only
       * translation will be manually controllable. */
-    swerveSubsystem.setDefaultCommand(new RunCommand(() -> {
-            swerveSubsystem.setDrivePowers(
-                driveController.getForwardPower(),
-                driveController.getLeftPower(),
-                driveController.getRotatePower());
-        }, swerveSubsystem));
+    swerveSubsystem.setDefaultCommand(
+      new RunCommand(() -> {
+        swerveSubsystem.setDrivePowers(
+          driveController.getForwardPower(),
+          driveController.getLeftPower(),
+          driveController.getRotatePower()
+        );
+        }, 
+        swerveSubsystem
+      )
+    );
 
-      /* Pressing the button resets the field axes to the current robot axes. */
-      driveController.getDriverHeadingResetButton().onTrue(new InstantCommand(() -> {
+    /* Pressing the button resets the field axes to the current robot axes. */
+    driveController.bindDriverHeadingReset(
+      () ->{ 
         swerveSubsystem.resetDriverHeading();
-    }));
+      },
+      swerveSubsystem
+    );
 
     // swerveSubsystem.setDefaultCommand(new RunCommand(() -> {
     //       swerveSubsystem.setTestAngle(driveController.getForwardPower());

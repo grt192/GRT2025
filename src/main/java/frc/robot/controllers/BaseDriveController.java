@@ -1,6 +1,6 @@
 package frc.robot.controllers;
 
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 
 /** The base class for a drive controller. Contains all needed methods for driving the robot (without mechs) */
 public abstract class BaseDriveController {
@@ -31,21 +31,21 @@ public abstract class BaseDriveController {
      *
      * @return The JoystickButton to reset the driver heading. 
      */
-    public abstract JoystickButton getDriverHeadingResetButton();
+    public abstract boolean getDriverHeadingResetButton();
 
     /**
      * Gets the left bumper or equivalent. Used in testSingleModuleSwerveSubsystem to move between tests.
      *
      * @return The JoystickButton of the left bumper or equivalent.
      */
-    public abstract JoystickButton getLeftBumper();
+    public abstract boolean getLeftBumper();
 
     /**
      * Gets the right bumper or equivalent. Used in testSingleModuleSwerveSubsystem to move between tests.
      *
      * @return The JoystickButton of the right bumper or equivalent.
      */
-    public abstract JoystickButton getRightBumper();
+    public abstract boolean getRightBumper();
 
     /**
      * Gets whether the driver is currently running in relative mode or not. Relative mode means moving the joystick
@@ -54,6 +54,10 @@ public abstract class BaseDriveController {
      *
      * @return true if relativeMode is active, false otherwise
      */
-    public abstract Boolean getRelativeMode();
+    public abstract boolean getRelativeMode();
+
+    public abstract void bindDriverHeadingReset(
+        Runnable command, Subsystem requiredSubsystem
+    );
 
 }

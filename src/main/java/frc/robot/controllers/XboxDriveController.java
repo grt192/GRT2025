@@ -1,7 +1,10 @@
 package frc.robot.controllers;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.subsystems.swerve.SwerveSubsystem;
 
 /**
  * A single Xbox controller on port 0.
@@ -41,22 +44,32 @@ public class XboxDriveController extends BaseDriveController {
     }
 
     @Override
-    public JoystickButton getDriverHeadingResetButton() {
-        return aButton;
+    public boolean getDriverHeadingResetButton() {
+        return aButton.getAsBoolean();
     }
 
     @Override
-    public JoystickButton getLeftBumper() {
-        return lBumper;
+    public boolean getLeftBumper() {
+        return lBumper.getAsBoolean();
     }
 
     @Override
-    public JoystickButton getRightBumper() {
-        return rBumper;
+    public boolean getRightBumper() {
+        return rBumper.getAsBoolean();
     }
 
     @Override
-    public Boolean getRelativeMode() {
+    public boolean getRelativeMode() {
         return driveController.getRightTriggerAxis() > .1;
+    }
+
+    @Override
+    public void bindDriverHeadingReset(
+        Runnable command, Subsystem requiredSubsystem
+    ) {
+        aButton.onTrue(new InstantCommand(
+            command,
+            requiredSubsystem
+        ));
     }
 }
