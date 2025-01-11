@@ -2,7 +2,9 @@ package frc.robot.controllers;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 
 /**
  * A two-joystick drive controller on ports 0 and 1.
@@ -59,22 +61,32 @@ public class DualJoystickDriveController extends BaseDriveController {
     }
 
     @Override
-    public JoystickButton getDriverHeadingResetButton() {
-        return rightTopButton;
+    public boolean getDriverHeadingResetButton() {
+        return rightTopButton.getAsBoolean();
     }
 
     @Override
-    public JoystickButton getRightBumper() {
-        return rightMiddleRightButton;
+    public boolean getRightBumper() {
+        return rightMiddleRightButton.getAsBoolean();
     }
 
     @Override
-    public JoystickButton getLeftBumper() {
-        return rightMiddleLeftButton;
+    public boolean getLeftBumper() {
+        return rightMiddleLeftButton.getAsBoolean();
     }
 
     @Override
-    public Boolean getRelativeMode() {
+    public boolean getRelativeMode() {
         return rightTrigger.getAsBoolean();
+    }
+
+    @Override
+    public void bindDriverHeadingReset(Runnable command, Subsystem requiredSubsystem) {
+        rightTopButton.onTrue(new InstantCommand(command, requiredSubsystem));
+    }
+
+    @Override
+    public void setDeadZone(double deadZone){
+
     }
 }   
