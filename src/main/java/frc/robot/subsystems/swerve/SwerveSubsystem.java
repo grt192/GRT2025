@@ -9,7 +9,13 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.SwerveSetpoint;
 
@@ -54,6 +60,21 @@ public class SwerveSubsystem extends SubsystemBase {
 
     private final AHRS ahrs;
 
+    private NetworkTableInstance ntInstance;
+    private NetworkTable swerveTable;
+    private NetworkTableEntry swerveDesiredStatesEntry;
+    private NetworkTableEntry swerveVxEntry;
+    private NetworkTableEntry swerveVyEntry;
+    private NetworkTableEntry swerveVoEntry;
+    private NetworkTableEntry chassisVxEntry;
+    private NetworkTableEntry chassisVyEntry;
+    private NetworkTableEntry chassisVoEntry;
+    private NetworkTableEntry swerveTestToggleEntry;
+    private NetworkTableEntry swerveTestAngleEntry;
+
+    private final Field2d fieldVisual = new Field2d();
+    private final ShuffleboardTab tab = Shuffleboard.getTab("Swerve");
+
     // private final SwerveSetpointGenerator setpointGenerator;
     
     public SwerveSubsystem() {
@@ -72,7 +93,22 @@ public class SwerveSubsystem extends SubsystemBase {
             getModulePositions(),
             new Pose2d()
             );
-
+        
+        ntInstance = NetworkTableInstance.getDefault();
+        swerveTable = ntInstance.getTable("Swerve");
+        swerveDesiredStatesEntry = swerveTable.getEntry("DesiredStates");
+        swerveVxEntry = swerveTable.getEntry("swerveVx");
+        swerveVyEntry = swerveTable.getEntry("swerveVy");
+        swerveVoEntry = swerveTable.getEntry("swerveVo");
+        chassisVxEntry = swerveTable.getEntry("chassisVx");
+        chassisVyEntry = swerveTable.getEntry("chassisVy");
+        chassisVoEntry = swerveTable.getEntry("chassisVo");
+        swerveTestToggleEntry = swerveTable.getEntry("TestToggle");
+        swerveTestToggleEntry.setBoolean(false);
+        swerveTestAngleEntry = swerveTable.getEntry("TestAngle");
+        
+        tab.add("Field", fieldVisual);
+        
     }
 
     @Override
@@ -81,6 +117,19 @@ public class SwerveSubsystem extends SubsystemBase {
         frontRightModule.setDesiredState(states[1]);
         backLeftModule.setDesiredState(states[2]);
         backRightModule.setDesiredState(states[3]);
+        String[] strStates = new String[4];
+        for (int i = 0; i < 4; i++) {
+            strStates[i] = states[i].toString();
+        }
+        swerveDesiredStatesEntry.setStringArray(strStates);
+        
+        Rotation2d gyroAngle = getGyroHeading();
+        Pose2d estimate = poseEstimator.update(
+            gyroAngle,
+            getModulePositions()
+        );
+        
+        fieldVisual.setRobotPose(getRobotPosition());
     }
 
     /**
@@ -91,17 +140,25 @@ public class SwerveSubsystem extends SubsystemBase {
      * @param angularPower [-1, 1] The rotational power.
      */
     public void setDrivePowers(double xPower, double yPower, double angularPower) {
+        swerveVxEntry.setDouble(xPower);
+        swerveVyEntry.setDouble(yPower);
+        swerveVoEntry.setDouble(angularPower);
         ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
             xPower * MAX_VEL, 
             yPower * MAX_VEL, 
             angularPower * MAX_OMEGA,
             getDriverHeading()
         );
+        chassisVxEntry.setDouble(speeds.vxMetersPerSecond);
+        chassisVyEntry.setDouble(speeds.vyMetersPerSecond);
+        chassisVoEntry.setDouble(speeds.omegaRadiansPerSecond);
+        // System.out.println(speeds);
 
         states = kinematics.toSwerveModuleStates(speeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(
             states, speeds,
             MAX_VEL, MAX_VEL, MAX_OMEGA);
+        // System.out.println(states[0]);
     }
 
     /**
@@ -132,6 +189,21 @@ public class SwerveSubsystem extends SubsystemBase {
         return robotHeading.minus(driverHeadingOffset);
     }
 
+    /**
+     * Resets the driver heading.
+     *
+     * @param currentRotation The new driver heading.
+     */
+    public void resetDriverHeading(Rotation2d currentRotation) {
+        driverHeadingOffset = getGyroHeading().minus(currentRotation);
+    }
+
+    /** Resets the driver heading to 0. */
+    public void resetDriverHeading() {
+        resetDriverHeading(new Rotation2d());
+    }
+
+
     /** Gets the gyro heading.*/
     private Rotation2d getGyroHeading() {
         return Rotation2d.fromDegrees(ahrs.getAngle()); //might be flipped, tune
@@ -144,6 +216,27 @@ public class SwerveSubsystem extends SubsystemBase {
      */
     public Pose2d getRobotPosition() {
         return poseEstimator.getEstimatedPosition();
+    }
+
+    /**
+     * Set all swerve modules to a test angle.
+     * @param angle angle in radiants 
+     */
+    public void setTestAngle(double angle){
+        // Setting through swerve state
+        // SwerveModuleState testState =
+        //     new SwerveModuleState(
+        //         0., new Rotation2d(Math.toRadians(angle))
+        //     );
+        // frontLeftModule.setDesiredState(testState);
+        // frontRightModule.setDesiredState(testState);
+        // backLeftModule.setDesiredState(testState);
+        // backRightModule.setDesiredState(testState);
+
+        frontLeftModule.steerMotor.setPosition(angle);
+        // frontRightModule.steerMotor.setPosition(angle);
+        // backLeftModule.steerMotor.setPosition(angle);
+        // backRightModule.steerMotor.setPosition(angle);
     }
     
     

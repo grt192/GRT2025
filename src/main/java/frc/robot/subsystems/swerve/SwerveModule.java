@@ -4,11 +4,14 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class SwerveModule {
 
     private final KrakenDriveMotor driveMotor;
-    private final NeoSteerMotor steerMotor;
+    public final NeoSteerMotor steerMotor;
 
     private double offsetRads = 0;
 
@@ -17,11 +20,16 @@ public class SwerveModule {
     private static final double DRIVE_D = 0;
     private static final double DRIVE_FF = 0;
 
-    private static final double STEER_P = 8;
+    private static final double STEER_P = 5.8;
     private static final double STEER_I = 0;
-    private static final double STEER_D = 5;
+    private static final double STEER_D = 0;
     private static final double STEER_FF = 0;
 
+    private NetworkTableInstance ntInstance;
+    private NetworkTable swerveTable;
+    private NetworkTableEntry swerveOptimizedStateEntry;
+    private NetworkTableEntry swerveDriveVeloEntry;
+    private NetworkTableEntry swerveSteerPositionEntry;
 
     /** Constructs a Swerve Module.
      *
@@ -40,6 +48,12 @@ public class SwerveModule {
 
         this.offsetRads = offsetRads;
 
+        ntInstance = NetworkTableInstance.getDefault();
+        swerveTable = ntInstance.getTable("Swerve");
+        swerveOptimizedStateEntry = swerveTable.getEntry(drivePort + "OptimizedState");
+        swerveDriveVeloEntry = swerveTable.getEntry(drivePort + "DriveVelo");
+        swerveSteerPositionEntry = swerveTable.getEntry(drivePort + "SteerPos");
+
     }
 
     /** Sets the un optimized desired state of this swerve module through setting the PID targets.
@@ -49,6 +63,9 @@ public class SwerveModule {
     public void setDesiredState(SwerveModuleState state) {
         Rotation2d currentAngle = getWrappedAngle();
         state.optimize(currentAngle);
+
+        String strState = state.toString();
+        swerveOptimizedStateEntry.setString(strState);
 
         double targetAngleRads = state.angle.getRadians() - offsetRads;
         double angleErrorRads = state.angle.minus(currentAngle).getRadians();
@@ -60,6 +77,9 @@ public class SwerveModule {
 
         driveMotor.setVelocity(targetVelocity);
         steerMotor.setPosition(targetAngleRads);
+
+        swerveDriveVeloEntry.setDouble(targetVelocity);
+        swerveSteerPositionEntry.setDouble(targetAngleRads);
     }
 
     /** Sets the optimized desired state of this swerve module through setting the PID targets.

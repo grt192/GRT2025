@@ -3,6 +3,7 @@ package frc.robot.subsystems.swerve;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -46,14 +47,14 @@ public class KrakenDriveMotor {
      * @param canId The canId of the motor.
      */
     public KrakenDriveMotor(int canId) {
-        motor = new TalonFX(canId);
+        motor = new TalonFX(canId, "can");
 
         // motorConfig.TorqueCurrent.PeakForwardTorqueCurrent = 80.0;
         // motorConfig.TorqueCurrent.PeakReverseTorqueCurrent = -80.0;
         // motorConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.02;
         motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-        motorConfig.Feedback.SensorToMechanismRatio = 3. * 26. / 20. * 3.; //according to Samuel
+        motorConfig.Feedback.SensorToMechanismRatio = 3. * 20. / 26. * 3.; //according to Samuel
 
         // Apply configs, apparently this fails a lot
         for (int i = 0; i < 4; i++) {
@@ -107,7 +108,7 @@ public class KrakenDriveMotor {
     }
 
     public void setVelocity(double metersPerSec) {
-        targetRps = Units.radiansToRotations(metersPerSec);
+        targetRps = metersPerSec / 0.3192;
         motor.setControl(request.withVelocity(targetRps));
     }
 
@@ -127,7 +128,7 @@ public class KrakenDriveMotor {
     }
 
     public double getDistance() {
-        return motor.getPosition().getValueAsDouble();
+        return Units.inchesToMeters(Math.PI * 4) * (motor.getPosition().getValueAsDouble());
     }
 
     public double getVelocity() {

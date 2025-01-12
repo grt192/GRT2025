@@ -5,14 +5,40 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.controllers.BaseDriveController;
+import frc.robot.controllers.DualJoystickDriveController;
+import frc.robot.controllers.PS5DriveController;
+import frc.robot.controllers.XboxDriveController;
+
+import static frc.robot.Constants.SwerveConstants.BL_DRIVE;
+import static frc.robot.Constants.SwerveConstants.BL_STEER;
+import static frc.robot.Constants.SwerveConstants.BR_DRIVE;
+import static frc.robot.Constants.SwerveConstants.BR_STEER;
+import static frc.robot.Constants.SwerveConstants.FL_DRIVE;
+import static frc.robot.Constants.SwerveConstants.FL_STEER;
+import static frc.robot.Constants.SwerveConstants.FR_DRIVE;
+import static frc.robot.Constants.SwerveConstants.FR_STEER;
+
+import java.util.EnumSet;
+
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableEvent;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.FieldManagementSubsystem.FieldManagementSubsystem;
+import frc.robot.subsystems.PhoenixLoggingSubsystem.PhoenixLoggingSubsystem;
 import frc.robot.subsystems.swerve.SingleModuleSwerveSubsystem;
 import frc.robot.subsystems.swerve.SwerveModule;
+import frc.robot.subsystems.swerve.SwerveSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -22,28 +48,49 @@ import frc.robot.subsystems.swerve.SwerveModule;
  */
 public class RobotContainer {
 
-  int drivePort = 1;
-  int steerPort = 2;
   int offsetRads = 0;
 
   public double count;
 
-            
-  int controllerSwitch = 0;
+  private final BaseDriveController driveController;
+
+  // SwerveModule mod = new SwerveModule(BL_DRIVE, BL_STEER, offsetRads);
+  // SingleModuleSwerveSubsystem singleModuleSwerve = new SingleModuleSwerveSubsystem(mod);
+  private final SwerveSubsystem swerveSubsystem;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final XboxController mechController =
       new XboxController(OperatorConstants.kDriverControllerPort);
 
-  SwerveModule mod = new SwerveModule(drivePort, steerPort, offsetRads);
+  // SwerveModule mod = new SwerveModule(drivePort, steerPort, offsetRads);
   // IAmDyingSubsystem pls = new IAmDyingSubsystem();
-  SingleModuleSwerveSubsystem singleModuleSwerve = new SingleModuleSwerveSubsystem(mod);
-
+  // SingleModuleSwerveSubsystem singleModuleSwerve = new SingleModuleSwerveSubsystem(mod);
+  FieldManagementSubsystem fieldManagementSubsystem = new FieldManagementSubsystem();
+  PhoenixLoggingSubsystem phoenixLoggingSubsystem = new PhoenixLoggingSubsystem(fieldManagementSubsystem);
   int state = 0;
 
+  private NetworkTableInstance ntInstance;
+  private NetworkTable swerveTable;
+  private NetworkTableEntry swerveTestAngleEntry;
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    double count = 0;
+    swerveSubsystem = new SwerveSubsystem();
+    
+    if(DriverStation.getJoystickName(0).equals("Controller (Xbox One For Windows)")) {
+        driveController = new XboxDriveController();
+    }
+    else if(DriverStation.getJoystickName(0).equals("DualSense Wireless Controller")){
+        driveController = new PS5DriveController();
+    }
+    else{
+        driveController = new DualJoystickDriveController();
+    }
+    driveController.setDeadZone(0.03);
+
+    ntInstance = NetworkTableInstance.getDefault();
+    swerveTable = ntInstance.getTable("Swerve");
+    swerveTestAngleEntry = swerveTable.getEntry("TestAngle");
+    swerveTestAngleEntry.setDouble(0);
     // pls.configurePID(.5, 0, 0, 0); 
     // Configure the trigger bindings
     configureBindings();
@@ -52,26 +99,63 @@ public class RobotContainer {
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-   * predicate, or via the named factories in {@link
+   * predicate, or via the named f`actories in {@link
    * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
    * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
   private void configureBindings() {
+      /* Driving -- One joystick controls translation, the other rotation. If the robot-relative button is held down,
+      * the robot is controlled along its own axes, otherwise controls apply to the field axes by default. If the
+      * swerve aim button is held down, the robot will rotate automatically to always face a target, and only
+      * translation will be manually controllable. */
+    swerveSubsystem.setDefaultCommand(
+      new RunCommand(() -> {
+        swerveSubsystem.setDrivePowers(
+          driveController.getForwardPower(),
+          driveController.getLeftPower(),
+          driveController.getRotatePower()
+        );
+        }, 
+        swerveSubsystem
+      )
+    );
 
-    singleModuleSwerve.setDefaultCommand(new InstantCommand(() -> {
-      System.out.println(mod.getWrappedAngle());
-      if(mechController.getRightBumperPressed()) {
-        if (state == 3) {
-          state = 0;
-        }
-        else {
-          state += 1;
-        }
-      }
+    InstantCommand resetDriverHeadingCommand = new InstantCommand(() ->{ 
+        swerveSubsystem.resetDriverHeading();
+      },
+      swerveSubsystem
+    );
+    /* Pressing the button resets the field axes to the current robot axes. */
+    driveController.bindDriverHeadingReset(
+      () ->{
+        swerveSubsystem.resetDriverHeading();
+      },
+      swerveSubsystem
+    );
 
-      switch (state) {
+    // swerveSubsystem.setDefaultCommand(new RunCommand(() -> {
+    //       swerveSubsystem.setTestAngle(driveController.getForwardPower());
+    //     }, swerveSubsystem
+    // ));
+
+    swerveTable.addListener("TestAngle", EnumSet.of(NetworkTableEvent.Kind.kValueAll), (table, key, event) -> {
+      swerveSubsystem.setTestAngle(event.valueData.value.getDouble());
+    });
+
+    // singleModuleSwerve.setDefaultCommand(new InstantCommand(() -> {
+    //   System.out.println(mod.getWrappedAngle());
+    //   if(driveController.getRightBumperButtonPressed()) {
+    //     if (state == 7) {
+    //       state = 0;
+    //     }
+    //     else {
+    //       state += 1;
+    //     }
+    //   }
+
+    //   switch (state) {
           // case 1: 
           //     singleModuleSwerve.setRawPowers(.5, 0);
           //     // singleModuleSwerve.setState(0, Units.degreesToRadians(180));
@@ -82,7 +166,7 @@ public class RobotContainer {
           //     // singleModuleSwerve.setState(0, Units.degreesToRadians(180));
           //     break;
 
-          // case 3:
+          // case 0:
           //     singleModuleSwerve.setRawPowers(0, .5);
           //     break;
 
@@ -90,26 +174,26 @@ public class RobotContainer {
           //     singleModuleSwerve.setRawPowers(0, -.5);
           //     break;
 
-          case 1:
-              singleModuleSwerve.setState(0, Units.degreesToRadians(45));
-              break;
+          // case 5:
+          //     singleModuleSwerve.setState(0, Units.degreesToRadians(45));
+          //     break;
 
-          case 2:
-              singleModuleSwerve.setState(0, Units.degreesToRadians(90));
-              break;
+          // case 6:
+          //     singleModuleSwerve.setState(0, Units.degreesToRadians(90));
+          //     break;
           
-          case 3:
-              singleModuleSwerve.setState(0, Units.degreesToRadians(135));
-              break;
+          // case 7:
+          //     singleModuleSwerve.setState(0, Units.degreesToRadians(135));
+          //     break;
               
-          case 0:
-              singleModuleSwerve.setRawPowers(0, 0);
-              break;
+    //       case 3:
+    //           singleModuleSwerve.setRawPowers(0, 0);
+    //           break;
 
-          default:
-              break;
-      }
-    }, singleModuleSwerve));
+    //       default:
+    //           break;
+    //   }
+    // }, singleModuleSwerve));
 
   }
 
