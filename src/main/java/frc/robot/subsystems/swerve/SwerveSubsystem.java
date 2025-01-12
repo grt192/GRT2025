@@ -130,6 +130,7 @@ public class SwerveSubsystem extends SubsystemBase {
         );
         
         fieldVisual.setRobotPose(getRobotPosition());
+        updateNT();
     }
 
     /**
@@ -239,5 +240,10 @@ public class SwerveSubsystem extends SubsystemBase {
         // backRightModule.steerMotor.setPosition(angle);
     }
     
-    
+    private void updateNT(){
+        frontLeftModule.updateNT();
+        frontRightModule.updateNT();
+        backLeftModule.updateNT();
+        backRightModule.updateNT();
+    }
 }
