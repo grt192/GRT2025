@@ -169,4 +169,8 @@ public class SwerveModule {
     public double getDriveVelocity() {
         return driveMotor.getVelocity();
     }
+
+    public void updateNT(){
+        driveMotor.updateNT();
+    }
 }
