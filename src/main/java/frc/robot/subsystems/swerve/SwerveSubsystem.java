@@ -117,12 +117,7 @@ public class SwerveSubsystem extends SubsystemBase {
         frontRightModule.setDesiredState(states[1]);
         backLeftModule.setDesiredState(states[2]);
         backRightModule.setDesiredState(states[3]);
-        String[] strStates = new String[4];
-        for (int i = 0; i < 4; i++) {
-            strStates[i] = states[i].toString();
-        }
-        swerveDesiredStatesEntry.setStringArray(strStates);
-        
+                
         Rotation2d gyroAngle = getGyroHeading();
         Pose2d estimate = poseEstimator.update(
             gyroAngle,
@@ -130,8 +125,14 @@ public class SwerveSubsystem extends SubsystemBase {
         );
         
         fieldVisual.setRobotPose(getRobotPosition());
-        updateNT();
-    }
+        // updateNT(); //Causing Loop Overrun
+        //Causing Overrun
+        // String[] strStates = new String[4];
+        // for (int i = 0; i < 4; i++) {
+        //     strStates[i] = states[i].toString();
+        // }
+        // swerveDesiredStatesEntry.setStringArray(strStates);
+}
 
     /**
      * Sets the powers of the drivetrain through PIDs. Relative to the driver heading on the field.

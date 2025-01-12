@@ -64,8 +64,8 @@ public class SwerveModule {
         Rotation2d currentAngle = getWrappedAngle();
         state.optimize(currentAngle);
 
-        String strState = state.toString();
-        swerveOptimizedStateEntry.setString(strState);
+        // String strState = state.toString();
+        // swerveOptimizedStateEntry.setString(strState);
 
         double targetAngleRads = state.angle.getRadians() - offsetRads;
         double angleErrorRads = state.angle.minus(currentAngle).getRadians();
@@ -78,8 +78,8 @@ public class SwerveModule {
         driveMotor.setVelocity(targetVelocity);
         steerMotor.setPosition(targetAngleRads);
 
-        swerveDriveVeloEntry.setDouble(targetVelocity);
-        swerveSteerPositionEntry.setDouble(targetAngleRads);
+        // swerveDriveVeloEntry.setDouble(targetVelocity);
+        // swerveSteerPositionEntry.setDouble(targetAngleRads);
     }
 
     /** Sets the optimized desired state of this swerve module through setting the PID targets.
