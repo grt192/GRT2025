@@ -1,4 +1,5 @@
 package frc.robot.subsystems.swerve;
+
 import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -12,6 +13,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -19,27 +21,14 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.SwerveSetpoint;
 
-import static frc.robot.Constants.SwerveConstants.BL_DRIVE;
-import static frc.robot.Constants.SwerveConstants.BL_OFFSET;
-import static frc.robot.Constants.SwerveConstants.BL_POS;
-import static frc.robot.Constants.SwerveConstants.BL_STEER;
-import static frc.robot.Constants.SwerveConstants.BR_DRIVE;
-import static frc.robot.Constants.SwerveConstants.BR_OFFSET;
-import static frc.robot.Constants.SwerveConstants.BR_POS;
-import static frc.robot.Constants.SwerveConstants.BR_STEER;
-import static frc.robot.Constants.SwerveConstants.FL_DRIVE;
-import static frc.robot.Constants.SwerveConstants.FL_OFFSET;
-import static frc.robot.Constants.SwerveConstants.FL_POS;
-import static frc.robot.Constants.SwerveConstants.FL_STEER;
-import static frc.robot.Constants.SwerveConstants.FR_DRIVE;
-import static frc.robot.Constants.SwerveConstants.FR_OFFSET;
-import static frc.robot.Constants.SwerveConstants.FR_POS;
-import static frc.robot.Constants.SwerveConstants.FR_STEER;
+import static frc.robot.Constants.SwerveConstants.*;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
-
-//krakens drive, neo steer
 
 public class SwerveSubsystem extends SubsystemBase {
 
@@ -55,7 +44,7 @@ public class SwerveSubsystem extends SubsystemBase {
     private final SwerveDrivePoseEstimator poseEstimator;
     private Rotation2d driverHeadingOffset = new Rotation2d();
 
-    public static final double MAX_VEL = 6000 / 6.923 / 60 * 2 * 2 * Math.PI * .0254; // kraken speed / gear ratio / reduced to per second * circumference * convert to meter
+    public static final double MAX_VEL = 6000 / 6.923 / 60 * 2 * 2 * Math.PI * .0254; // Kraken speed / gear ratio / reduced to per second * circumference * convert to meters
     public static final double MAX_OMEGA = MAX_VEL / FL_POS.getNorm();
 
     private final AHRS ahrs;
@@ -78,7 +67,6 @@ public class SwerveSubsystem extends SubsystemBase {
     // private final SwerveSetpointGenerator setpointGenerator;
     
     public SwerveSubsystem() {
-
         ahrs = new AHRS(NavXComType.kMXP_SPI);
 
         frontLeftModule = new SwerveModule(FL_DRIVE, FL_STEER, FL_OFFSET);
@@ -109,6 +97,37 @@ public class SwerveSubsystem extends SubsystemBase {
         
         tab.add("Field", fieldVisual);
         
+
+        RobotConfig config = null;
+        try {
+            config = RobotConfig.fromGUISettings();
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle exception as needed, maybe use default values or fallback
+        }
+
+        AutoBuilder.configure(
+            this::getRobotPosition,
+            this::resetPose,
+            this::getRobotRelativeChassisSpeeds,
+            (speeds, feedforwards) -> setRobotRelativeDrivePowers(speeds),
+            
+            new PPHolonomicDriveController(
+                new PIDConstants(1.0, 0.0, 0.0),
+                new PIDConstants(1.0, 0.0, 0.0)
+            ),
+
+            config,
+            ()->{
+                var alliance = DriverStation.getAlliance();
+                if (alliance.isPresent()) {
+                    return alliance.get()==DriverStation.Alliance.Red;
+                }
+                return false; 
+            },
+            this
+
+        );
     }
 
     @Override
@@ -183,11 +202,7 @@ public class SwerveSubsystem extends SubsystemBase {
      * @return The angle of the robot relative to the driver heading.
      */
     public Rotation2d getDriverHeading() {
-
-        Rotation2d robotHeading = ahrs.isConnected()
-            ? getGyroHeading()
-            : getRobotPosition().getRotation();
-        
+        Rotation2d robotHeading = ahrs.isConnected() ? getGyroHeading() : getRobotPosition().getRotation();
         return robotHeading.minus(driverHeadingOffset);
     }
 
@@ -208,10 +223,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
     /** Gets the gyro heading.*/
     private Rotation2d getGyroHeading() {
-        return Rotation2d.fromDegrees(ahrs.getAngle()); //might be flipped, tune
+        return Rotation2d.fromDegrees(ahrs.getAngle()); // Might need to flip depending on the robot setup
     }
 
-        /**
+    /**
      * Gets the current robot pose.
      *
      * @return The robot Pose2d.
@@ -247,4 +262,35 @@ public class SwerveSubsystem extends SubsystemBase {
         backLeftModule.updateNT();
         backRightModule.updateNT();
     }
+    public void resetPose(Pose2d currentPose) {
+        Rotation2d gyroAngle = getGyroHeading();
+        poseEstimator.resetPosition(
+            gyroAngle, 
+            getModulePositions(), 
+            currentPose
+        );
+    }
+
+    public ChassisSpeeds getRobotRelativeChassisSpeeds() {
+        ChassisSpeeds robotRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+            kinematics.toChassisSpeeds(states),
+            getRobotPosition().getRotation() // Could be replaced with getGyroHeading() if desired
+        );
+        return robotRelativeSpeeds;
+    }
+    
+    public void setRobotRelativeDrivePowers(ChassisSpeeds robotRelativeSpeeds) {
+        
+        ChassisSpeeds speeds = ChassisSpeeds.fromRobotRelativeSpeeds(
+            robotRelativeSpeeds,
+            new Rotation2d(0)
+        );
+
+        states = kinematics.toSwerveModuleStates(speeds);
+        SwerveDriveKinematics.desaturateWheelSpeeds(
+            states, speeds,
+            MAX_VEL, MAX_VEL, MAX_OMEGA);
+    }
+
+
 }

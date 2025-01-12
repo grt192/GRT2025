@@ -20,6 +20,8 @@ import static frc.robot.Constants.SwerveConstants.FR_DRIVE;
 import static frc.robot.Constants.SwerveConstants.FR_STEER;
 
 import java.util.EnumSet;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
@@ -54,7 +56,9 @@ public class RobotContainer {
 
   private final BaseDriveController driveController;
 
-  // SwerveModule mod = new SwerveModule(BL_DRIVE, BL_STEER, offsetRads);
+
+  // SwerveModule mod = new SwerveModule(BR_DRIVE, BR_STEER, offsetRads);
+  // IAmDyingSubsystem pls = new IAmDyingSubsystem();
   // SingleModuleSwerveSubsystem singleModuleSwerve = new SingleModuleSwerveSubsystem(mod);
   private final SwerveSubsystem swerveSubsystem;
 
@@ -93,6 +97,9 @@ public class RobotContainer {
     swerveTestAngleEntry.setDouble(0);
     // pls.configurePID(.5, 0, 0, 0); 
     // Configure the trigger bindings
+
+
+
     configureBindings();
   }
 
@@ -105,6 +112,7 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
+ 
   private void configureBindings() {
       /* Driving -- One joystick controls translation, the other rotation. If the robot-relative button is held down,
       * the robot is controlled along its own axes, otherwise controls apply to the field axes by default. If the
@@ -205,6 +213,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return null;
+    return new PathPlannerAuto("Three Meters");
   }
 }
