@@ -46,6 +46,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     private NetworkTableInstance ntInstance;
     private NetworkTable swerveTable;
+
     private StructArrayPublisher<SwerveModuleState> swerveStatesPublisher;
 
     private StructPublisher<Pose2d> estimatedPosePublisher;
@@ -72,6 +73,43 @@ public class SwerveSubsystem extends SubsystemBase {
             getGyroHeading(), 
             getModulePositions(),
             new Pose2d()
+            );
+        
+        ntInstance = NetworkTableInstance.getDefault();
+        swerveTable = ntInstance.getTable("Swerve");
+        
+        tab.add("Field", fieldVisual);
+        
+
+        RobotConfig config = null;
+        try {
+            config = RobotConfig.fromGUISettings();
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle exception as needed, maybe use default values or fallback
+        }
+
+        AutoBuilder.configure(
+            this::getRobotPosition,
+            this::resetPose,
+            this::getRobotRelativeChassisSpeeds,
+            (speeds, feedforwards) -> setRobotRelativeDrivePowers(speeds),
+            
+            new PPHolonomicDriveController(
+                new PIDConstants(1.0, 0.0, 0.0),
+                new PIDConstants(1.0, 0.0, 0.0)
+            ),
+
+            config,
+            ()->{
+                var alliance = DriverStation.getAlliance();
+                if (alliance.isPresent()) {
+                    return alliance.get()==DriverStation.Alliance.Red;
+                }
+                return false; 
+            },
+            this
+
         );
 
         buildAuton(); 
