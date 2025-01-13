@@ -13,6 +13,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -64,6 +65,8 @@ public class SwerveSubsystem extends SubsystemBase {
     private final Field2d fieldVisual = new Field2d();
     private final ShuffleboardTab tab = Shuffleboard.getTab("Swerve");
 
+    private StructPublisher<Pose2d> estimatedPosePublisher;
+
     // private final SwerveSetpointGenerator setpointGenerator;
     
     public SwerveSubsystem() {
@@ -98,7 +101,7 @@ public class SwerveSubsystem extends SubsystemBase {
         tab.add("Field", fieldVisual);
         
 
-        RobotConfig config = null;
+        RobotConfig config = new RobotConfig(null, null, null, null);
         try {
             config = RobotConfig.fromGUISettings();
         } catch (Exception e) {
@@ -128,6 +131,11 @@ public class SwerveSubsystem extends SubsystemBase {
             this
 
         );
+
+        estimatedPosePublisher = swerveTable.getStructTopic(
+            "estimatedPose",
+            Pose2d.struct
+        ).publish();
     }
 
     @Override
@@ -151,7 +159,8 @@ public class SwerveSubsystem extends SubsystemBase {
         //     strStates[i] = states[i].toString();
         // }
         // swerveDesiredStatesEntry.setStringArray(strStates);
-}
+        estimatedPosePublisher.set(estimate);
+    }
 
     /**
      * Sets the powers of the drivetrain through PIDs. Relative to the driver heading on the field.
