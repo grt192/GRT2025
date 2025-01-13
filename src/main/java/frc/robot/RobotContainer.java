@@ -22,6 +22,7 @@ import static frc.robot.Constants.SwerveConstants.FR_STEER;
 import java.util.EnumSet;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
@@ -213,6 +214,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new PathPlannerAuto("Three Meters");
+    return new PathPlannerAuto("3m Auto");
   }
 }

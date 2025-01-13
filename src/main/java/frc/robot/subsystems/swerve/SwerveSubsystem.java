@@ -101,7 +101,7 @@ public class SwerveSubsystem extends SubsystemBase {
         tab.add("Field", fieldVisual);
         
 
-        RobotConfig config = new RobotConfig(null, null, null, null);
+        RobotConfig config = null;
         try {
             config = RobotConfig.fromGUISettings();
         } catch (Exception e) {
