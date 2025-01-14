@@ -116,7 +116,7 @@ public class SwerveSubsystem extends SubsystemBase {
             (speeds, feedforwards) -> setRobotRelativeDrivePowers(speeds),
             
             new PPHolonomicDriveController(
-                new PIDConstants(7, 0.0, 0.0),
+                new PIDConstants(1, 0.0, 0.0),
                 new PIDConstants(1.0, 0.0, 0.0)
             ),
 
@@ -160,6 +160,11 @@ public class SwerveSubsystem extends SubsystemBase {
         // }
         // swerveDesiredStatesEntry.setStringArray(strStates);
         estimatedPosePublisher.set(estimate);
+
+        frontLeftModule.driveMotor.publishVeloError();
+        frontRightModule.driveMotor.publishVeloError();
+        backLeftModule.driveMotor.publishVeloError();
+        backRightModule.driveMotor.publishVeloError();
     }
 
     /**
@@ -198,6 +203,15 @@ public class SwerveSubsystem extends SubsystemBase {
      */
     public SwerveModulePosition[] getModulePositions() {
         return new SwerveModulePosition[] {
+            frontLeftModule.getPosition(),
+            frontRightModule.getPosition(),
+            backLeftModule.getPosition(),
+            backRightModule.getPosition()
+        };
+    }
+
+    public SwerveModuleState[] getModuleStates(){
+        return new SwerveModuleState[] {
             frontLeftModule.getState(),
             frontRightModule.getState(),
             backLeftModule.getState(),
@@ -271,6 +285,7 @@ public class SwerveSubsystem extends SubsystemBase {
         backLeftModule.updateNT();
         backRightModule.updateNT();
     }
+
     public void resetPose(Pose2d currentPose) {
         Rotation2d gyroAngle = getGyroHeading();
         poseEstimator.resetPosition(
@@ -281,8 +296,9 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public ChassisSpeeds getRobotRelativeChassisSpeeds() {
+        SwerveModuleState[] currentModuleStates = getModuleStates();
         ChassisSpeeds robotRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-            kinematics.toChassisSpeeds(states),
+            kinematics.toChassisSpeeds(currentModuleStates),
             getRobotPosition().getRotation() // Could be replaced with getGyroHeading() if desired
         );
         return robotRelativeSpeeds;

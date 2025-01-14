@@ -10,15 +10,15 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class SwerveModule {
 
-    private final KrakenDriveMotor driveMotor;
+    public final KrakenDriveMotor driveMotor;
     public final NeoSteerMotor steerMotor;
 
     private double offsetRads = 0;
 
-    private static final double DRIVE_P = 1; // temporary value
-    private static final double DRIVE_I = 0;
+    private static final double DRIVE_P = 0.3; // temporary value
+    private static final double DRIVE_I = 0; 
     private static final double DRIVE_D = 0;
-    private static final double DRIVE_FF = 0;
+    private static final double DRIVE_FF = 0.05;
 
     private static final double STEER_P = 5.8;
     private static final double STEER_I = 0;
@@ -109,9 +109,16 @@ public class SwerveModule {
      *
      * @return The current SwerveModulePosition of this module
      */
-    public SwerveModulePosition getState() {
+    public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(
             driveMotor.getDistance(),
+            getWrappedAngle()
+        );
+    }
+
+    public SwerveModuleState getState(){
+        return new SwerveModuleState(
+            getDriveVelocity(),
             getWrappedAngle()
         );
     }

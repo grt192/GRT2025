@@ -43,5 +43,8 @@ public final class Constants {
       public static final Translation2d BL_POS = new Translation2d(-MODULE_DIST, MODULE_DIST);
       public static final Translation2d BR_POS = new Translation2d(-MODULE_DIST, -MODULE_DIST);
 
+      public static final double DRIVE_GEAR_REDUCTION = 9 * 20 / 26;
+      public static final double DRIVE_WHEEL_CIRCUMFERENCE = Units.inchesToMeters(4 * Math.PI);
+
   }
 }

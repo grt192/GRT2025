@@ -1,5 +1,8 @@
 package frc.robot.subsystems.swerve;
 
+import static frc.robot.Constants.SwerveConstants.DRIVE_GEAR_REDUCTION;
+import static frc.robot.Constants.SwerveConstants.DRIVE_WHEEL_CIRCUMFERENCE;
+
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
@@ -10,6 +13,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -35,11 +39,14 @@ public class KrakenDriveMotor {
     private NetworkTableEntry supplyCurrentEntry;
     private NetworkTableEntry supplyVoltageEntry;
 
+    private DoublePublisher veloErrorPublisher;
+
     private StatusSignal<Angle> positionSignal;
     private StatusSignal<AngularVelocity> velocitySignal;
     private StatusSignal<Voltage> appliedVoltsSignal;
     private StatusSignal<Current> supplyCurrentSignal;
     private StatusSignal<Current> statorCurrentSignal; //torqueCurrent is Pro
+
 
     /** A kraken drive motor for swerve.
      *
@@ -53,7 +60,7 @@ public class KrakenDriveMotor {
         // motorConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.02;
         motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-        motorConfig.Feedback.SensorToMechanismRatio = 3. * 20. / 26. * 3.; //according to Samuel
+        // motorConfig.Feedback.SensorToMechanismRatio = 3. * 20. / 26. * 3.; //according to Samuel
 
         // Apply configs, apparently this fails a lot
         for (int i = 0; i < 4; i++) {
@@ -63,6 +70,7 @@ public class KrakenDriveMotor {
 
         initNT(canId);
         initSignals();
+        veloErrorPublisher = swerveStatsTable.getDoubleTopic(canId + "veloError").publish();
     }
     
     /**
@@ -72,12 +80,12 @@ public class KrakenDriveMotor {
     private void initNT(int canId){
         ntInstance = NetworkTableInstance.getDefault();
         swerveStatsTable = ntInstance.getTable("swerveStats");
-        deviceTempEntry = swerveStatsTable.getEntry(canId + "deviceTemp");
-        processorTempEntry = swerveStatsTable.getEntry(canId + "processorTemp");
-        ampDrawEntry = swerveStatsTable.getEntry(canId + "ampDraw");
-        statorCurrentEntry = swerveStatsTable.getEntry(canId + "statorCurrent");
-        supplyCurrentEntry = swerveStatsTable.getEntry(canId + "supplyCurrena");
-        supplyVoltageEntry = swerveStatsTable.getEntry(canId + "supplyVoltage");
+        // deviceTempEntry = swerveStatsTable.getEntry(canId + "deviceTemp");
+        // processorTempEntry = swerveStatsTable.getEntry(canId + "processorTemp");
+        // ampDrawEntry = swerveStatsTable.getEntry(canId + "ampDraw");
+        // statorCurrentEntry = swerveStatsTable.getEntry(canId + "statorCurrent");
+        // supplyCurrentEntry = swerveStatsTable.getEntry(canId + "supplyCurrena");
+        // supplyVoltageEntry = swerveStatsTable.getEntry(canId + "supplyVoltage");
     }
 
     private void initSignals(){
@@ -98,16 +106,16 @@ public class KrakenDriveMotor {
      * updates motor stats to network tables
      */
     public void updateNT(){
-        deviceTempEntry.setDouble(getDeviceTemp());
-        processorTempEntry.setDouble(getProcessorTemp());
-        ampDrawEntry.setDouble(getAmpDraw());
-        statorCurrentEntry.setDouble(getStatorCurrent());
-        supplyCurrentEntry.setDouble(getSupplyCurrent());
-        supplyVoltageEntry.setDouble(getSupplyVoltage());
+        // deviceTempEntry.setDouble(getDeviceTemp());
+        // processorTempEntry.setDouble(getProcessorTemp());
+        // ampDrawEntry.setDouble(getAmpDraw());
+        // statorCurrentEntry.setDouble(getStatorCurrent());
+        // supplyCurrentEntry.setDouble(getSupplyCurrent());
+        // supplyVoltageEntry.seuble(getSupplyVoltage());
     }
 
     public void setVelocity(double metersPerSec) {
-        targetRps = metersPerSec / 0.3192 * 3. * 20. / 26. * 3;
+        targetRps = metersPerSec / DRIVE_WHEEL_CIRCUMFERENCE * DRIVE_GEAR_REDUCTION;
         motor.setControl(request.withVelocity(targetRps));
     }
 
@@ -127,11 +135,11 @@ public class KrakenDriveMotor {
     }
 
     public double getDistance() {
-        return Units.inchesToMeters(Math.PI * 4) * (motor.getPosition().getValueAsDouble());
+        return DRIVE_WHEEL_CIRCUMFERENCE / DRIVE_GEAR_REDUCTION * (motor.getPosition().getValueAsDouble());
     }
 
     public double getVelocity() {
-        return motor.getVelocity().getValueAsDouble() * Units.inchesToMeters(Math.PI * 4); 
+        return motor.getVelocity().getValueAsDouble() / DRIVE_GEAR_REDUCTION * DRIVE_WHEEL_CIRCUMFERENCE;
     }
 
     public double getError() {
@@ -164,6 +172,10 @@ public class KrakenDriveMotor {
 
     public double getSupplyVoltage() {
         return motor.getSupplyVoltage().getValueAsDouble();
+    }
+
+    public void publishVeloError(){
+        veloErrorPublisher.set(this.targetRps - motor.getVelocity().getValueAsDouble());
     }
 
 }
