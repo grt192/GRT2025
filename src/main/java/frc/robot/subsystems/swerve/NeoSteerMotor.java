@@ -26,6 +26,10 @@ public class NeoSteerMotor {
 
     private SparkClosedLoopController steerPIDController;
 
+    /**
+     * A Neo steer motor for swerve steering
+     * @param canId the motor's CAN ID
+     */
     public NeoSteerMotor(int canId) {
 
         motor = new SparkMax(canId, MotorType.kBrushless);
@@ -59,10 +63,15 @@ public class NeoSteerMotor {
         // motor.enableVoltageCompensation(12.0);
 
         // motor.burnFlash();
-
-
     }
 
+    /**
+     * Configures the motor's PID
+     * @param p kP
+     * @param i kI
+     * @param d kD
+     * @param ff kFF
+     */
     public void configurePID(double p, double i, double d, double ff){
         closedLoopConfig.pidf(p, i, d, ff);
         sparkMaxConfig.apply(closedLoopConfig);
@@ -70,17 +79,20 @@ public class NeoSteerMotor {
         steerPIDController = motor.getClosedLoopController();
     }
 
+    /**
+     * Using PID to move to target position
+     * @param targetRads target position in radiants
+     */
     public void setPosition(double targetRads) {
         double targetDouble = (targetRads + Math.PI) / (2. * Math.PI);
         steerPIDController.setReference(targetDouble, ControlType.kPosition);
     }
 
-    public void setPower(double power) {
-        motor.set(power);
-    }
-
+    /**
+     * Gets the motor's position through the absolute encoder
+     * @return position in double from 0 to 1
+     */
     public double getPosition(){
         return steerEncoder.getPosition();
     }
-    
 }

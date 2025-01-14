@@ -54,8 +54,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
     private StructPublisher<Pose2d> estimatedPosePublisher;
 
-    // private final SwerveSetpointGenerator setpointGenerator;
-    
     public SwerveSubsystem() {
         ahrs = new AHRS(NavXComType.kMXP_SPI);
 
@@ -88,7 +86,6 @@ public class SwerveSubsystem extends SubsystemBase {
             gyroAngle,
             getModulePositions()
         );
-        
         
         publishStats();
     }
@@ -128,6 +125,10 @@ public class SwerveSubsystem extends SubsystemBase {
         };
     }
 
+    /**
+     * Gets the states of the module
+     * @return The array of module states
+     */
     public SwerveModuleState[] getModuleStates(){
         return new SwerveModuleState[] {
             frontLeftModule.getState(),
@@ -156,7 +157,9 @@ public class SwerveSubsystem extends SubsystemBase {
         driverHeadingOffset = getGyroHeading().minus(currentRotation);
     }
 
-    /** Resets the driver heading to 0. */
+    /** 
+     * Resets the driver heading to 0. 
+     */
     public void resetDriverHeading() {
         resetDriverHeading(new Rotation2d());
     }
@@ -176,27 +179,6 @@ public class SwerveSubsystem extends SubsystemBase {
         return estimatedPose;
     }
 
-    /**
-     * Set all swerve modules to a test angle.
-     * @param angle angle in radiants 
-     */
-    public void setTestAngle(double angle){
-        // Setting through swerve state
-        // SwerveModuleState testState =
-        //     new SwerveModuleState(
-        //         0., new Rotation2d(Math.toRadians(angle))
-        //     );
-        // frontLeftModule.setDesiredState(testState);
-        // frontRightModule.setDesiredState(testState);
-        // backLeftModule.setDesiredState(testState);
-        // backRightModule.setDesiredState(testState);
-
-        // frontLeftModule.steerMotor.setPosition(angle);
-        // frontRightModule.steerMotor.setPosition(angle);
-        // backLeftModule.steerMotor.setPosition(angle);
-        // backRightModule.steerMotor.setPosition(angle);
-    }
-    
     public void resetPose(Pose2d currentPose) {
         Rotation2d gyroAngle = getGyroHeading();
         poseEstimator.resetPosition(
@@ -216,7 +198,6 @@ public class SwerveSubsystem extends SubsystemBase {
     }
     
     public void setRobotRelativeDrivePowers(ChassisSpeeds robotRelativeSpeeds) {
-        
         ChassisSpeeds speeds = ChassisSpeeds.fromRobotRelativeSpeeds(
             robotRelativeSpeeds,
             new Rotation2d(0)
@@ -225,7 +206,8 @@ public class SwerveSubsystem extends SubsystemBase {
         states = kinematics.toSwerveModuleStates(speeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(
             states, speeds,
-            MAX_VEL, MAX_VEL, MAX_OMEGA);
+            MAX_VEL, MAX_VEL, MAX_OMEGA
+        );
     }
 
     private void initNT(){

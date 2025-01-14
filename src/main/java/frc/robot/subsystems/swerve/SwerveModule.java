@@ -3,8 +3,6 @@ package frc.robot.subsystems.swerve;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 
 import static frc.robot.Constants.SwerveConstants.*;
 
@@ -15,10 +13,6 @@ public class SwerveModule {
 
     private double offsetRads = 0;
 
-    
-    private NetworkTableInstance ntInstance;
-    private NetworkTable swerveTable;
-    
     /** Constructs a Swerve Module.
      *
      * @param drivePort The CAN ID of the drive motor
@@ -35,9 +29,6 @@ public class SwerveModule {
         driveMotor.configPID(DRIVE_P, DRIVE_I, DRIVE_D, DRIVE_S, DRIVE_V);
 
         this.offsetRads = offsetRads;
-
-        ntInstance = NetworkTableInstance.getDefault();
-        swerveTable = ntInstance.getTable("Swerve");
     }
 
     /** Sets the un optimized desired state of this swerve module through setting the PID targets.
@@ -67,18 +58,6 @@ public class SwerveModule {
         steerMotor.setPosition(state.angle.getRadians()); 
     }
 
-    
-
-    /** Sets the raw powers of the swerve module.
-     *
-     * @param drivePower The power for the drive motor
-     * @param steerPower The power for the steer motor
-     */
-    public void setRawPowers(double drivePower, double steerPower) {
-        driveMotor.setPower(drivePower);
-        steerMotor.setPower(steerPower);
-    }
-
     /** Gets the current state of the swerve module.
      *
      * @return The current SwerveModulePosition of this module
@@ -89,10 +68,13 @@ public class SwerveModule {
             getWrappedAngle()
         );
     }
-
+    /**
+     * Gets the state of the swerve module (drive velo in m/s + angle 0-1 )
+     * @return state of the module (velo is m/s and angle is double from 0 to 1)
+     */
     public SwerveModuleState getState(){
         return new SwerveModuleState(
-            getDriveVelocity(),
+            driveMotor.getVelocity(),
             getWrappedAngle()
         );
     }
@@ -110,29 +92,12 @@ public class SwerveModule {
         return new Rotation2d(angleRads);
     }
 
-    
     /** Gets the error of the drive motor.
      *
      * @return The velocity PID error of the drive motor.
      */
     public double getDriveError() {
         return driveMotor.getError();
-    }
-
-    /** Gets the setpoint of the drive motor.
-     *
-     * @return The current setpoint of the drive motor.
-     */
-    public double getDriveSetpoint() {
-        return driveMotor.getSetpoint();
-    }
-
-    /** Gets the current amp draw of the drive motor.
-     *
-     * @return The amp draw of the drive motor.
-     */
-    public double getDriveAmpDraw() {
-        return driveMotor.getAmpDraw();
     }
 
     /** Gets the distance the distance driven by the drive motor.

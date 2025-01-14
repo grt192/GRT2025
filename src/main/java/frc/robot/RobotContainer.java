@@ -9,11 +9,8 @@ import frc.robot.controllers.DualJoystickDriveController;
 import frc.robot.controllers.PS5DriveController;
 import frc.robot.controllers.XboxDriveController;
 
-import java.util.EnumSet;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEvent;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -32,39 +29,16 @@ import frc.robot.subsystems.swerve.SwerveSubsystem;
  */
 public class RobotContainer {
 
-  int offsetRads = 0;
+  private BaseDriveController driveController;
 
-  public double count;
+  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
-  private final BaseDriveController driveController;
+  private final FieldManagementSubsystem fieldManagementSubsystem = new FieldManagementSubsystem();
+  private final PhoenixLoggingSubsystem phoenixLoggingSubsystem = new PhoenixLoggingSubsystem(fieldManagementSubsystem);
 
-
-  // SwerveModule mod = new SwerveModule(BR_DRIVE, BR_STEER, offsetRads);
-  // SingleModuleSwerveSubsystem singleModuleSwerve = new SingleModuleSwerveSubsystem(mod);
-  private final SwerveSubsystem swerveSubsystem;
-
-  // SwerveModule mod = new SwerveModule(drivePort, steerPort, offsetRads);
-  // SingleModuleSwerveSubsystem singleModuleSwerve = new SingleModuleSwerveSubsystem(mod);
-  FieldManagementSubsystem fieldManagementSubsystem = new FieldManagementSubsystem();
-  PhoenixLoggingSubsystem phoenixLoggingSubsystem = new PhoenixLoggingSubsystem(fieldManagementSubsystem);
-  int state = 0;
-
-  private NetworkTable swerveTable;
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    swerveSubsystem = new SwerveSubsystem();
-    
-    if(DriverStation.getJoystickName(0).equals("Controller (Xbox One For Windows)")) {
-        driveController = new XboxDriveController();
-    }
-    else if(DriverStation.getJoystickName(0).equals("DualSense Wireless Controller")){
-        driveController = new PS5DriveController();
-    }
-    else{
-        driveController = new DualJoystickDriveController();
-    }
-    driveController.setDeadZone(0.03);
-
+    constructDriveController(); 
     startLog();
     configureBindings();
   }
@@ -103,70 +77,7 @@ public class RobotContainer {
       },
       swerveSubsystem
     );
-
-    // swerveSubsystem.setDefaultCommand(new RunCommand(() -> {
-    //       swerveSubsystem.setTestAngle(driveController.getForwardPower());
-    //     }, swerveSubsystem
-    // ));
-
-    // swerveTable.addListener("TestAngle", EnumSet.of(NetworkTableEvent.Kind.kValueAll), (table, key, event) -> {
-    //   swerveSubsystem.setTestAngle(event.valueData.value.getDouble());
-    // });
-
-    // singleModuleSwerve.setDefaultCommand(new InstantCommand(() -> {
-    //   System.out.println(mod.getWrappedAngle());
-    //   if(driveController.getRightBumperButtonPressed()) {
-    //     if (state == 7) {
-    //       state = 0;
-    //     }
-    //     else {
-    //       state += 1;
-    //     }
-    //   }
-
-    //   switch (state) {
-          // case 1: 
-          //     singleModuleSwerve.setRawPowers(.5, 0);
-          //     // singleModuleSwerve.setState(0, Units.degreesToRadians(180));
-          //     break;
-
-          // case 2:
-          //     singleModuleSwerve.setRawPowers(-.5, 0);
-          //     // singleModuleSwerve.setState(0, Units.degreesToRadians(180));
-          //     break;
-
-          // case 0:
-          //     singleModuleSwerve.setRawPowers(0, .5);
-          //     break;
-
-          // case 4:
-          //     singleModuleSwerve.setRawPowers(0, -.5);
-          //     break;
-
-          // case 5:
-          //     singleModuleSwerve.setState(0, Units.degreesToRadians(45));
-          //     break;
-
-          // case 6:
-          //     singleModuleSwerve.setState(0, Units.degreesToRadians(90));
-          //     break;
-          
-          // case 7:
-          //     singleModuleSwerve.setState(0, Units.degreesToRadians(135));
-          //     break;
-              
-    //       case 3:
-    //           singleModuleSwerve.setRawPowers(0, 0);
-    //           break;
-
-    //       default:
-    //           break;
-    //   }
-    // }, singleModuleSwerve));
-
   }
-
-  
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -177,6 +88,26 @@ public class RobotContainer {
     return new PathPlannerAuto("3m Auto");
   }
 
+  /**
+   * Constructs the drive controller based on the name of the controller at port
+   * 0
+   */
+  private void constructDriveController(){
+    if(DriverStation.getJoystickName(0).equals("Controller (Xbox One For Windows)")) {
+        driveController = new XboxDriveController();
+    }
+    else if(DriverStation.getJoystickName(0).equals("DualSense Wireless Controller")){
+        driveController = new PS5DriveController();
+    }
+    else{
+        driveController = new DualJoystickDriveController();
+    }
+    driveController.setDeadZone(0.03);
+  }
+
+  /**
+   * Starts datalog at /media/sda1/robotLogs
+   */
   private void startLog(){
     DataLogManager.start("/media/sda1/robotLogs");
     DriverStation.startDataLog(DataLogManager.getLog());
