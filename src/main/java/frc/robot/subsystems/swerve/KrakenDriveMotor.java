@@ -32,6 +32,10 @@ public class KrakenDriveMotor {
     private NetworkTableInstance ntInstance;
     private NetworkTable swerveStatsTable;
     private DoublePublisher veloErrorPublisher;
+    private DoublePublisher veloPublisher;
+    private DoublePublisher appliedVlotsPublisher;
+    private DoublePublisher supplyCurrentPublisher;
+    private DoublePublisher statorCurrentPublisher;
 
     private StatusSignal<Angle> positionSignal;
     private StatusSignal<AngularVelocity> velocitySignal;
@@ -62,7 +66,6 @@ public class KrakenDriveMotor {
 
         initNT(canId);
         initSignals();
-        veloErrorPublisher = swerveStatsTable.getDoubleTopic(canId + "veloError").publish();
     }
     
     /**
@@ -72,6 +75,11 @@ public class KrakenDriveMotor {
     private void initNT(int canId){
         ntInstance = NetworkTableInstance.getDefault();
         swerveStatsTable = ntInstance.getTable("swerveStats");
+        veloErrorPublisher = swerveStatsTable.getDoubleTopic(canId + "veloError").publish();
+        veloPublisher = swerveStatsTable.getDoubleTopic(canId + "velo").publish();
+        appliedVlotsPublisher = swerveStatsTable.getDoubleTopic(canId + "appliedVolts").publish();
+        supplyCurrentPublisher = swerveStatsTable.getDoubleTopic(canId + "supplyCurrent").publish();
+        statorCurrentPublisher = swerveStatsTable.getDoubleTopic(canId + "statorCurrent").publish();
     }
     private void initSignals(){
         positionSignal = motor.getPosition();
@@ -119,6 +127,10 @@ public class KrakenDriveMotor {
         return DRIVE_WHEEL_CIRCUMFERENCE / DRIVE_GEAR_REDUCTION * (motor.getPosition().getValueAsDouble());
     }
 
+    /**
+     * get swerve wheel's velocity in m/s
+     * @return swerve wheel's velocity in m/s
+     */
     public double getVelocity() {
         return motor.getVelocity().getValueAsDouble() / DRIVE_GEAR_REDUCTION * DRIVE_WHEEL_CIRCUMFERENCE;
     }
@@ -155,9 +167,13 @@ public class KrakenDriveMotor {
         return motor.getSupplyVoltage().getValueAsDouble();
     }
 
-    public void publishVeloError(){
+    public void publishStats(){
         // veloErrorPublisher.set(this.targetRps - motor.getVelocity().getValueAsDouble());
         veloErrorPublisher.set(motor.getClosedLoopError().getValueAsDouble());
+        veloPublisher.set(motor.getVelocity().getValueAsDouble());
+        appliedVlotsPublisher.set(motor.getMotorVoltage().getValueAsDouble());
+        supplyCurrentPublisher.set(motor.getSupplyCurrent().getValueAsDouble());
+        statorCurrentPublisher.set(motor.getStatorCurrent().getValueAsDouble());
     }
 
 }
