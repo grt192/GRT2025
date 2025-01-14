@@ -109,9 +109,9 @@ public class RobotContainer {
     //     }, swerveSubsystem
     // ));
 
-    swerveTable.addListener("TestAngle", EnumSet.of(NetworkTableEvent.Kind.kValueAll), (table, key, event) -> {
-      swerveSubsystem.setTestAngle(event.valueData.value.getDouble());
-    });
+    // swerveTable.addListener("TestAngle", EnumSet.of(NetworkTableEvent.Kind.kValueAll), (table, key, event) -> {
+    //   swerveSubsystem.setTestAngle(event.valueData.value.getDouble());
+    // });
 
     // singleModuleSwerve.setDefaultCommand(new InstantCommand(() -> {
     //   System.out.println(mod.getWrappedAngle());
