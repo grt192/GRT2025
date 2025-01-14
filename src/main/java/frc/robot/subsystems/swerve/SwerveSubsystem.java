@@ -1,26 +1,20 @@
 package frc.robot.subsystems.swerve;
 
-import edu.wpi.first.math.MatBuilder;
-import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.util.SwerveSetpoint;
 
 import static frc.robot.Constants.SwerveConstants.*;
 
@@ -50,15 +44,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
     private NetworkTableInstance ntInstance;
     private NetworkTable swerveTable;
-    private NetworkTableEntry swerveDesiredStatesEntry;
-    private NetworkTableEntry swerveVxEntry;
-    private NetworkTableEntry swerveVyEntry;
-    private NetworkTableEntry swerveVoEntry;
-    private NetworkTableEntry chassisVxEntry;
-    private NetworkTableEntry chassisVyEntry;
-    private NetworkTableEntry chassisVoEntry;
-    private NetworkTableEntry swerveTestToggleEntry;
-    private NetworkTableEntry swerveTestAngleEntry;
 
     private final Field2d fieldVisual = new Field2d();
     private final ShuffleboardTab tab = Shuffleboard.getTab("Swerve");
@@ -85,17 +70,6 @@ public class SwerveSubsystem extends SubsystemBase {
         
         ntInstance = NetworkTableInstance.getDefault();
         swerveTable = ntInstance.getTable("Swerve");
-        swerveDesiredStatesEntry = swerveTable.getEntry("DesiredStates");
-        swerveVxEntry = swerveTable.getEntry("swerveVx");
-        swerveVyEntry = swerveTable.getEntry("swerveVy");
-        swerveVoEntry = swerveTable.getEntry("swerveVo");
-        chassisVxEntry = swerveTable.getEntry("chassisVx");
-        chassisVyEntry = swerveTable.getEntry("chassisVy");
-        chassisVoEntry = swerveTable.getEntry("chassisVo");
-        swerveTestToggleEntry = swerveTable.getEntry("TestToggle");
-        swerveTestToggleEntry.setBoolean(false);
-        swerveTestAngleEntry = swerveTable.getEntry("TestAngle");
-        
         tab.add("Field", fieldVisual);
         
 
@@ -173,25 +147,17 @@ public class SwerveSubsystem extends SubsystemBase {
      * @param angularPower [-1, 1] The rotational power.
      */
     public void setDrivePowers(double xPower, double yPower, double angularPower) {
-        swerveVxEntry.setDouble(xPower);
-        swerveVyEntry.setDouble(yPower);
-        swerveVoEntry.setDouble(angularPower);
         ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
             xPower * MAX_VEL, 
             yPower * MAX_VEL, 
             angularPower * MAX_OMEGA,
             getDriverHeading()
         );
-        chassisVxEntry.setDouble(speeds.vxMetersPerSecond);
-        chassisVyEntry.setDouble(speeds.vyMetersPerSecond);
-        chassisVoEntry.setDouble(speeds.omegaRadiansPerSecond);
-        // System.out.println(speeds);
 
         states = kinematics.toSwerveModuleStates(speeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(
             states, speeds,
             MAX_VEL, MAX_VEL, MAX_OMEGA);
-        // System.out.println(states[0]);
     }
 
     /**
@@ -277,13 +243,6 @@ public class SwerveSubsystem extends SubsystemBase {
         // backRightModule.steerMotor.setPosition(angle);
     }
     
-    private void updateNT(){
-        frontLeftModule.updateNT();
-        frontRightModule.updateNT();
-        backLeftModule.updateNT();
-        backRightModule.updateNT();
-    }
-
     public void resetPose(Pose2d currentPose) {
         Rotation2d gyroAngle = getGyroHeading();
         poseEstimator.resetPosition(

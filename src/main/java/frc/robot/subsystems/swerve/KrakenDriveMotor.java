@@ -15,7 +15,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -32,13 +31,6 @@ public class KrakenDriveMotor {
 
     private NetworkTableInstance ntInstance;
     private NetworkTable swerveStatsTable;
-    private NetworkTableEntry deviceTempEntry;
-    private NetworkTableEntry processorTempEntry;
-    private NetworkTableEntry ampDrawEntry;
-    private NetworkTableEntry statorCurrentEntry;
-    private NetworkTableEntry supplyCurrentEntry;
-    private NetworkTableEntry supplyVoltageEntry;
-
     private DoublePublisher veloErrorPublisher;
 
     private StatusSignal<Angle> positionSignal;

@@ -1,11 +1,9 @@
 package frc.robot.subsystems.swerve;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class SwerveModule {
@@ -27,10 +25,7 @@ public class SwerveModule {
 
     private NetworkTableInstance ntInstance;
     private NetworkTable swerveTable;
-    private NetworkTableEntry swerveOptimizedStateEntry;
-    private NetworkTableEntry swerveDriveVeloEntry;
-    private NetworkTableEntry swerveSteerPositionEntry;
-
+    
     /** Constructs a Swerve Module.
      *
      * @param drivePort The CAN ID of the drive motor
@@ -50,10 +45,6 @@ public class SwerveModule {
 
         ntInstance = NetworkTableInstance.getDefault();
         swerveTable = ntInstance.getTable("Swerve");
-        swerveOptimizedStateEntry = swerveTable.getEntry(drivePort + "OptimizedState");
-        swerveDriveVeloEntry = swerveTable.getEntry(drivePort + "DriveVelo");
-        swerveSteerPositionEntry = swerveTable.getEntry(drivePort + "SteerPos");
-
     }
 
     /** Sets the un optimized desired state of this swerve module through setting the PID targets.
