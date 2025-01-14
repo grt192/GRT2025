@@ -175,7 +175,8 @@ public class KrakenDriveMotor {
     }
 
     public void publishVeloError(){
-        veloErrorPublisher.set(this.targetRps - motor.getVelocity().getValueAsDouble());
+        // veloErrorPublisher.set(this.targetRps - motor.getVelocity().getValueAsDouble());
+        veloErrorPublisher.set(motor.getClosedLoopError().getValueAsDouble());
     }
 
 }
