@@ -3,7 +3,6 @@ package frc.robot.subsystems.swerve;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
-import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -108,7 +107,7 @@ public class KrakenDriveMotor {
     }
 
     public void setVelocity(double metersPerSec) {
-        targetRps = metersPerSec / 0.3192;
+        targetRps = metersPerSec / 0.3192 * 3. * 20. / 26. * 3;
         motor.setControl(request.withVelocity(targetRps));
     }
 
@@ -132,7 +131,7 @@ public class KrakenDriveMotor {
     }
 
     public double getVelocity() {
-        return motor.getVelocity().getValueAsDouble(); 
+        return motor.getVelocity().getValueAsDouble() * Units.inchesToMeters(Math.PI * 4); 
     }
 
     public double getError() {
