@@ -124,13 +124,6 @@ public class SwerveSubsystem extends SubsystemBase {
         );
         
         fieldVisual.setRobotPose(getRobotPosition());
-        // updateNT(); //Causing Loop Overrun
-        //Causing Overrun
-        // String[] strStates = new String[4];
-        // for (int i = 0; i < 4; i++) {
-        //     strStates[i] = states[i].toString();
-        // }
-        // swerveDesiredStatesEntry.setStringArray(strStates);
         estimatedPosePublisher.set(estimate);
 
         frontLeftModule.driveMotor.publishVeloError();
@@ -237,7 +230,7 @@ public class SwerveSubsystem extends SubsystemBase {
         // backLeftModule.setDesiredState(testState);
         // backRightModule.setDesiredState(testState);
 
-        frontLeftModule.steerMotor.setPosition(angle);
+        // frontLeftModule.steerMotor.setPosition(angle);
         // frontRightModule.steerMotor.setPosition(angle);
         // backLeftModule.steerMotor.setPosition(angle);
         // backRightModule.steerMotor.setPosition(angle);

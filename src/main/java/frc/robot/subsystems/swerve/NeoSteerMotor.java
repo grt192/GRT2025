@@ -45,9 +45,7 @@ public class NeoSteerMotor {
         
         sparkMaxConfig = new SparkMaxConfig();
         sparkMaxConfig.apply(closedLoopConfig)
-                    //   .inverted(true)
                       .apply(encoderConfig);
-                    //   .absoluteEncoder.setSparkMaxDataPortConfig().inverted(true);
 
         motor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         
@@ -74,9 +72,6 @@ public class NeoSteerMotor {
 
     public void setPosition(double targetRads) {
         double targetDouble = (targetRads + Math.PI) / (2. * Math.PI);
-        // System.out.println("error" + (targetDouble - steerEncoder.getPosition()));
-        // System.out.println("current" + steerEncoder.getPosition());
-        // System.out.println("volts" + motor.getOutputCurrent());
         steerPIDController.setReference(targetDouble, ControlType.kPosition);
     }
 

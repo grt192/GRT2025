@@ -72,14 +72,7 @@ public class KrakenDriveMotor {
     private void initNT(int canId){
         ntInstance = NetworkTableInstance.getDefault();
         swerveStatsTable = ntInstance.getTable("swerveStats");
-        // deviceTempEntry = swerveStatsTable.getEntry(canId + "deviceTemp");
-        // processorTempEntry = swerveStatsTable.getEntry(canId + "processorTemp");
-        // ampDrawEntry = swerveStatsTable.getEntry(canId + "ampDraw");
-        // statorCurrentEntry = swerveStatsTable.getEntry(canId + "statorCurrent");
-        // supplyCurrentEntry = swerveStatsTable.getEntry(canId + "supplyCurrena");
-        // supplyVoltageEntry = swerveStatsTable.getEntry(canId + "supplyVoltage");
     }
-
     private void initSignals(){
         positionSignal = motor.getPosition();
         velocitySignal = motor.getVelocity();
@@ -95,22 +88,18 @@ public class KrakenDriveMotor {
     }
 
     /**
-     * updates motor stats to network tables
+     * Set motor velo to target velo
+     * @param metersPerSec target velo in m/s
      */
-    public void updateNT(){
-        // deviceTempEntry.setDouble(getDeviceTemp());
-        // processorTempEntry.setDouble(getProcessorTemp());
-        // ampDrawEntry.setDouble(getAmpDraw());
-        // statorCurrentEntry.setDouble(getStatorCurrent());
-        // supplyCurrentEntry.setDouble(getSupplyCurrent());
-        // supplyVoltageEntry.seuble(getSupplyVoltage());
-    }
-
     public void setVelocity(double metersPerSec) {
         targetRps = metersPerSec / DRIVE_WHEEL_CIRCUMFERENCE * DRIVE_GEAR_REDUCTION;
         motor.setControl(request.withVelocity(targetRps));
     }
 
+    /**
+     * Set motor power to provided power
+     * @param power -1.0 - 1.0
+     */
     public void setPower(double power) {
         motor.set(power);
     }
