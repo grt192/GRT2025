@@ -1,5 +1,6 @@
 package frc.robot.subsystems.swerve;
 
+import static frc.robot.Constants.LoggingConstants.SWERVE_TABLE;
 import static frc.robot.Constants.SwerveConstants.DRIVE_GEAR_REDUCTION;
 import static frc.robot.Constants.SwerveConstants.DRIVE_WHEEL_CIRCUMFERENCE;
 
@@ -74,7 +75,7 @@ public class KrakenDriveMotor {
      */
     private void initNT(int canId){
         ntInstance = NetworkTableInstance.getDefault();
-        swerveStatsTable = ntInstance.getTable("swerveStats");
+        swerveStatsTable = ntInstance.getTable(SWERVE_TABLE);
         veloErrorPublisher = swerveStatsTable.getDoubleTopic(canId + "veloError").publish();
         veloPublisher = swerveStatsTable.getDoubleTopic(canId + "velo").publish();
         appliedVlotsPublisher = swerveStatsTable.getDoubleTopic(canId + "appliedVolts").publish();
