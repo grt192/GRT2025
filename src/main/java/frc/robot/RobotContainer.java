@@ -4,43 +4,24 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.controllers.BaseDriveController;
 import frc.robot.controllers.DualJoystickDriveController;
 import frc.robot.controllers.PS5DriveController;
 import frc.robot.controllers.XboxDriveController;
 
-import static frc.robot.Constants.SwerveConstants.BL_DRIVE;
-import static frc.robot.Constants.SwerveConstants.BL_STEER;
-import static frc.robot.Constants.SwerveConstants.BR_DRIVE;
-import static frc.robot.Constants.SwerveConstants.BR_STEER;
-import static frc.robot.Constants.SwerveConstants.FL_DRIVE;
-import static frc.robot.Constants.SwerveConstants.FL_STEER;
-import static frc.robot.Constants.SwerveConstants.FR_DRIVE;
-import static frc.robot.Constants.SwerveConstants.FR_STEER;
-
 import java.util.EnumSet;
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathPlannerPath;
 
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableEvent;
-import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.FieldManagementSubsystem.FieldManagementSubsystem;
 import frc.robot.subsystems.PhoenixLoggingSubsystem.PhoenixLoggingSubsystem;
-import frc.robot.subsystems.swerve.SingleModuleSwerveSubsystem;
-import frc.robot.subsystems.swerve.SwerveModule;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 
 /**
@@ -59,24 +40,16 @@ public class RobotContainer {
 
 
   // SwerveModule mod = new SwerveModule(BR_DRIVE, BR_STEER, offsetRads);
-  // IAmDyingSubsystem pls = new IAmDyingSubsystem();
   // SingleModuleSwerveSubsystem singleModuleSwerve = new SingleModuleSwerveSubsystem(mod);
   private final SwerveSubsystem swerveSubsystem;
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final XboxController mechController =
-      new XboxController(OperatorConstants.kDriverControllerPort);
-
   // SwerveModule mod = new SwerveModule(drivePort, steerPort, offsetRads);
-  // IAmDyingSubsystem pls = new IAmDyingSubsystem();
   // SingleModuleSwerveSubsystem singleModuleSwerve = new SingleModuleSwerveSubsystem(mod);
   FieldManagementSubsystem fieldManagementSubsystem = new FieldManagementSubsystem();
   PhoenixLoggingSubsystem phoenixLoggingSubsystem = new PhoenixLoggingSubsystem(fieldManagementSubsystem);
   int state = 0;
 
-  private NetworkTableInstance ntInstance;
   private NetworkTable swerveTable;
-  private NetworkTableEntry swerveTestAngleEntry;
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     swerveSubsystem = new SwerveSubsystem();
@@ -92,15 +65,7 @@ public class RobotContainer {
     }
     driveController.setDeadZone(0.03);
 
-    ntInstance = NetworkTableInstance.getDefault();
-    swerveTable = ntInstance.getTable("Swerve");
-    swerveTestAngleEntry = swerveTable.getEntry("TestAngle");
-    swerveTestAngleEntry.setDouble(0);
-    // pls.configurePID(.5, 0, 0, 0); 
-    // Configure the trigger bindings
-
-
-
+    startLog();
     configureBindings();
   }
 
@@ -131,11 +96,6 @@ public class RobotContainer {
       )
     );
 
-    InstantCommand resetDriverHeadingCommand = new InstantCommand(() ->{ 
-        swerveSubsystem.resetDriverHeading();
-      },
-      swerveSubsystem
-    );
     /* Pressing the button resets the field axes to the current robot axes. */
     driveController.bindDriverHeadingReset(
       () ->{
@@ -215,5 +175,11 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return new PathPlannerAuto("3m Auto");
+  }
+
+  private void startLog(){
+    DataLogManager.start("/media/sda1/robotLogs");
+    DriverStation.startDataLog(DataLogManager.getLog());
+
   }
 }
