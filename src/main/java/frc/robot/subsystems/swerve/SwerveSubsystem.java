@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -17,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static frc.robot.Constants.SwerveConstants.*;
+import static frc.robot.Constants.LoggingConstants.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
@@ -35,6 +37,7 @@ public class SwerveSubsystem extends SubsystemBase {
         new SwerveModuleState()
     };
 
+    private Pose2d estimatedPose;
     private final SwerveDriveKinematics kinematics;
     private final SwerveDrivePoseEstimator poseEstimator;
     private Rotation2d driverHeadingOffset = new Rotation2d();
@@ -44,6 +47,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     private NetworkTableInstance ntInstance;
     private NetworkTable swerveTable;
+    private StructArrayPublisher<SwerveModuleState> swerveStatesPublisher;
 
     private final Field2d fieldVisual = new Field2d();
     private final ShuffleboardTab tab = Shuffleboard.getTab("Swerve");
@@ -66,48 +70,10 @@ public class SwerveSubsystem extends SubsystemBase {
             getGyroHeading(), 
             getModulePositions(),
             new Pose2d()
-            );
-        
-        ntInstance = NetworkTableInstance.getDefault();
-        swerveTable = ntInstance.getTable("Swerve");
-        tab.add("Field", fieldVisual);
-        
-
-        RobotConfig config = null;
-        try {
-            config = RobotConfig.fromGUISettings();
-        } catch (Exception e) {
-            e.printStackTrace();
-            // Handle exception as needed, maybe use default values or fallback
-        }
-
-        AutoBuilder.configure(
-            this::getRobotPosition,
-            this::resetPose,
-            this::getRobotRelativeChassisSpeeds,
-            (speeds, feedforwards) -> setRobotRelativeDrivePowers(speeds),
-            
-            new PPHolonomicDriveController(
-                new PIDConstants(1, 0.0, 0.0),
-                new PIDConstants(1.0, 0.0, 0.0)
-            ),
-
-            config,
-            ()->{
-                var alliance = DriverStation.getAlliance();
-                if (alliance.isPresent()) {
-                    return alliance.get()==DriverStation.Alliance.Red;
-                }
-                return false; 
-            },
-            this
-
         );
 
-        estimatedPosePublisher = swerveTable.getStructTopic(
-            "estimatedPose",
-            Pose2d.struct
-        ).publish();
+        buildAuton(); 
+        initNT();
     }
 
     @Override
@@ -118,18 +84,13 @@ public class SwerveSubsystem extends SubsystemBase {
         backRightModule.setDesiredState(states[3]);
                 
         Rotation2d gyroAngle = getGyroHeading();
-        Pose2d estimate = poseEstimator.update(
+        estimatedPose = poseEstimator.update(
             gyroAngle,
             getModulePositions()
         );
         
-        fieldVisual.setRobotPose(getRobotPosition());
-        estimatedPosePublisher.set(estimate);
-
-        frontLeftModule.driveMotor.publishVeloError();
-        frontRightModule.driveMotor.publishVeloError();
-        backLeftModule.driveMotor.publishVeloError();
-        backRightModule.driveMotor.publishVeloError();
+        
+        publishStats();
     }
 
     /**
@@ -212,7 +173,7 @@ public class SwerveSubsystem extends SubsystemBase {
      * @return The robot Pose2d.
      */
     public Pose2d getRobotPosition() {
-        return poseEstimator.getEstimatedPosition();
+        return estimatedPose;
     }
 
     /**
@@ -267,5 +228,64 @@ public class SwerveSubsystem extends SubsystemBase {
             MAX_VEL, MAX_VEL, MAX_OMEGA);
     }
 
+    private void initNT(){
+        ntInstance = NetworkTableInstance.getDefault();
+        swerveTable = ntInstance.getTable(SWERVE_TABLE);
 
+        swerveStatesPublisher = swerveTable.getStructArrayTopic(
+            "SwerveStates", SwerveModuleState.struct
+        ).publish(); 
+
+        estimatedPosePublisher = swerveTable.getStructTopic(
+            "estimatedPose",
+            Pose2d.struct
+        ).publish();
+
+        tab.add("Field", fieldVisual);
+    }
+
+    /**
+     * publishes swerve stats to NT
+     */
+    private void publishStats(){
+        swerveStatesPublisher.set(getModuleStates());
+        estimatedPosePublisher.set(estimatedPose);
+        fieldVisual.setRobotPose(estimatedPose);
+        frontLeftModule.driveMotor.publishStats();
+        frontRightModule.driveMotor.publishStats();
+        backLeftModule.driveMotor.publishStats();
+        backRightModule.driveMotor.publishStats();
+    }
+
+    private void buildAuton(){
+        RobotConfig config = null;
+        try {
+            config = RobotConfig.fromGUISettings();
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle exception as needed, maybe use default values or fallback
+        }
+
+        AutoBuilder.configure(
+            this::getRobotPosition,
+            this::resetPose,
+            this::getRobotRelativeChassisSpeeds,
+            (speeds, feedforwards) -> setRobotRelativeDrivePowers(speeds),
+            
+            new PPHolonomicDriveController(
+                new PIDConstants(1, 0.0, 0.0),
+                new PIDConstants(1.0, 0.0, 0.0)
+            ),
+
+            config,
+            ()->{
+                var alliance = DriverStation.getAlliance();
+                if (alliance.isPresent()) {
+                    return alliance.get()==DriverStation.Alliance.Red;
+                }
+                return false; 
+            },
+            this
+        );
+    }
 }
