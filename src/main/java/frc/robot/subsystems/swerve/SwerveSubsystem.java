@@ -45,8 +45,6 @@ public class SwerveSubsystem extends SubsystemBase {
     private final SwerveDrivePoseEstimator poseEstimator;
     private Rotation2d driverHeadingOffset = new Rotation2d();
 
-    public static final double MAX_VEL = 6000 / 6.923 / 60 * 2 * 2 * Math.PI * .0254; // Kraken speed / gear ratio / reduced to per second * circumference * convert to meters
-    public static final double MAX_OMEGA = MAX_VEL / FL_POS.getNorm();
 
     private final AHRS ahrs;
 
