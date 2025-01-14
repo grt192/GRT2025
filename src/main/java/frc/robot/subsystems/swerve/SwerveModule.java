@@ -6,6 +6,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
+import static frc.robot.Constants.SwerveConstants.*;
+
 public class SwerveModule {
 
     public final KrakenDriveMotor driveMotor;
@@ -13,16 +15,7 @@ public class SwerveModule {
 
     private double offsetRads = 0;
 
-    private static final double DRIVE_P = 0.3; // temporary value
-    private static final double DRIVE_I = 0; 
-    private static final double DRIVE_D = 0;
-    private static final double DRIVE_FF = 0.05;
-
-    private static final double STEER_P = 5.8;
-    private static final double STEER_I = 0;
-    private static final double STEER_D = 0;
-    private static final double STEER_FF = 0;
-
+    
     private NetworkTableInstance ntInstance;
     private NetworkTable swerveTable;
     
@@ -39,7 +32,7 @@ public class SwerveModule {
         steerMotor.configurePID(STEER_P, STEER_I, STEER_D, STEER_FF);
 
         driveMotor = new KrakenDriveMotor(drivePort);
-        driveMotor.configPID(DRIVE_P, DRIVE_I, DRIVE_D, DRIVE_FF);
+        driveMotor.configPID(DRIVE_P, DRIVE_I, DRIVE_D, DRIVE_S, DRIVE_V);
 
         this.offsetRads = offsetRads;
 

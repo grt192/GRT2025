@@ -112,13 +112,14 @@ public class KrakenDriveMotor {
         motor.set(power);
     }
 
-    public void configPID(double p, double i, double d, double ff) {
+    public void configPID(double p, double i, double d, double s, double v) {
         Slot0Configs slot0Configs = new Slot0Configs();
 
-        slot0Configs.kV = ff;
         slot0Configs.kP = p;
         slot0Configs.kI = i;
         slot0Configs.kD = d;
+        slot0Configs.kS = s;
+        slot0Configs.kV = v;
 
         motor.getConfigurator().apply(slot0Configs);
     }
