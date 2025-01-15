@@ -27,7 +27,24 @@ public final class Constants {
       public static final double PIVOT_D = 0;//placeholder value
 
       public static final int SENSOR_ID = 0;//placeholder value
+      public static final double PIVOT_POSITION_1 = 0;//placeholder value
+      
+      public enum Positions{//each position corresponds to a tuned height
+        POS1(0.2),
+        POS2(0.4),
+        POS3(-0.3);
+        private final double pos;
 
+        // Constructor to set the double value
+        createPos(double pos) {
+            this.pos = pos;
+        }
+    
+        // Getter to retrieve the rate
+        public double getPos() {
+            return pos;
+        }
+      }
     }
       /** Constants for the swerve subsystem. */
     public static class SwerveConstants {

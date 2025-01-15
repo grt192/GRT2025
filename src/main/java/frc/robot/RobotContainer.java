@@ -58,6 +58,15 @@ public class RobotContainer {
       * the robot is controlled along its own axes, otherwise controls apply to the field axes by default. If the
       * swerve aim button is held down, the robot will rotate automatically to always face a target, and only
       * translation will be manually controllable. */
+
+      //HYPOTHETICAL BACK ALGAE CODE
+      /*
+       * Bind a button to move pivot into intaking position, rollers start rolling automatically
+       *  Rollers stop when you press the button again or when distance  sensor detects ball
+       * 
+       * Bind a button to move pivot into outtaking position
+       * Pressing that button twice spits the algae out
+       */
     swerveSubsystem.setDefaultCommand(
       new RunCommand(() -> {
         swerveSubsystem.setDrivePowers(
