@@ -17,21 +17,20 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkBase.ControlType;
+
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.BackAlgaeConstants;
 
-import edu.wpi.first.wpilibj.DigitalInput;
+import frc.robot.Constants.ClimbConstants;
 
 
-public class BackAlgaeSubsystem extends SubsystemBase {
-  static double speed;
-  static double angle;
-  private final SparkMax pivotMotor;
-  private final SparkMax rollerMotor;
+public class ClimbSubsysten extends SubsystemBase {
+
+  private final SparkMax topMotor;
+  private final SparkMax botMotor;
 
   private RelativeEncoder encoder;
   private final ClosedLoopConfig closedLoopConfig;
@@ -39,15 +38,13 @@ public class BackAlgaeSubsystem extends SubsystemBase {
   private final SparkClosedLoopController steerPIDController;
   private final EncoderConfig encoderConfig;
 
-  private final DigitalInput algaeSensor;
-
   /** Creates a new ExampleSubsystem. */
-  public BackAlgaeSubsystem() {
-    angle = 0;
-    pivotMotor = new SparkMax(BackAlgaeConstants.PIVOT_MOTOR_ID, MotorType.kBrushless);
-    rollerMotor = new SparkMax(BackAlgaeConstants.PIVOT_MOTOR_ID, MotorType.kBrushless);
-
-    steerPIDController = pivotMotor.getClosedLoopController();
+  public ClimbSubsysten() {
+    
+    topMotor = new SparkMax(ClimbConstants.TOP_MOTOR_ID, MotorType.kBrushless);
+    botMotor = new SparkMax(ClimbConstants.BOT_MOTOR_ID, MotorType.kBrushless);
+    botMotor.follow(topMotor);
+    steerPIDController = topMotor.getClosedLoopController();
 
     encoderConfig = new EncoderConfig();
     // encoderConfig.inverted(true);
@@ -64,10 +61,8 @@ public class BackAlgaeSubsystem extends SubsystemBase {
                   .apply(closedLoopConfig)
                   .inverted(true);
 
-    pivotMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    configurePID(BackAlgaeConstants.PIVOT_P, BackAlgaeConstants.PIVOT_I, BackAlgaeConstants.PIVOT_D);
-
-    algaeSensor = new DigitalInput(BackAlgaeConstants.SENSOR_ID);
+    topMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    configurePID(ClimbConstants.CLIMB_P, ClimbConstants.CLIMB_I, ClimbConstants.CLIMB_D);
 
   }
 
@@ -83,7 +78,7 @@ public class BackAlgaeSubsystem extends SubsystemBase {
   public void configurePID(double p, double i, double d){
     closedLoopConfig.pid(p, i, d);
     sparkMaxConfig.apply(closedLoopConfig);
-    pivotMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    topMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 }
 
 public void setPosition(double targetRads) {
@@ -93,15 +88,13 @@ public void setPosition(double targetRads) {
     steerPIDController.setReference(targetDouble, ControlType.kPosition);
 }
 public void driveRollers(double speed){
-  rollerMotor.set(speed);
+  topMotor.set(speed);
 }
 public double getMotorPosition() {
   // Returns the position in rotations
   return encoder.getPosition();
 }
-public boolean SensorGet(){
-  return algaeSensor.get();
-}
+
 
   /**
    * An example method querying a boolean state of the subsystem (for example, a

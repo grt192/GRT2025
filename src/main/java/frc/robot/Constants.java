@@ -43,21 +43,27 @@ public final class Constants {
     public static final double PIVOT_I = 0;//placeholder value
     public static final double PIVOT_D = 0;//placeholder value
 
-    public static final int SENSOR_ID = 0;//placeholder value
-    public static final double PIVOT_POSITION_1 = 0;//placeholder value
-    public static final double PIVOT_POSITION_2 = 0;//placeholder value
-  }
+      public static final int SENSOR_ID = 0;//placeholder value
+      public static final double PIVOT_POSITION_1 = 0;//placeholder value
+      public static final double PIVOT_POSITION_2 = 0;//placeholder value
+    }
+    public static class ClimbConstants{
+      public static final int TOP_MOTOR_ID = 1;//Placeholder
+      public static final int BOT_MOTOR_ID = 2;//Placeholder
+      public static final double CLIMB_P = 0.01;//placeholder value
+      public static final double CLIMB_I = 0;//placeholder value
+      public static final double CLIMB_D = 0;//placeholder value
+      public static final double CLIMB_POSITION_1 = 0;//placeholder value
+      public static final double CLIMB_POSITION_2 = 0;//placeholder value
+    }
 
-  public static class ClimbConstants{
-    public static final int MOTOR_ID = 0;//Placeholder
 
-  }
     
-    /** Constants for the swerve subsystem. */
-  public static class SwerveConstants {
-    public static final int FL_DRIVE = 0;
-    public static final int FL_STEER = 1;
-    public static final double FL_OFFSET = 0;
+      /** Constants for the swerve subsystem. */
+    public static class SwerveConstants {
+      public static final int FL_DRIVE = 0;
+      public static final int FL_STEER = 1;
+      public static final double FL_OFFSET = 0;
 
     public static final int FR_DRIVE = 2;
     public static final int FR_STEER = 3;
