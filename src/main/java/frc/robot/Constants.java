@@ -28,24 +28,20 @@ public final class Constants {
 
       public static final int SENSOR_ID = 0;//placeholder value
       public static final double PIVOT_POSITION_1 = 0;//placeholder value
-      
-      public enum Positions{//each position corresponds to a tuned height
-        POS1(0.2),
-        POS2(0.4),
-        POS3(-0.3);
-        private final double pos;
-
-        // Constructor to set the double value
-        createPos(double pos) {
-            this.pos = pos;
-        }
-    
-        // Getter to retrieve the rate
-        public double getPos() {
-            return pos;
-        }
-      }
+      public static final double PIVOT_POSITION_2 = 0;//placeholder value
     }
+    public static class ClimbConstants{
+      public static final int TOP_MOTOR_ID = 1;//Placeholder
+      public static final int BOT_MOTOR_ID = 2;//Placeholder
+      public static final double CLIMB_P = 0.01;//placeholder value
+      public static final double CLIMB_I = 0;//placeholder value
+      public static final double CLIMB_D = 0;//placeholder value
+      public static final double CLIMB_POSITION_1 = 0;//placeholder value
+      public static final double CLIMB_POSITION_2 = 0;//placeholder value
+    }
+
+
+    
       /** Constants for the swerve subsystem. */
     public static class SwerveConstants {
       public static final int FL_DRIVE = 0;
