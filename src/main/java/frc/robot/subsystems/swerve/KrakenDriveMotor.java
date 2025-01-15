@@ -1,18 +1,20 @@
 package frc.robot.subsystems.swerve;
 
+import static frc.robot.Constants.LoggingConstants.SWERVE_TABLE;
+import static frc.robot.Constants.SwerveConstants.DRIVE_GEAR_REDUCTION;
+import static frc.robot.Constants.SwerveConstants.DRIVE_WHEEL_CIRCUMFERENCE;
+
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
-import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -29,18 +31,18 @@ public class KrakenDriveMotor {
 
     private NetworkTableInstance ntInstance;
     private NetworkTable swerveStatsTable;
-    private NetworkTableEntry deviceTempEntry;
-    private NetworkTableEntry processorTempEntry;
-    private NetworkTableEntry ampDrawEntry;
-    private NetworkTableEntry statorCurrentEntry;
-    private NetworkTableEntry supplyCurrentEntry;
-    private NetworkTableEntry supplyVoltageEntry;
+    private DoublePublisher veloErrorPublisher;
+    private DoublePublisher veloPublisher;
+    private DoublePublisher appliedVlotsPublisher;
+    private DoublePublisher supplyCurrentPublisher;
+    private DoublePublisher statorCurrentPublisher;
 
     private StatusSignal<Angle> positionSignal;
     private StatusSignal<AngularVelocity> velocitySignal;
     private StatusSignal<Voltage> appliedVoltsSignal;
     private StatusSignal<Current> supplyCurrentSignal;
     private StatusSignal<Current> statorCurrentSignal; //torqueCurrent is Pro
+
 
     /** A kraken drive motor for swerve.
      *
@@ -53,8 +55,6 @@ public class KrakenDriveMotor {
         // motorConfig.TorqueCurrent.PeakReverseTorqueCurrent = -80.0;
         // motorConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.02;
         motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-
-        motorConfig.Feedback.SensorToMechanismRatio = 3. * 20. / 26. * 3.; //according to Samuel
 
         // Apply configs, apparently this fails a lot
         for (int i = 0; i < 4; i++) {
@@ -72,15 +72,17 @@ public class KrakenDriveMotor {
      */
     private void initNT(int canId){
         ntInstance = NetworkTableInstance.getDefault();
-        swerveStatsTable = ntInstance.getTable("swerveStats");
-        deviceTempEntry = swerveStatsTable.getEntry(canId + "deviceTemp");
-        processorTempEntry = swerveStatsTable.getEntry(canId + "processorTemp");
-        ampDrawEntry = swerveStatsTable.getEntry(canId + "ampDraw");
-        statorCurrentEntry = swerveStatsTable.getEntry(canId + "statorCurrent");
-        supplyCurrentEntry = swerveStatsTable.getEntry(canId + "supplyCurrena");
-        supplyVoltageEntry = swerveStatsTable.getEntry(canId + "supplyVoltage");
+        swerveStatsTable = ntInstance.getTable(SWERVE_TABLE);
+        veloErrorPublisher = swerveStatsTable.getDoubleTopic(canId + "veloError").publish();
+        veloPublisher = swerveStatsTable.getDoubleTopic(canId + "velo").publish();
+        appliedVlotsPublisher = swerveStatsTable.getDoubleTopic(canId + "appliedVolts").publish();
+        supplyCurrentPublisher = swerveStatsTable.getDoubleTopic(canId + "supplyCurrent").publish();
+        statorCurrentPublisher = swerveStatsTable.getDoubleTopic(canId + "statorCurrent").publish();
     }
 
+    /**
+     * Initializes Phoenix 6's signals
+     */
     private void initSignals(){
         positionSignal = motor.getPosition();
         velocitySignal = motor.getVelocity();
@@ -96,75 +98,68 @@ public class KrakenDriveMotor {
     }
 
     /**
-     * updates motor stats to network tables
+     * Set motor velo to target velo
+     * @param metersPerSec target velo in m/s
      */
-    public void updateNT(){
-        deviceTempEntry.setDouble(getDeviceTemp());
-        processorTempEntry.setDouble(getProcessorTemp());
-        ampDrawEntry.setDouble(getAmpDraw());
-        statorCurrentEntry.setDouble(getStatorCurrent());
-        supplyCurrentEntry.setDouble(getSupplyCurrent());
-        supplyVoltageEntry.setDouble(getSupplyVoltage());
-    }
-
     public void setVelocity(double metersPerSec) {
-        targetRps = metersPerSec / 0.3192;
+        targetRps = metersPerSec / DRIVE_WHEEL_CIRCUMFERENCE * DRIVE_GEAR_REDUCTION;
         motor.setControl(request.withVelocity(targetRps));
     }
 
-    public void setPower(double power) {
-        motor.set(power);
-    }
-
-    public void configPID(double p, double i, double d, double ff) {
+    /**
+     * Configures drive motor's PIDSV
+     * @param p kP
+     * @param i kI
+     * @param d kD
+     * @param s kS for static friction
+     * @param v kV Voltage feed forward
+     */
+    public void configPID(double p, double i, double d, double s, double v) {
         Slot0Configs slot0Configs = new Slot0Configs();
 
-        slot0Configs.kV = ff;
         slot0Configs.kP = p;
         slot0Configs.kI = i;
         slot0Configs.kD = d;
+        slot0Configs.kS = s;
+        slot0Configs.kV = v;
 
         motor.getConfigurator().apply(slot0Configs);
     }
 
+    /**
+     * Gets the distance the drive wheel has traveled.
+     * @return distance the drive wheel has traveled in meters
+     */
     public double getDistance() {
-        return Units.inchesToMeters(Math.PI * 4) * (motor.getPosition().getValueAsDouble());
+        return DRIVE_WHEEL_CIRCUMFERENCE / DRIVE_GEAR_REDUCTION * (motor.getPosition().getValueAsDouble());
     }
 
+    /**
+     * get swerve wheel's velocity in m/s
+     * @return swerve wheel's velocity in m/s
+     */
     public double getVelocity() {
-        return motor.getVelocity().getValueAsDouble(); 
+        return motor.getVelocity().getValueAsDouble() / DRIVE_GEAR_REDUCTION * DRIVE_WHEEL_CIRCUMFERENCE;
     }
 
+    /**
+     * Gets the error of the closed loop controller
+     * @return
+     */
     public double getError() {
-        return motor.getClosedLoopError().getValue();
+        return motor.getClosedLoopError().getValueAsDouble();
     }
 
-    public double getSetpoint() {
-        return Units.radiansToRotations(targetRps); //not proportional to actual swerve rn
-    }
-    
-    public double getAmpDraw() {
-        return motor.getSupplyCurrent().getValueAsDouble();
-    }
-
-    public double getDeviceTemp() {
-        return motor.getDeviceTemp().getValueAsDouble();
-    }
-
-    public double getProcessorTemp() {
-        return motor.getProcessorTemp().getValueAsDouble();
-    }
-
-    public double getStatorCurrent() {
-        return motor.getStatorCurrent().getValueAsDouble();
-    }
-
-    public double getSupplyCurrent() {
-        return motor.getSupplyCurrent().getValueAsDouble();
-    }
-
-    public double getSupplyVoltage() {
-        return motor.getSupplyVoltage().getValueAsDouble();
+    /**
+     * Publishes motor stats to NT for logging
+     */
+    public void publishStats(){
+        // veloErrorPublisher.set(this.targetRps - motor.getVelocity().getValueAsDouble());
+        veloErrorPublisher.set(motor.getClosedLoopError().getValueAsDouble());
+        veloPublisher.set(motor.getVelocity().getValueAsDouble());
+        appliedVlotsPublisher.set(motor.getMotorVoltage().getValueAsDouble());
+        supplyCurrentPublisher.set(motor.getSupplyCurrent().getValueAsDouble());
+        statorCurrentPublisher.set(motor.getStatorCurrent().getValueAsDouble());
     }
 
 }

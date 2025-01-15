@@ -1,35 +1,17 @@
 package frc.robot.subsystems.swerve;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
+
+import static frc.robot.Constants.SwerveConstants.*;
 
 public class SwerveModule {
 
-    private final KrakenDriveMotor driveMotor;
+    public final KrakenDriveMotor driveMotor;
     public final NeoSteerMotor steerMotor;
 
     private double offsetRads = 0;
-
-    private static final double DRIVE_P = 1; // temporary value
-    private static final double DRIVE_I = 0;
-    private static final double DRIVE_D = 0;
-    private static final double DRIVE_FF = 0;
-
-    private static final double STEER_P = 5.8;
-    private static final double STEER_I = 0;
-    private static final double STEER_D = 0;
-    private static final double STEER_FF = 0;
-
-    private NetworkTableInstance ntInstance;
-    private NetworkTable swerveTable;
-    private NetworkTableEntry swerveOptimizedStateEntry;
-    private NetworkTableEntry swerveDriveVeloEntry;
-    private NetworkTableEntry swerveSteerPositionEntry;
 
     /** Constructs a Swerve Module.
      *
@@ -44,16 +26,9 @@ public class SwerveModule {
         steerMotor.configurePID(STEER_P, STEER_I, STEER_D, STEER_FF);
 
         driveMotor = new KrakenDriveMotor(drivePort);
-        driveMotor.configPID(DRIVE_P, DRIVE_I, DRIVE_D, DRIVE_FF);
+        driveMotor.configPID(DRIVE_P, DRIVE_I, DRIVE_D, DRIVE_S, DRIVE_V);
 
         this.offsetRads = offsetRads;
-
-        ntInstance = NetworkTableInstance.getDefault();
-        swerveTable = ntInstance.getTable("Swerve");
-        swerveOptimizedStateEntry = swerveTable.getEntry(drivePort + "OptimizedState");
-        swerveDriveVeloEntry = swerveTable.getEntry(drivePort + "DriveVelo");
-        swerveSteerPositionEntry = swerveTable.getEntry(drivePort + "SteerPos");
-
     }
 
     /** Sets the un optimized desired state of this swerve module through setting the PID targets.
@@ -64,22 +39,14 @@ public class SwerveModule {
         Rotation2d currentAngle = getWrappedAngle();
         state.optimize(currentAngle);
 
-        // String strState = state.toString();
-        // swerveOptimizedStateEntry.setString(strState);
-
         double targetAngleRads = state.angle.getRadians() - offsetRads;
         double angleErrorRads = state.angle.minus(currentAngle).getRadians();
 
         // Multiply by cos so we don't move quickly when the swerves are angled wrong
         double targetVelocity = state.speedMetersPerSecond * Math.cos(angleErrorRads);
 
-        // System.out.println("current angle" + currentAngle + "target angle" + targetAngleRads);
-
         driveMotor.setVelocity(targetVelocity);
         steerMotor.setPosition(targetAngleRads);
-
-        // swerveDriveVeloEntry.setDouble(targetVelocity);
-        // swerveSteerPositionEntry.setDouble(targetAngleRads);
     }
 
     /** Sets the optimized desired state of this swerve module through setting the PID targets.
@@ -91,27 +58,23 @@ public class SwerveModule {
         steerMotor.setPosition(state.angle.getRadians()); 
     }
 
-    
-
-    /** Sets the raw powers of the swerve module.
-     *
-     * @param drivePower The power for the drive motor
-     * @param steerPower The power for the steer motor
-     */
-    public void setRawPowers(double drivePower, double steerPower) {
-        driveMotor.setPower(drivePower);
-        steerMotor.setPower(steerPower);
-        // System.out.print(getWrappedAngle());
-        // System.out.println(steerMotor.getPosition());
-    }
-
     /** Gets the current state of the swerve module.
      *
      * @return The current SwerveModulePosition of this module
      */
-    public SwerveModulePosition getState() {
+    public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(
             driveMotor.getDistance(),
+            getWrappedAngle()
+        );
+    }
+    /**
+     * Gets the state of the swerve module (drive velo in m/s + angle 0-1 )
+     * @return state of the module (velo is m/s and angle is double from 0 to 1)
+     */
+    public SwerveModuleState getState(){
+        return new SwerveModuleState(
+            driveMotor.getVelocity(),
             getWrappedAngle()
         );
     }
@@ -129,29 +92,12 @@ public class SwerveModule {
         return new Rotation2d(angleRads);
     }
 
-    
     /** Gets the error of the drive motor.
      *
      * @return The velocity PID error of the drive motor.
      */
     public double getDriveError() {
         return driveMotor.getError();
-    }
-
-    /** Gets the setpoint of the drive motor.
-     *
-     * @return The current setpoint of the drive motor.
-     */
-    public double getDriveSetpoint() {
-        return driveMotor.getSetpoint();
-    }
-
-    /** Gets the current amp draw of the drive motor.
-     *
-     * @return The amp draw of the drive motor.
-     */
-    public double getDriveAmpDraw() {
-        return driveMotor.getAmpDraw();
     }
 
     /** Gets the distance the distance driven by the drive motor.
@@ -168,9 +114,5 @@ public class SwerveModule {
      */
     public double getDriveVelocity() {
         return driveMotor.getVelocity();
-    }
-
-    public void updateNT(){
-        driveMotor.updateNT();
     }
 }

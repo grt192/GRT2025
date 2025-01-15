@@ -3,7 +3,6 @@ package frc.robot.subsystems.swerve;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.AbsoluteEncoderConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig;
-import com.revrobotics.spark.config.EncoderConfig;
 import com.revrobotics.spark.config.MAXMotionConfig;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -11,7 +10,6 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkMaxAlternateEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -28,6 +26,10 @@ public class NeoSteerMotor {
 
     private SparkClosedLoopController steerPIDController;
 
+    /**
+     * A Neo steer motor for swerve steering
+     * @param canId the motor's CAN ID
+     */
     public NeoSteerMotor(int canId) {
 
         motor = new SparkMax(canId, MotorType.kBrushless);
@@ -47,9 +49,7 @@ public class NeoSteerMotor {
         
         sparkMaxConfig = new SparkMaxConfig();
         sparkMaxConfig.apply(closedLoopConfig)
-                    //   .inverted(true)
                       .apply(encoderConfig);
-                    //   .absoluteEncoder.setSparkMaxDataPortConfig().inverted(true);
 
         motor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         
@@ -63,10 +63,15 @@ public class NeoSteerMotor {
         // motor.enableVoltageCompensation(12.0);
 
         // motor.burnFlash();
-
-
     }
 
+    /**
+     * Configures the motor's PID
+     * @param p kP
+     * @param i kI
+     * @param d kD
+     * @param ff kFF
+     */
     public void configurePID(double p, double i, double d, double ff){
         closedLoopConfig.pidf(p, i, d, ff);
         sparkMaxConfig.apply(closedLoopConfig);
@@ -74,20 +79,20 @@ public class NeoSteerMotor {
         steerPIDController = motor.getClosedLoopController();
     }
 
+    /**
+     * Using PID to move to target position
+     * @param targetRads target position in radiants
+     */
     public void setPosition(double targetRads) {
         double targetDouble = (targetRads + Math.PI) / (2. * Math.PI);
-        // System.out.println("error" + (targetDouble - steerEncoder.getPosition()));
-        // System.out.println("current" + steerEncoder.getPosition());
-        // System.out.println("volts" + motor.getOutputCurrent());
         steerPIDController.setReference(targetDouble, ControlType.kPosition);
     }
 
-    public void setPower(double power) {
-        motor.set(power);
-    }
-
+    /**
+     * Gets the motor's position through the absolute encoder
+     * @return position in double from 0 to 1
+     */
     public double getPosition(){
         return steerEncoder.getPosition();
     }
-    
 }

@@ -19,29 +19,49 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
-      /** Constants for the swerve subsystem. */
-    public static class SwerveConstants {
-      public static final int FL_DRIVE = 0;
-      public static final int FL_STEER = 1;
-      public static final double FL_OFFSET = 0;
 
-      public static final int FR_DRIVE = 2;
-      public static final int FR_STEER = 3;
-      public static final double FR_OFFSET = 0;
+  /** Constants for the swerve subsystem. */
+  public static class SwerveConstants {
+    public static final int FL_DRIVE = 0;
+    public static final int FL_STEER = 1;
+    public static final double FL_OFFSET = 0;
 
-      public static final int BL_DRIVE = 4;
-      public static final int BL_STEER = 5;
-      public static final double BL_OFFSET = 0;
+    public static final int FR_DRIVE = 2;
+    public static final int FR_STEER = 3;
+    public static final double FR_OFFSET = 0;
 
-      public static final int BR_DRIVE = 6;
-      public static final int BR_STEER = 7;
-      public static final double BR_OFFSET = 0;
+    public static final int BL_DRIVE = 4;
+    public static final int BL_STEER = 5;
+    public static final double BL_OFFSET = 0;
 
-      public static double MODULE_DIST = Units.inchesToMeters(30 / 2.0);
-      public static final Translation2d FL_POS = new Translation2d(MODULE_DIST, MODULE_DIST);
-      public static final Translation2d FR_POS = new Translation2d(MODULE_DIST, -MODULE_DIST);
-      public static final Translation2d BL_POS = new Translation2d(-MODULE_DIST, MODULE_DIST);
-      public static final Translation2d BR_POS = new Translation2d(-MODULE_DIST, -MODULE_DIST);
+    public static final int BR_DRIVE = 6;
+    public static final int BR_STEER = 7;
+    public static final double BR_OFFSET = 0;
 
+    public static double MODULE_DIST = Units.inchesToMeters(30 / 2.0);
+    public static final Translation2d FL_POS = new Translation2d(MODULE_DIST, MODULE_DIST);
+    public static final Translation2d FR_POS = new Translation2d(MODULE_DIST, -MODULE_DIST);
+    public static final Translation2d BL_POS = new Translation2d(-MODULE_DIST, MODULE_DIST);
+    public static final Translation2d BR_POS = new Translation2d(-MODULE_DIST, -MODULE_DIST);
+
+    public static final double DRIVE_GEAR_REDUCTION = 9. * 20. / 26.;
+    public static final double DRIVE_WHEEL_CIRCUMFERENCE = Units.inchesToMeters(4 * Math.PI);
+    public static final double MAX_VEL = 6000 / 6.923 / 60 * 2 * 2 * Math.PI * .0254; // Kraken speed / gear ratio / reduced to per second * circumference * convert to meters
+    public static final double MAX_OMEGA = MAX_VEL / FL_POS.getNorm();
+
+    public static final double DRIVE_P = 0.34; // temporary value
+    public static final double DRIVE_I = 0; 
+    public static final double DRIVE_D = 0;
+    public static final double DRIVE_S = 0.1499;
+    public static final double DRIVE_V = 0.112;
+
+    public static final double STEER_P = 5.8;
+    public static final double STEER_I = 0;
+    public static final double STEER_D = 0;
+    public static final double STEER_FF = 0;
+  }
+
+  public static class LoggingConstants{
+    public static final String SWERVE_TABLE = "SwerveStats";
   }
 }
