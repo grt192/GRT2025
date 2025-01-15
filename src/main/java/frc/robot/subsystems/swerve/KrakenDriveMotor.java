@@ -66,6 +66,8 @@ public class KrakenDriveMotor {
         // motorConfig.TorqueCurrent.PeakReverseTorqueCurrent = -80.0;
         // motorConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.02;
         motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        motorConfig.Voltage.PeakForwardVoltage = 12;
+        motorConfig.Voltage.PeakReverseVoltage = 12;
 
         // Apply configs, apparently this fails a lot
         for (int i = 0; i < 4; i++) {
