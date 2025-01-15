@@ -27,7 +27,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimbConstants;
 
 
-public class ClimbSubsysten extends SubsystemBase {
+public class ClimbSubsystem extends SubsystemBase {
 
   private final SparkMax topMotor;
   private final SparkMax botMotor;
@@ -39,7 +39,7 @@ public class ClimbSubsysten extends SubsystemBase {
   private final EncoderConfig encoderConfig;
 
   /** Creates a new ExampleSubsystem. */
-  public ClimbSubsysten() {
+  public ClimbSubsystem() {
     
     topMotor = new SparkMax(ClimbConstants.TOP_MOTOR_ID, MotorType.kBrushless);
     botMotor = new SparkMax(ClimbConstants.BOT_MOTOR_ID, MotorType.kBrushless);
