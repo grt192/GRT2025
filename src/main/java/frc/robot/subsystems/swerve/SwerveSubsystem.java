@@ -58,6 +58,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public SwerveSubsystem() {
         ahrs = new AHRS(NavXComType.kMXP_SPI);
+        ahrs.reset();
+        ahrs.zeroYaw();
 
         frontLeftModule = new SwerveModule(FL_DRIVE, FL_STEER, FL_OFFSET);
         frontRightModule = new SwerveModule(FR_DRIVE, FR_STEER, FR_OFFSET);
