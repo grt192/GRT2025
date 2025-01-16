@@ -27,12 +27,19 @@ import com.revrobotics.spark.SparkBase.ControlType;
 public class NeoSteerMotor {
 
     private final SparkMax motor;
+    private final double doubleRads = 0;
+
+    private NetworkTableInstance ntInstance; 
+    private NetworkTable swerveStatsTable; 
     private final SparkAbsoluteEncoder steerEncoder;
     
     private SparkBaseConfig sparkMaxConfig;
     private AbsoluteEncoderConfig encoderConfig;
     private ClosedLoopConfig closedLoopConfig;
     private MAXMotionConfig maxMotionConfig;
+
+    private DoublePublisher neoPositionPublisher;
+    private DoublePublisher neoSetPositionPublisher; 
 
     private SparkClosedLoopController steerPIDController;
 
