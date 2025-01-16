@@ -53,7 +53,7 @@ public final class Constants {
     public static final double[] DRIVE_I = new double[] {0, 0, 0, 0}; 
     public static final double[] DRIVE_D = new double[] {0, 0, 0, 0};
     public static final double[] DRIVE_S = new double[] {0.1499, 0.1499, 0.1499, 0.1499};
-    public static final double[] DRIVE_V = new double[] {0.112, 0.112, 0.112, 0.112};
+    public static final double[] DRIVE_V = new double[] {0.11, 0.112, 0.112, 0.112};
 
     public static final double[] STEER_P = new double[] {5.4, 5.4, 5.4, 5.4};
     public static final double[] STEER_I = new double[] {0, 0, 0, 0};
