@@ -81,8 +81,6 @@ public class SwerveSubsystem extends SubsystemBase {
             new Pose2d()
             );
 
-        
-        resetPose(currentPose);
         buildAuton(); 
         initNT();
 
@@ -325,11 +323,11 @@ public class SwerveSubsystem extends SubsystemBase {
             this::getRobotRelativeChassisSpeeds,
             (speeds, feedforwards) -> setRobotRelativeDrivePowers(speeds),
             
-         //1.25/3.25 PID
+         //1.25/3.25
          //
             new PPHolonomicDriveController(
-                new PIDConstants(1.5, 0.0, 0.0),
-                new PIDConstants(2, 0.0, 0.0)
+                new PIDConstants(1.25, 0, 0.0),
+                new PIDConstants(3.25, 0.0, 0.0)
             ),
 
             config,
