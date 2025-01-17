@@ -19,7 +19,7 @@ import static frc.robot.Constants.IntakeConstants.PIVOT_CONVERSION_FACTOR;
 import static frc.robot.Constants.IntakeConstants.PIVOT_ID;
 
 
-public class PivotSubsytem extends SubsystemBase{
+public class PivotSubsystem extends SubsystemBase{
 
     private SparkMax pivotMotor;
     private RelativeEncoder pivotEncoder; 
@@ -34,7 +34,7 @@ public class PivotSubsytem extends SubsystemBase{
     private double i = 0; 
     private double d = 0;
 
-    public void PivotSubsystem(){
+    public PivotSubsystem(){
 
         pivotMotor = new SparkMax(PIVOT_ID, MotorType.kBrushless);
         pivotEncoder = pivotMotor.getEncoder();
