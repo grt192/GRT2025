@@ -55,6 +55,7 @@ public final class Constants {
       public static final double CLIMB_D = 0;//placeholder value
       public static final double CLIMB_POSITION_1 = 0;//placeholder value
       public static final double CLIMB_POSITION_2 = 0;//placeholder value
+      public static final double CLIMB_GEAR_RATIO = 0.0; //placeholder value
     }
 
 
