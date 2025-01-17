@@ -161,6 +161,7 @@ public class NeoSteerMotor {
      * Publishes Neo stats to NT
      */
     public void publishStats(){
+
         neoPositionPublisher.set(getPosition());
         neoSetPositionPublisher.set(targetDouble);
     }
