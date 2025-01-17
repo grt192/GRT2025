@@ -27,7 +27,7 @@ import com.revrobotics.spark.SparkBase.ControlType;
 public class NeoSteerMotor {
 
     private final SparkMax motor;
-    private final double doubleRads = 0;
+    private double targetDouble = 0;
 
     private NetworkTableInstance ntInstance; 
     private NetworkTable swerveStatsTable; 
