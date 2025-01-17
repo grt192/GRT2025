@@ -17,7 +17,7 @@ import com.revrobotics.spark.SparkBase.ControlType;
 
 public class DiffyArmSubsystem {
 
-    private final SparkMax motor;
+    private final SparkMax diffymotor;
 
     private final SparkAbsoluteEncoder armEncoder;
     private SparkBaseConfig sparkMaxConfig;
@@ -27,16 +27,23 @@ public class DiffyArmSubsystem {
 
     private SparkClosedLoopController armPIDController;
 
+    private int upperLimit = 0;
+    private int lowerLimit = 0;
+
+
+    double p = 1;
+    double i = 0;
+    double d = 0;
+
     /**
      * A Neo motor for diffy arm control
      * @param canId the motor's CAN ID
      */
     public DiffyArmSubsystem(int canId) {
 
-        motor = new SparkMax(canId, MotorType.kBrushless);
+        diffymotor = new SparkMax(canId, MotorType.kBrushless);
 
         encoderConfig = new AbsoluteEncoderConfig();
-        encoderConfig.inverted(true);
 
         maxMotionConfig = new MAXMotionConfig();
         maxMotionConfig.allowedClosedLoopError(.005);
@@ -52,9 +59,11 @@ public class DiffyArmSubsystem {
         sparkMaxConfig.apply(closedLoopConfig)
                       .apply(encoderConfig);
 
-        motor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        diffymotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         
-        armEncoder = motor.getAbsoluteEncoder();
+        armEncoder = diffymotor.getAbsoluteEncoder();
+
+        configurePID(p,i,d,0);
     }
 
     /**
@@ -67,16 +76,16 @@ public class DiffyArmSubsystem {
     public void configurePID(double p, double i, double d, double ff){
         closedLoopConfig.pidf(p, i, d, ff);
         sparkMaxConfig.apply(closedLoopConfig);
-        motor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        armPIDController = motor.getClosedLoopController();
+        diffymotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        armPIDController = diffymotor.getClosedLoopController();
     }
 
     /**
      * Using PID to move to target position
-     * @param targetRads target position in radiants
+     * @param targetDegrees target position in degrees
      */
-    public void setPosition(double targetRads) {
-        double targetDouble = (targetRads + Math.PI) / (2. * Math.PI);
+    public void setPosition(double targetDegrees) {
+        double targetDouble = (targetDegrees / 360.0);
         armPIDController.setReference(targetDouble, ControlType.kPosition);
     }
 

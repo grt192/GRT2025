@@ -9,6 +9,8 @@ import frc.robot.controllers.BaseDriveController;
 import frc.robot.controllers.DualJoystickDriveController;
 import frc.robot.controllers.PS5DriveController;
 import frc.robot.controllers.XboxDriveController;
+import frc.robot.commands.Differential.DifferentialTurnCommand;
+import frc.robot.commands.Differential.DifferentialTwistCommand;
 
 import static frc.robot.Constants.SwerveConstants.BL_DRIVE;
 import static frc.robot.Constants.SwerveConstants.BL_STEER;
@@ -31,9 +33,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.DiffySubsystem.DiffyArmSubsystem;
 import frc.robot.subsystems.FieldManagementSubsystem.FieldManagementSubsystem;
 import frc.robot.subsystems.PhoenixLoggingSubsystem.PhoenixLoggingSubsystem;
 import frc.robot.subsystems.swerve.SingleModuleSwerveSubsystem;
@@ -48,6 +52,18 @@ import frc.robot.subsystems.swerve.SwerveSubsystem;
  */
 public class RobotContainer {
 
+  // Motors IDs
+  int leftDiffyMotorID; //M1 motor for diffy
+  int rightDiffyMotorID; //M2 motor for diffy
+
+  //Controllers
+  Trigger l1Trigger;
+  Trigger r1Trigger;
+
+  //Differential Drive Subsystems
+  DiffyArmSubsystem leftDiffy;
+  DiffyArmSubsystem rightDiffy;
+
   int offsetRads = 0;
 
   public double count;
@@ -58,9 +74,8 @@ public class RobotContainer {
   // SingleModuleSwerveSubsystem singleModuleSwerve = new SingleModuleSwerveSubsystem(mod);
   private final SwerveSubsystem swerveSubsystem;
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final XboxController mechController =
-      new XboxController(OperatorConstants.kDriverControllerPort);
+  private final CommandPS5Controller mechController = new CommandPS5Controller(0);
+
 
   // SwerveModule mod = new SwerveModule(drivePort, steerPort, offsetRads);
   // IAmDyingSubsystem pls = new IAmDyingSubsystem();
@@ -73,18 +88,31 @@ public class RobotContainer {
   private NetworkTable swerveTable;
   private NetworkTableEntry swerveTestAngleEntry;
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
+
+  
   public RobotContainer() {
+    
+    // Configure Motor IDs
+    leftDiffyMotorID = 9;
+    rightDiffyMotorID = 9;
+    
+    // Configure controllers
+    l1Trigger = new Trigger(mechController.L1());
+    r1Trigger = new Trigger(mechController.R1());
+
+    // Configure Differential Drive Subsystems
+    leftDiffy = new DiffyArmSubsystem(leftDiffyMotorID);
+    rightDiffy = new DiffyArmSubsystem(rightDiffyMotorID);
+
+
+
+
+
     swerveSubsystem = new SwerveSubsystem();
     
-    if(DriverStation.getJoystickName(0).equals("Controller (Xbox One For Windows)")) {
-        driveController = new XboxDriveController();
-    }
-    else if(DriverStation.getJoystickName(0).equals("DualSense Wireless Controller")){
-        driveController = new PS5DriveController();
-    }
-    else{
-        driveController = new DualJoystickDriveController();
-    }
+    driveController = new PS5DriveController();
+
+
     driveController.setDeadZone(0.03);
 
     ntInstance = NetworkTableInstance.getDefault();
@@ -93,6 +121,7 @@ public class RobotContainer {
     swerveTestAngleEntry.setDouble(0);
     // pls.configurePID(.5, 0, 0, 0); 
     // Configure the trigger bindings
+
     configureBindings();
   }
 
@@ -110,6 +139,17 @@ public class RobotContainer {
       * the robot is controlled along its own axes, otherwise controls apply to the field axes by default. If the
       * swerve aim button is held down, the robot will rotate automatically to always face a target, and only
       * translation will be manually controllable. */
+
+      l1Trigger.onTrue(
+        new DifferentialTwistCommand(leftDiffy, rightDiffy)
+      );
+
+
+      r1Trigger.onTrue(
+        new DifferentialTurnCommand(leftDiffy, rightDiffy)
+      );
+
+    
     swerveSubsystem.setDefaultCommand(
       new RunCommand(() -> {
         swerveSubsystem.setDrivePowers(
