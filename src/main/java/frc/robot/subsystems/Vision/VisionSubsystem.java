@@ -40,7 +40,7 @@ public class VisionSubsystem extends SubsystemBase {
 
         try{
             aprilTagFieldLayout = new AprilTagFieldLayout(
-                Filesystem.getDeployDirectory() + "2025-reefscape.json"
+                Filesystem.getDeployDirectory() + "/2025-reefscape.json"
             );
         }
         catch (Exception e){
