@@ -1,11 +1,13 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.pivot;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.SoftLimitConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -26,6 +28,7 @@ public class PivotSubsytem extends SubsystemBase{
     private EncoderConfig encoderConfig;
     private ClosedLoopConfig closedLoopConfig;
     private SparkMaxConfig sparkMaxConfig;
+    private SoftLimitConfig softLimitConfig;
 
     private double p = 1; 
     private double i = 0; 
@@ -39,12 +42,19 @@ public class PivotSubsytem extends SubsystemBase{
         encoderConfig = new EncoderConfig();
         encoderConfig.positionConversionFactor(PIVOT_CONVERSION_FACTOR);
 
+        softLimitConfig = new SoftLimitConfig();
+        softLimitConfig.forwardSoftLimitEnabled(true)
+                       .forwardSoftLimit(Units.degreesToRadians(90))
+                       .reverseSoftLimitEnabled(true)
+                       .reverseSoftLimit(0);
+
         closedLoopConfig = new ClosedLoopConfig();
         closedLoopConfig.pid(p, i, d);
 
         sparkMaxConfig = new SparkMaxConfig();
         sparkMaxConfig.apply(closedLoopConfig)
-                      .apply(encoderConfig);
+                      .apply(encoderConfig)
+                      .apply(softLimitConfig);
 
         pivotMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -52,14 +62,12 @@ public class PivotSubsytem extends SubsystemBase{
 
     }
 
-    public void setAngle(double angle){
-        pivotPID.setReference(angle, ControlType.kPosition);
-    }
-
     public double getPosition() {
         return pivotEncoder.getPosition();
     }
 
-
+    public void setState(PivotState state) {
+        pivotPID.setReference(state.getTargetAngle(), ControlType.kPosition);
+    }
     }
 

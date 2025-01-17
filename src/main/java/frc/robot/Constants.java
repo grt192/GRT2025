@@ -156,5 +156,9 @@ public final class Constants {
   public static class IntakeConstants {
     public static final int PIVOT_ID = 0;
     public static final double PIVOT_CONVERSION_FACTOR = 1 / 30.;
+    public static final double ZERO_POSITION = 0;
+    public static final double SOURCE_POSITION = 0; //TODO: change
+    public static final double OUTTAKE_POSITION = 0; //TODO: change
+
   }
 }
