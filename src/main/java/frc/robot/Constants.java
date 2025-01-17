@@ -152,4 +152,9 @@ public final class Constants {
     public static final PolynomialRegression oStdDevModel = new PolynomialRegression(
       VisionConstants.STD_DEV_DIST,VisionConstants.O_STD_DEV,1);
   }
+
+  public static class IntakeConstants {
+    public static final int PIVOT_ID = 0;
+    public static final double PIVOT_CONVERSION_FACTOR = 1 / 30.;
+  }
 }
