@@ -10,82 +10,84 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.AbsoluteEncoderConfig;
+import com.revrobotics.spark.config.SoftLimitConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig;
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.EncoderConfig;
-import com.revrobotics.spark.config.MAXMotionConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.MAXMotionConfig;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimbConstants;
 
+import edu.wpi.first.math.util.Units;
 
 public class ClimbSubsystem extends SubsystemBase {
 
   private final SparkMax topMotor;
   private final SparkMax botMotor;
-
   private final int botMotorID;
 
-  private RelativeEncoder encoder;
   private final ClosedLoopConfig closedLoopConfig;
-  private SparkMaxConfig sparkMaxConfig;
-  private final SparkClosedLoopController steerPIDController;
+  private final SparkMaxConfig sparkMaxConfig;
+  private final SparkMaxConfig sparkMaxConfigFollow;
   private final EncoderConfig encoderConfig;
-  private MAXMotionConfig maxMotionConfig;
+  private final SoftLimitConfig softLimitConfig;
+
+  private final RelativeEncoder climbEncoder;
+  private final SparkClosedLoopController steerPIDController;
 
   /** Creates a new ExampleSubsystem. */
   public ClimbSubsystem() {
     
     topMotor = new SparkMax(ClimbConstants.TOP_MOTOR_ID, MotorType.kBrushless);
     botMotor = new SparkMax(ClimbConstants.BOT_MOTOR_ID, MotorType.kBrushless);
+    climbEncoder = topMotor.getEncoder();
 
     botMotorID = 0; //have to change later
 
     steerPIDController = topMotor.getClosedLoopController();
 
     encoderConfig = new EncoderConfig();
-    encoderConfig.inverted(true);
+    encoderConfig.positionConversionFactor(ClimbConstants.CLIMB_GEAR_RATIO);
 
-    closedLoopConfig = new ClosedLoopConfig(); //code copied from swerve, untested do NOT trust it
-    closedLoopConfig.feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-                    .positionWrappingEnabled(true)
-                    .positionWrappingMinInput(0)
-                    .positionWrappingMaxInput(1);
+    softLimitConfig = new SoftLimitConfig();
+    softLimitConfig.forwardSoftLimitEnabled(true)
+                   .forwardSoftLimit(Units.degreesToRadians(90)) //find out with mech for soft lim
+                   .reverseSoftLimitEnabled(true)
+                   .reverseSoftLimit(0);
+
+    closedLoopConfig = new ClosedLoopConfig(); 
+    closedLoopConfig.pid(ClimbConstants.CLIMB_P, ClimbConstants.CLIMB_I, ClimbConstants.CLIMB_D);
     
     sparkMaxConfig = new SparkMaxConfig();
     sparkMaxConfig.apply(encoderConfig)
-                  .apply(closedLoopConfig)
-                  .inverted(true)
-                  .follow(botMotorID);
+                  .apply(softLimitConfig)
+                  .apply(closedLoopConfig);
+
+    sparkMaxConfigFollow = new SparkMaxConfig(); //to follow the motor
+    sparkMaxConfigFollow.follow(botMotorID)
+                        .apply(encoderConfig)
+                        .apply(softLimitConfig)
+                        .apply(closedLoopConfig);
                   
     topMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    botMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);    
-    configurePID(ClimbConstants.CLIMB_P, ClimbConstants.CLIMB_I, ClimbConstants.CLIMB_D);
+    botMotor.configure(sparkMaxConfigFollow, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);    
   }
-  
-  public void configurePID(double p, double i, double d){
-    closedLoopConfig.pid(p, i, d);
-    sparkMaxConfig.apply(closedLoopConfig);
-    topMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-}
 
-public void setPosition(double targetRads) {
+  public void setPosition(double targetRads) {
     double targetDouble = (targetRads + Math.PI) / (2. * Math.PI);
     System.out.println("target" + targetDouble);
-    System.out.println("current" + encoder.getPosition());
+    System.out.println("current" + climbEncoder.getPosition());
     steerPIDController.setReference(targetDouble, ControlType.kPosition);
-}
-public void driveRollers(double speed){
-  topMotor.set(speed);
-}
-public double getMotorPosition() {
-  // Returns the position in rotations
-  return encoder.getPosition();
-}
+  }
 
+  public void driveRollers(double speed){
+    topMotor.set(speed);
+  }
+
+  public double getMotorPosition() {
+    // Returns the position in rotations
+    return climbEncoder.getPosition();
+  }
 
   /**
    * An example method querying a boolean state of the subsystem (for example, a
@@ -95,6 +97,7 @@ public double getMotorPosition() {
    */
 
    //sets the actuall speed of the rollers
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
