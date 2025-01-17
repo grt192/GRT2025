@@ -157,7 +157,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new PathPlannerAuto("curve");
+    return new PathPlannerAuto("New Auto");
   }
 
   /**
