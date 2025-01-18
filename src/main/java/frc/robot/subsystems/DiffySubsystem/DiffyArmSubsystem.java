@@ -17,83 +17,103 @@ import com.revrobotics.spark.SparkBase.ControlType;
 
 public class DiffyArmSubsystem {
 
-    private final SparkMax diffymotor;
-
-    private final SparkAbsoluteEncoder armEncoder;
-    private SparkBaseConfig sparkMaxConfig;
-    private AbsoluteEncoderConfig encoderConfig;
-    private ClosedLoopConfig closedLoopConfig;
-    private MAXMotionConfig maxMotionConfig;
-
-    private SparkClosedLoopController armPIDController;
-
-    private int upperLimit = 0;
-    private int lowerLimit = 0;
+    
 
 
-    double p = 1;
-    double i = 0;
-    double d = 0;
-
-    /**
-     * A Neo motor for diffy arm control
-     * @param canId the motor's CAN ID
-     */
     public DiffyArmSubsystem(int canId) {
 
-        diffymotor = new SparkMax(canId, MotorType.kBrushless);
 
-        encoderConfig = new AbsoluteEncoderConfig();
 
-        maxMotionConfig = new MAXMotionConfig();
-        maxMotionConfig.allowedClosedLoopError(.005);
+    }
 
-        closedLoopConfig = new ClosedLoopConfig();
-        closedLoopConfig.feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-                        .positionWrappingEnabled(true)
-                        .positionWrappingMinInput(0)
-                        .positionWrappingMaxInput(1)
-                        .apply(maxMotionConfig);
+    //Default
+    public void diffyDeafaltPos(){
+
         
-        sparkMaxConfig = new SparkMaxConfig();
-        sparkMaxConfig.apply(closedLoopConfig)
-                      .apply(encoderConfig);
+    }
 
-        diffymotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+
+
+    //Wrist Position
+
+    public void leftTwist(){
+
+    }
+
+    public void centerTwist(){
         
-        armEncoder = diffymotor.getAbsoluteEncoder();
-
-        configurePID(p,i,d,0);
     }
 
-    /**
-     * Configures the motor's PID
-     * @param p kP
-     * @param i kI
-     * @param d kD
-     * @param ff kFF
+    public void rightTwist(){
+
+    }
+
+    /* 
+     * @param position the position of the wrist in degrees
      */
-    public void configurePID(double p, double i, double d, double ff){
-        closedLoopConfig.pidf(p, i, d, ff);
-        sparkMaxConfig.apply(closedLoopConfig);
-        diffymotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        armPIDController = diffymotor.getClosedLoopController();
+    public void setwristPosition(double position){
+        
     }
 
-    /**
-     * Using PID to move to target position
-     * @param targetDegrees target position in degrees
-     */
-    public void setPosition(double targetDegrees) {
-        double targetDouble = (targetDegrees / 360.0);
-        armPIDController.setReference(targetDouble, ControlType.kPosition);
+
+
+
+    //Arm Position
+
+    public void armUp(){
+
     }
 
-    /**
-     * Gets the motor's position through the absolute encoder
-     * @return position in double from 0 to 1
-     */
-    public double getPosition(){
-        return armEncoder.getPosition();
+    public void armMiddle(){
+
     }
+
+    public void armDown(){
+
+    }
+
+    
+
+    /*
+     * @param position the position of the arm in degrees
+     */
+    public void setArmPosition(double position){
+        
+    }
+
+
+
+
+    // Positions
+
+    /*Get the position of both econders
+     * @returns two ints, the first is left motor, the second is the right motor  
+     */
+    public double getDifferentialPosiution(){
+        return 0;
+
+    }
+
+
+    /*
+     * @returns the position of the arm in degrees
+     */
+    public double getDiffyArmPosition(){
+        return 0;
+    }
+
+    /*
+     * @returns the position of the wrist in degrees
+     */
+    public double getDiffyWristPosition(){
+        return 0;
+    }
+
+
+
+
+
+
+
 }
