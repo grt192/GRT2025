@@ -4,10 +4,8 @@
 
 package frc.robot.subsystems;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SoftLimitConfig;
@@ -33,7 +31,7 @@ public class ClimbSubsystem extends SubsystemBase {
   private final SoftLimitConfig softLimitConfig;
 
   private final RelativeEncoder climbEncoder;
-  private final SparkClosedLoopController steerPIDController;
+  //private final SparkClosedLoopController steerPIDController;
 
   /** Creates a new ExampleSubsystem. */
   public ClimbSubsystem() {
@@ -44,7 +42,7 @@ public class ClimbSubsystem extends SubsystemBase {
 
     botMotorID = 0; //have to change later
 
-    steerPIDController = topMotor.getClosedLoopController();
+    //steerPIDController = topMotor.getClosedLoopController();
 
     encoderConfig = new EncoderConfig();
     encoderConfig.positionConversionFactor(ClimbConstants.CLIMB_GEAR_RATIO);
@@ -56,7 +54,7 @@ public class ClimbSubsystem extends SubsystemBase {
                    .reverseSoftLimit(0);
 
     closedLoopConfig = new ClosedLoopConfig(); 
-    closedLoopConfig.pid(ClimbConstants.CLIMB_P, ClimbConstants.CLIMB_I, ClimbConstants.CLIMB_D);
+    //closedLoopConfig.pid(ClimbConstants.CLIMB_P, ClimbConstants.CLIMB_I, ClimbConstants.CLIMB_D);
     
     sparkMaxConfig = new SparkMaxConfig();
     sparkMaxConfig.apply(encoderConfig)
@@ -77,7 +75,6 @@ public class ClimbSubsystem extends SubsystemBase {
     double targetDouble = (targetRads + Math.PI) / (2. * Math.PI);
     System.out.println("target" + targetDouble);
     System.out.println("current" + climbEncoder.getPosition());
-    steerPIDController.setReference(targetDouble, ControlType.kPosition);
   }
 
   public void driveRollers(double speed){
