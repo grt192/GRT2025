@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.commands.DifferentialRollerCommand;
 import frc.robot.controllers.BaseDriveController;
 import frc.robot.controllers.DualJoystickDriveController;
 import frc.robot.controllers.PS5DriveController;
@@ -15,8 +16,10 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.Differential.DifferentialRollerSubsystem;
 import frc.robot.subsystems.FieldManagementSubsystem.FieldManagementSubsystem;
 import frc.robot.subsystems.PhoenixLoggingSubsystem.PhoenixLoggingSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
@@ -36,8 +39,18 @@ public class RobotContainer {
   private final FieldManagementSubsystem fieldManagementSubsystem = new FieldManagementSubsystem();
   private final PhoenixLoggingSubsystem phoenixLoggingSubsystem = new PhoenixLoggingSubsystem(fieldManagementSubsystem);
 
+  private final DifferentialRollerSubsystem differentialRoller = new DifferentialRollerSubsystem(10);
+  private final CommandPS5Controller mechController = new CommandPS5Controller(0);
+
+
+  Trigger xbutton;
+
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
+    xbutton = mechController.cross();
+
     constructDriveController(); 
     startLog();
     configureBindings();
@@ -58,6 +71,13 @@ public class RobotContainer {
       * the robot is controlled along its own axes, otherwise controls apply to the field axes by default. If the
       * swerve aim button is held down, the robot will rotate automatically to always face a target, and only
       * translation will be manually controllable. */
+
+
+    xbutton.onTrue(new RunCommand(() -> {
+      new DifferentialRollerCommand(differentialRoller);
+      
+      
+    }));
     swerveSubsystem.setDefaultCommand(
       new RunCommand(() -> {
         swerveSubsystem.setDrivePowers(
@@ -77,6 +97,10 @@ public class RobotContainer {
       },
       swerveSubsystem
     );
+
+    xbutton.onTrue(new RunCommand(() -> {
+      
+    }));
   }
 
   /**
