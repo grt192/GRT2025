@@ -100,6 +100,10 @@ public class RobotContainer {
     l1Trigger = new Trigger(mechController.L1());
     r1Trigger = new Trigger(mechController.R1());
 
+
+
+    // THIS WILL NEED TO BE CHANGED, THE BUTTONS AND ID
+
     // Configure Differential Drive Subsystems
     leftDiffy = new DiffyArmSubsystem(leftDiffyMotorID);
     rightDiffy = new DiffyArmSubsystem(rightDiffyMotorID);
