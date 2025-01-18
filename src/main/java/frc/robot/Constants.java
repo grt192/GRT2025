@@ -159,6 +159,8 @@ public final class Constants {
     public static final double ZERO_POSITION = 0;
     public static final double SOURCE_POSITION = 0; //TODO: change
     public static final double OUTTAKE_POSITION = 0; //TODO: change
+    public static final double VERTICAL_POSITION = 0; //TODO: change
+    public static final double PIVOT_TOLERANCE = 0; //TODO: change
 
   }
 }

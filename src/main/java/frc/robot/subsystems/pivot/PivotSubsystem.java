@@ -17,6 +17,7 @@ import com.revrobotics.spark.SparkClosedLoopController;
 
 import static frc.robot.Constants.IntakeConstants.PIVOT_CONVERSION_FACTOR;
 import static frc.robot.Constants.IntakeConstants.PIVOT_ID;
+import static frc.robot.Constants.IntakeConstants.PIVOT_TOLERANCE;
 
 
 public class PivotSubsystem extends SubsystemBase{
@@ -33,6 +34,8 @@ public class PivotSubsystem extends SubsystemBase{
     private double p = 1; 
     private double i = 0; 
     private double d = 0;
+
+    private PivotState targetState;
 
     public PivotSubsystem(){
 
@@ -60,14 +63,25 @@ public class PivotSubsystem extends SubsystemBase{
 
         pivotPID = pivotMotor.getClosedLoopController();
 
+        targetState = PivotState.ZERO;
+
     }
 
-    public double getPosition() {
+    public double getCurrentAngle() {
         return pivotEncoder.getPosition();
     }
 
-    public void setState(PivotState state) {
-        pivotPID.setReference(state.getTargetAngle(), ControlType.kPosition);
+    public PivotState getTargetState() {
+        return targetState;
+    }
+
+    public void setState(PivotState targetState) {
+        pivotPID.setReference(targetState.getTargetAngle(), ControlType.kPosition);
+        this.targetState = targetState;
+    }
+
+    public boolean atState(PivotState state) {
+        return Math.abs(getCurrentAngle() - state.getTargetAngle()) < PIVOT_TOLERANCE;
     }
     }
 

@@ -4,10 +4,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.pivot.PivotState;
 import frc.robot.subsystems.pivot.PivotSubsystem;
 
-public class SetIntakePositionCommand extends Command{
+public class SetPivotSourceCommand extends Command{
     private PivotSubsystem pivotSubsystem;
 
-    public SetIntakePositionCommand(PivotSubsystem pivotSubsystem) {
+    public SetPivotSourceCommand(PivotSubsystem pivotSubsystem) {
         this.addRequirements(pivotSubsystem);
         this.pivotSubsystem = pivotSubsystem;
     }
@@ -17,8 +17,8 @@ public class SetIntakePositionCommand extends Command{
         this.pivotSubsystem.setState(PivotState.SOURCE);
     }
 
-    // @Override
-    // public boolean isFinished() {
-        
-    // }
+    @Override
+    public boolean isFinished() {
+        return pivotSubsystem.atState(PivotState.SOURCE);
+    }
 }
