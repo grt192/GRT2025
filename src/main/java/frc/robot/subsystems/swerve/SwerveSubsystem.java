@@ -322,7 +322,7 @@ public class SwerveSubsystem extends SubsystemBase {
             this::getRobotRelativeChassisSpeeds,
             (speeds, feedforwards) -> setRobotRelativeDrivePowers(speeds),
             
-         //1.25/3.25
+         //1.25/3.25 PID
          //
             new PPHolonomicDriveController(
                 new PIDConstants(1.25, 0, 0.0),
