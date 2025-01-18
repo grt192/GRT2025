@@ -42,6 +42,15 @@ public final class Constants {
       public static final Translation2d FR_POS = new Translation2d(MODULE_DIST, -MODULE_DIST);
       public static final Translation2d BL_POS = new Translation2d(-MODULE_DIST, MODULE_DIST);
       public static final Translation2d BR_POS = new Translation2d(-MODULE_DIST, -MODULE_DIST);
+    }
 
+
+    public static class diffyConst {
+
+      public static final double ARM_CONVERSION_FACTOR = 20. / (2 * Math.PI);
+      public static final double WRIST_CONVERSION_FACTOR = 10. / (2 * Math.PI);
+
+
+  
   }
 }
