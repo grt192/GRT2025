@@ -69,7 +69,7 @@ public final class Constants {
 
     public static final double DRIVE_GEAR_REDUCTION = 9. * 20. / 26.;
     public static final double DRIVE_WHEEL_CIRCUMFERENCE = Units.inchesToMeters(4 * Math.PI);
-    public static final double MAX_VEL = 4200. / 6.923 / 60. * 2. * 2. * Math.PI * .0254; // Kraken speed / gear ratio / reduced to per second * circumference * convert to meters
+    public static final double MAX_VEL = 6000. / 6.923 / 60. * 2. * 2. * Math.PI * .0254; // Kraken speed / gear ratio / reduced to per second * circumference * convert to meters
     public static final double MAX_OMEGA = MAX_VEL / FL_POS.getNorm();
 
     public static final double DRIVE_P = 0.32; // temporary value
