@@ -21,6 +21,7 @@ import com.revrobotics.spark.SparkRelativeEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkBase.ControlType;
+import edu.wpi.first.wpilibj.Timer;
 
 import static frc.robot.Constants.diffyConst.ARM_CONVERSION_FACTOR;
 import static frc.robot.Constants.diffyConst.WRIST_CONVERSION_FACTOR ;
@@ -28,23 +29,23 @@ import static frc.robot.Constants.diffyConst.WRIST_CONVERSION_FACTOR ;
 
 public class DiffyArmSubsystem {
 
-    //Sparkmax controls 
-    private final SparkMax leftDiffyMotor; //Left can be seen in the view with the gears visible 
-    private final SparkMax rightDiffyMotor;  //Right can be seen in the view with the gears visible 
+    // SparkMax controls 
+    private final SparkMax leftDiffyMotor; // Left can be seen in the view with the gears visible 
+    private final SparkMax rightDiffyMotor;  // Right can be seen in the view with the gears visible 
 
-    //Encoders
+    // Encoders
     private RelativeEncoder leftDiffyEncoder; 
     private RelativeEncoder rightDiffyEncoder;
 
-    //Encoder Configs
+    // Encoder Configs
     private EncoderConfig leftDiffyEncoderConfig;
     private EncoderConfig rightDiffyEncoderConfig;
 
-    //SparkMax Configs
+    // SparkMax Configs
     private SparkMaxConfig leftDiffyConfig;
     private SparkMaxConfig rightDiffyConfig;
 
-    //PID Controls
+    // PID Controls
     private SparkClosedLoopController leftDiffyPID;
     private SparkClosedLoopController rightDiffyPID;
 
@@ -53,46 +54,45 @@ public class DiffyArmSubsystem {
     private double kI = 0.0;
     private double kD = 0.0;
 
-    //PID Configs
+    // PID Configs
     private ClosedLoopConfig leftDiffyPIDConfig;
     private ClosedLoopConfig rightDiffyPIDConfig;
 
-    //Soft limits
+    // Soft limits
     private SoftLimitConfig leftDiffySoftLimit;
     private SoftLimitConfig rightDiffySoftLimit;
 
     private DiffyState targetState;
 
-    //MotorPosition
+    // MotorPosition
     private double leftMotorPosition;
     private double rightMotorPosition;
 
-    //DiffyPosition
+    // DiffyPosition
     private double diffyWristPosition;
     private double diffyArmPosition;
 
 
-
     public DiffyArmSubsystem(int canId) {
 
-        //Motor
+        // Motor
         leftDiffyMotor = new SparkMax(canId, MotorType.kBrushless);
         rightDiffyMotor = new SparkMax(canId, MotorType.kBrushless);
         leftMotorPosition = leftDiffyEncoder.getPosition();
         rightMotorPosition = rightDiffyEncoder.getPosition();
 
-        //Encoder Configs
+        // Encoder Configs
         leftDiffyEncoderConfig = new EncoderConfig();
         rightDiffyEncoderConfig = new EncoderConfig();
-            //Convertion factor for gear ratio
+            // Conversion factor for gear ratio
         leftDiffyEncoderConfig.positionConversionFactor(ARM_CONVERSION_FACTOR);
         rightDiffyEncoderConfig.positionConversionFactor(ARM_CONVERSION_FACTOR);
 
-        //Soft Limit
+        // Soft Limit
         leftDiffySoftLimit = new SoftLimitConfig();
         rightDiffySoftLimit = new SoftLimitConfig();
 
-        //Soft limit config
+        // Soft limit config
         leftDiffySoftLimit.forwardSoftLimitEnabled(true)
         .forwardSoftLimit(Units.degreesToRadians(90))
         .reverseSoftLimitEnabled(true)
@@ -103,8 +103,7 @@ public class DiffyArmSubsystem {
         .reverseSoftLimitEnabled(true)
         .reverseSoftLimit(0);
 
-
-        //PID Configs
+        // PID Configs
         leftDiffyPIDConfig = new ClosedLoopConfig();
         rightDiffyPIDConfig = new ClosedLoopConfig();
 
@@ -117,46 +116,21 @@ public class DiffyArmSubsystem {
         leftDiffyPID = leftDiffyMotor.getClosedLoopController();
         rightDiffyPID = rightDiffyMotor.getClosedLoopController();
 
-        //Diffy Positions
+        // Diffy Positions
         diffyWristPosition = getDiffyArmPosition();
         diffyArmPosition = getDiffyArmPosition();
-
     }
-
-
-    //Default
-    public void diffydefPos(){
-
-
-        
-    }
-
-
-    /* 
-     * @param position the position of the wrist in degrees
-     */
-    public void setWristPosition(double position){
-        
-    }
-
-    /*
-     * @param position the position of the arm in degrees
-     */
-    public void setArmPosition(double position){
-        
-    }
-
 
     // Positions
 
-    /*Turn motor Ticks to degrees
+    /* Turn motor ticks to degrees
      * @param position the position of the wrist in ticks
      */
     public double ticksToDegrees(double ticks){
         return ticks * 360;
     }
 
-    /*Get the position of both econders
+    /* Get the position of both encoders
      * @returns two doubles, the first is left motor, the second is the right motor ticks
      */
     public double[] getDifferentialPosition(){
@@ -164,7 +138,6 @@ public class DiffyArmSubsystem {
         rightMotorPosition = rightDiffyEncoder.getPosition();
 
         return new double[] {leftMotorPosition, rightMotorPosition};
-
     }
 
     /*
@@ -179,7 +152,6 @@ public class DiffyArmSubsystem {
         return diffyWristPosition;
     }
 
-
     /*
      * @returns the position of the arm in ticks
      */
@@ -191,4 +163,41 @@ public class DiffyArmSubsystem {
         return diffyArmPosition; 
     }
 
+    // Setters
+
+    /* 
+     * @param position the position of the wrist in degrees
+     */
+    public void setWristPosition(double position){
+
+        leftDiffyEncoderConfig.positionConversionFactor(WRIST_CONVERSION_FACTOR);
+        rightDiffyEncoderConfig.positionConversionFactor(WRIST_CONVERSION_FACTOR);
+
+        leftDiffyPID.setReference(( position/360 ), ControlType.kPosition);
+        rightDiffyPID.setReference(( - position/360 ), ControlType.kPosition);
+        
+    }
+
+    /*
+     * @param position the position of the arm in degrees
+     */
+    public void setArmPosition(double position){
+
+
+        leftDiffyEncoderConfig.positionConversionFactor(ARM_CONVERSION_FACTOR);
+        rightDiffyEncoderConfig.positionConversionFactor(ARM_CONVERSION_FACTOR);
+
+        leftDiffyPID.setReference(( position/360 ), ControlType.kPosition);
+        rightDiffyPID.setReference(( position/360 ), ControlType.kPosition);
+        
+    }
+
+    /*
+     * Puts the diffy in the default position
+     */
+    public void diffydefPos(){
+        setWristPosition(0);
+        Timer.delay(0.5); // make sure diffy stops moving before moving arm (if play)
+        setArmPosition(0);
+    }
 }
