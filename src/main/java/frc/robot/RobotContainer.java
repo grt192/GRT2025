@@ -61,8 +61,8 @@ public class RobotContainer {
   Trigger r1Trigger;
 
   //Differential Drive Subsystems
-  DiffyArmSubsystem leftDiffy;
-  DiffyArmSubsystem rightDiffy;
+  DiffyArmSubsystem diffyArmSubsystem;
+
 
   int offsetRads = 0;
 
@@ -105,8 +105,7 @@ public class RobotContainer {
     // THIS WILL NEED TO BE CHANGED, THE BUTTONS AND ID
 
     // Configure Differential Drive Subsystems
-    leftDiffy = new DiffyArmSubsystem(leftDiffyMotorID);
-    rightDiffy = new DiffyArmSubsystem(rightDiffyMotorID);
+    diffyArmSubsystem = new DiffyArmSubsystem(leftDiffyMotorID, rightDiffyMotorID);
 
 
 
@@ -145,12 +144,12 @@ public class RobotContainer {
       * translation will be manually controllable. */
 
       l1Trigger.onTrue(
-        new DifferentialTwistCommand(leftDiffy, rightDiffy)
+        new DifferentialTwistCommand(diffyArmSubsystem)
       );
 
 
       r1Trigger.onTrue(
-        new DifferentialTurnCommand(leftDiffy, rightDiffy)
+        new DifferentialTurnCommand(diffyArmSubsystem)
       );
 
     

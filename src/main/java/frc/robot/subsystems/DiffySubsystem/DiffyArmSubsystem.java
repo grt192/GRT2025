@@ -73,11 +73,13 @@ public class DiffyArmSubsystem {
     private double diffyArmPosition;
 
 
-    public DiffyArmSubsystem(int canId) {
+    public DiffyArmSubsystem(int leftCanId, int rightCanId){ {
 
         // Motor
-        leftDiffyMotor = new SparkMax(canId, MotorType.kBrushless);
-        rightDiffyMotor = new SparkMax(canId, MotorType.kBrushless);
+        leftDiffyMotor = new SparkMax(leftCanId, MotorType.kBrushless);
+        rightDiffyMotor = new SparkMax(rightCanId, MotorType.kBrushless);
+        leftDiffyEncoder = leftDiffyMotor.getEncoder();
+        rightDiffyEncoder = rightDiffyMotor.getEncoder();
         leftMotorPosition = leftDiffyEncoder.getPosition();
         rightMotorPosition = rightDiffyEncoder.getPosition();
 
@@ -119,6 +121,7 @@ public class DiffyArmSubsystem {
         // Diffy Positions
         diffyWristPosition = getDiffyArmPosition();
         diffyArmPosition = getDiffyArmPosition();
+    }
     }
 
     // Positions
@@ -200,4 +203,5 @@ public class DiffyArmSubsystem {
         Timer.delay(0.5); // make sure diffy stops moving before moving arm (if play)
         setArmPosition(0);
     }
+
 }

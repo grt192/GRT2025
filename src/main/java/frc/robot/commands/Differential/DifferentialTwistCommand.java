@@ -5,13 +5,11 @@ import frc.robot.subsystems.DiffySubsystem.DiffyArmSubsystem;
 
 public class DifferentialTwistCommand extends Command {
 
-    DiffyArmSubsystem leftDiffy;
-    DiffyArmSubsystem rightDiffy;
+    DiffyArmSubsystem diffyArmSubsystem;
 
-    public DifferentialTwistCommand( DiffyArmSubsystem leftDiffy, DiffyArmSubsystem  rightDiffy) {
+    public DifferentialTwistCommand( DiffyArmSubsystem  rightCanId) {
         
-        this.leftDiffy = leftDiffy;
-        this.rightDiffy = rightDiffy;
+        this.diffyArmSubsystem = diffyArmSubsystem;
 
         // Use addRequirements() here to declare subsystem dependencies.
         // Configure additional PID settings by calling getPIDController() and setting the desired values

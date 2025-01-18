@@ -5,17 +5,15 @@ import frc.robot.subsystems.DiffySubsystem.DiffyArmSubsystem;
 
 public class DifferentialTurnCommand extends Command{
 
-    DiffyArmSubsystem leftDiffy;
-    DiffyArmSubsystem rightDiffy;
+    DiffyArmSubsystem diffyArmSubsystem;
 
 
-    public DifferentialTurnCommand( DiffyArmSubsystem leftDiffy, DiffyArmSubsystem  rightDiffy) {
+    public DifferentialTurnCommand( DiffyArmSubsystem diffyArmSubsystem) {
         // Use addRequirements() here to declare subsystem dependencies.
         // Configure additional PID settings by calling getPIDController() and setting the desired values
 
 
-        this.leftDiffy = leftDiffy;
-        this.rightDiffy = rightDiffy;
+        this.diffyArmSubsystem = diffyArmSubsystem;
     
     }
 
