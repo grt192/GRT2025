@@ -53,6 +53,7 @@ public class RobotContainer {
 
     constructDriveController(); 
     startLog();
+    rollerIntakeSensor();
     configureBindings();
   }
 
@@ -97,10 +98,6 @@ public class RobotContainer {
       },
       swerveSubsystem
     );
-
-    xbutton.onTrue(new RunCommand(() -> {
-      
-    }));
   }
 
   /**
@@ -127,6 +124,14 @@ public class RobotContainer {
         driveController = new DualJoystickDriveController();
     }
     driveController.setDeadZone(0.03);
+  }
+
+  //bad but good for now type stuff, on skibs
+  private void rollerIntakeSensor(){
+    if(differentialRoller.getIntakeRollerSensorValue()){
+      differentialRoller.stop();
+    }
+
   }
 
   /**
