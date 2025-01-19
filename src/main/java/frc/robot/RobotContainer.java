@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import frc.robot.commands.pivot.SetPivotVerticalCommand;
+import frc.robot.commands.pivot.SetPivotZeroCommand;
 import frc.robot.controllers.BaseDriveController;
 import frc.robot.controllers.DualJoystickDriveController;
 import frc.robot.controllers.PS5DriveController;
@@ -13,11 +15,18 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PS5Controller;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Vision.VisionSubsystem;
+import frc.robot.subsystems.intake.pivot.PivotState;
+import frc.robot.subsystems.intake.pivot.PivotSubsystem;
+import frc.robot.subsystems.intake.rollers.RollerSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.Constants.VisionConstants;
 /**
@@ -31,6 +40,8 @@ public class RobotContainer {
   private BaseDriveController driveController;
 
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  private final PivotSubsystem pivotSubsystem = new PivotSubsystem();
+  private final RollerSubsystem rollerSubsystem = new RollerSubsystem();
   private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(
     VisionConstants.cameraConfigs[1]
   );
@@ -41,8 +52,13 @@ public class RobotContainer {
     VisionConstants.cameraConfigs[3]
   );
 
+  private CommandPS5Controller mechController;
+  private Trigger aButton = new Trigger(mechController.button(0));
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    mechController = new CommandPS5Controller(1);
+
     constructDriveController(); 
     // startLog();
     setVisionDataInterface();
@@ -74,6 +90,18 @@ public class RobotContainer {
         swerveSubsystem
       )
     );
+
+    aButton.onTrue(
+      new ConditionalCommand(
+        new SetPivotZeroCommand(pivotSubsystem),
+        new SetPivotVerticalCommand(pivotSubsystem),
+        () -> (pivotSubsystem.getTargetState() == PivotState.VERTICAL)
+        )
+    );
+
+    rollerSubsystem.setDefaultCommand(new InstantCommand( () -> {
+      rollerSubsystem.setRollerPower(mechController.getL2Axis() - mechController.getR2Axis());
+    }, rollerSubsystem));
 
     /* Pressing the button resets the field axes to the current robot axes. */
     driveController.bindDriverHeadingReset(

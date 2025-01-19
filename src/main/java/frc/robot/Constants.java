@@ -155,6 +155,8 @@ public final class Constants {
 
   public static class IntakeConstants {
     public static final int PIVOT_ID = 0;
+    public static final int ROLLER_ID = 0;
+    public static final int INTAKE_SENSOR_ID = 0;
     public static final double PIVOT_CONVERSION_FACTOR = 30. / (2 * Math.PI);
     public static final double ZERO_POSITION = 0;
     public static final double SOURCE_POSITION = 0; //TODO: change

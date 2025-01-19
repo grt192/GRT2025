@@ -1,8 +1,8 @@
 package frc.robot.commands.pivot;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.pivot.PivotState;
-import frc.robot.subsystems.pivot.PivotSubsystem;
+import frc.robot.subsystems.intake.pivot.PivotState;
+import frc.robot.subsystems.intake.pivot.PivotSubsystem;
 
 public class SetPivotSourceCommand extends Command{
     private PivotSubsystem pivotSubsystem;
