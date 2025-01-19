@@ -61,6 +61,16 @@ public final class Constants {
     public static final double STEER_FF = 0;
   }
 
+  public static class ElevatorConstants {
+    public static final double SOURCE_POSITION = 0.0; //change
+    public static final double ONE_DROP = 0.0; //change
+    public static final double TWO_DROP = 0.0; //change
+    public static final double THREE_DROP = 0.0; //change
+    public static final double FOUR_DROP = 0.0; //change
+    public static final double ZERO = 0.0; //change
+    public static final double TOLERANCE = 0.0; //change
+  }
+
   public static class LoggingConstants{
     public static final String SWERVE_TABLE = "SwerveStats";
   }
