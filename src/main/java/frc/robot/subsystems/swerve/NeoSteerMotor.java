@@ -76,6 +76,7 @@ public class NeoSteerMotor {
         // motor.enableVoltageCompensation(12.0);
 
         // motor.burnFlash();
+        initNT(canId);
     }
 
     /**
