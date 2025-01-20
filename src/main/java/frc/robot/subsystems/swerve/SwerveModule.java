@@ -12,8 +12,8 @@ import java.util.EnumSet;
 
 public class SwerveModule {
 
-    public final KrakenDriveMotor driveMotor;
-    public final NeoSteerMotor steerMotor;
+    private final KrakenDriveMotor driveMotor;
+    private final NeoSteerMotor steerMotor;
 
     private int drivePort;
     private int steerPort;
@@ -142,6 +142,14 @@ public class SwerveModule {
      */
     public double getDriveVelocity() {
         return driveMotor.getVelocity();
+    }
+
+    public void publishDriveStats(){
+        driveMotor.publishStats();
+    }
+
+    public void publishSteerStats(){
+        steerMotor.publishStats();
     }
 
     public void steerDebug(){
