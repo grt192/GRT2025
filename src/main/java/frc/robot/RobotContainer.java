@@ -39,9 +39,9 @@ public class RobotContainer {
 
   private BaseDriveController driveController;
 
-  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  // private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   private final PivotSubsystem pivotSubsystem = new PivotSubsystem();
-  private final RollerSubsystem rollerSubsystem = new RollerSubsystem();
+  // private final RollerSubsystem rollerSubsystem = new RollerSubsystem();
   private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(
     VisionConstants.cameraConfigs[1]
   );
@@ -53,11 +53,12 @@ public class RobotContainer {
   );
 
   private CommandPS5Controller mechController;
-  private Trigger aButton = new Trigger(mechController.button(0));
+  private Trigger aButton;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     mechController = new CommandPS5Controller(1);
+    aButton = new Trigger(mechController.cross());
 
     constructDriveController(); 
     // startLog();
@@ -79,17 +80,17 @@ public class RobotContainer {
       * the robot is controlled along its own axes, otherwise controls apply to the field axes by default. If the
       * swerve aim button is held down, the robot will rotate automatically to always face a target, and only
       * translation will be manually controllable. */
-    swerveSubsystem.setDefaultCommand(
-      new RunCommand(() -> {
-        swerveSubsystem.setDrivePowers(
-          driveController.getForwardPower(),
-          driveController.getLeftPower(),
-          driveController.getRotatePower()
-        );
-        }, 
-        swerveSubsystem
-      )
-    );
+    // swerveSubsystem.setDefaultCommand(
+    //   new RunCommand(() -> {
+    //     swerveSubsystem.setDrivePowers(
+    //       driveController.getForwardPower(),
+    //       driveController.getLeftPower(),
+    //       driveController.getRotatePower()
+    //     );
+    //     }, 
+    //     swerveSubsystem
+    //   )
+    // );
 
     aButton.onTrue(
       new ConditionalCommand(
@@ -99,17 +100,21 @@ public class RobotContainer {
         )
     );
 
-    rollerSubsystem.setDefaultCommand(new InstantCommand( () -> {
-      rollerSubsystem.setRollerPower(mechController.getL2Axis() - mechController.getR2Axis());
-    }, rollerSubsystem));
+    // aButton.onTrue(
+    //     new SetPivotVerticalCommand(pivotSubsystem)
+    // );
 
-    /* Pressing the button resets the field axes to the current robot axes. */
-    driveController.bindDriverHeadingReset(
-      () ->{
-        swerveSubsystem.resetDriverHeading();
-      },
-      swerveSubsystem
-    );
+    // rollerSubsystem.setDefaultCommand(new InstantCommand( () -> {
+    //   rollerSubsystem.setRollerPower(mechController.getL2Axis() - mechController.getR2Axis());
+    // }, rollerSubsystem));
+
+    // /* Pressing the button resets the field axes to the current robot axes. */
+    // driveController.bindDriverHeadingReset(
+    //   () ->{
+    //     swerveSubsystem.resetDriverHeading();
+    //   },
+    //   swerveSubsystem
+    // );
   }
 
   /**

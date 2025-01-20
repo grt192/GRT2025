@@ -15,10 +15,16 @@ public class SetPivotVerticalCommand extends Command{
     @Override
     public void execute() {
         this.pivotSubsystem.setState(PivotState.VERTICAL);
+        System.out.println("setting vertical");
     }
 
     @Override
     public boolean isFinished() {
         return pivotSubsystem.atState(PivotState.VERTICAL);
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        pivotSubsystem.setSpeed(0);
     }
 }

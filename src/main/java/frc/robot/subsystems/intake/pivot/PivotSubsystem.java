@@ -41,9 +41,10 @@ public class PivotSubsystem extends SubsystemBase{
 
         pivotMotor = new SparkMax(PIVOT_ID, MotorType.kBrushless);
         pivotEncoder = pivotMotor.getEncoder();
+        pivotEncoder.setPosition(0);
 
         encoderConfig = new EncoderConfig();
-        encoderConfig.positionConversionFactor(PIVOT_CONVERSION_FACTOR);
+        encoderConfig.positionConversionFactor(1./ PIVOT_CONVERSION_FACTOR);
 
         softLimitConfig = new SoftLimitConfig();
         softLimitConfig.forwardSoftLimitEnabled(true)
@@ -56,8 +57,8 @@ public class PivotSubsystem extends SubsystemBase{
 
         sparkMaxConfig = new SparkMaxConfig();
         sparkMaxConfig.apply(closedLoopConfig)
-                      .apply(encoderConfig)
-                      .apply(softLimitConfig);
+                      .apply(encoderConfig);
+                    //   .apply(softLimitConfig);
 
         pivotMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -77,7 +78,12 @@ public class PivotSubsystem extends SubsystemBase{
 
     public void setState(PivotState targetState) {
         pivotPID.setReference(targetState.getTargetAngle(), ControlType.kPosition);
+        // System.out.println("state set to : " + targetState.getTargetAngle());
         this.targetState = targetState;
+    }
+
+    public void setSpeed(double speed) {
+        pivotMotor.set(speed);
     }
 
     public boolean atState(PivotState state) {
