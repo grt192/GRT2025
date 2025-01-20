@@ -11,10 +11,13 @@ import frc.robot.controllers.XboxDriveController;
 
 import org.photonvision.simulation.VideoSimUtil;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -43,12 +46,25 @@ public class RobotContainer {
   // private final PhoenixLoggingSubsystem phoenixLoggingSubsystem =
     // new PhoenixLoggingSubsystem(fieldManagementSubsystem);
 
+
+  private final SendableChooser<Command> autoChooser;
+  boolean isCompetition = false;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     constructDriveController(); 
     startLog();
     configureBindings();
-  }
+
+    autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
+    (stream) -> isCompetition
+      ? stream.filter(auto -> auto.getName().startsWith("C;"))
+      : stream
+    );
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+}
+
+
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -87,13 +103,15 @@ public class RobotContainer {
     visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
   }
 
+  
+    
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new PathPlannerAuto("curve");
+    return autoChooser.getSelected();
   }
 
   /**
