@@ -281,13 +281,6 @@ public class SwerveSubsystem extends SubsystemBase {
         }
     }
 
-    private void logStats(){
-        frontLeftModule.logStats();
-        frontRightModule.logStats();
-        backLeftModule.logStats();
-        backRightModule.logStats();
-    }
-
     /**
      * Enables drive debug
      */

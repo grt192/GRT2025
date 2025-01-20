@@ -27,10 +27,6 @@ import com.revrobotics.spark.SparkBase.ControlType;
 public class NeoSteerMotor {
 
     private final SparkMax motor;
-    private double targetDouble = 0;
-
-    private NetworkTableInstance ntInstance; 
-    private NetworkTable swerveStatsTable; 
     private final SparkAbsoluteEncoder steerEncoder;
     
     private SparkBaseConfig sparkMaxConfig;
@@ -165,7 +161,6 @@ public class NeoSteerMotor {
      * Publishes Neo stats to NT
      */
     public void publishStats(){
-
         neoPositionPublisher.set(getPosition());
         neoSetPositionPublisher.set(targetDouble);
     }
