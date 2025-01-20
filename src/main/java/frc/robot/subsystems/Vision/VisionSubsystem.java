@@ -2,6 +2,7 @@ package frc.robot.subsystems.Vision;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
@@ -34,6 +35,7 @@ public class VisionSubsystem extends SubsystemBase {
     private NetworkTable visionStatsTable;
     private StructPublisher visionPosePublisher;
 
+    private Consumer<List<TimestampedVisionUpdate>> visionConsumer = (x) -> {};
     public VisionSubsystem() {
         // Initialize the camera with its network table name
         camera = new PhotonCamera("1");
@@ -96,5 +98,13 @@ public class VisionSubsystem extends SubsystemBase {
      */
     public boolean hasTargets() {
         return camera.getLatestResult().hasTargets();
+    }
+
+    /**
+     * Sets up interfaces between swerve subsystem and vision subsystem
+     * @param consumer consumer to receive vision updates
+     */
+    public void setInterface(Consumer<List<TimestampedVisionUpdate>> consumer){
+        visionConsumer = consumer;
     }
 }
