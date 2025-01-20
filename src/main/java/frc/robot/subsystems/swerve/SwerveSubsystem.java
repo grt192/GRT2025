@@ -12,9 +12,6 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static frc.robot.Constants.SwerveConstants.*;
@@ -48,9 +45,6 @@ public class SwerveSubsystem extends SubsystemBase {
     private NetworkTableInstance ntInstance;
     private NetworkTable swerveTable;
     private StructArrayPublisher<SwerveModuleState> swerveStatesPublisher;
-
-    private final Field2d fieldVisual = new Field2d();
-    private final ShuffleboardTab tab = Shuffleboard.getTab("Swerve");
 
     private StructPublisher<Pose2d> estimatedPosePublisher;
 
@@ -222,8 +216,6 @@ public class SwerveSubsystem extends SubsystemBase {
             "estimatedPose",
             Pose2d.struct
         ).publish();
-
-        tab.add("Field", fieldVisual);
     }
 
     /**
@@ -232,7 +224,6 @@ public class SwerveSubsystem extends SubsystemBase {
     private void publishStats(){
         swerveStatesPublisher.set(getModuleStates());
         estimatedPosePublisher.set(estimatedPose);
-        fieldVisual.setRobotPose(estimatedPose);
         frontLeftModule.driveMotor.publishStats();
         frontRightModule.driveMotor.publishStats();
         backLeftModule.driveMotor.publishStats();
