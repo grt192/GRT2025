@@ -10,6 +10,9 @@ import frc.robot.subsystems.swerve.SwerveSubsystem;
  * A single Xbox controller on port 0.
  */
 public class XboxDriveController extends BaseDriveController {
+
+    private double deadZone = 0.02; 
+
     private final XboxController driveController = new XboxController(0);
      
     private final JoystickButton aButton = new JoystickButton(driveController, XboxController.Button.kA.value);
@@ -30,17 +33,29 @@ public class XboxDriveController extends BaseDriveController {
 
     @Override
     public double getForwardPower() {
-        return -driveController.getLeftY();
+        double forwardPower =  -driveController.getLeftY();
+        if (Math.abs(forwardPower)> deadZone)
+            return -driveController.getLeftY();
+        else 
+            return 0; 
     }
 
     @Override
     public double getLeftPower() {
-        return -driveController.getLeftX();
+        double leftPower =  -driveController.getLeftX();
+        if (Math.abs(leftPower)> deadZone)
+            return -driveController.getLeftX();
+        else 
+            return 0; 
     }
 
     @Override
     public double getRotatePower() {
-        return -driveController.getRightX();
+        double rotatePower =  -driveController.getRightX();
+        if (Math.abs(rotatePower)> deadZone)
+            return -driveController.getRightX();
+        else 
+            return 0; 
     }
 
     @Override

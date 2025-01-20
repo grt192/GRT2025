@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Three Meters"
+            "pathName": "ninety"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Testing Autos",
+  "folder": null,
   "choreoAuto": false
 }
