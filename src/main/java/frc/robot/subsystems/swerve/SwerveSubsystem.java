@@ -39,7 +39,6 @@ public class SwerveSubsystem extends SubsystemBase {
     private final SwerveDrivePoseEstimator poseEstimator;
     private Rotation2d driverHeadingOffset = new Rotation2d();
 
-
     private final AHRS ahrs;
 
     private NetworkTableInstance ntInstance;
@@ -66,6 +65,13 @@ public class SwerveSubsystem extends SubsystemBase {
 
         buildAuton(); 
         initNT();
+
+        if(DRIVE_DEBUG){
+            enableDriveDebug();
+        }
+        if(STEER_DEBUG){
+            enableSteerDebug();
+        }
     }
 
     @Override
@@ -222,14 +228,50 @@ public class SwerveSubsystem extends SubsystemBase {
      * publishes swerve stats to NT
      */
     private void publishStats(){
-        swerveStatesPublisher.set(getModuleStates());
         estimatedPosePublisher.set(estimatedPose);
-        frontLeftModule.driveMotor.publishStats();
-        frontRightModule.driveMotor.publishStats();
-        backLeftModule.driveMotor.publishStats();
-        backRightModule.driveMotor.publishStats();
+
+        if(STATE_DEBUG || DRIVE_DEBUG || STEER_DEBUG){
+            swerveStatesPublisher.set(getModuleStates());
+        }
+
+        if(DRIVE_DEBUG){
+            frontLeftModule.publishDriveStats();
+            frontRightModule.publishDriveStats();
+            backLeftModule.publishDriveStats();
+            backRightModule.publishDriveStats();
+        }
+
+        if(STEER_DEBUG){
+            frontLeftModule.publishSteerStats();
+            frontRightModule.publishSteerStats();
+            backLeftModule.publishSteerStats();
+            backRightModule.publishSteerStats();
+        }
     }
 
+    /**
+     * Enables drive debug
+     */
+    private void enableDriveDebug(){
+        frontLeftModule.driveDebug();
+        frontRightModule.driveDebug();
+        backLeftModule.driveDebug();
+        backRightModule.driveDebug();
+    }
+
+    /**
+     * Enables steer debug
+     */
+    private void enableSteerDebug(){
+        frontLeftModule.steerDebug();
+        frontRightModule.steerDebug();
+        backLeftModule.steerDebug();
+        backRightModule.steerDebug();
+    }
+
+    /** 
+     * Builds the auton builder
+     */
     private void buildAuton(){
         RobotConfig config = null;
         try {

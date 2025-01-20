@@ -7,6 +7,13 @@ import com.revrobotics.spark.config.MAXMotionConfig;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+
+import static frc.robot.Constants.LoggingConstants.SWERVE_TABLE;
+
+import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
@@ -17,14 +24,20 @@ import com.revrobotics.spark.SparkBase.ControlType;
 public class NeoSteerMotor {
 
     private final SparkMax motor;
-
     private final SparkAbsoluteEncoder steerEncoder;
+    
     private SparkBaseConfig sparkMaxConfig;
     private AbsoluteEncoderConfig encoderConfig;
     private ClosedLoopConfig closedLoopConfig;
     private MAXMotionConfig maxMotionConfig;
 
     private SparkClosedLoopController steerPIDController;
+
+    private NetworkTableInstance ntInstance; 
+    private NetworkTable swerveStatsTable; 
+    private DoublePublisher neoPositionPublisher;
+    private DoublePublisher neoSetPositionPublisher; 
+    private double targetDouble = 0;
 
     /**
      * A Neo steer motor for swerve steering
@@ -94,5 +107,24 @@ public class NeoSteerMotor {
      */
     public double getPosition(){
         return steerEncoder.getPosition();
+    }
+
+    /**
+     * Initializes NetworkTables
+     * @param canId
+     */
+    public void initNT (int canId){
+        ntInstance = NetworkTableInstance.getDefault();
+        swerveStatsTable = ntInstance.getTable(SWERVE_TABLE); 
+        neoPositionPublisher = swerveStatsTable.getDoubleTopic(canId + "neoPosition").publish(); 
+        neoSetPositionPublisher = swerveStatsTable.getDoubleTopic(canId + "neoSetPosition").publish();
+    }
+
+    /**
+     * Publishes Neo stats to NT
+     */
+    public void publishStats(){
+        neoPositionPublisher.set(getPosition());
+        neoSetPositionPublisher.set(targetDouble);
     }
 }
