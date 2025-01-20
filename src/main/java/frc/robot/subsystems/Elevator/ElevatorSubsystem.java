@@ -74,9 +74,6 @@ public class ElevatorSubsystem extends SubsystemBase{
         if(atGround()) {
             elevatorMotor.setPosition(0);
         }
-
     }
-
-
 
 }
