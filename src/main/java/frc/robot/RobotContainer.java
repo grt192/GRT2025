@@ -93,6 +93,7 @@ public class RobotContainer {
    * 0
    */
   private void constructDriveController(){
+    DriverStation.refreshData();
     if(DriverStation.getJoystickName(0).equals("Controller (Xbox One For Windows)")) {
         driveController = new XboxDriveController();
     }
