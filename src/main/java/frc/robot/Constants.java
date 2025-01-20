@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -67,5 +69,28 @@ public final class Constants {
 
   public static class LoggingConstants{
     public static final String SWERVE_TABLE = "SwerveStats";
+  }
+
+  public static class VisionConstants{
+
+    public static final double[] STD_DEV_DIST = new double[] {
+      0.75, 1.00, 1.3, 1.69, 2., 2.51, 2.78, 3.07, 3.54, 4.1, 4.52 
+    };
+
+    public static final double[] X_STD_DEV = new double[] {
+      0.002, 0.005, 0.007, 0.014, 0.029, 0.074, 0.101, 0.12, 0.151, 0.204, 0.287
+    };
+
+    public static final double[] Y_STD_DEV = new double[] {
+      0.002, 0.005, 0.013, 0.020, 0.067, 0.080, 0.095, 0.160, 0.206, 0.259, 0.288
+    };
+
+    public static final double[] O_STD_DEV = new double[] {
+      0.002, 0.004, 0.005, 0.011, 0.031, 0.4, 1.72, 1.89, 2.05, 2.443, 2.804
+    };
+
+    public static final Pose3d[] CAMERA_POSES = new Pose3d[] {
+      new Pose3d(0.20, 0, 0.20, new Rotation3d(0, 0, 0))
+    };
   }
 }
