@@ -4,7 +4,7 @@ import frc.robot.Constants;
 
 /** States of the elevator. */
 public enum ElevatorState {
-    ZERO(Constants.ElevatorConstants.ZERO),
+    ZERO_STATE(Constants.ElevatorConstants.ZERO_STATE),
     SOURCE(Constants.ElevatorConstants.SOURCE_POSITION),
     AMP(Constants.ElevatorConstants.ONE_DROP),
     TWO_DROP(Constants.ElevatorConstants.TWO_DROP),
