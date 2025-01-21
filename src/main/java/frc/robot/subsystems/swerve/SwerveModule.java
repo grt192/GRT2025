@@ -152,6 +152,11 @@ public class SwerveModule {
         steerMotor.publishStats();
     }
 
+    public void logStats(){
+        driveMotor.logStats();
+        steerMotor.logStats();
+    }
+
     public void steerDebug(){
         NetworkTableInstance.getDefault().getTable("steerDebug")
             .getEntry(steerPort + "PIDF")
