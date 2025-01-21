@@ -11,10 +11,10 @@ public enum ElevatorState {
     THREE_DROP(Constants.ElevatorConstants.THREE_DROP),
     FOUR_DROP(Constants.ElevatorConstants.FOUR_DROP);
 
-    private final double extendDistanceMeters;
+    private final double extendedDistanceMeters;
 
-    private ElevatorState(double extendDistanceMeters) {
-        this.extendDistanceMeters = extendDistanceMeters;
+    private ElevatorState(double extendedDistanceMeters) {
+        this.extendedDistanceMeters = extendedDistanceMeters;
     }
 
     /**
@@ -22,8 +22,8 @@ public enum ElevatorState {
      *
      * @return meters in double.
      */
-    public double getExtendDistanceMeters() {
-        return this.extendDistanceMeters;
+    public double getExtendedDistanceMeters() {
+        return this.extendedDistanceMeters;
     }
 
 }
