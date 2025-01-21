@@ -11,8 +11,11 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.util.datalog.StructLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.util.GRTUtil;
 
 import static frc.robot.Constants.SwerveConstants.*;
 import static frc.robot.Constants.LoggingConstants.*;
@@ -46,6 +49,12 @@ public class SwerveSubsystem extends SubsystemBase {
     private StructArrayPublisher<SwerveModuleState> swerveStatesPublisher;
 
     private StructPublisher<Pose2d> estimatedPosePublisher;
+    private StructLogEntry<Pose2d> estimatedPoseLogEntry =
+        StructLogEntry.create(
+            DataLogManager.getLog(),
+            "estimatedPose",
+            Pose2d.struct
+        );
 
     public SwerveSubsystem() {
         ahrs = new AHRS(NavXComType.kMXP_SPI);
@@ -86,8 +95,10 @@ public class SwerveSubsystem extends SubsystemBase {
             gyroAngle,
             getModulePositions()
         );
-        
+
+        estimatedPoseLogEntry.append(estimatedPose, GRTUtil.getFPGATime()); 
         publishStats();
+        logStats();
     }
 
     /**
@@ -247,6 +258,13 @@ public class SwerveSubsystem extends SubsystemBase {
             backLeftModule.publishSteerStats();
             backRightModule.publishSteerStats();
         }
+    }
+
+    private void logStats(){
+        frontLeftModule.logStats();
+        frontRightModule.logStats();
+        backLeftModule.logStats();
+        backRightModule.logStats();
     }
 
     /**
