@@ -45,12 +45,15 @@ public final class Constants {
     }
 
 
-    public static class diffyConst {
+    public static class DiffyConstants {
+      public static final int LEFT_ID = 0;
+      public static final int RIGHT_ID = 0;
+      public static final double ARM_CONVERSION_FACTOR = (2 * Math.PI) / 20.;
+      public static final double WRIST_CONVERSION_FACTOR = (2 * Math.PI) / 10.;
 
-      public static final double ARM_CONVERSION_FACTOR = 20. / (2 * Math.PI);
-      public static final double WRIST_CONVERSION_FACTOR = 10. / (2 * Math.PI);
+      public static final double DIFFY_P = 0;
+      public static final double DIFFY_I = 0;
+      public static final double DIFFY_D = 0;
 
-
-  
   }
 }

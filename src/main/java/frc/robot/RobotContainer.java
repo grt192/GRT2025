@@ -92,23 +92,14 @@ public class RobotContainer {
   
   public RobotContainer() {
     
-    // Configure Motor IDs
-    leftDiffyMotorID = 9;
-    rightDiffyMotorID = 9;
-    
     // Configure controllers
     l1Trigger = new Trigger(mechController.L1());
     r1Trigger = new Trigger(mechController.R1());
 
-
-
     // THIS WILL NEED TO BE CHANGED, THE BUTTONS AND ID
 
     // Configure Differential Drive Subsystems
-    diffyArmSubsystem = new DiffyArmSubsystem(leftDiffyMotorID, rightDiffyMotorID);
-
-
-
+    diffyArmSubsystem = new DiffyArmSubsystem();
 
 
     swerveSubsystem = new SwerveSubsystem();
