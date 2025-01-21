@@ -54,8 +54,8 @@ public class ElevatorSubsystem extends SubsystemBase{
 
     //returns current position in meters (?)
     public double getCurrentPosition() {
-        double dimAnalysis = elevatorMotor.getPosition().getValueAsDouble() * 0.0254 *
-        ElevatorConstants.GEAR_RATIO * 2 * Math.PI * ElevatorConstants.AXLE_RADIUS; //change from angles to position (0.0254 is one meter by inch)
+        double axleCircumMeters = 2 * Math.PI * ElevatorConstants.AXLE_RADIUS * 0.0254; //0.0254 is one meter by inch
+        double dimAnalysis = elevatorMotor.getPosition().getValueAsDouble() * axleCircumMeters * ElevatorConstants.GEAR_RATIO; 
         return dimAnalysis;
     }
 
