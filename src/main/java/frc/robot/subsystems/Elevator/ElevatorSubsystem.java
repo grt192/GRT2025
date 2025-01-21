@@ -20,9 +20,6 @@ public class ElevatorSubsystem extends SubsystemBase{
 
     //limit switch
     private final DigitalInput zeroLimitSwitch;
-
-    //
-    private final int axleRadius = 9; //change later
     
     public ElevatorSubsystem() {
 
@@ -58,7 +55,7 @@ public class ElevatorSubsystem extends SubsystemBase{
     //returns current position in meters (?)
     public double getCurrentPosition() {
         double dimAnalysis = elevatorMotor.getPosition().getValueAsDouble() * 
-        ElevatorConstants.GEAR_RATIO * 2 * Math.PI * axleRadius; //change from angles to position
+        ElevatorConstants.GEAR_RATIO * 2 * Math.PI * ElevatorConstants.AXLE_RADIUS; //change from angles to position
         return dimAnalysis;
     }
 
@@ -73,5 +70,4 @@ public class ElevatorSubsystem extends SubsystemBase{
             elevatorMotor.setPosition(0);
         }
     }
-    
 }
