@@ -1,5 +1,6 @@
 package frc.robot.subsystems.intake.pivot;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -13,10 +14,18 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkClosedLoopController.ArbFFUnits;
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkClosedLoopController;
 
 import static frc.robot.Constants.IntakeConstants.PIVOT_CONVERSION_FACTOR;
+import static frc.robot.Constants.IntakeConstants.PIVOT_D;
+import static frc.robot.Constants.IntakeConstants.PIVOT_I;
 import static frc.robot.Constants.IntakeConstants.PIVOT_ID;
+import static frc.robot.Constants.IntakeConstants.PIVOT_KG;
+import static frc.robot.Constants.IntakeConstants.PIVOT_KS;
+import static frc.robot.Constants.IntakeConstants.PIVOT_KV;
+import static frc.robot.Constants.IntakeConstants.PIVOT_P;
 import static frc.robot.Constants.IntakeConstants.PIVOT_TOLERANCE;
 
 
@@ -31,11 +40,10 @@ public class PivotSubsystem extends SubsystemBase{
     private SparkMaxConfig sparkMaxConfig;
     private SoftLimitConfig softLimitConfig;
 
-    private double p = 1; 
-    private double i = 0; 
-    private double d = 0;
+    private ArmFeedforward armFeedforward;
 
     private PivotState targetState;
+    private double gravityFF;
 
     public PivotSubsystem(){
 
@@ -53,7 +61,9 @@ public class PivotSubsystem extends SubsystemBase{
                        .reverseSoftLimit(0);
 
         closedLoopConfig = new ClosedLoopConfig();
-        closedLoopConfig.pid(p, i, d);
+        closedLoopConfig.pid(PIVOT_P, PIVOT_I, PIVOT_D, ClosedLoopSlot.kSlot0);
+
+        armFeedforward = new ArmFeedforward(PIVOT_KS, PIVOT_KG, PIVOT_KV);
 
         sparkMaxConfig = new SparkMaxConfig();
         sparkMaxConfig.apply(closedLoopConfig)
@@ -65,6 +75,7 @@ public class PivotSubsystem extends SubsystemBase{
         pivotPID = pivotMotor.getClosedLoopController();
 
         targetState = PivotState.ZERO;
+        gravityFF = 0;
 
     }
 
@@ -77,7 +88,8 @@ public class PivotSubsystem extends SubsystemBase{
     }
 
     public void setState(PivotState targetState) {
-        pivotPID.setReference(targetState.getTargetAngle(), ControlType.kPosition);
+        gravityFF = armFeedforward.calculate(targetState.getTargetAngle(), 2);
+        pivotPID.setReference(targetState.getTargetAngle(), ControlType.kPosition, ClosedLoopSlot.kSlot0, gravityFF, ArbFFUnits.kVoltage);
         // System.out.println("state set to : " + targetState.getTargetAngle());
         this.targetState = targetState;
     }
@@ -88,6 +100,10 @@ public class PivotSubsystem extends SubsystemBase{
 
     public boolean atState(PivotState state) {
         return Math.abs(getCurrentAngle() - state.getTargetAngle()) < PIVOT_TOLERANCE;
+    }
+
+    public double getPositionError() {
+        return Math.abs(getCurrentAngle() - targetState.getTargetAngle());
     }
     }
 

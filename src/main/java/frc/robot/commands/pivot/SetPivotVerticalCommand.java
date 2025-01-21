@@ -15,7 +15,7 @@ public class SetPivotVerticalCommand extends Command{
     @Override
     public void execute() {
         this.pivotSubsystem.setState(PivotState.VERTICAL);
-        System.out.println("setting vertical");
+        System.out.println("vertical" + pivotSubsystem.getPositionError());
     }
 
     @Override

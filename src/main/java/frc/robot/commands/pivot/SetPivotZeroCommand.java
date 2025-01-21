@@ -15,7 +15,7 @@ public class SetPivotZeroCommand extends Command{
     @Override
     public void execute() {
         this.pivotSubsystem.setState(PivotState.ZERO);
-        System.out.println("setting horizaontal");
+        System.out.println("horizontal" + pivotSubsystem.getPositionError());
     }
 
     @Override

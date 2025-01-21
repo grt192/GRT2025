@@ -97,7 +97,7 @@ public class RobotContainer {
         new SetPivotZeroCommand(pivotSubsystem),
         new SetPivotVerticalCommand(pivotSubsystem),
         () -> (pivotSubsystem.getTargetState() == PivotState.VERTICAL)
-        )
+        ).withTimeout(3)
     );
 
     // aButton.onTrue(
