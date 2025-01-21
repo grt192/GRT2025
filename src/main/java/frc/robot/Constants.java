@@ -68,12 +68,16 @@ public final class Constants {
     public static final double THREE_DROP = 0.0; //change
     public static final double FOUR_DROP = 0.0; //change
     public static final double ZERO_STATE = 0.0; //change
+
     public static final double TOLERANCE = 0.0; //change
+
     public static final int KRAKEN_ID = 0; //change
     public static final int LIMIT_ID = 0; //change
+
     public static final double ELEVATOR_P = 0; //change
     public static final double ELEVATOR_I = 0; //change
     public static final double ELEVATOR_D = 0; //change
+    
     public static final double GEAR_RATIO = 0; //change
     public static final double AXLE_RADIUS = 0; //change
   }
