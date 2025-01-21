@@ -77,9 +77,9 @@ public final class Constants {
     public static final double ELEVATOR_P = 0; //change
     public static final double ELEVATOR_I = 0; //change
     public static final double ELEVATOR_D = 0; //change
-    
-    public static final double GEAR_RATIO = 0; //change
-    public static final double AXLE_RADIUS = 0; //change
+
+    public static final double GEAR_RATIO = 20; //motor to axle
+    public static final double AXLE_RADIUS = 0.578; //in inches
   }
 
   public static class LoggingConstants{

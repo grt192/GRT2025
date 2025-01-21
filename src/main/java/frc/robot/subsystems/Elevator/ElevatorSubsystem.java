@@ -33,7 +33,7 @@ public class ElevatorSubsystem extends SubsystemBase{
         slot1Configs.kP = ElevatorConstants.ELEVATOR_P;
         slot1Configs.kI = ElevatorConstants.ELEVATOR_I;
         slot1Configs.kD = ElevatorConstants.ELEVATOR_D;
-
+        
         elevatorMotor.getConfigurator().apply(slot1Configs);
     }
 
@@ -54,8 +54,8 @@ public class ElevatorSubsystem extends SubsystemBase{
 
     //returns current position in meters (?)
     public double getCurrentPosition() {
-        double dimAnalysis = elevatorMotor.getPosition().getValueAsDouble() * 
-        ElevatorConstants.GEAR_RATIO * 2 * Math.PI * ElevatorConstants.AXLE_RADIUS; //change from angles to position
+        double dimAnalysis = elevatorMotor.getPosition().getValueAsDouble() * 0.0254 *
+        ElevatorConstants.GEAR_RATIO * 2 * Math.PI * ElevatorConstants.AXLE_RADIUS; //change from angles to position (0.0254 is one meter by inch)
         return dimAnalysis;
     }
 
