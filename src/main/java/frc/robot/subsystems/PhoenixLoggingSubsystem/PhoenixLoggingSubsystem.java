@@ -18,30 +18,31 @@ public class PhoenixLoggingSubsystem extends SubsystemBase{
 
     public PhoenixLoggingSubsystem(FieldManagementSubsystem fieldManagementSubsystem){
         this.fieldManagementSubsystem = fieldManagementSubsystem;
-        SignalLogger.setPath("/media/sda1/ctre-logs/");
+        SignalLogger.setPath("/u/ctre-logs/");
+        SignalLogger.start();
     }
 
     @Override
     public void periodic(){
-        MatchStatus currentMatchStatus = fieldManagementSubsystem.getMatchStatus();
-        if(currentMatchStatus == MatchStatus.AUTON
-            || currentMatchStatus == MatchStatus.TELEOP
-            && !isLogging){
-            SignalLogger.start();
-            DataLogManager.start();
-            // DriverStation.startDataLog(DataLogManager.getLog());
-            isLogging = true;
-        }
-        else if(currentMatchStatus == MatchStatus.ENDED){
-            SignalLogger.stop();
-            DataLogManager.stop();
-            isLogging = false;
-        }
-        else if(fieldManagementSubsystem.getRobotStatus() == RobotStatus.DISABLED){
-            DataLogManager.stop();
-            SignalLogger.stop();
-            isLogging = false;
-        }
+        // MatchStatus currentMatchStatus = fieldManagementSubsystem.getMatchStatus();
+        // if(currentMatchStatus == MatchStatus.AUTON
+        //     || currentMatchStatus == MatchStatus.TELEOP
+        //     && !isLogging){
+        //     SignalLogger.start();
+        //     DataLogManager.start();
+        //     // DriverStation.startDataLog(DataLogManager.getLog());
+        //     isLogging = true;
+        // }
+        // else if(currentMatchStatus == MatchStatus.ENDED){
+        //     SignalLogger.stop();
+        //     DataLogManager.stop();
+        //     isLogging = false;
+        // }
+        // else if(fieldManagementSubsystem.getRobotStatus() == RobotStatus.DISABLED){
+        //     DataLogManager.stop();
+        //     SignalLogger.stop();
+        //     isLogging = false;
+        // }
         // System.out.println("Log Dir: " + DataLogManager.getLogDir());
     }
 }
