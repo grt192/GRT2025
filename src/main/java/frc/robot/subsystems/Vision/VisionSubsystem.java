@@ -158,9 +158,9 @@ public class VisionSubsystem extends SubsystemBase {
      * Checks if the camera currently sees any AprilTags
      * @return true if targets are detected
      */
-    public boolean hasTargets() {
-        return camera.getLatestResult().hasTargets();
-    }
+    // public boolean hasTargets() {
+    //     return camera.getLatestResult().hasTargets();
+    // }
 
     /**
      * Sets up interfaces between swerve subsystem and vision subsystem
