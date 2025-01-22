@@ -33,8 +33,11 @@ public class RobotContainer {
 
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
-  private final FieldManagementSubsystem fieldManagementSubsystem = new FieldManagementSubsystem();
-  private final PhoenixLoggingSubsystem phoenixLoggingSubsystem = new PhoenixLoggingSubsystem(fieldManagementSubsystem);
+  private final FieldManagementSubsystem fieldManagementSubsystem =
+    new FieldManagementSubsystem();
+
+  // private final PhoenixLoggingSubsystem phoenixLoggingSubsystem =
+    // new PhoenixLoggingSubsystem(fieldManagementSubsystem);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -110,8 +113,7 @@ public class RobotContainer {
    * Starts datalog at /media/sda1/robotLogs
    */
   private void startLog(){
-    DataLogManager.start("/media/sda1/robotLogs");
+    DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
-
   }
 }
