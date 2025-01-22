@@ -36,13 +36,13 @@ public class RobotContainer {
   private final FieldManagementSubsystem fieldManagementSubsystem =
     new FieldManagementSubsystem();
 
-  private final PhoenixLoggingSubsystem phoenixLoggingSubsystem =
-    new PhoenixLoggingSubsystem(fieldManagementSubsystem);
+  // private final PhoenixLoggingSubsystem phoenixLoggingSubsystem =
+    // new PhoenixLoggingSubsystem(fieldManagementSubsystem);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     constructDriveController(); 
-    // startLog();
+    startLog();
     configureBindings();
   }
 
@@ -114,6 +114,6 @@ public class RobotContainer {
    */
   private void startLog(){
     DataLogManager.start();
-    // DriverStation.startDataLog(DataLogManager.getLog());
+    DriverStation.startDataLog(DataLogManager.getLog());
   }
 }
