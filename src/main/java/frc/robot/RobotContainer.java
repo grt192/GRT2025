@@ -62,12 +62,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     constructDriveController(); 
-    // startLog();
-    mechController = new CommandPS5Controller(1);
-    
-    xButton = new Trigger(mechController.cross());
-    squareButton = new Trigger(mechController.square());
-
+    startLog();
     configureBindings();
     
 
