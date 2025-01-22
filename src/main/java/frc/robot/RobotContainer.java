@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.Commands.AutoAlignCommand;
 import frc.robot.controllers.BaseDriveController;
 import frc.robot.controllers.DualJoystickDriveController;
 import frc.robot.controllers.PS5DriveController;
@@ -20,6 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -30,8 +32,7 @@ import frc.robot.subsystems.Vision.VisionSubsystem;
 import edu.wpi.first.wpilibj.PS5Controller;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
-
-
+import frc.robot.Commands.AutoAlignCommand;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -61,6 +62,8 @@ public class RobotContainer {
 
 
   private final SendableChooser<Command> autoChooser;
+
+  private Trigger rightBumper;
   boolean isCompetition = false;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -75,6 +78,11 @@ public class RobotContainer {
     
     startLog();
     configureBindings();
+
+    mechController = new CommandPS5Controller(1);
+    
+    rightBumper = new Trigger(mechController.R2());
+    
 
     autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
     (stream) -> isCompetition
