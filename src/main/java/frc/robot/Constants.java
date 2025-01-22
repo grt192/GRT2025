@@ -79,7 +79,10 @@ public final class Constants {
     public static final double ELEVATOR_D = 0; //change
 
     public static final double GEAR_RATIO = 20; //motor to axle
-    public static final double AXLE_RADIUS = 0.578; //in inches
+    public static final double AXLE_RADIUS = 6. * .289 * .0254; //in meters
+
+    public static final double TICKS_TO_METERS = 2. * Math.PI * AXLE_RADIUS / GEAR_RATIO;
+    public static final double METERS_TO_TICKS = 1. / TICKS_TO_METERS;
   }
 
   public static class LoggingConstants{

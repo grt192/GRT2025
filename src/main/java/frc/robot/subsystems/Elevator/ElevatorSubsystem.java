@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
 
+
 public class ElevatorSubsystem extends SubsystemBase{
 
     //motor stuff and configs
@@ -24,7 +25,7 @@ public class ElevatorSubsystem extends SubsystemBase{
     public ElevatorSubsystem() {
 
         zeroLimitSwitch = new DigitalInput(ElevatorConstants.LIMIT_ID); 
-        elevatorMotor = new TalonFX(0);
+        elevatorMotor = new TalonFX(ElevatorConstants.KRAKEN_ID);
 
         request = new PositionVoltage(0); //change
 
@@ -39,7 +40,8 @@ public class ElevatorSubsystem extends SubsystemBase{
 
     //functions
     public void setTargetState(ElevatorState targetState) {
-        elevatorMotor.setControl(request.withPosition(targetState.getExtendedDistanceMeters())); //change
+        double targetTicks = targetState.getExtendInTicks();
+        elevatorMotor.setControl(request.withPosition(targetTicks));
         this.targetState = targetState;
     }
 
@@ -48,20 +50,19 @@ public class ElevatorSubsystem extends SubsystemBase{
     }
 
     public boolean atState(ElevatorState state) {
-        double distance = Math.abs(this.getCurrentPosition() - state.getExtendedDistanceMeters());
+        double distance = Math.abs(this.getCurrentPosition() - state.getExtendInTicks());
         return distance < ElevatorConstants.TOLERANCE;
     }
 
     //returns current position in meters (?)
     public double getCurrentPosition() {
-        double axleCircumMeters = 2 * Math.PI * ElevatorConstants.AXLE_RADIUS * 0.0254; //0.0254 is one meter by inch
-        double dimAnalysis = elevatorMotor.getPosition().getValueAsDouble() * axleCircumMeters * ElevatorConstants.GEAR_RATIO; 
+        double dimAnalysis = elevatorMotor.getPosition().getValueAsDouble() * ElevatorConstants.TICKS_TO_METERS;
         return dimAnalysis;
     }
 
     public boolean atGround() {
-        double distance = Math.abs(this.getCurrentPosition() - state.getExtendedDistanceMeters());
-        return distance < ElevatorConstants.TOLERANCE && zeroLimitSwitch.get();
+        double distance = Math.abs(this.getCurrentPosition() - state.getExtendInTicks());
+        return (distance < ElevatorConstants.TOLERANCE) || zeroLimitSwitch.get();
     }
 
     public void periodic() {
