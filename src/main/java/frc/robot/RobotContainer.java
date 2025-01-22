@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.Commands.AutoAlignCommand;
 import frc.robot.Commands.elevator.ElevatorToGroundCommand;
 import frc.robot.Commands.elevator.ElevatorToL1Command;
 import frc.robot.controllers.BaseDriveController;
@@ -32,7 +33,7 @@ import frc.robot.subsystems.Elevator.ElevatorSubsystem;
 import frc.robot.subsystems.Elevator.ElevatorSubsystemTest;
 import frc.robot.subsystems.Vision.VisionSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
-
+import frc.robot.Commands.AutoAlignCommand;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -41,7 +42,6 @@ import frc.robot.subsystems.swerve.SwerveSubsystem;
  */
 public class RobotContainer {
   private BaseDriveController driveController;
-
 
   private final CommandPS5Controller mechController = new CommandPS5Controller(1);
 
@@ -60,6 +60,8 @@ public class RobotContainer {
 
 
   private final SendableChooser<Command> autoChooser;
+
+  private Trigger rightBumper;
   boolean isCompetition = false;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -72,8 +74,13 @@ public class RobotContainer {
 
 
     constructDriveController(); 
-    startLog();
+    // startLog();
     configureBindings();
+
+    mechController = new CommandPS5Controller(1);
+    
+    rightBumper = new Trigger(mechController.R2());
+    
 
     autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
     (stream) -> isCompetition
