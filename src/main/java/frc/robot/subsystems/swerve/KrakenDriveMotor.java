@@ -20,6 +20,9 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
+import frc.robot.util.GRTUtil;
 
 public class KrakenDriveMotor {
     
@@ -43,6 +46,14 @@ public class KrakenDriveMotor {
     private StatusSignal<Current> supplyCurrentSignal;
     private StatusSignal<Current> statorCurrentSignal; //torqueCurrent is Pro
 
+    private DoubleLogEntry positionLogEntry;
+    private DoubleLogEntry veloErrorLogEntry;
+    private DoubleLogEntry veloLogEntry;
+    private DoubleLogEntry targetVeloEntry;
+    private DoubleLogEntry appliedVoltsLogEntry;
+    private DoubleLogEntry supplyCurrLogEntry;
+    private DoubleLogEntry statorCurrLogEntry;
+    private DoubleLogEntry temperatureLogEntry;
 
     /** A kraken drive motor for swerve.
      *
@@ -64,6 +75,7 @@ public class KrakenDriveMotor {
 
         initNT(canId);
         initSignals();
+        initLogs(canId);
     }
     
     /**
@@ -97,6 +109,20 @@ public class KrakenDriveMotor {
         motor.optimizeBusUtilization(0, 1.0);
     }
 
+    /**
+     * Initializes log entries
+     * @param canId drive motor's CAN ID
+     */
+    private void initLogs(int canId){
+        positionLogEntry = new DoubleLogEntry(DataLogManager.getLog(), canId + "position");
+        veloErrorLogEntry = new DoubleLogEntry(DataLogManager.getLog(), canId + "veloError"); 
+        veloLogEntry = new DoubleLogEntry(DataLogManager.getLog(), canId + "velo");
+        targetVeloEntry = new DoubleLogEntry(DataLogManager.getLog(), canId + "targetVelo");
+        appliedVoltsLogEntry = new DoubleLogEntry(DataLogManager.getLog(), canId + "appliedVolts");
+        supplyCurrLogEntry = new DoubleLogEntry(DataLogManager.getLog(), canId + "supplyCurrent");
+        statorCurrLogEntry = new DoubleLogEntry(DataLogManager.getLog(), canId + "statorCurrent");
+        temperatureLogEntry = new DoubleLogEntry(DataLogManager.getLog(), canId + "temperature");
+    }
     /**
      * Set motor velo to target velo
      * @param metersPerSec target velo in m/s
@@ -162,4 +188,35 @@ public class KrakenDriveMotor {
         statorCurrentPublisher.set(motor.getStatorCurrent().getValueAsDouble());
     }
 
+    public void logStats(){
+        positionLogEntry.append(
+            motor.getPosition().getValueAsDouble(), GRTUtil.getFPGATime()
+        );
+
+        veloErrorLogEntry.append(
+            motor.getClosedLoopError().getValueAsDouble(), GRTUtil.getFPGATime()
+        );
+
+        veloLogEntry.append(
+            motor.getVelocity().getValueAsDouble(), GRTUtil.getFPGATime()
+        );
+
+        targetVeloEntry.append(targetRps, GRTUtil.getFPGATime());
+
+        appliedVoltsLogEntry.append(
+            motor.getMotorVoltage().getValueAsDouble(), GRTUtil.getFPGATime()
+        );
+
+        supplyCurrLogEntry.append(
+            motor.getSupplyCurrent().getValueAsDouble(), GRTUtil.getFPGATime()
+        );
+
+        statorCurrLogEntry.append(
+            motor.getStatorCurrent().getValueAsDouble(), GRTUtil.getFPGATime()
+        );
+
+        temperatureLogEntry.append(
+            motor.getDeviceTemp().getValueAsDouble(), GRTUtil.getFPGATime()
+        );
+    }
 }

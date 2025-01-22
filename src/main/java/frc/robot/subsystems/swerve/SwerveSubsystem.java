@@ -11,11 +11,11 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.util.datalog.StructLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.util.GRTUtil;
 
 import static frc.robot.Constants.SwerveConstants.*;
 import static frc.robot.Constants.LoggingConstants.*;
@@ -42,17 +42,19 @@ public class SwerveSubsystem extends SubsystemBase {
     private final SwerveDrivePoseEstimator poseEstimator;
     private Rotation2d driverHeadingOffset = new Rotation2d();
 
-
     private final AHRS ahrs;
 
     private NetworkTableInstance ntInstance;
     private NetworkTable swerveTable;
     private StructArrayPublisher<SwerveModuleState> swerveStatesPublisher;
 
-    private final Field2d fieldVisual = new Field2d();
-    private final ShuffleboardTab tab = Shuffleboard.getTab("Swerve");
-
     private StructPublisher<Pose2d> estimatedPosePublisher;
+    private StructLogEntry<Pose2d> estimatedPoseLogEntry =
+        StructLogEntry.create(
+            DataLogManager.getLog(),
+            "estimatedPose",
+            Pose2d.struct
+        );
 
     public SwerveSubsystem() {
         ahrs = new AHRS(NavXComType.kMXP_SPI);
@@ -72,6 +74,13 @@ public class SwerveSubsystem extends SubsystemBase {
 
         buildAuton(); 
         initNT();
+
+        if(DRIVE_DEBUG){
+            enableDriveDebug();
+        }
+        if(STEER_DEBUG){
+            enableSteerDebug();
+        }
     }
 
     @Override
@@ -86,8 +95,10 @@ public class SwerveSubsystem extends SubsystemBase {
             gyroAngle,
             getModulePositions()
         );
-        
+
+        estimatedPoseLogEntry.append(estimatedPose, GRTUtil.getFPGATime()); 
         publishStats();
+        logStats();
     }
 
     /**
@@ -222,23 +233,63 @@ public class SwerveSubsystem extends SubsystemBase {
             "estimatedPose",
             Pose2d.struct
         ).publish();
-
-        tab.add("Field", fieldVisual);
     }
 
     /**
      * publishes swerve stats to NT
      */
     private void publishStats(){
-        swerveStatesPublisher.set(getModuleStates());
         estimatedPosePublisher.set(estimatedPose);
-        fieldVisual.setRobotPose(estimatedPose);
-        frontLeftModule.driveMotor.publishStats();
-        frontRightModule.driveMotor.publishStats();
-        backLeftModule.driveMotor.publishStats();
-        backRightModule.driveMotor.publishStats();
+
+        if(STATE_DEBUG || DRIVE_DEBUG || STEER_DEBUG){
+            swerveStatesPublisher.set(getModuleStates());
+        }
+
+        if(DRIVE_DEBUG){
+            frontLeftModule.publishDriveStats();
+            frontRightModule.publishDriveStats();
+            backLeftModule.publishDriveStats();
+            backRightModule.publishDriveStats();
+        }
+
+        if(STEER_DEBUG){
+            frontLeftModule.publishSteerStats();
+            frontRightModule.publishSteerStats();
+            backLeftModule.publishSteerStats();
+            backRightModule.publishSteerStats();
+        }
     }
 
+    private void logStats(){
+        frontLeftModule.logStats();
+        frontRightModule.logStats();
+        backLeftModule.logStats();
+        backRightModule.logStats();
+    }
+
+    /**
+     * Enables drive debug
+     */
+    private void enableDriveDebug(){
+        frontLeftModule.driveDebug();
+        frontRightModule.driveDebug();
+        backLeftModule.driveDebug();
+        backRightModule.driveDebug();
+    }
+
+    /**
+     * Enables steer debug
+     */
+    private void enableSteerDebug(){
+        frontLeftModule.steerDebug();
+        frontRightModule.steerDebug();
+        backLeftModule.steerDebug();
+        backRightModule.steerDebug();
+    }
+
+    /** 
+     * Builds the auton builder
+     */
     private void buildAuton(){
         RobotConfig config = null;
         try {

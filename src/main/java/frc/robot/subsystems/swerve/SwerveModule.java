@@ -3,13 +3,23 @@ package frc.robot.subsystems.swerve;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTableEvent;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 import static frc.robot.Constants.SwerveConstants.*;
 
+import java.util.EnumSet;
+
 public class SwerveModule {
 
-    public final KrakenDriveMotor driveMotor;
-    public final NeoSteerMotor steerMotor;
+    private final KrakenDriveMotor driveMotor;
+    private final NeoSteerMotor steerMotor;
+
+    private int drivePort;
+    private int steerPort;
+
+    private int driveIndex;
+    private int steerIndex;
 
     private double offsetRads = 0;
 
@@ -22,11 +32,28 @@ public class SwerveModule {
 
     public SwerveModule(int drivePort, int steerPort, double offsetRads) {
 
+        this.drivePort = drivePort;
+        this.steerPort = steerPort;
+
+        driveIndex = drivePort / 2;
+        steerIndex = (steerPort -1) / 2;
+
         steerMotor = new NeoSteerMotor(steerPort);
-        steerMotor.configurePID(STEER_P, STEER_I, STEER_D, STEER_FF);
+        steerMotor.configurePID(
+            STEER_P[steerIndex],
+            STEER_I[steerIndex],
+            STEER_D[steerIndex],
+            STEER_FF[steerIndex]
+        );
 
         driveMotor = new KrakenDriveMotor(drivePort);
-        driveMotor.configPID(DRIVE_P, DRIVE_I, DRIVE_D, DRIVE_S, DRIVE_V);
+        driveMotor.configPID(
+            DRIVE_P[driveIndex],
+            DRIVE_I[driveIndex],
+            DRIVE_D[driveIndex],
+            DRIVE_S[driveIndex],
+            DRIVE_V[driveIndex]
+        );
 
         this.offsetRads = offsetRads;
     }
@@ -68,6 +95,7 @@ public class SwerveModule {
             getWrappedAngle()
         );
     }
+
     /**
      * Gets the state of the swerve module (drive velo in m/s + angle 0-1 )
      * @return state of the module (velo is m/s and angle is double from 0 to 1)
@@ -114,5 +142,61 @@ public class SwerveModule {
      */
     public double getDriveVelocity() {
         return driveMotor.getVelocity();
+    }
+
+    public void publishDriveStats(){
+        driveMotor.publishStats();
+    }
+
+    public void publishSteerStats(){
+        steerMotor.publishStats();
+    }
+
+    public void logStats(){
+        driveMotor.logStats();
+        steerMotor.logStats();
+    }
+
+    public void steerDebug(){
+        NetworkTableInstance.getDefault().getTable("steerDebug")
+            .getEntry(steerPort + "PIDF")
+            .setDoubleArray(
+                new double[] {
+                    STEER_P[steerIndex],
+                    STEER_I[steerIndex],
+                    STEER_D[steerIndex],
+                    STEER_FF[steerIndex]
+                }
+            );
+        NetworkTableInstance.getDefault().getTable("steerDebug").addListener(
+            steerPort + "PIDF",
+            EnumSet.of(NetworkTableEvent.Kind.kValueAll),
+            (table, key, event) -> {
+                double[] pidf = event.valueData.value.getDoubleArray();
+                steerMotor.configurePID(pidf[0], pidf[1], pidf[2], pidf[3]);
+            }
+        );
+    }
+
+    public void driveDebug(){
+        NetworkTableInstance.getDefault().getTable("driveDebug")
+            .getEntry(drivePort + "PIDSV")
+            .setDoubleArray(
+                new double[] {
+                    DRIVE_P[driveIndex],
+                    DRIVE_I[driveIndex],
+                    DRIVE_D[driveIndex],
+                    DRIVE_S[driveIndex],
+                    DRIVE_V[driveIndex]
+                }
+            );
+        NetworkTableInstance.getDefault().getTable("driveDebug").addListener(
+            drivePort + "PIDSV",
+            EnumSet.of(NetworkTableEvent.Kind.kValueAll),
+            (table, key, event) -> {
+                double[] pidsv = event.valueData.value.getDoubleArray();
+                driveMotor.configPID(pidsv[0], pidsv[1], pidsv[2], pidsv[3], pidsv[4]);
+            }
+        );
     }
 }
