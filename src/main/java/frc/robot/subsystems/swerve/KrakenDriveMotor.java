@@ -46,6 +46,7 @@ public class KrakenDriveMotor {
     private StatusSignal<Current> supplyCurrentSignal;
     private StatusSignal<Current> statorCurrentSignal; //torqueCurrent is Pro
 
+    private DoubleLogEntry positionLogEntry;
     private DoubleLogEntry veloErrorLogEntry;
     private DoubleLogEntry veloLogEntry;
     private DoubleLogEntry targetVeloEntry;
@@ -113,6 +114,7 @@ public class KrakenDriveMotor {
      * @param canId drive motor's CAN ID
      */
     private void initLogs(int canId){
+        positionLogEntry = new DoubleLogEntry(DataLogManager.getLog(), canId + "position");
         veloErrorLogEntry = new DoubleLogEntry(DataLogManager.getLog(), canId + "veloError"); 
         veloLogEntry = new DoubleLogEntry(DataLogManager.getLog(), canId + "velo");
         targetVeloEntry = new DoubleLogEntry(DataLogManager.getLog(), canId + "targetVelo");
@@ -187,6 +189,10 @@ public class KrakenDriveMotor {
     }
 
     public void logStats(){
+        positionLogEntry.append(
+            motor.getPosition().getValueAsDouble(), GRTUtil.getFPGATime()
+        );
+
         veloErrorLogEntry.append(
             motor.getClosedLoopError().getValueAsDouble(), GRTUtil.getFPGATime()
         );
