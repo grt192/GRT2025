@@ -77,12 +77,7 @@ public class RobotContainer {
 
 
     constructDriveController(); 
-    // startLog();
-    mechController = new CommandPS5Controller(1);
-    
-    xButton = new Trigger(mechController.cross());
-    squareButton = new Trigger(mechController.square());
-
+    startLog();
     configureBindings();
     
 
