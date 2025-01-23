@@ -19,56 +19,48 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class AutoAlignCommand {
 
-    static Pose2d reefPose = new Pose2d(1.05, -0.74, Rotation2d.fromDegrees(54));
+    static Pose2d reefPose = new Pose2d(3.607, 5.312, Rotation2d.fromDegrees(-55));
     
     static PathPlannerPath getAlignPath;
-    private static String reefName = "testReef";
+    private static String reefName = "la";
+    private static String sourceName = "pa";
     
     
     static PathConstraints constraints = new PathConstraints(
         3.227,
-            3,
+        3,
         Units.degreesToRadians(540), 
         Units.degreesToRadians(720)
     );
 
-    // private static PathPlannerPath getAlignPath(String path){
-    //     try {
-    //         getAlignPath = PathPlannerPath.fromPathFile(path);
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //         // Handle exception as needed, maybe use default values or fallback
-    //     }
-    //     return getAlignPath;
-    // }
+    private static PathPlannerPath getAlignPath(String path){
+        try {
+            getAlignPath = PathPlannerPath.fromPathFile(path);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle exception as needed, maybe use default values or fallback
+        }
+        return getAlignPath;
+    }
 
-    // public static Command alignToPose(SwerveSubsystem swerveSubsystem, Pose2d targetPose){
-    //     Command alignToPose = AutoBuilder.pathfindToPose(
-    //         targetPose,
-    //         constraints
-    //         );
+    public static Command runAlignPath (SwerveSubsystem swerveSubsystem, String pathName){
+        PathPlannerPath path = getAlignPath(pathName);
+        Command runAlignPath = AutoBuilder.pathfindThenFollowPath(
+            path,
+            constraints
+        );
+        runAlignPath.addRequirements(swerveSubsystem); 
+        return runAlignPath;
+    }
     
-    //     alignToPose.addRequirements(swerveSubsystem);
+    public static Command reefTest(SwerveSubsystem swerveSubsystem){
+        System.out.println("started reef");
+        return runAlignPath(swerveSubsystem, reefName);
+    }
 
-    //     return alignToPose; 
-    // }
+    public static Command sourceTest(SwerveSubsystem swerveSubsystem){
+        return runAlignPath(swerveSubsystem, sourceName);
+    }
 
-    // public static Command runAlignPath (SwerveSubsystem swerveSubsystem, String pathName){
-    //     PathPlannerPath path = getAlignPath(pathName);
-    //     Command runAlignPath = AutoBuilder.pathfindThenFollowPath(
-    //         path,
-    //         constraints
-    //     );
-    //     runAlignPath.addRequirements(swerveSubsystem); 
-    //     return runAlignPath;
-    // }
-    
-//     public static SequentialCommandGroup reefTest(SwerveSubsystem swerveSubsystem){
-//         return new SequentialCommandGroup(
-//         //  alignToPose(swerveSubsystem, reefPose)
-//         runAlignPath(swerveSubsystem, reefName)
-//         );
-//     }
-     }
-
+}
 

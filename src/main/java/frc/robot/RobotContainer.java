@@ -15,6 +15,8 @@ import org.photonvision.simulation.VideoSimUtil;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -81,7 +83,9 @@ public class RobotContainer {
 
     mechController = new CommandPS5Controller(1);
     
-    rightBumper = new Trigger(mechController.R2());
+    rightBumper = new Trigger(mechController.cross());
+
+    configureBindings();
     
 
     autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
@@ -154,6 +158,10 @@ public class RobotContainer {
       },
       swerveSubsystem
     );
+
+    rightBumper.onTrue(
+      AutoAlignCommand.reefTest(swerveSubsystem));
+
     visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
   }
 
