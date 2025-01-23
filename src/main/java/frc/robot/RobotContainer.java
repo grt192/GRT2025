@@ -66,7 +66,7 @@ public class RobotContainer {
     mechController = new CommandPS5Controller(1);
     
     xButton = new Trigger(mechController.cross());
-    squareButton = new Trigger(mechController.square();)
+    squareButton = new Trigger(mechController.square());
 
     configureBindings();
     
