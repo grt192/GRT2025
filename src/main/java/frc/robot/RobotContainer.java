@@ -62,7 +62,7 @@ public class RobotContainer {
   private final SendableChooser<Command> autoChooser;
 
   private Trigger xButton;
-  private Trigger squareButton
+  private Trigger squareButton;
   boolean isCompetition = false;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -143,20 +143,14 @@ public class RobotContainer {
       swerveSubsystem
     );
     visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
-  }
-
-
     xButton.onTrue(
       AutoAlignCommand.reefTest(swerveSubsystem));
 
     visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
     squareButton.onTrue(
       AutoAlignCommand.sourceTest(swerveSubsystem));
-
   }
 
-  
-    
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
