@@ -158,6 +158,9 @@ public class RobotContainer {
       },
       swerveSubsystem
     );
+    visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
+  }
+
 
     xButton.onTrue(
       AutoAlignCommand.reefTest(swerveSubsystem));
