@@ -63,7 +63,8 @@ public class RobotContainer {
 
   private final SendableChooser<Command> autoChooser;
 
-  private Trigger rightBumper;
+  private Trigger xButton;
+  private Trigger squareButton
   boolean isCompetition = false;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -79,7 +80,8 @@ public class RobotContainer {
     // startLog();
     mechController = new CommandPS5Controller(1);
     
-    rightBumper = new Trigger(mechController.cross());
+    xButton = new Trigger(mechController.cross());
+    squareButton = new Trigger(mechController.square();)
 
     configureBindings();
     
@@ -148,10 +150,13 @@ public class RobotContainer {
       swerveSubsystem
     );
 
-    rightBumper.onTrue(
+    xButton.onTrue(
       AutoAlignCommand.reefTest(swerveSubsystem));
 
     visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
+    squareButton.onTrue(
+      AutoAlignCommand.sourceTest(swerveSubsystem));
+
   }
 
   
