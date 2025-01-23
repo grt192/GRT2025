@@ -62,6 +62,8 @@ public class SwerveSubsystem extends SubsystemBase {
             Pose2d.struct
         );
 
+    private Pose2d currentPose = new Pose2d(0.575, 6.687, Rotation2d.fromDegrees(-55));
+
     public SwerveSubsystem() {
         ahrs = new AHRS(NavXComType.kMXP_SPI);
         ahrs.reset();
@@ -80,6 +82,8 @@ public class SwerveSubsystem extends SubsystemBase {
             new Pose2d()
             );
 
+        
+        resetPose(currentPose);
         buildAuton(); 
         initNT();
 

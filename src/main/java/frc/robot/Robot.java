@@ -32,7 +32,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     PathfindingCommand.warmupCommand().schedule();
-  }
+  };
 
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
