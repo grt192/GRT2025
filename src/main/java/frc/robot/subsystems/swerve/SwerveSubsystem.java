@@ -15,9 +15,13 @@ import edu.wpi.first.util.datalog.StructLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.Vision.TimestampedVisionUpdate;
 import frc.robot.util.GRTUtil;
 
 import static frc.robot.Constants.SwerveConstants.*;
+
+import java.util.List;
+
 import static frc.robot.Constants.LoggingConstants.*;
 import static frc.robot.Constants.DebugConstants.*;
 
@@ -126,6 +130,15 @@ public class SwerveSubsystem extends SubsystemBase {
             MAX_VEL, MAX_VEL, MAX_OMEGA);
     }
 
+    public void addVisionMeasurements(List<TimestampedVisionUpdate> updates){
+        for (TimestampedVisionUpdate update : updates){
+            poseEstimator.addVisionMeasurement(
+                update.pose(), 
+                update.timestamp(),
+                update.stdDevs()
+            );
+        }
+    }
     /**
      * Gets the module positions.
      *

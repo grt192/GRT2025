@@ -48,6 +48,10 @@ public class RobotContainer {
   private final Trigger createTrigger;
   private final Trigger optionTrigger;
   private final Trigger xbutton;
+  private final VisionSubsystem visionSubsystem = new VisionSubsystem();
+
+  private final FieldManagementSubsystem fieldManagementSubsystem =
+    new FieldManagementSubsystem();
 
   // private final PhoenixLoggingSubsystem phoenixLoggingSubsystem =
     // new PhoenixLoggingSubsystem(fieldManagementSubsystem);
@@ -126,6 +130,16 @@ public class RobotContainer {
       },
       swerveSubsystem
     );
+    visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
+  }
+
+  /*
+   * Sets the rumble of the controller
+   * @param value the value of the rumble
+   */
+  private void setRumble(double value) {
+    
+    mechController.getHID().setOutputs((int) value);
   }
 
   /*
