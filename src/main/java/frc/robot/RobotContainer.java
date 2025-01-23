@@ -46,6 +46,7 @@ public class RobotContainer {
   private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
 
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  private final VisionSubsystem visionSubsystem = new VisionSubsystem();
 
   private final Trigger xButton, sButton;
   private final Trigger lBumper, rBumper;
@@ -121,6 +122,7 @@ public class RobotContainer {
       },
       swerveSubsystem
     );
+    visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
   }
 
   /**
