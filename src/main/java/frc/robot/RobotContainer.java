@@ -35,6 +35,7 @@ public class RobotContainer {
   private BaseDriveController driveController;
 
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  private final VisionSubsystem visionSubsystem = new VisionSubsystem();
 
   private final FieldManagementSubsystem fieldManagementSubsystem =
     new FieldManagementSubsystem();
@@ -83,6 +84,7 @@ public class RobotContainer {
       },
       swerveSubsystem
     );
+    visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
   }
 
   /**

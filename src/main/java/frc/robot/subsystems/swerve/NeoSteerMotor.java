@@ -34,9 +34,6 @@ public class NeoSteerMotor {
     private ClosedLoopConfig closedLoopConfig;
     private MAXMotionConfig maxMotionConfig;
 
-    private DoublePublisher neoPositionPublisher;
-    private DoublePublisher neoSetPositionPublisher; 
-
     private SparkClosedLoopController steerPIDController;
 
     private NetworkTableInstance ntInstance; 
