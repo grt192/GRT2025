@@ -1,15 +1,18 @@
 package frc.robot.controllers;
 
 import edu.wpi.first.util.concurrent.Event;
-import edu.wpi.first.wpilibj.PS5Controller;
-import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class PS5DriveController extends BaseDriveController{
 
-    private final PS5Controller driveController = new PS5Controller(0);
+    private final CommandPS5Controller driveController = new CommandPS5Controller(0);
+    private Trigger L1 = new Trigger(driveController.L1());
+    private Trigger R1 = new Trigger(driveController.R1());
+    private Trigger cross = new Trigger(driveController.cross());
+    private Trigger square = new Trigger(driveController.square());
     private double deadZone = 0;
     
     @Override
@@ -41,22 +44,22 @@ public class PS5DriveController extends BaseDriveController{
 
     @Override
     public boolean getDriverHeadingResetButton(){
-        return driveController.getL1Button();
+        return L1.getAsBoolean();
     }
 
     @Override
     public boolean getLeftBumper(){
-        return driveController.getL1Button();
+        return L1.getAsBoolean();
     }
 
     @Override
     public boolean getRightBumper(){
-        return driveController.getR1Button();
+        return R1.getAsBoolean();
     }
 
     @Override
     public boolean getRelativeMode(){
-        return driveController.getR1Button();
+        return R1.getAsBoolean();
     }
 
     @Override
@@ -76,5 +79,15 @@ public class PS5DriveController extends BaseDriveController{
     @Override
     public void setDeadZone(double deadZone){
         this.deadZone = deadZone;
+    }
+
+    @Override
+    public Trigger getAlignToReef() {
+        return cross;
+    }
+
+    @Override
+    public Trigger getAlignToSource() {
+        return square;
     }
 }

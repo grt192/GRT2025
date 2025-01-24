@@ -15,8 +15,6 @@ import frc.robot.controllers.XboxDriveController;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -31,9 +29,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Elevator.ElevatorState;
 import frc.robot.subsystems.Elevator.ElevatorSubsystem;
 import frc.robot.subsystems.Elevator.ElevatorSubsystemTest;
+import frc.robot.subsystems.FieldManagementSubsystem.FieldManagementSubsystem;
 import frc.robot.subsystems.Vision.VisionSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
-import frc.robot.Commands.AutoAlignCommand;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -148,12 +146,14 @@ public class RobotContainer {
       swerveSubsystem
     );
     visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
-    xButton.onTrue(
-      AutoAlignCommand.reefTest(swerveSubsystem));
+    driveController.getAlignToReef().onTrue(
+      AutoAlignCommand.reefTest(swerveSubsystem).onlyWhile(() -> driveController.getForwardPower() 
+      <= 0.05 && driveController.getLeftPower() <= 0.05));
 
     visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
-    squareButton.onTrue(
-      AutoAlignCommand.sourceTest(swerveSubsystem));
+    driveController.getAlignToSource().onTrue(
+      AutoAlignCommand.sourceTest(swerveSubsystem).onlyWhile(() -> driveController.getForwardPower() 
+      <= 0.05 && driveController.getLeftPower() <= 0.05));
   }
 
   /**

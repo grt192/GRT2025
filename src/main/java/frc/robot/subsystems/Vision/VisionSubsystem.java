@@ -127,6 +127,7 @@ public class VisionSubsystem extends SubsystemBase {
                     closestTarget = target;
                 }
             }
+            if(minDistance > 3) continue;
             cameraVisionUpdate.add(
             new TimestampedVisionUpdate(
                 timestamp, //current x, y, and theta 
