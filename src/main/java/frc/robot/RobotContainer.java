@@ -59,6 +59,11 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
+    mechController = new CommandPS5Controller(1);
+
+    xButton = new Trigger(mechController.cross());
+    squareButton = new Trigger(mechController.square());
     constructDriveController(); 
     startLog();
     configureBindings();
@@ -141,7 +146,7 @@ public class RobotContainer {
     else{
         driveController = new DualJoystickDriveController();
     }
-    driveController.setDeadZone(0.03);
+    driveController.setDeadZone(0.05);
   }
 
   /**

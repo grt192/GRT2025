@@ -35,8 +35,8 @@ public class VisionSubsystem extends SubsystemBase {
     private static AprilTagFieldLayout aprilTagFieldLayout;
     private static final Transform3d CAMERA_TO_ROBOT = new Transform3d(
         // Modify these values based on your robot's camera mounting position
-        0.5, 0.0, 0.5,  // x, y, z in meters
-        new Rotation3d(0, 0, 0)  // roll, pitch, yaw in radians
+        0.31, 0.0 ,0.,  // x, y, z in meters
+        new Rotation3d(- Math.PI / 2., 0, 0)  // roll, pitch, yaw in radians
     );
 
     private NetworkTableInstance ntInstance;
@@ -72,7 +72,7 @@ public class VisionSubsystem extends SubsystemBase {
         // Create pose estimator
         photonPoseEstimator = new PhotonPoseEstimator(
             aprilTagFieldLayout,
-            PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+            PoseStrategy.LOWEST_AMBIGUITY,
             CAMERA_TO_ROBOT
         );
 
