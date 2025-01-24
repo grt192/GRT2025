@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 
 /**
@@ -91,5 +92,15 @@ public class XboxDriveController extends BaseDriveController {
     @Override
     public void setDeadZone(double deadZone){
 
+    }
+
+    @Override
+    public Trigger getAlignToReef() {
+        return (Trigger) xButton;
+    }
+
+    @Override
+    public Trigger getAlignToSource() {
+        return (Trigger) aButton;
     }
 }
