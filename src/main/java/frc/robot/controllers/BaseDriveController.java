@@ -1,6 +1,7 @@
 package frc.robot.controllers;
 
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /** The base class for a drive controller. Contains all needed methods for driving the robot (without mechs) */
 public abstract class BaseDriveController {
@@ -56,10 +57,16 @@ public abstract class BaseDriveController {
      */
     public abstract boolean getRelativeMode();
 
+    // public abstract boolean getAlignToReef();
+
     public abstract void bindDriverHeadingReset(
         Runnable command, Subsystem requiredSubsystem
     );
 
     public abstract void setDeadZone(double deadZone);
+
+    public abstract Trigger getAlignToReef();
+
+    public abstract Trigger getAlignToSource();
     
 }
