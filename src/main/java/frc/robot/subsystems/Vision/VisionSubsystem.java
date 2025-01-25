@@ -32,6 +32,11 @@ public class VisionSubsystem extends SubsystemBase {
     private final PhotonCamera camera;
     private final PhotonPoseEstimator photonPoseEstimator;
     private static AprilTagFieldLayout aprilTagFieldLayout;
+    private static final Transform3d CAMERA_TO_ROBOT = new Transform3d(
+        // Modify these values based on your robot's camera mounting position
+        0.31, -0.2 ,0.01,  // x, y, z in meters
+        new Rotation3d(- Math.PI / 2., 0, 0)  // roll, pitch, yaw in radians
+    );
 
     private NetworkTableInstance ntInstance;
     private NetworkTable visionStatsTable;
