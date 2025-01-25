@@ -49,15 +49,15 @@ public class RobotContainer {
   private final FieldManagementSubsystem fieldManagementSubsystem =
     new FieldManagementSubsystem();
 
-  // private final PhoenixLoggingSubsystem phoenixLoggingSubsystem =
-    // new PhoenixLoggingSubsystem(fieldManagementSubsystem);
+  // // private final PhoenixLoggingSubsystem phoenixLoggingSubsystem =
+  //   // new PhoenixLoggingSubsystem(fieldManagementSubsystem);
 
 
-  private final SendableChooser<Command> autoChooser;
+  // private final SendableChooser<Command> autoChooser;
 
   private Trigger xButton;
   private Trigger squareButton;
-  boolean isCompetition = false;
+  // boolean isCompetition = false;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -72,12 +72,12 @@ public class RobotContainer {
     configureBindings();
     
 
-    autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
-    (stream) -> isCompetition
-      ? stream.filter(auto -> auto.getName().startsWith("C;"))
-      : stream
-    );
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+    // autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
+    // (stream) -> isCompetition
+    //   ? stream.filter(auto -> auto.getName().startsWith("C;"))
+    //   : stream
+    // );
+    // SmartDashboard.putData("Auto Chooser", autoChooser);
 }
 
 
@@ -129,9 +129,9 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    return new PathPlannerAuto("New Auto");
-  }
+  // public Command getAutonomousCommand() {
+  //   return new PathPlannerAuto("New Auto");
+  // }
 
   /**
    * Constructs the drive controller based on the name of the controller at port
