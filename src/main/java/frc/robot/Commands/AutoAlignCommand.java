@@ -22,7 +22,7 @@ public class AutoAlignCommand {
     static Pose2d reefPose = new Pose2d(3.607, 5.312, Rotation2d.fromDegrees(-55));
     
     static PathPlannerPath getAlignPath;
-    private static String reefName = "reefAlignPath";
+    private static String reefName = "shortReefAlignPath";
     private static String sourceName = "sourceAlignPath";
     
     
@@ -54,7 +54,6 @@ public class AutoAlignCommand {
     }
     
     public static Command reefTest(SwerveSubsystem swerveSubsystem){
-        System.out.println("started reef");
         return runAlignPath(swerveSubsystem, reefName);
     }
 
