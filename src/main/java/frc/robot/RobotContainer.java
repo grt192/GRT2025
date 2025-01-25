@@ -100,9 +100,9 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  // public Command getAutonomousCommand() {
-  //   return new PathPlannerAuto("Three Meters");
-  // }
+  public Command getAutonomousCommand() {
+    return new PathPlannerAuto("Three Meters");
+  }
 
   /**
    * Constructs the drive controller based on the name of the controller at port
