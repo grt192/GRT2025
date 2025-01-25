@@ -82,6 +82,17 @@ public class RobotContainer {
       },
       swerveSubsystem
     );
+
+    driveController.getAlignToReef().onTrue(
+      AutoAlignCommand.reefTest(swerveSubsystem).onlyWhile(() -> driveController.getForwardPower() 
+      <= 0.05 && driveController.getLeftPower() <= 0.05));
+
+    // visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
+    driveController.getAlignToSource().onTrue(
+      AutoAlignCommand.sourceTest(swerveSubsystem).onlyWhile(() -> driveController.getForwardPower() 
+      <= 0.05 && driveController.getLeftPower() <= 0.05));
+
+
   }
 
   /**
@@ -89,9 +100,9 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    return new PathPlannerAuto("Three Meters");
-  }
+  // public Command getAutonomousCommand() {
+  //   return new PathPlannerAuto("Three Meters");
+  // }
 
   /**
    * Constructs the drive controller based on the name of the controller at port
