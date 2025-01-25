@@ -11,6 +11,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -22,7 +23,7 @@ public class AutoAlignCommand {
     static Pose2d reefPose = new Pose2d(3.607, 5.312, Rotation2d.fromDegrees(-55));
     
     static PathPlannerPath getAlignPath;
-    private static String reefName = "shortReefAlignPath";
+    private static String reefName = "reefAlignPath";
     private static String sourceName = "sourceAlignPath";
     
     
@@ -60,6 +61,12 @@ public class AutoAlignCommand {
     public static Command sourceTest(SwerveSubsystem swerveSubsystem){
         return runAlignPath(swerveSubsystem, sourceName);
     }
+
+    // public static Command closeReef(SwerveSubsystem swerveSubsystem, Pose2d currentPose){
+    //     Translation2d currentTrans = currentPose.getTranslation();
+    //     currentTrans.
+
+    // }
 
 }
 
