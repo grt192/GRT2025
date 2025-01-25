@@ -1,6 +1,5 @@
 package frc.robot.subsystems.Vision;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -15,7 +14,6 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -26,7 +24,6 @@ import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VisionConstants;
-import frc.robot.subsystems.Vision.TimestampedVisionUpdate;
 import frc.robot.util.PolynomialRegression;
 public class VisionSubsystem extends SubsystemBase {
     private final PhotonCamera camera;
@@ -41,13 +38,11 @@ public class VisionSubsystem extends SubsystemBase {
 
     private NetworkTableInstance ntInstance;
     private NetworkTable visionStatsTable;
-    private StructPublisher visionPosePublisher;
+    private StructPublisher<Pose2d> visionPosePublisher;
     private DoublePublisher visionDistPublisher;
 
-    private Consumer<List<TimestampedVisionUpdate>> visionConsumer = (x) -> {};
+    private Consumer<TimestampedVisionUpdate> visionConsumer = (x) -> {};
     
-    private List<TimestampedVisionUpdate> cameraVisionUpdate;
-
     private PolynomialRegression xStdDevModel =
         new PolynomialRegression(VisionConstants.STD_DEV_DIST,VisionConstants.X_STD_DEV,2);
     private PolynomialRegression yStdDevModel =
@@ -76,11 +71,6 @@ public class VisionSubsystem extends SubsystemBase {
             CAMERA_TO_ROBOT
         );
 
-        // ntInstance = NetworkTableInstance.getDefault();
-        // visionStatsTable = ntInstance.getTable("VisionStats");
-        // visionPosePublisher = visionStatsTable.getStructTopic(
-        //     "VisionPose", Pose2d.struct
-        // ).publish();
         initNT();
     }
 
@@ -89,83 +79,58 @@ public class VisionSubsystem extends SubsystemBase {
         // Get the latest pipeline result the results are queued up since the last call
         List<PhotonPipelineResult> results = camera.getAllUnreadResults();
         
-        //loops through all snapshots of the camera stream
+        //loops through all unread results
         for (PhotonPipelineResult result : results){
-            cameraVisionUpdate = new ArrayList<>();
-            double timestamp = result.getTimestampSeconds();//get time stamp of results
-
-
-
-            // Variables to track the closest target
             
             //checks if the camera detected any apriltags
             if (result.hasTargets()){
+                
+                double minDistance = Double.MAX_VALUE; // Start with a very large value
+        
+                //loops through all detected targets from the camera
+                for (PhotonTrackedTarget target : result.getTargets()) {
+                    
+                    Transform3d cameraToTagTransform = target.getBestCameraToTarget();
+                    Translation3d translation = cameraToTagTransform.getTranslation();
+                    double distance = Math.sqrt(
+                        Math.pow(translation.getX(),2) +
+                        Math.pow(translation.getY(),2) +
+                        Math.pow(translation.getZ(),2) 
+                    );
+                    if (distance < minDistance){
+                        minDistance = distance;
+                    }
+                }
 
-            double minDistance = Double.MAX_VALUE; // Start with a very large value
-            PhotonTrackedTarget closestTarget = null;
-    
-            //loops through all detected targets from the camera
-            for (PhotonTrackedTarget target : result.getTargets()) {
-                // Get estimated robot pose
-                Optional<EstimatedRobotPose> estimatedPose = photonPoseEstimator.update(result);
-                if (estimatedPose.isPresent()) {
-                    // Update the current pose
-                    //Transform3d tagToRobotTransform = result.getTargets();
-                    //Translation3d translation = result.getTra
-                    currentPose = estimatedPose.get().estimatedPose.toPose2d();
-                    // You might wanst to send this to other subsystems or log it
+                //Don't use vision measurement if tags are too far
+                if(minDistance > 3) continue;
+
+                Optional<EstimatedRobotPose> estimatedPose = 
+                    photonPoseEstimator.update(result);
+                if(estimatedPose.isPresent()){
+                    visionConsumer.accept(
+                        new TimestampedVisionUpdate(
+                            result.getTimestampSeconds(),
+                            estimatedPose.get().estimatedPose.toPose2d(),
+                            VecBuilder.fill(//standard deviation matrix
+                                xStdDevModel.predict(minDistance),
+                                yStdDevModel.predict(minDistance),
+                                oStdDevModel.predict(minDistance))
+                        )
+                    );
                 }
-                Transform3d cameraToTagTransform = target.getBestCameraToTarget();
-                Translation3d translation = cameraToTagTransform.getTranslation();
-                double distance = Math.sqrt(
-                    Math.pow(translation.getX(),2) +
-                    Math.pow(translation.getY(),2) +
-                    Math.pow(translation.getZ(),2) 
-                );
-                if (distance < minDistance){
-                    minDistance = distance;
-                    closestTarget = target;
-                }
+               
+                visionDistPublisher.set(minDistance);
+                visionPosePublisher.set(currentPose);
             }
-            if(minDistance > 3) continue;
-            cameraVisionUpdate.add(
-            new TimestampedVisionUpdate(
-                timestamp, //current x, y, and theta 
-                currentPose,
-                VecBuilder.fill(//standard deviation matrix
-                    xStdDevModel.predict(minDistance),
-                    yStdDevModel.predict(minDistance),
-                    oStdDevModel.predict(minDistance)))
-            );
-            visionConsumer.accept(cameraVisionUpdate);
-            visionDistPublisher.set(minDistance);
-            visionPosePublisher.set(currentPose);
         }
     }
-
-    }
-
-    /**
-     * Gets the latest estimated robot pose from vision
-     * @return The estimated Pose2d of the robot
-     */
-    public Pose2d getCurrentPose() {
-        return currentPose;
-    }
-
-    /**
-     * Checks if the camera currently sees any AprilTags
-     * @return true if targets are detected
-     */
-    // public boolean hasTargets() {
-    //     return camera.getLatestResult().hasTargets();
-    // }
 
     /**
      * Sets up interfaces between swerve subsystem and vision subsystem
      * @param consumer consumer to receive vision updates
      */
-    public void setInterface(Consumer<List<TimestampedVisionUpdate>> consumer){
+    public void setInterface(Consumer<TimestampedVisionUpdate> consumer){
         visionConsumer = consumer;//thiing for vision to interface with the swerve subsystem
     }
 
