@@ -45,14 +45,14 @@ public class VisionSubsystem extends SubsystemBase {
         // Initialize the camera with its network table name
         camera = new PhotonCamera(cameraConfig.getCameraName());
 
-        try{
-            aprilTagFieldLayout = new AprilTagFieldLayout(
-                Filesystem.getDeployDirectory() + "/2025-reefscape.json"
-            );
-        }
-        catch (Exception e){
-            throw new RuntimeException("Failed to load field layout", e);
-        }
+        // try{
+        //     aprilTagFieldLayout = new AprilTagFieldLayout(
+        //         Filesystem.getDeployDirectory() + "/2025-reefscape.json"
+        //     );
+        // }
+        // catch (Exception e){
+        //     throw new RuntimeException("Failed to load field layout", e);
+        // }
 
         // Create pose estimator
         photonPoseEstimator = new PhotonPoseEstimator(
@@ -66,8 +66,8 @@ public class VisionSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // Get the latest pipeline result the results are queued up since the last call
-        List<PhotonPipelineResult> results = camera.getAllUnreadResults();
+    //     // Get the latest pipeline result the results are queued up since the last call
+    //     List<PhotonPipelineResult> results = camera.getAllUnreadResults();
         
         //loops through all unread results
         for (PhotonPipelineResult result : results){
@@ -128,11 +128,11 @@ public class VisionSubsystem extends SubsystemBase {
      * Initializes Networktables.
      */
     private void initNT(){
-        ntInstance = NetworkTableInstance.getDefault();
-        visionStatsTable = ntInstance.getTable("Vision Debug");
-        visionPosePublisher = visionStatsTable.getStructTopic(
-            "estimated pose", Pose2d.struct
-        ).publish();
-        visionDistPublisher = visionStatsTable.getDoubleTopic("dist").publish();
+        // ntInstance = NetworkTableInstance.getDefault();
+        // visionStatsTable = ntInstance.getTable("Vision Debug");
+        // visionPosePublisher = visionStatsTable.getStructTopic(
+        //     "estimated pose", Pose2d.struct
+        // ).publish();
+        // visionDistPublisher = visionStatsTable.getDoubleTopic("dist").publish();
     }
 }
