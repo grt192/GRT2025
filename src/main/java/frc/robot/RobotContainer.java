@@ -55,17 +55,13 @@ public class RobotContainer {
 
   // private final SendableChooser<Command> autoChooser;
 
-  private Trigger xButton;
-  private Trigger squareButton;
-  // boolean isCompetition = false;
+  boolean isCompetition = false;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
     mechController = new CommandPS5Controller(1);
 
-    xButton = new Trigger(mechController.cross());
-    squareButton = new Trigger(mechController.square());
     constructDriveController(); 
     startLog();
     setVisionDataInterface();
@@ -122,6 +118,15 @@ public class RobotContainer {
       driveController.getLeftPower() <= 0.05
     );
 
+    visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
+    // driveController.getAlignToReef().onTrue(
+    //   AutoAlignCommand.reefTest(swerveSubsystem).onlyWhile(() -> driveController.getForwardPower() 
+    //   <= 0.05 && driveController.getLeftPower() <= 0.05));
+
+    // visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
+    driveController.getAlignToSource().onTrue(
+      AutoAlignCommand.sourceTest(swerveSubsystem).onlyWhile(() -> driveController.getForwardPower() 
+      <= 0.05 && driveController.getLeftPower() <= 0.05));
   }
 
   /**
@@ -129,9 +134,9 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  // public Command getAutonomousCommand() {
-  //   return new PathPlannerAuto("New Auto");
-  // }
+  public Command getAutonomousCommand() {
+    return new PathPlannerAuto("Three Meters");
+  }
 
   /**
    * Constructs the drive controller based on the name of the controller at port
