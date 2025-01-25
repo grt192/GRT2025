@@ -169,6 +169,9 @@ public class VisionSubsystem extends SubsystemBase {
         visionConsumer = consumer;//thiing for vision to interface with the swerve subsystem
     }
 
+    /**
+     * Initializes Networktables.
+     */
     private void initNT(){
         ntInstance = NetworkTableInstance.getDefault();
         visionStatsTable = ntInstance.getTable("Vision Debug");
