@@ -20,8 +20,6 @@ import frc.robot.util.GRTUtil;
 
 import static frc.robot.Constants.SwerveConstants.*;
 
-import java.util.List;
-
 import static frc.robot.Constants.LoggingConstants.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -131,14 +129,12 @@ public class SwerveSubsystem extends SubsystemBase {
             MAX_VEL, MAX_VEL, MAX_OMEGA);
     }
 
-    public void addVisionMeasurements(List<TimestampedVisionUpdate> updates){
-        for (TimestampedVisionUpdate update : updates){
-            poseEstimator.addVisionMeasurement(
-                update.pose(), 
-                update.timestamp(),
-                update.stdDevs()
-            );
-        }
+    public void addVisionMeasurements(TimestampedVisionUpdate update){
+        poseEstimator.addVisionMeasurement(
+            update.pose(), 
+            update.timestamp(),
+            update.stdDevs()
+        );
     }
     /**
      * Gets the module positions.
