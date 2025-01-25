@@ -55,5 +55,16 @@ public final class Constants {
       public static final double DIFFY_I = 0;
       public static final double DIFFY_D = 0;
 
+      public static final double ARM_ANGLE_180 = 0; //chabnge
+      public static final double ARM_ANGLE_0 = 0; //change
+      public static final double ARM_ANGLE_90 = 0; //change
+      public static final double ARM_ANGLE_CORAL = 0; //change
+
+      public static final double WRIST_ANGLE_180 = 0; //chabnge
+      public static final double WRIST_ANGLE_0 = 0; //change
+      public static final double WRIST_ANGLE_90 = 0; //change
+      public static final double WRIST_ANGLE_CORAL = 0; //change
+
+      public static final double TOLERANCE = 0; //change
   }
 }
