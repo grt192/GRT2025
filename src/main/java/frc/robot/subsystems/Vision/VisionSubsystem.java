@@ -67,7 +67,7 @@ public class VisionSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
     //     // Get the latest pipeline result the results are queued up since the last call
-    //     List<PhotonPipelineResult> results = camera.getAllUnreadResults();
+        List<PhotonPipelineResult> results = camera.getAllUnreadResults();
         
         //loops through all unread results
         for (PhotonPipelineResult result : results){
