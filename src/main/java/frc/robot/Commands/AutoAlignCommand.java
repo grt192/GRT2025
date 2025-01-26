@@ -4,6 +4,7 @@ import frc.robot.subsystems.swerve.SwerveSubsystem;
 
 import java.nio.file.Path;
 
+import com.ctre.phoenix6.swerve.SwerveRequest.NativeSwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.path.PathConstraints;
@@ -26,9 +27,10 @@ public class AutoAlignCommand {
     private static String reefName = "reefAlignPath";
     private static String sourceName = "sourceAlignPath";
     
+    private static Command runAlignPath;
     
     static PathConstraints constraints = new PathConstraints(
-        3.227,
+        4.6,
         3,
         Units.degreesToRadians(540), 
         Units.degreesToRadians(720)
@@ -46,7 +48,8 @@ public class AutoAlignCommand {
 
     public static Command runAlignPath (SwerveSubsystem swerveSubsystem, String pathName){
         PathPlannerPath path = getAlignPath(pathName);
-        Command runAlignPath = AutoBuilder.pathfindThenFollowPath(
+        // runAlignPath.addRequirements(swerveSubsystem);
+        runAlignPath = AutoBuilder.pathfindThenFollowPath(
             path,
             constraints
         );
@@ -55,11 +58,26 @@ public class AutoAlignCommand {
     }
     
     public static Command reefTest(SwerveSubsystem swerveSubsystem){
-        return runAlignPath(swerveSubsystem, reefName);
+        PathPlannerPath path = getAlignPath(reefName);
+        // runAlignPath.addRequirements(swerveSubsystem); 
+        runAlignPath = AutoBuilder.pathfindThenFollowPath(
+            path,
+            constraints
+        );
+        runAlignPath.addRequirements(swerveSubsystem); 
+        return runAlignPath;
+        // return runAlignPath(swerveSubsystem, reefName);
     }
 
     public static Command sourceTest(SwerveSubsystem swerveSubsystem){
-        return runAlignPath(swerveSubsystem, sourceName);
+        PathPlannerPath path = getAlignPath(sourceName);
+        runAlignPath = AutoBuilder.pathfindThenFollowPath(
+            path,
+            constraints
+        );
+        runAlignPath.addRequirements(swerveSubsystem);
+        return runAlignPath; 
+        // return runAlignPath(swerveSubsystem, sourceName);
     }
 
     // public static Command closeReef(SwerveSubsystem swerveSubsystem, Pose2d currentPose){
