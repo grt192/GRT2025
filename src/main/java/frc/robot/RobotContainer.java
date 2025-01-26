@@ -166,7 +166,6 @@ public class RobotContainer {
       driveController.getLeftPower() <= 0.05
     );
 
-    visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
     // driveController.getAlignToReef().onTrue(
     //   AutoAlignCommand.reefTest(swerveSubsystem).onlyWhile(() -> driveController.getForwardPower() 
     //   <= 0.05 && driveController.getLeftPower() <= 0.05));
