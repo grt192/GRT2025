@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import javax.xml.crypto.dsig.Transform;
+
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -13,6 +15,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.DoublePublisher;
@@ -27,12 +30,14 @@ public class VisionSubsystem extends SubsystemBase {
     private final PhotonCamera camera;
     private final PhotonPoseEstimator photonPoseEstimator;
     private Pose2d currentPose = new Pose2d();
+    private Pose3d cameraPose = new Pose3d();
     private static AprilTagFieldLayout aprilTagFieldLayout;
 
     private NetworkTableInstance ntInstance;
     private NetworkTable visionStatsTable;
     private StructPublisher<Pose2d> visionPosePublisher;
     private DoublePublisher visionDistPublisher;
+    private StructPublisher<Pose3d> cameraPosePublisher;
 
     private Consumer<TimestampedVisionUpdate> visionConsumer = (x) -> {};
     
@@ -61,7 +66,10 @@ public class VisionSubsystem extends SubsystemBase {
             cameraConfig.getCameraPose()
         );
 
+        cameraPose = cameraPose.transformBy(cameraConfig.getCameraPose());
+
         initNT(cameraConfig.getCameraName());
+
     }
 
     @Override
@@ -134,5 +142,9 @@ public class VisionSubsystem extends SubsystemBase {
             "estimated pose", Pose2d.struct
         ).publish();
         visionDistPublisher = visionStatsTable.getDoubleTopic("dist").publish();
+        cameraPosePublisher = visionStatsTable.getStructTopic(
+            "camera pose", Pose3d.struct
+        ).publish();
+        cameraPosePublisher.set(cameraPose);
     }
 }
