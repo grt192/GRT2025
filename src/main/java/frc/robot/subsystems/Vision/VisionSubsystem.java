@@ -7,14 +7,12 @@ import java.util.function.Consumer;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
-import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.DoublePublisher;
@@ -30,11 +28,6 @@ public class VisionSubsystem extends SubsystemBase {
     private final PhotonPoseEstimator photonPoseEstimator;
     private Pose2d currentPose = new Pose2d();
     private static AprilTagFieldLayout aprilTagFieldLayout;
-    private static final Transform3d CAMERA_TO_ROBOT = new Transform3d(
-        // Modify these values based on your robot's camera mounting position
-        0.31, 0.0 ,0.,  // x, y, z in meters
-        new Rotation3d(- Math.PI / 2., 0, 0)  // roll, pitch, yaw in radians
-    );
 
     private NetworkTableInstance ntInstance;
     private NetworkTable visionStatsTable;
@@ -43,17 +36,14 @@ public class VisionSubsystem extends SubsystemBase {
 
     private Consumer<TimestampedVisionUpdate> visionConsumer = (x) -> {};
     
-    private PolynomialRegression xStdDevModel =
-        new PolynomialRegression(VisionConstants.STD_DEV_DIST,VisionConstants.X_STD_DEV,2);
-    private PolynomialRegression yStdDevModel =
-        new PolynomialRegression(VisionConstants.STD_DEV_DIST,VisionConstants.Y_STD_DEV,2);
-    private PolynomialRegression oStdDevModel = //standard deviation of the theta
-        new PolynomialRegression(VisionConstants.STD_DEV_DIST,VisionConstants.O_STD_DEV,1);
+    private PolynomialRegression xStdDevModel = VisionConstants.xStdDevModel;
+    private PolynomialRegression yStdDevModel = VisionConstants.yStdDevModel;
+    private PolynomialRegression oStdDevModel = VisionConstants.oStdDevModel;
 
     
-    public VisionSubsystem() {
+    public VisionSubsystem(CameraConfig cameraConfig) {
         // Initialize the camera with its network table name
-        camera = new PhotonCamera("1");
+        camera = new PhotonCamera(cameraConfig.getCameraName());
 
         try{
             aprilTagFieldLayout = new AprilTagFieldLayout(
@@ -67,8 +57,8 @@ public class VisionSubsystem extends SubsystemBase {
         // Create pose estimator
         photonPoseEstimator = new PhotonPoseEstimator(
             aprilTagFieldLayout,
-            PoseStrategy.LOWEST_AMBIGUITY,
-            CAMERA_TO_ROBOT
+            cameraConfig.getPoseStrategy(),
+            cameraConfig.getCameraPose()
         );
 
         initNT();
