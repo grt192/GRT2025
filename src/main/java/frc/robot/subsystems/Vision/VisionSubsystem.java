@@ -45,14 +45,14 @@ public class VisionSubsystem extends SubsystemBase {
         // Initialize the camera with its network table name
         camera = new PhotonCamera(cameraConfig.getCameraName());
 
-        // try{
-        //     aprilTagFieldLayout = new AprilTagFieldLayout(
-        //         Filesystem.getDeployDirectory() + "/2025-reefscape.json"
-        //     );
-        // }
-        // catch (Exception e){
-        //     throw new RuntimeException("Failed to load field layout", e);
-        // }
+        try{
+            aprilTagFieldLayout = new AprilTagFieldLayout(
+                Filesystem.getDeployDirectory() + "/2025-reefscape.json"
+            );
+        }
+        catch (Exception e){
+            throw new RuntimeException("Failed to load field layout", e);
+        }
 
         // Create pose estimator
         photonPoseEstimator = new PhotonPoseEstimator(
@@ -61,7 +61,7 @@ public class VisionSubsystem extends SubsystemBase {
             cameraConfig.getCameraPose()
         );
 
-        initNT();
+        initNT(cameraConfig.getCameraName());
     }
 
     @Override
@@ -111,7 +111,7 @@ public class VisionSubsystem extends SubsystemBase {
                 }
                
                 visionDistPublisher.set(minDistance);
-                visionPosePublisher.set(currentPose);
+                visionPosePublisher.set(estimatedPose.get().estimatedPose.toPose2d());
             }
         }
     }
@@ -127,12 +127,12 @@ public class VisionSubsystem extends SubsystemBase {
     /**
      * Initializes Networktables.
      */
-    private void initNT(){
-        // ntInstance = NetworkTableInstance.getDefault();
-        // visionStatsTable = ntInstance.getTable("Vision Debug");
-        // visionPosePublisher = visionStatsTable.getStructTopic(
-        //     "estimated pose", Pose2d.struct
-        // ).publish();
-        // visionDistPublisher = visionStatsTable.getDoubleTopic("dist").publish();
+    private void initNT(String cameraName){
+        ntInstance = NetworkTableInstance.getDefault();
+        visionStatsTable = ntInstance.getTable("Vision Debug" + cameraName);
+        visionPosePublisher = visionStatsTable.getStructTopic(
+            "estimated pose", Pose2d.struct
+        ).publish();
+        visionDistPublisher = visionStatsTable.getDoubleTopic("dist").publish();
     }
 }
