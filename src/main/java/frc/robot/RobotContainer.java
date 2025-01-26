@@ -28,6 +28,7 @@ import frc.robot.subsystems.Vision.VisionSubsystem;
 import edu.wpi.first.wpilibj.PS5Controller;
 import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.Constants.VisionConstants;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -48,6 +49,13 @@ public class RobotContainer {
   private final Trigger optionTrigger;
   private final Trigger xbutton;
   private final VisionSubsystem visionSubsystem = new VisionSubsystem();
+  private final VisionSubsystem visionSubsystem1 = new VisionSubsystem(
+    VisionConstants.cameraConfigs[0]
+  );
+  private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(
+    VisionConstants.cameraConfigs[1]
+  );
+
 
   private final FieldManagementSubsystem fieldManagementSubsystem =
     new FieldManagementSubsystem();
@@ -76,6 +84,7 @@ public class RobotContainer {
     xbutton = new Trigger(mechController.cross());
     
     startLog();
+    setVisionDataInterface();
     configureBindings();
 
     mechController = new CommandPS5Controller(1);
@@ -83,7 +92,6 @@ public class RobotContainer {
     xButton = new Trigger(mechController.cross());
     squareButton = new Trigger(mechController.square());
 
-    configureBindings();
     
 
     autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
@@ -156,15 +164,12 @@ public class RobotContainer {
       },
       swerveSubsystem
     );
-    visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
-    driveController.getAlignToReef().onTrue(
-      AutoAlignCommand.reefTest(swerveSubsystem).onlyWhile(() -> driveController.getForwardPower() 
-      <= 0.05 && driveController.getLeftPower() <= 0.05));
 
-    visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
-    driveController.getAlignToSource().onTrue(
-      AutoAlignCommand.sourceTest(swerveSubsystem).onlyWhile(() -> driveController.getForwardPower() 
-      <= 0.05 && driveController.getLeftPower() <= 0.05));
+    AutoAlignCommand.reefTest(swerveSubsystem).onlyWhile(
+      () -> driveController.getForwardPower() <= 0.05 && 
+      driveController.getLeftPower() <= 0.05
+    );
+
   }
 
   /**
@@ -200,5 +205,12 @@ public class RobotContainer {
   private void startLog(){
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
+  }
+  /**
+   * Links vision and swerve
+   */
+  private void setVisionDataInterface(){
+    visionSubsystem1.setInterface(swerveSubsystem::addVisionMeasurements);
+    visionSubsystem2.setInterface(swerveSubsystem::addVisionMeasurements);
   }
 }
