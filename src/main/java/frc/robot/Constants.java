@@ -171,15 +171,15 @@ public final class Constants {
       new CameraConfig(
         "1",
         new Transform3d(
-          0.31, -0.2, 0.01,
+          0.31, 0.01, 0.2,
           new Rotation3d(- Math.PI / 2., 0, 0)
         ),
-        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR
+        PoseStrategy.LOWEST_AMBIGUITY
       ),
       new CameraConfig(
         "2",
         new Transform3d(
-          0.19, 0.2, -0.065,
+          -0.19, -0.065, 0.2,
           new Rotation3d(Math.PI / 2., 0., Math.PI)
         ),
         PoseStrategy.LOWEST_AMBIGUITY
