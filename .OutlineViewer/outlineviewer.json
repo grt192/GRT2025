@@ -6,6 +6,21 @@
   "transitory": {
     "Swerve": {
       "open": true
+    },
+    "Vision Debug": {
+      "Pose2d##v_/Vision Debug/estimated pose": {
+        "Translation2d##v_translation": {
+          "open": true
+        },
+        "open": true
+      },
+      "open": true
+    },
+    "VisionStats": {
+      "open": true
+    },
+    "photonvision": {
+      "open": true
     }
   }
 }
