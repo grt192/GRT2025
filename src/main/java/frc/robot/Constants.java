@@ -5,9 +5,15 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
+
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
+import frc.robot.subsystems.Vision.CameraConfig;
+import frc.robot.util.PolynomialRegression;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -92,5 +98,30 @@ public final class Constants {
     public static final Pose3d[] CAMERA_POSES = new Pose3d[] {
       new Pose3d(0.20, 0, 0.20, new Rotation3d(0, 0, 0))
     };
+
+    public static final CameraConfig[] cameraConfigs = new CameraConfig[]{
+      new CameraConfig(
+        "1",
+        new Transform3d(
+          0.31, -0.2, 0.01,
+          new Rotation3d(- Math.PI / 2., 0, 0)
+        ),
+        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR
+      ),
+      new CameraConfig(
+        "2",
+        new Transform3d(
+          0.19, 0.2, -0.065,
+          new Rotation3d(Math.PI / 2., 0., Math.PI)
+        ),
+        PoseStrategy.LOWEST_AMBIGUITY
+      )
+    };
+    public static final PolynomialRegression xStdDevModel = new PolynomialRegression(
+      VisionConstants.STD_DEV_DIST,VisionConstants.X_STD_DEV,2);
+    public static final PolynomialRegression yStdDevModel = new PolynomialRegression(
+      VisionConstants.STD_DEV_DIST,VisionConstants.Y_STD_DEV,2);
+    public static final PolynomialRegression oStdDevModel = new PolynomialRegression(
+      VisionConstants.STD_DEV_DIST,VisionConstants.O_STD_DEV,1);
   }
 }
