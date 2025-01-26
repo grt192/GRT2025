@@ -175,6 +175,12 @@ public class RobotContainer {
     driveController.getAlignToSource().onTrue(
       AutoAlignCommand.sourceTest(swerveSubsystem).onlyWhile(() -> driveController.getForwardPower() 
       <= 0.05 && driveController.getLeftPower() <= 0.05));
+
+    AutoAlignCommand.reefTest(swerveSubsystem).onlyWhile(
+      () -> driveController.getForwardPower() <= 0.05 && 
+      driveController.getLeftPower() <= 0.05
+    );
+
   }
 
   /**
