@@ -45,7 +45,7 @@ public class VisionSubsystem extends SubsystemBase {
     private PolynomialRegression yStdDevModel = VisionConstants.yStdDevModel;
     private PolynomialRegression oStdDevModel = VisionConstants.oStdDevModel;
 
-    
+    private static double robotRadius = 0.762;
     public VisionSubsystem(CameraConfig cameraConfig) {
         // Initialize the camera with its network table name
         camera = new PhotonCamera(cameraConfig.getCameraName());
@@ -105,17 +105,26 @@ public class VisionSubsystem extends SubsystemBase {
 
                 Optional<EstimatedRobotPose> estimatedPose = 
                     photonPoseEstimator.update(result);
+                double x = estimatedPose.get().
+                estimatedPose.toPose2d().getTranslation().getX();
+                double y = estimatedPose.get().
+                estimatedPose.toPose2d().getTranslation().getY();
+
                 if(estimatedPose.isPresent()){
-                    visionConsumer.accept(
-                        new TimestampedVisionUpdate(
-                            result.getTimestampSeconds(),
-                            estimatedPose.get().estimatedPose.toPose2d(),
-                            VecBuilder.fill(//standard deviation matrix
-                                xStdDevModel.predict(minDistance),
-                                yStdDevModel.predict(minDistance),
-                                oStdDevModel.predict(minDistance))
-                        )
-                    );
+
+                    if ((x-robotRadius > 0) && (x+robotRadius < 17.548) && 
+                        (y-robotRadius > 0) && (y+robotRadius < 8.052));
+                        
+                        visionConsumer.accept(
+                            new TimestampedVisionUpdate(
+                                result.getTimestampSeconds(),
+                                estimatedPose.get().estimatedPose.toPose2d(),
+                                VecBuilder.fill(//standard deviation matrix
+                                    xStdDevModel.predict(minDistance),
+                                    yStdDevModel.predict(minDistance),
+                                    oStdDevModel.predict(minDistance))
+                            )
+                        );
                 }
                
                 visionDistPublisher.set(minDistance);
