@@ -80,6 +80,8 @@ public final class Constants {
 
   public static class LoggingConstants{
     public static final String SWERVE_TABLE = "SwerveStats";
+    public static final String REV_TABLE = "MotorStats";
+    public static final String CTRE_TABLE = "MotorStats";
   }
 
   public static class VisionConstants{
