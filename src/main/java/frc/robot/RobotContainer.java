@@ -32,6 +32,7 @@ public class RobotContainer {
 
   private BaseDriveController driveController;
 
+
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(
     VisionConstants.cameraConfigs[1]
@@ -45,6 +46,9 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
+
+
     constructDriveController(); 
     // startLog();
     setVisionDataInterface();
@@ -86,13 +90,14 @@ public class RobotContainer {
     );
 
     driveController.getAlignToReef().onTrue(
-      AutoAlignCommand.reefTest(swerveSubsystem).onlyWhile(() -> driveController.getForwardPower() 
+      AutoAlignCommand.closeReefAlign(swerveSubsystem).onlyWhile(() -> driveController.getForwardPower() 
       <= 0.05 && driveController.getLeftPower() <= 0.05));
 
     // visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
     driveController.getAlignToSource().onTrue(
       AutoAlignCommand.sourceTest(swerveSubsystem).onlyWhile(() -> driveController.getForwardPower() 
       <= 0.05 && driveController.getLeftPower() <= 0.05));
+
 
 
   }
