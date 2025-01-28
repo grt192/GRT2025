@@ -41,6 +41,7 @@ public class AutoAlignCommand {
         Units.degreesToRadians(720)
     );
 
+    //Gets the path from pathplanner using the path name
     private static PathPlannerPath getAlignPath(String path){
         try {
             getAlignPath = PathPlannerPath.fromPathFile(path);
@@ -51,6 +52,7 @@ public class AutoAlignCommand {
         return getAlignPath;
     }
 
+    //runs the path from getAlignPath
     public static Command runAlignPath (SwerveSubsystem swerveSubsystem, String pathName){
         PathPlannerPath path = getAlignPath(pathName);
 
@@ -63,6 +65,7 @@ public class AutoAlignCommand {
         return runAlignPath;
     }
     
+    //aligns to the reef L/K on test field
     public static Command reefTest(SwerveSubsystem swerveSubsystem){
 
         PathPlannerPath path = getAlignPath(reefName);
@@ -75,6 +78,7 @@ public class AutoAlignCommand {
         return runAlignPath(swerveSubsystem, reefName);
     }
 
+    //aligns to top reef on test field
     public static Command sourceTest(SwerveSubsystem swerveSubsystem){
 
         PathPlannerPath path = getAlignPath(sourceName);
@@ -86,6 +90,7 @@ public class AutoAlignCommand {
         return runAlignPath(swerveSubsystem, sourceName);
     }
 
+    //aligns to the closest reef pose from the ReefPoseList
     public static Command closeReefAlign(SwerveSubsystem swerveSubsystem){
 
         currentPose = swerveSubsystem.getRobotPosition();
