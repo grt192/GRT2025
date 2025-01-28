@@ -46,6 +46,7 @@ public class RobotContainer {
 
   private BaseDriveController driveController;
 
+
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   private final PivotSubsystem pivotSubsystem = new PivotSubsystem();
   private final RollerSubsystem rollerSubsystem = new RollerSubsystem();
@@ -92,6 +93,37 @@ public class RobotContainer {
       * the robot is controlled along its own axes, otherwise controls apply to the field axes by default. If the
       * swerve aim button is held down, the robot will rotate automatically to always face a target, and only
       * translation will be manually controllable. */
+    swerveSubsystem.setDefaultCommand(
+      new RunCommand(() -> {
+        swerveSubsystem.setDrivePowers(
+          driveController.getForwardPower(),
+          driveController.getLeftPower(),
+          driveController.getRotatePower()
+        );
+        }, 
+        swerveSubsystem
+      )
+    );
+
+    /* Pressing the button resets the field axes to the current robot axes. */
+    driveController.bindDriverHeadingReset(
+      () ->{
+        swerveSubsystem.resetDriverHeading();
+      },
+      swerveSubsystem
+    );
+
+    driveController.getAlignToReef().onTrue(
+      AutoAlignCommand.closeReefAlign(swerveSubsystem).onlyWhile(() -> driveController.getForwardPower() 
+      <= 0.05 && driveController.getLeftPower() <= 0.05));
+
+    // visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
+    driveController.getAlignToSource().onTrue(
+      AutoAlignCommand.sourceTest(swerveSubsystem).onlyWhile(() -> driveController.getForwardPower() 
+      <= 0.05 && driveController.getLeftPower() <= 0.05));
+
+
+
     // swerveSubsystem.setDefaultCommand(
     //   new RunCommand(() -> {
     //     swerveSubsystem.setDrivePowers(

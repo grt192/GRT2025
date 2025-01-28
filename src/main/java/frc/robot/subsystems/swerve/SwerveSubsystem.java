@@ -66,6 +66,8 @@ public class SwerveSubsystem extends SubsystemBase {
         ahrs.reset();
         ahrs.zeroYaw();
 
+        estimatedPose = new Pose2d();
+
         frontLeftModule = new SwerveModule(FL_DRIVE, FL_STEER, FL_OFFSET);
         frontRightModule = new SwerveModule(FR_DRIVE, FR_STEER, FR_OFFSET);
         backLeftModule = new SwerveModule(BL_DRIVE, BL_STEER, BL_OFFSET);
