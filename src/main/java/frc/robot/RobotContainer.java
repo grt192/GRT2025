@@ -4,8 +4,8 @@
 
 package frc.robot;
 
-import frc.robot.commands.pivot.SetPivotVerticalCommand;
-import frc.robot.commands.pivot.SetPivotZeroCommand;
+// import frc.robot.commands.pivot.SetPivotVerticalCommand;
+// import frc.robot.commands.pivot.SetPivotZeroCommand;
 import frc.robot.controllers.BaseDriveController;
 import frc.robot.controllers.DualJoystickDriveController;
 import frc.robot.controllers.PS5DriveController;
@@ -41,7 +41,7 @@ public class RobotContainer {
 
   // private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   private final PivotSubsystem pivotSubsystem = new PivotSubsystem();
-  // private final RollerSubsystem rollerSubsystem = new RollerSubsystem();
+  private final RollerSubsystem rollerSubsystem = new RollerSubsystem();
   private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(
     VisionConstants.cameraConfigs[1]
   );
@@ -53,12 +53,14 @@ public class RobotContainer {
   );
 
   private CommandPS5Controller mechController;
-  private Trigger aButton;
+  private Trigger aButton, lTrigger, rTrigger;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     mechController = new CommandPS5Controller(1);
     aButton = new Trigger(mechController.cross());
+    lTrigger = new Trigger(mechController.L2());
+    rTrigger = new Trigger(mechController.R2());
 
     constructDriveController(); 
     // startLog();
@@ -92,13 +94,17 @@ public class RobotContainer {
     //   )
     // );
 
-    aButton.onTrue(
-      new ConditionalCommand(
-        new SetPivotZeroCommand(pivotSubsystem),
-        new SetPivotVerticalCommand(pivotSubsystem),
-        () -> (pivotSubsystem.getTargetState() == PivotState.VERTICAL)
-        ).withTimeout(3)
-    );
+    // aButton.onTrue(
+    //   new ConditionalCommand(
+    //     new SetPivotZeroCommand(pivotSubsystem),
+    //     new SetPivotVerticalCommand(pivotSubsystem),
+    //     () -> (pivotSubsystem.getTargetState() == PivotState.VERTICAL)
+    //     ).withTimeout(3)
+    // );
+
+    rollerSubsystem.setDefaultCommand(new InstantCommand( () -> {
+      rollerSubsystem.setRollerPower(.25 * (mechController.getL2Axis() - mechController.getR2Axis()));
+    }, rollerSubsystem));
 
     // aButton.onTrue(
     //     new SetPivotVerticalCommand(pivotSubsystem)

@@ -23,7 +23,7 @@ public class RollerSubsystem extends SubsystemBase{
     }
 
     public boolean getIntakeSensor() {
-        return intakeSensor.get();
+        return !intakeSensor.get();
     }
 
 }
