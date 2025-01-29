@@ -21,6 +21,7 @@ import frc.robot.util.GRTUtil;
 import static frc.robot.Constants.SwerveConstants.*;
 
 import static frc.robot.Constants.LoggingConstants.*;
+import static frc.robot.Constants.DebugConstants.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
