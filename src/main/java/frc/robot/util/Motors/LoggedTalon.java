@@ -1,6 +1,9 @@
 package frc.robot.util.Motors;
 
 import static frc.robot.Constants.LoggingConstants.CTRE_TABLE;
+import static frc.robot.Constants.DebugConstants.CTRE_DEBUG;
+
+import java.util.EnumSet;
 
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -11,6 +14,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEvent;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -19,6 +23,9 @@ import frc.robot.util.GRTUtil;
 public class LoggedTalon{
 
     private final TalonFX motor;
+
+    private final int canId;
+    private double[] pidsvg = new double[6];
 
     private NetworkTableInstance ntInstance;
     private NetworkTable motorStatsTable;
@@ -50,8 +57,20 @@ public class LoggedTalon{
             boolean error = motor.getConfigurator().apply(talonConfig, 0.1) == StatusCode.OK;
             if (!error) break;
         }
+        this.canId = canId;
+        pidsvg = new double[] {
+            talonConfig.Slot0.kP,
+            talonConfig.Slot0.kI,
+            talonConfig.Slot0.kD,
+            talonConfig.Slot0.kS,
+            talonConfig.Slot0.kV,
+            talonConfig.Slot0.kG
+        };
         initNT(canId);
         initLogs(canId);
+        if(CTRE_DEBUG){
+            enableDebug();
+        }
     }
 
     /**
@@ -80,7 +99,9 @@ public class LoggedTalon{
      * @param s kS for static friction
      * @param v kV Voltage feed forward
      */
-    public void configPID(double p, double i, double d, double s, double v) {
+    public void configurePIDSVG(double p, double i, double d, double s, double v,
+        double g
+    ) {
         Slot0Configs slot0Configs = new Slot0Configs();
 
         slot0Configs.kP = p;
@@ -88,6 +109,7 @@ public class LoggedTalon{
         slot0Configs.kD = d;
         slot0Configs.kS = s;
         slot0Configs.kV = v;
+        slot0Configs.kG = g;
 
         motor.getConfigurator().apply(slot0Configs);
     }
@@ -154,6 +176,27 @@ public class LoggedTalon{
         );
     }
 
+    /**
+     * Allows changing PID through NT
+     */
+    private void enableDebug(){
+        motorStatsTable.getDoubleArrayTopic(canId + "PIDSVG").publish().set(
+            pidsvg
+        );
+        motorStatsTable.addListener(canId + "PIDSVG", 
+            EnumSet.of(NetworkTableEvent.Kind.kValueAll),
+            (table, key, event) -> {
+                configurePIDSVG(
+                    event.valueData.value.getDoubleArray()[0],
+                    event.valueData.value.getDoubleArray()[1],
+                    event.valueData.value.getDoubleArray()[2],
+                    event.valueData.value.getDoubleArray()[3],
+                    event.valueData.value.getDoubleArray()[4],
+                    event.valueData.value.getDoubleArray()[5]
+                );
+            }
+        );
+    }
     /**
      * Gets motor's position in rotations after taking the 
      * SensorToMechanismRatio into account 
