@@ -84,7 +84,7 @@ public class LoggedTalon{
 
     /**
      * Using PIDF to set the motor's velocity
-     * @param velocity$ velocity reference
+     * @param velocity velocity reference
      */
     public void setVelocity(double velocity){
         targetVelocity = velocity;
