@@ -59,10 +59,6 @@ public final class Constants {
     public static final double[] STEER_I = new double[] {0, 0, 0, 0};
     public static final double[] STEER_D = new double[] {0, 0, 0, 0};
     public static final double[] STEER_FF = new double[] {0.036, 0.024, 0.0182, 0.05};
-    
-    public static final boolean DRIVE_DEBUG = false;
-    public static final boolean STEER_DEBUG = false;
-    public static final boolean STATE_DEBUG = false;
   }
 
   public static class ElevatorConstants {
@@ -93,5 +89,13 @@ public final class Constants {
     public static final String SWERVE_TABLE = "SwerveStats";
     public static final String REV_TABLE = "MotorStats";
     public static final String CTRE_TABLE = "MotorStats";
+  }
+
+  public static class DebugConstants{
+    public static final boolean STATE_DEBUG = false;
+    public static final boolean DRIVE_DEBUG = false;
+    public static final boolean STEER_DEBUG = false;
+    public static final boolean REV_DEBUG = false;
+    public static final boolean CTRE_DEBUG = false;
   }
 }
