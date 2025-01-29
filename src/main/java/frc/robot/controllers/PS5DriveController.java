@@ -1,6 +1,5 @@
 package frc.robot.controllers;
 
-import edu.wpi.first.util.concurrent.Event;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
