@@ -4,26 +4,19 @@
 
 package frc.robot;
 
-import frc.robot.Commands.AutoAlignCommand;
 import frc.robot.controllers.BaseDriveController;
 import frc.robot.controllers.DualJoystickDriveController;
 import frc.robot.controllers.PS5DriveController;
 import frc.robot.controllers.XboxDriveController;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.subsystems.FieldManagementSubsystem.FieldManagementSubsystem;
 import frc.robot.subsystems.Vision.VisionSubsystem;
 import edu.wpi.first.wpilibj.PS5Controller;
 import frc.robot.subsystems.ClimbSubsystem;
@@ -56,23 +49,8 @@ public class RobotContainer {
     VisionConstants.cameraConfigs[1]
   );
 
-
-  private final FieldManagementSubsystem fieldManagementSubsystem =
-    new FieldManagementSubsystem();
-
-  // // private final PhoenixLoggingSubsystem phoenixLoggingSubsystem =
-  //   // new PhoenixLoggingSubsystem(fieldManagementSubsystem);
-
-
-  // private final SendableChooser<Command> autoChooser;
-
-  boolean isCompetition = false;
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-
-    mechController = new CommandPS5Controller(1);
-
     constructDriveController(); 
 
     createTrigger = new Trigger(mechController.create());
@@ -109,7 +87,6 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
- 
   private void configureBindings() {
       /* Driving -- One joystick controls translation, the other rotation. If the robot-relative button is held down,
       * the robot is controlled along its own axes, otherwise controls apply to the field axes by default. If the
@@ -160,26 +137,6 @@ public class RobotContainer {
       },
       swerveSubsystem
     );
-
-    AutoAlignCommand.reefTest(swerveSubsystem).onlyWhile(
-      () -> driveController.getForwardPower() <= 0.05 && 
-      driveController.getLeftPower() <= 0.05
-    );
-
-    // driveController.getAlignToReef().onTrue(
-    //   AutoAlignCommand.reefTest(swerveSubsystem).onlyWhile(() -> driveController.getForwardPower() 
-    //   <= 0.05 && driveController.getLeftPower() <= 0.05));
-
-    // visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
-    driveController.getAlignToSource().onTrue(
-      AutoAlignCommand.sourceTest(swerveSubsystem).onlyWhile(() -> driveController.getForwardPower() 
-      <= 0.05 && driveController.getLeftPower() <= 0.05));
-
-    AutoAlignCommand.reefTest(swerveSubsystem).onlyWhile(
-      () -> driveController.getForwardPower() <= 0.05 && 
-      driveController.getLeftPower() <= 0.05
-    );
-
   }
 
   /**
@@ -210,12 +167,13 @@ public class RobotContainer {
   }
 
   /**
-   * Starts datalog at /media/sda1/robotLogs
+   * Starts datalog at /u/logs
    */
   private void startLog(){
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
   }
+
   /**
    * Links vision and swerve
    */
