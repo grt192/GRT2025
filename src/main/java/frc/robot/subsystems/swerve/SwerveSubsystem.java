@@ -124,7 +124,8 @@ public class SwerveSubsystem extends SubsystemBase {
         states = kinematics.toSwerveModuleStates(speeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(
             states, speeds,
-            MAX_VEL, MAX_VEL, MAX_OMEGA);
+            MAX_VEL, MAX_VEL, MAX_OMEGA
+        );
     }
 
     public void addVisionMeasurements(TimestampedVisionUpdate update){
