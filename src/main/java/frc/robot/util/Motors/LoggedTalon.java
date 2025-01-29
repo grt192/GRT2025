@@ -6,6 +6,7 @@ import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.networktables.DoublePublisher;
@@ -20,20 +21,28 @@ public class LoggedTalon{
     private final TalonFX motor;
 
     private NetworkTableInstance ntInstance;
-    private NetworkTable swerveStatsTable;
-    private DoublePublisher veloErrorPublisher;
+    private NetworkTable motorStatsTable;
+
+    private DoublePublisher positionPublisher;
     private DoublePublisher veloPublisher;
     private DoublePublisher appliedVlotsPublisher;
     private DoublePublisher supplyCurrentPublisher;
     private DoublePublisher statorCurrentPublisher;
+    private DoublePublisher temperaturePublisher;
+    private DoublePublisher targetPositionPublisher;
+    private DoublePublisher targetVelocityPublisher;
 
     private DoubleLogEntry positionLogEntry;
-    private DoubleLogEntry veloErrorLogEntry;
     private DoubleLogEntry veloLogEntry;
     private DoubleLogEntry appliedVoltsLogEntry;
     private DoubleLogEntry supplyCurrLogEntry;
     private DoubleLogEntry statorCurrLogEntry;
     private DoubleLogEntry temperatureLogEntry;
+    private DoubleLogEntry targetPositionLogEntry; 
+    private DoubleLogEntry targetVelocityLogEntry;
+
+    private double targetPosition;
+    private double targetVelocity;
 
     public LoggedTalon(int canId, TalonFXConfiguration talonConfig){
         motor = new TalonFX(canId, "can");
@@ -46,53 +55,21 @@ public class LoggedTalon{
     }
 
     /**
-     * initializes network table and entries
-     * @param canId motor's CAN ID
+     * Using PIDF to set the motor's position
+     * @param position position reference
      */
-    private void initNT(int canId){
-        ntInstance = NetworkTableInstance.getDefault();
-        swerveStatsTable = ntInstance.getTable(CTRE_TABLE);
-        veloErrorPublisher = swerveStatsTable.getDoubleTopic(
-            canId + "veloError"
-        ).publish();
-        veloPublisher = swerveStatsTable.getDoubleTopic(canId + "velo").publish();
-        appliedVlotsPublisher = swerveStatsTable.getDoubleTopic(
-            canId + "appliedVolts"
-        ).publish();
-        supplyCurrentPublisher = swerveStatsTable.getDoubleTopic(
-            canId + "supplyCurrent"
-        ).publish();
-        statorCurrentPublisher = swerveStatsTable.getDoubleTopic(
-            canId + "statorCurrent"
-        ).publish();
+    public void setPosition(double position){
+        targetPosition = position;
+        motor.setControl(new PositionVoltage(position));
     }
 
     /**
-     * Initializes log entries
-     * @param canId drive motor's CAN ID
+     * Using PIDF to set the motor's velocity
+     * @param velocity$ velocity reference
      */
-    private void initLogs(int canId){
-        positionLogEntry = new DoubleLogEntry(
-            DataLogManager.getLog(), canId + "position"
-        );
-        veloErrorLogEntry = new DoubleLogEntry(
-            DataLogManager.getLog(), canId + "veloError"
-        ); 
-        veloLogEntry = new DoubleLogEntry(
-            DataLogManager.getLog(), canId + "velo"
-        );
-        appliedVoltsLogEntry = new DoubleLogEntry(
-            DataLogManager.getLog(), canId + "appliedVolts"
-        );
-        supplyCurrLogEntry = new DoubleLogEntry(
-            DataLogManager.getLog(), canId + "supplyCurrent"
-        );
-        statorCurrLogEntry = new DoubleLogEntry(
-            DataLogManager.getLog(), canId + "statorCurrent"
-        );
-        temperatureLogEntry = new DoubleLogEntry(
-            DataLogManager.getLog(), canId + "temperature"
-        );
+    public void setVelocity(double velocity){
+        targetVelocity = velocity;
+        motor.setControl(new VelocityVoltage(velocity));
     }
 
     /**
@@ -115,10 +92,82 @@ public class LoggedTalon{
         motor.getConfigurator().apply(slot0Configs);
     }
 
+    /**
+     * initializes network table and entries
+     * @param canId motor's CAN ID
+     */
+    private void initNT(int canId){
+        ntInstance = NetworkTableInstance.getDefault();
+        motorStatsTable = ntInstance.getTable(CTRE_TABLE);
+        positionPublisher = motorStatsTable.getDoubleTopic(
+            canId + "position"
+        ).publish();
+        veloPublisher = motorStatsTable.getDoubleTopic(canId + "velo").publish();
+        appliedVlotsPublisher = motorStatsTable.getDoubleTopic(
+            canId + "appliedVolts"
+        ).publish();
+        supplyCurrentPublisher = motorStatsTable.getDoubleTopic(
+            canId + "supplyCurrent"
+        ).publish();
+        statorCurrentPublisher = motorStatsTable.getDoubleTopic(
+            canId + "statorCurrent"
+        ).publish();
+        temperaturePublisher = motorStatsTable.getDoubleTopic(
+            canId + "temperature"
+        ).publish();
+        targetPositionPublisher = motorStatsTable.getDoubleTopic(
+            canId + "targetPosition"
+        ).publish();
+        targetVelocityPublisher = motorStatsTable.getDoubleTopic(
+            canId + "targetVelocity"
+        ).publish();
+    }
+
+    /**
+     * Initializes log entries
+     * @param canId drive motor's CAN ID
+     */
+    private void initLogs(int canId){
+        positionLogEntry = new DoubleLogEntry(
+            DataLogManager.getLog(), canId + "position"
+        );
+        veloLogEntry = new DoubleLogEntry(
+            DataLogManager.getLog(), canId + "velo"
+        );
+        appliedVoltsLogEntry = new DoubleLogEntry(
+            DataLogManager.getLog(), canId + "appliedVolts"
+        );
+        supplyCurrLogEntry = new DoubleLogEntry(
+            DataLogManager.getLog(), canId + "supplyCurrent"
+        );
+        statorCurrLogEntry = new DoubleLogEntry(
+            DataLogManager.getLog(), canId + "statorCurrent"
+        );
+        temperatureLogEntry = new DoubleLogEntry(
+            DataLogManager.getLog(), canId + "temperature"
+        );
+        targetPositionLogEntry = new DoubleLogEntry(
+            DataLogManager.getLog(), canId + "targetPosition"
+        );
+        targetVelocityLogEntry = new DoubleLogEntry(
+            DataLogManager.getLog(), canId + "targetVelocity"
+        );
+    }
+
+    /**
+     * Gets motor's position in rotations after taking the 
+     * SensorToMechanismRatio into account 
+     * @return position of the motor in rotations
+     */
     public double getPosition(){
         return motor.getPosition().getValueAsDouble();
     }
 
+    /**
+     * Gets motor's velocity in RPS after taking the SensorToMechanismRatio into
+     * account
+     * @return velocity of the motor in RPS
+     */
     public double getVelocity(){
         return motor.getVelocity().getValueAsDouble();
     }
@@ -127,20 +176,22 @@ public class LoggedTalon{
      * Publishes motor stats to NT for logging
      */
     public void publishStats(){
-        veloErrorPublisher.set(motor.getClosedLoopError().getValueAsDouble());
+        positionPublisher.set(motor.getPosition().getValueAsDouble());
         veloPublisher.set(motor.getVelocity().getValueAsDouble());
         appliedVlotsPublisher.set(motor.getMotorVoltage().getValueAsDouble());
         supplyCurrentPublisher.set(motor.getSupplyCurrent().getValueAsDouble());
         statorCurrentPublisher.set(motor.getStatorCurrent().getValueAsDouble());
+        temperaturePublisher.set(motor.getDeviceTemp().getValueAsDouble());
+        targetPositionPublisher.set(targetPosition);
+        targetVelocityPublisher.set(targetVelocity);
     }    
 
+    /**
+     * Loggs motor stats into log file
+     */
     public void logStats(){
         positionLogEntry.append(
             motor.getPosition().getValueAsDouble(), GRTUtil.getFPGATime()
-        );
-
-        veloErrorLogEntry.append(
-            motor.getClosedLoopError().getValueAsDouble(), GRTUtil.getFPGATime()
         );
 
         veloLogEntry.append(
@@ -162,9 +213,8 @@ public class LoggedTalon{
         temperatureLogEntry.append(
             motor.getDeviceTemp().getValueAsDouble(), GRTUtil.getFPGATime()
         );
-    }
-    
-    public void setPosition(double position){
-        motor.setControl(new PositionVoltage(position));
+
+        targetPositionLogEntry.append(targetPosition, GRTUtil.getFPGATime());
+        targetVelocityLogEntry.append(targetVelocity, GRTUtil.getFPGATime());
     }
 }
