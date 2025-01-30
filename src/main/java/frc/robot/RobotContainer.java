@@ -9,10 +9,10 @@ import frc.robot.controllers.BaseDriveController;
 import frc.robot.controllers.DualJoystickDriveController;
 import frc.robot.controllers.PS5DriveController;
 import frc.robot.controllers.XboxDriveController;
-import frc.robot.commands.Differential.DifferentialTurnCommand;
-import frc.robot.commands.Differential.DifferentialTwistCommand;
 import frc.robot.commands.Differential.DiffyTestPivot0Command;
 import frc.robot.commands.Differential.DiffyTestPivot90Command;
+import frc.robot.commands.Differential.DiffyTestWrist0Command;
+import frc.robot.commands.Differential.DiffyTestWrist90Command;
 
 import static frc.robot.Constants.SwerveConstants.BL_DRIVE;
 import static frc.robot.Constants.SwerveConstants.BL_STEER;
@@ -60,6 +60,7 @@ public class RobotContainer {
   Trigger l1Trigger;
   Trigger r1Trigger;
   Trigger xButton;
+  Trigger sButton;
 
   //Differential Drive Subsystems
   DiffyArmSubsystem diffyArmSubsystem;
@@ -97,6 +98,7 @@ public class RobotContainer {
     l1Trigger = new Trigger(mechController.L1());
     r1Trigger = new Trigger(mechController.R1());
     xButton = new Trigger(mechController.cross());
+    sButton = new Trigger(mechController.square());
 
     // THIS WILL NEED TO BE CHANGED, THE BUTTONS AND ID
 
@@ -149,6 +151,12 @@ public class RobotContainer {
         new DiffyTestPivot90Command(diffyArmSubsystem), 
         new DiffyTestPivot0Command(diffyArmSubsystem), 
         () -> diffyArmSubsystem.atArmState(DiffyState.TEST_0))
+      );
+
+      sButton.onTrue(new ConditionalCommand(
+        new DiffyTestWrist90Command(diffyArmSubsystem), 
+        new DiffyTestWrist0Command(diffyArmSubsystem), 
+        () -> diffyArmSubsystem.atWristState(DiffyState.WTEST_0))
       );
       
 

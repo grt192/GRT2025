@@ -10,7 +10,9 @@ public enum DiffyState {
     ANGLE_90(DiffyConstants.ARM_ANGLE_90, DiffyConstants.WRIST_ANGLE_90),
     ANGLE_180(DiffyConstants.ARM_ANGLE_180, DiffyConstants.WRIST_ANGLE_180 ),
     TEST_90(Units.degreesToRadians(90), 0),
-    TEST_0(0, 0);
+    TEST_0(0, 0),
+    WTEST_90(0, Units.degreesToRadians(90)),
+    WTEST_0(0, 0);
 
     private final double armAngle;
     private final double wristAngle;

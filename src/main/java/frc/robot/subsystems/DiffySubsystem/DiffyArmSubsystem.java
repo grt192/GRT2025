@@ -139,7 +139,7 @@ public class DiffyArmSubsystem extends SubsystemBase{
         leftMotorPosition = leftDiffyEncoder.getPosition();
         rightMotorPosition = rightDiffyEncoder.getPosition();
 
-        diffyWristPosition = ( Math.abs(leftMotorPosition - rightMotorPosition) / 2);
+        diffyWristPosition = ( Math.abs(leftMotorPosition - rightMotorPosition) / 2.);
 
         return diffyWristPosition;
     }
@@ -164,12 +164,13 @@ public class DiffyArmSubsystem extends SubsystemBase{
     }
 
     public void setWristPosition(double wristPosition) {
-        leftTarget = getMotorPositions()[0] - wristPosition;
-        rightTarget = getMotorPositions()[1] + wristPosition;
-        setMotorPositions(leftTarget, rightTarget);
+        leftTarget = (getMotorPositions()[0] - wristPosition) * 2;
+        rightTarget = (getMotorPositions()[1] + wristPosition) * 2;
+        setMotorPositions(leftTarget / 2., rightTarget / 2.);
     }
 
     private void setMotorPositions(double leftPosition, double rightPosition) {
+        System.out.println(leftPosition);
         leftDiffyPID.setReference(leftPosition, ControlType.kPosition);
         rightDiffyPID.setReference(rightPosition, ControlType.kPosition);
     }

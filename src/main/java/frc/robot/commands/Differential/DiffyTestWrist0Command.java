@@ -1,16 +1,16 @@
 package frc.robot.commands.Differential;
-
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DiffySubsystem.DiffyArmSubsystem;
+import frc.robot.subsystems.DiffySubsystem.DiffyState;
 
-public class DifferentialTwistCommand extends Command {
+public class DiffyTestWrist0Command extends Command{
 
     DiffyArmSubsystem diffyArmSubsystem;
 
-    public DifferentialTwistCommand( DiffyArmSubsystem  rightCanId) {
-        
+    public DiffyTestWrist0Command(DiffyArmSubsystem diffyArmSubsystem)  {
         this.diffyArmSubsystem = diffyArmSubsystem;
-
+        addRequirements(diffyArmSubsystem);
         // Use addRequirements() here to declare subsystem dependencies.
         // Configure additional PID settings by calling getPIDController() and setting the desired values
     }
@@ -18,13 +18,7 @@ public class DifferentialTwistCommand extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        
-
-    }
-
-    // Called every time the scheduler runs while the command is scheduled.
-    @Override
-    public void execute() {
+        diffyArmSubsystem.setWristPosition(DiffyState.WTEST_0.getDiffyWristPos());
     }
 
     // Called once the command ends or is interrupted.
@@ -35,8 +29,8 @@ public class DifferentialTwistCommand extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return false;
+        return diffyArmSubsystem.atWristState(DiffyState.WTEST_0);
     }
 
+ }
 
-}
