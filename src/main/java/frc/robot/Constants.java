@@ -4,8 +4,15 @@
 
 package frc.robot;
 
+import java.util.OptionalInt;
+
+import com.revrobotics.spark.config.ClosedLoopConfig;
+import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import frc.robot.util.Motors.LoggedSparkMaxConfig;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -19,35 +26,47 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
-    public static class BackAlgaeConstants{
-      public static final int ROLLER_MOTOR_ID = 1;//Placeholder
-      public static final int PIVOT_MOTOR_ID = 2;//Placeholder
-      public static final double PIVOT_P = 0.01;//placeholder value
-      public static final double PIVOT_I = 0;//placeholder value
-      public static final double PIVOT_D = 0;//placeholder value
 
-      public static final int SENSOR_ID = 0;//placeholder value
-      public static final double PIVOT_POSITION_1 = 0;//placeholder value
-      public static final double PIVOT_POSITION_2 = 0;//placeholder value
-    }
-    public static class ClimbConstants{
-      public static final int TOP_MOTOR_ID = 1;//Placeholder
-      public static final int BOT_MOTOR_ID = 2;//Placeholder
-      public static final double CLIMB_P = 0.01;//placeholder value
-      public static final double CLIMB_I = 0;//placeholder value
-      public static final double CLIMB_D = 0;//placeholder value
-      public static final double CLIMB_POSITION_1 = 0;//placeholder value
-      public static final double CLIMB_POSITION_2 = 0;//placeholder value
-      public static final double CLIMB_GEAR_RATIO = 0.0; //placeholder value
-    }
+  public static class BackAlgaeConstants{
+    public static final int ROLLER_MOTOR_ID = 1;//Placeholder
+    public static final int PIVOT_MOTOR_ID = 2;//Placeholder
+    public static final double PIVOT_P = 0.01;//placeholder value
+    public static final double PIVOT_I = 0;//placeholder value
+    public static final double PIVOT_D = 0;//placeholder value
 
+    public static final int SENSOR_ID = 0;//placeholder value
+    public static final double PIVOT_POSITION_1 = 0;//placeholder value
+    public static final double PIVOT_POSITION_2 = 0;//placeholder value
+  }
 
+  public static class ClimbConstants{
+    public static final int TOP_MOTOR_ID = 9;//Placeholder
+    public static final int BOT_MOTOR_ID = 10;//Placeholder
+    public static final LoggedSparkMaxConfig TOP_MOTOR_CONFIG = 
+      new LoggedSparkMaxConfig(
+        TOP_MOTOR_ID, 
+        new ClosedLoopConfig()
+          .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+          .outputRange(0, 1),
+        new EncoderConfig(),
+        null
+      );
+    public static final LoggedSparkMaxConfig BOT_MOTOR_CONFIG =
+      new LoggedSparkMaxConfig(
+        BOT_MOTOR_ID,
+        new ClosedLoopConfig()
+          .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+          .outputRange(0, 1),
+        new EncoderConfig(),
+        OptionalInt.of(TOP_MOTOR_ID)
+      );
+  }
     
-      /** Constants for the swerve subsystem. */
-    public static class SwerveConstants {
-      public static final int FL_DRIVE = 0;
-      public static final int FL_STEER = 1;
-      public static final double FL_OFFSET = 0;
+    /** Constants for the swerve subsystem. */
+  public static class SwerveConstants {
+    public static final int FL_DRIVE = 0;
+    public static final int FL_STEER = 1;
+    public static final double FL_OFFSET = 0;
 
     public static final int FR_DRIVE = 2;
     public static final int FR_STEER = 3;

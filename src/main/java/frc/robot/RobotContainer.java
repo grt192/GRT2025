@@ -17,8 +17,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.subsystems.FieldManagementSubsystem.FieldManagementSubsystem;
-import frc.robot.subsystems.PhoenixLoggingSubsystem.PhoenixLoggingSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 
 /**
@@ -32,9 +30,6 @@ public class RobotContainer {
   private BaseDriveController driveController;
 
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
-
-  private final FieldManagementSubsystem fieldManagementSubsystem =
-    new FieldManagementSubsystem();
 
   // private final PhoenixLoggingSubsystem phoenixLoggingSubsystem =
     // new PhoenixLoggingSubsystem(fieldManagementSubsystem);

@@ -3,101 +3,50 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SoftLimitConfig;
-import com.revrobotics.spark.config.ClosedLoopConfig;
-import com.revrobotics.spark.config.EncoderConfig;
-import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ClimbConstants;
-
-import edu.wpi.first.math.util.Units;
+import static frc.robot.Constants.ClimbConstants.TOP_MOTOR_CONFIG;
+import static frc.robot.Constants.ClimbConstants.BOT_MOTOR_CONFIG;
+import static frc.robot.Constants.DebugConstants.REV_DEBUG;
+import frc.robot.util.Motors.LoggedSparkMax;
 
 public class ClimbSubsystem extends SubsystemBase {
 
-  private final SparkMax topMotor;
-  private final SparkMax botMotor;
-  private final int botMotorID;
-
-  private final ClosedLoopConfig closedLoopConfig;
-  private final SparkMaxConfig sparkMaxConfig;
-  private final SparkMaxConfig sparkMaxConfigFollow;
-  private final EncoderConfig encoderConfig;
-  private final SoftLimitConfig softLimitConfig;
-
-  private final RelativeEncoder climbEncoder;
-  //private final SparkClosedLoopController steerPIDController;
+  private final LoggedSparkMax topMotor;
+  private final LoggedSparkMax botMotor;
+  private double targetSpeed;
 
   /** Creates a new ExampleSubsystem. */
   public ClimbSubsystem() {
-    
-    topMotor = new SparkMax(ClimbConstants.TOP_MOTOR_ID, MotorType.kBrushless);
-    botMotor = new SparkMax(ClimbConstants.BOT_MOTOR_ID, MotorType.kBrushless);
-    climbEncoder = topMotor.getEncoder();
-
-    botMotorID = 0; //have to change later
-
-    //steerPIDController = topMotor.getClosedLoopController();
-
-    encoderConfig = new EncoderConfig();
-    encoderConfig.positionConversionFactor(ClimbConstants.CLIMB_GEAR_RATIO);
-
-    softLimitConfig = new SoftLimitConfig();
-    softLimitConfig.forwardSoftLimitEnabled(true)
-                   .forwardSoftLimit(Units.degreesToRadians(90)) //find out with mech for soft lim
-                   .reverseSoftLimitEnabled(true)
-                   .reverseSoftLimit(0);
-
-    closedLoopConfig = new ClosedLoopConfig(); 
-    //closedLoopConfig.pid(ClimbConstants.CLIMB_P, ClimbConstants.CLIMB_I, ClimbConstants.CLIMB_D);
-    
-    sparkMaxConfig = new SparkMaxConfig();
-    sparkMaxConfig.apply(encoderConfig)
-                  .apply(softLimitConfig)
-                  .apply(closedLoopConfig);
-
-    sparkMaxConfigFollow = new SparkMaxConfig(); //to follow the motor
-    sparkMaxConfigFollow.follow(botMotorID)
-                        .apply(encoderConfig)
-                        .apply(softLimitConfig)
-                        .apply(closedLoopConfig);
-                  
-    topMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    botMotor.configure(sparkMaxConfigFollow, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);    
+    topMotor = new LoggedSparkMax(TOP_MOTOR_CONFIG);
+    botMotor = new LoggedSparkMax(BOT_MOTOR_CONFIG);
   }
-
-  public void setPosition(double targetRads) {
-    double targetDouble = (targetRads + Math.PI) / (2. * Math.PI);
-    System.out.println("target" + targetDouble);
-    System.out.println("current" + climbEncoder.getPosition());
-  }
-
-  public void driveRollers(double speed){
-    topMotor.set(speed);
-  }
-
-  public double getMotorPosition() {
-    // Returns the position in rotations
-    return climbEncoder.getPosition();
-  }
-
-  /**
-   * An example method querying a boolean state of the subsystem (for example, a
-   * digital sensor).
-   *
-   * @return value of some boolean subsystem state, such as a digital sensor.
-   */
-
-   //sets the actuall speed of the rollers
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    topMotor.set(targetSpeed);
+    topMotor.logStats();
+    botMotor.logStats();
+    if(REV_DEBUG){
+      topMotor.publishStats();
+      botMotor.publishStats();
+    }
   }
 
+  /**
+   * Gets the position of the top motor
+   * @return position of the top motor in rotations after taking the position
+   * conversion factor into account
+   */
+  public double getPosition() {
+    return topMotor.getPosition();
+  }
+
+  /**
+   * Sets the speed of the motors
+   * @param speed target speed from -1.0 to 1.0
+   */
+  public void setSpeed(double speed){
+    targetSpeed = speed;
+  }
 }
