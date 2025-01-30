@@ -157,6 +157,12 @@ public class DiffyArmSubsystem extends SubsystemBase{
 
     // Setters
 
+
+
+    /*
+     * Sets the position of the arm in radians
+     * @param target armPosition in radians
+     */
     public void setArmPosition(double armPosition) {
         leftTarget = armPosition - getDiffyWristPosition();
         rightTarget = armPosition + getDiffyWristPosition();
@@ -169,6 +175,12 @@ public class DiffyArmSubsystem extends SubsystemBase{
     //     setMotorPositions(leftTarget / 2., rightTarget / 2.);
     // }
 
+
+    /*
+     * Sets the position of the wrist in radians
+     * @param target wristPosition in radians
+     * basicaly how it works is it gets the diffrence then adds 180 to make it positive then %360 to make it between 0 and 360 then -180 to make it between -180 and 180 then *2 to make it between -360 and 360
+     */
     public void setWristPosition(double wristPosition) {
         // Get the current positions of the left and right motors
         double leftCurrent = getMotorPositions()[0]; 
@@ -193,16 +205,30 @@ public class DiffyArmSubsystem extends SubsystemBase{
         setMotorPositions(leftTarget / 2.0, rightTarget / 2.0);
     }
 
+
+
+    /*
+     * Sets the position of the motors in radians
+     * @param leftPosition left motor position in radians
+     * @param rightPosition right motor position in radians
+     */
     private void setMotorPositions(double leftPosition, double rightPosition) {
         System.out.println(leftPosition);
         leftDiffyPID.setReference(leftPosition, ControlType.kPosition);
         rightDiffyPID.setReference(rightPosition, ControlType.kPosition);
     }
     
+
+    /*
+     * view the current state of the arm state
+     */
     public boolean atArmState(DiffyState state) {
         return Math.abs(getDiffyArmPosition() - state.getDiffyArmPos()) < DIFFY_TOLERANCE;
     }
 
+    /*
+     * view the current state of the wrist state
+     */
     public boolean atWristState(DiffyState state) {
         return Math.abs(getDiffyWristPosition() - state.getDiffyWristPos()) < DIFFY_TOLERANCE;
     }
