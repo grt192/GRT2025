@@ -17,13 +17,12 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkBase.ControlType;
 import edu.wpi.first.wpilibj.Timer;
 
-import static frc.robot.Constants.DiffyConstants.ARM_CONVERSION_FACTOR;
 import static frc.robot.Constants.DiffyConstants.DIFFY_D;
 import static frc.robot.Constants.DiffyConstants.DIFFY_I;
 import static frc.robot.Constants.DiffyConstants.DIFFY_P;
 import static frc.robot.Constants.DiffyConstants.LEFT_ID;
 import static frc.robot.Constants.DiffyConstants.RIGHT_ID;
-import static frc.robot.Constants.DiffyConstants.WRIST_CONVERSION_FACTOR ;
+import static frc.robot.Constants.DiffyConstants.DIFFY_CONVERSION_FACTOR ;
 
 
 public class DiffyArmSubsystem {
@@ -80,6 +79,7 @@ public class DiffyArmSubsystem {
 
         // Encoder Configs
         encoderConfig = new EncoderConfig();
+        encoderConfig.positionConversionFactor(DIFFY_CONVERSION_FACTOR);
 
         // Soft Limit
         leftDiffySoftLimit = new SoftLimitConfig();
@@ -146,7 +146,7 @@ public class DiffyArmSubsystem {
      * @returns the position of the wrist in radians
      */
     public double getAngledDiffyWristPosition(){
-        return getDiffyArmPosition() * WRIST_CONVERSION_FACTOR;
+        return getDiffyArmPosition();
     }
 
     /*
@@ -164,18 +164,18 @@ public class DiffyArmSubsystem {
      * @returns the position of the arm in ticks
      */
     public double getAngledDiffyArmPosition(){
-        return getDiffyArmPosition() * ARM_CONVERSION_FACTOR;
+        return getDiffyArmPosition();
     }
 
     // Setters
 
     public void setArmPosition(double position) {
         // System.out.println(position);
-        setArmTickPosition(position / ARM_CONVERSION_FACTOR);
+        setArmTickPosition(position);
     }
 
     public void setWristPosition(double position) {
-        setWristTickPosition(position / WRIST_CONVERSION_FACTOR);
+        setWristTickPosition(position);
     }
 
     /* 
