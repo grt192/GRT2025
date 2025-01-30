@@ -11,8 +11,8 @@ import frc.robot.controllers.PS5DriveController;
 import frc.robot.controllers.XboxDriveController;
 import frc.robot.commands.Differential.DifferentialTurnCommand;
 import frc.robot.commands.Differential.DifferentialTwistCommand;
-
-import frc.robot.commands.Differential.DiffySetPivotCommand;
+import frc.robot.commands.Differential.DiffyTestPivot0Command;
+import frc.robot.commands.Differential.DiffyTestPivot90Command;
 
 import static frc.robot.Constants.SwerveConstants.BL_DRIVE;
 import static frc.robot.Constants.SwerveConstants.BL_STEER;
@@ -41,6 +41,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.DiffySubsystem.DiffyArmSubsystem;
+import frc.robot.subsystems.DiffySubsystem.DiffyState;
 import frc.robot.subsystems.FieldManagementSubsystem.FieldManagementSubsystem;
 import frc.robot.subsystems.PhoenixLoggingSubsystem.PhoenixLoggingSubsystem;
 import frc.robot.subsystems.swerve.SingleModuleSwerveSubsystem;
@@ -144,7 +145,10 @@ public class RobotContainer {
       //   new DifferentialTurnCommand(diffyArmSubsystem)
       // );
 
-      xButton.onTrue(new DiffySetPivotCommand(diffyArmSubsystem, 90)
+      xButton.onTrue(new ConditionalCommand(
+        new DiffyTestPivot90Command(diffyArmSubsystem), 
+        new DiffyTestPivot0Command(diffyArmSubsystem), 
+        () -> diffyArmSubsystem.atArmState(DiffyState.TEST_0))
       );
       
 

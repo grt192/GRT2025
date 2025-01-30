@@ -16,6 +16,7 @@ import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkBase.ControlType;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static frc.robot.Constants.DiffyConstants.DIFFY_D;
 import static frc.robot.Constants.DiffyConstants.DIFFY_I;
@@ -23,9 +24,10 @@ import static frc.robot.Constants.DiffyConstants.DIFFY_P;
 import static frc.robot.Constants.DiffyConstants.LEFT_ID;
 import static frc.robot.Constants.DiffyConstants.RIGHT_ID;
 import static frc.robot.Constants.DiffyConstants.DIFFY_CONVERSION_FACTOR ;
+import static frc.robot.Constants.DiffyConstants.DIFFY_TOLERANCE;
 
 
-public class DiffyArmSubsystem {
+public class DiffyArmSubsystem extends SubsystemBase{
 
     // SparkMax controls 
     private final SparkMax leftDiffyMotor; // Left can be seen in the view with the gears visible 
@@ -120,10 +122,10 @@ public class DiffyArmSubsystem {
     }
     }
 
-    /* Get the RAW position of both encoders
-     * @returns two doubles, the first is left motor, the second is the right motor ticks
+    /* Get the radian position of both encoders
+     * @returns two doubles, the first is left motor, the second is the right motor rads
      */
-    public double[] getTickMotorPositions(){
+    public double[] getMotorPositions(){
         leftMotorPosition = leftDiffyEncoder.getPosition();
         rightMotorPosition = rightDiffyEncoder.getPosition();
 
@@ -131,7 +133,7 @@ public class DiffyArmSubsystem {
     }
 
     /*
-     * @returns the position of the wrist in ticks
+     * @returns the position of the wrist in radians
      */
     public double getDiffyWristPosition(){
         leftMotorPosition = leftDiffyEncoder.getPosition();
@@ -143,14 +145,7 @@ public class DiffyArmSubsystem {
     }
 
     /*
-     * @returns the position of the wrist in radians
-     */
-    public double getAngledDiffyWristPosition(){
-        return getDiffyArmPosition();
-    }
-
-    /*
-     * @returns the position of the arm in ticks
+     * @returns the position of the arm in radians
      */
     public double getDiffyArmPosition(){
         leftMotorPosition = leftDiffyEncoder.getPosition();
@@ -160,39 +155,17 @@ public class DiffyArmSubsystem {
         return diffyArmPosition; 
     }
 
-    /*
-     * @returns the position of the arm in ticks
-     */
-    public double getAngledDiffyArmPosition(){
-        return getDiffyArmPosition();
-    }
-
     // Setters
 
-    public void setArmPosition(double position) {
-        // System.out.println(position);
-        setArmTickPosition(position);
-    }
-
-    public void setWristPosition(double position) {
-        setWristTickPosition(position);
-    }
-
-    /* 
-     * @param position the position of the wrist in ticks
-     */
-    private void setWristTickPosition(double position){
-        leftTarget = getTickMotorPositions()[0] - position;
-        rightTarget = getTickMotorPositions()[1] + position;
+    public void setArmPosition(double armPosition) {
+        leftTarget = armPosition - getDiffyWristPosition();
+        rightTarget = armPosition + getDiffyWristPosition();
         setMotorPositions(leftTarget, rightTarget);
     }
 
-    /*
-     * @param position the position of the arm in ticks
-     */
-    private void setArmTickPosition(double position){
-        leftTarget = position - getDiffyWristPosition();
-        rightTarget = position + getDiffyWristPosition();
+    public void setWristPosition(double wristPosition) {
+        leftTarget = getMotorPositions()[0] - wristPosition;
+        rightTarget = getMotorPositions()[1] + wristPosition;
         setMotorPositions(leftTarget, rightTarget);
     }
 
@@ -200,7 +173,14 @@ public class DiffyArmSubsystem {
         leftDiffyPID.setReference(leftPosition, ControlType.kPosition);
         rightDiffyPID.setReference(rightPosition, ControlType.kPosition);
     }
+    
+    public boolean atArmState(DiffyState state) {
+        return Math.abs(getDiffyArmPosition() - state.getDiffyArmPos()) < DIFFY_TOLERANCE;
+    }
 
+    public boolean atWristState(DiffyState state) {
+        return Math.abs(getDiffyWristPosition() - state.getDiffyWristPos()) < DIFFY_TOLERANCE;
+    }
     // /*
     //  * Puts the diffy in the default position TO UPDATE
     //  */

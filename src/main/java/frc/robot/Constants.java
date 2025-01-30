@@ -64,6 +64,7 @@ public final class Constants {
       public static final double WRIST_ANGLE_90 = 0; //change
       public static final double WRIST_ANGLE_CORAL = 0; //change
 
-      public static final double TOLERANCE = 0; //change
+      public static final double DIFFY_TOLERANCE = 0.05; //change
+
   }
 }
