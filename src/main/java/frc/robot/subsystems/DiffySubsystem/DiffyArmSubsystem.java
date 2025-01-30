@@ -163,10 +163,34 @@ public class DiffyArmSubsystem extends SubsystemBase{
         setMotorPositions(leftTarget, rightTarget);
     }
 
+    // public void setWristPosition(double wristPosition) {
+    //     leftTarget = (getMotorPositions()[0] - wristPosition) * 2;
+    //     rightTarget = (getMotorPositions()[1] + wristPosition) * 2;
+    //     setMotorPositions(leftTarget / 2., rightTarget / 2.);
+    // }
+
     public void setWristPosition(double wristPosition) {
-        leftTarget = (getMotorPositions()[0] - wristPosition) * 2;
-        rightTarget = (getMotorPositions()[1] + wristPosition) * 2;
-        setMotorPositions(leftTarget / 2., rightTarget / 2.);
+        // Get the current positions of the left and right motors
+        double leftCurrent = getMotorPositions()[0]; 
+        double rightCurrent = getMotorPositions()[1];
+    
+        // Calculate the shortest rotation to the target position for both motors
+        // The formula ensures that we always rotate the shortest way around a 360-degree system
+        // 1. (wristPosition - leftCurrent): Finds the difference between target and current position
+        // 2. +180 and %360: Wraps the angle to ensure it's always within -180 to +180 degrees
+        // 3. -180: Ensures we get the shortest direction (clockwise or counterclockwise)
+        // 4. *2: Scales the movement so both motors contribute equally to wrist rotation
+        double leftTarget = ((wristPosition - leftCurrent + 180) % 360 - 180) * 2;
+        double rightTarget = ((wristPosition - rightCurrent + 180) % 360 - 180) * 2;
+    
+        // Handle a special case where the calculated target is exactly -360 degrees
+        // -360 degrees is mathematically the same as 0, but we convert it to +360 for consistency
+        if (leftTarget == -360) leftTarget = 360;
+        if (rightTarget == -360) rightTarget = 360;
+    
+        // Apply the motor targets, dividing by 2 to restore the correct scaling
+        // This balances the movement, ensuring both motors move in opposite directions equally
+        setMotorPositions(leftTarget / 2.0, rightTarget / 2.0);
     }
 
     private void setMotorPositions(double leftPosition, double rightPosition) {
