@@ -20,20 +20,52 @@ public class LoggedSparkMaxConfig {
         this.sparkMaxConfig.apply(encoderConfig);
     }
 
+    /**
+     * Follow another motor
+     * @param canId the CAN ID of the motor to follow
+     */
+    public void follow(int canId){
+        this.sparkMaxConfig.follow(canId);
+    }
+
+    /**
+     * Follow another motor
+     * @param canId the CAN ID of the motor to follow
+     * @param invert whether to invert the motor
+     */
+    public void follow(int canId, boolean invert){
+        this.sparkMaxConfig.follow(canId, invert);
+    }
+
+    /**
+     * Get the CAN ID of the motor
+     * @return the CAN ID of the motor
+     */
     public int getCanId() {
         return canId;
     }
 
+    /**
+     * Get the closed loop configuration
+     * @return the closed loop configuration
+     */
     public ClosedLoopConfig getClosedLoopConfig() {
         return closedLoopConfig;
     }
 
+    /**
+     * Get the Spark Max configuration
+     * @return the Spark Max configuration
+     */
     public SparkMaxConfig getSparkMaxConfig() {
         return sparkMaxConfig;
     }
 
+    /**
+     * Get the encoder configuration
+     * @return the encoder configuration
+     */
     public EncoderConfig getEncoderConfig() {
         return encoderConfig;
     }
-
 }
