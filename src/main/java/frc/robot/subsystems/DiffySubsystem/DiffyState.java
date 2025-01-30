@@ -18,7 +18,6 @@ public enum DiffyState {
     }
 
 
-
     /**
      * Gets the angle of a state in ticks.
      *

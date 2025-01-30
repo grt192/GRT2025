@@ -12,6 +12,8 @@ import frc.robot.controllers.XboxDriveController;
 import frc.robot.commands.Differential.DifferentialTurnCommand;
 import frc.robot.commands.Differential.DifferentialTwistCommand;
 
+import frc.robot.commands.Differential.DiffySetPivotCommand;
+
 import static frc.robot.Constants.SwerveConstants.BL_DRIVE;
 import static frc.robot.Constants.SwerveConstants.BL_STEER;
 import static frc.robot.Constants.SwerveConstants.BR_DRIVE;
@@ -31,6 +33,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
@@ -52,13 +55,10 @@ import frc.robot.subsystems.swerve.SwerveSubsystem;
  */
 public class RobotContainer {
 
-  // Motors IDs
-  int leftDiffyMotorID; //M1 motor for diffy
-  int rightDiffyMotorID; //M2 motor for diffy
-
   //Controllers
   Trigger l1Trigger;
   Trigger r1Trigger;
+  Trigger xButton;
 
   //Differential Drive Subsystems
   DiffyArmSubsystem diffyArmSubsystem;
@@ -72,7 +72,7 @@ public class RobotContainer {
 
   // SwerveModule mod = new SwerveModule(BL_DRIVE, BL_STEER, offsetRads);
   // SingleModuleSwerveSubsystem singleModuleSwerve = new SingleModuleSwerveSubsystem(mod);
-  private final SwerveSubsystem swerveSubsystem;
+  // private final SwerveSubsystem swerveSubsystem;
 
   private final CommandPS5Controller mechController = new CommandPS5Controller(0);
 
@@ -95,6 +95,7 @@ public class RobotContainer {
     // Configure controllers
     l1Trigger = new Trigger(mechController.L1());
     r1Trigger = new Trigger(mechController.R1());
+    xButton = new Trigger(mechController.cross());
 
     // THIS WILL NEED TO BE CHANGED, THE BUTTONS AND ID
 
@@ -102,7 +103,7 @@ public class RobotContainer {
     diffyArmSubsystem = new DiffyArmSubsystem();
 
 
-    swerveSubsystem = new SwerveSubsystem();
+    // swerveSubsystem = new SwerveSubsystem();
     
     driveController = new PS5DriveController();
 
@@ -134,49 +135,54 @@ public class RobotContainer {
       * swerve aim button is held down, the robot will rotate automatically to always face a target, and only
       * translation will be manually controllable. */
 
-      l1Trigger.onTrue(
-        new DifferentialTwistCommand(diffyArmSubsystem)
-      );
+      // l1Trigger.onTrue(
+      //   new DifferentialTwistCommand(diffyArmSubsystem)
+      // );
 
 
-      r1Trigger.onTrue(
-        new DifferentialTurnCommand(diffyArmSubsystem)
+      // r1Trigger.onTrue(
+      //   new DifferentialTurnCommand(diffyArmSubsystem)
+      // );
+
+      xButton.onTrue(new DiffySetPivotCommand(diffyArmSubsystem, 90)
       );
+      
+
 
     
-    swerveSubsystem.setDefaultCommand(
-      new RunCommand(() -> {
-        swerveSubsystem.setDrivePowers(
-          driveController.getForwardPower(),
-          driveController.getLeftPower(),
-          driveController.getRotatePower()
-        );
-        }, 
-        swerveSubsystem
-      )
-    );
+    // swerveSubsystem.setDefaultCommand(
+    //   new RunCommand(() -> {
+    //     swerveSubsystem.setDrivePowers(
+    //       driveController.getForwardPower(),
+    //       driveController.getLeftPower(),
+    //       driveController.getRotatePower()
+    //     );
+    //     }, 
+    //     swerveSubsystem
+    //   )
+    // );
 
-    InstantCommand resetDriverHeadingCommand = new InstantCommand(() ->{ 
-        swerveSubsystem.resetDriverHeading();
-      },
-      swerveSubsystem
-    );
-    /* Pressing the button resets the field axes to the current robot axes. */
-    driveController.bindDriverHeadingReset(
-      () ->{
-        swerveSubsystem.resetDriverHeading();
-      },
-      swerveSubsystem
-    );
+    // InstantCommand resetDriverHeadingCommand = new InstantCommand(() ->{ 
+    //     swerveSubsystem.resetDriverHeading();
+    //   },
+    //   swerveSubsystem
+    // );
+    // /* Pressing the button resets the field axes to the current robot axes. */
+    // driveController.bindDriverHeadingReset(
+    //   () ->{
+    //     swerveSubsystem.resetDriverHeading();
+    //   },
+    //   swerveSubsystem
+    // );
 
     // swerveSubsystem.setDefaultCommand(new RunCommand(() -> {
     //       swerveSubsystem.setTestAngle(driveController.getForwardPower());
     //     }, swerveSubsystem
-    // ));
+    // // ));
 
-    swerveTable.addListener("TestAngle", EnumSet.of(NetworkTableEvent.Kind.kValueAll), (table, key, event) -> {
-      swerveSubsystem.setTestAngle(event.valueData.value.getDouble());
-    });
+    // swerveTable.addListener("TestAngle", EnumSet.of(NetworkTableEvent.Kind.kValueAll), (table, key, event) -> {
+    //   swerveSubsystem.setTestAngle(event.valueData.value.getDouble());
+    // });
 
     // singleModuleSwerve.setDefaultCommand(new InstantCommand(() -> {
     //   System.out.println(mod.getWrappedAngle());

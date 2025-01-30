@@ -75,6 +75,9 @@ public class DiffyArmSubsystem {
         leftDiffyEncoder = leftDiffyMotor.getEncoder();
         rightDiffyEncoder = rightDiffyMotor.getEncoder();
 
+        leftDiffyEncoder.setPosition(0);
+        rightDiffyEncoder.setPosition(0);
+
         // Encoder Configs
         encoderConfig = new EncoderConfig();
 
@@ -100,13 +103,13 @@ public class DiffyArmSubsystem {
 
         leftDiffyConfig = new SparkMaxConfig();
         leftDiffyConfig.apply(encoderConfig)
-                       .apply(diffyPIDConfig)
-                       .apply(leftDiffySoftLimit);
+                       .apply(diffyPIDConfig);
+                    //    .apply(leftDiffySoftLimit);
 
         rightDiffyConfig = new SparkMaxConfig();
         rightDiffyConfig.apply(encoderConfig)
-                        .apply(diffyPIDConfig)
-                        .apply(leftDiffySoftLimit);
+                        .apply(diffyPIDConfig);
+                        // .apply(leftDiffySoftLimit);
 
         leftDiffyMotor.configure(leftDiffyConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         rightDiffyMotor.configure(rightDiffyConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -167,6 +170,7 @@ public class DiffyArmSubsystem {
     // Setters
 
     public void setArmPosition(double position) {
+        // System.out.println(position);
         setArmTickPosition(position / ARM_CONVERSION_FACTOR);
     }
 
