@@ -1,9 +1,11 @@
 package frc.robot.util.Motors;
 
+import java.util.Optional;
 import java.util.OptionalInt;
 
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.SoftLimitConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 public class LoggedSparkMaxConfig {
@@ -14,7 +16,8 @@ public class LoggedSparkMaxConfig {
 
     public LoggedSparkMaxConfig(
         int canId, ClosedLoopConfig closedLoopConfig,
-        EncoderConfig encoderConfig, OptionalInt followCanId
+        EncoderConfig encoderConfig, OptionalInt followCanId,
+        Optional<SoftLimitConfig> softLimitConfig
     ){
         this.canId = canId;
         this.closedLoopConfig = closedLoopConfig;
@@ -25,6 +28,9 @@ public class LoggedSparkMaxConfig {
 
         if(followCanId.isPresent()){
             this.sparkMaxConfig.follow(followCanId.getAsInt());
+        }
+        if(softLimitConfig.isPresent()){
+            this.sparkMaxConfig.apply(softLimitConfig.get());
         }
     }
 
