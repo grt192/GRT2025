@@ -156,12 +156,12 @@ public class RobotContainer {
           () -> diffyArmSubsystem.atArmState(DiffyState.TEST_0))
         );
 
-      sButton.onTrue(
-        new ConditionalCommand(
-          new InstantCommand(() -> diffyArmSubsystem.setWristPosition(Units.degreesToRadians(90))), 
-          new InstantCommand(() -> diffyArmSubsystem.setWristPosition(Units.degreesToRadians(0))), 
-          () -> diffyArmSubsystem.atWristState(DiffyState.WTEST_0))
-        );
+      // sButton.onTrue(
+      //   new ConditionalCommand(
+      //     new InstantCommand(() -> diffyArmSubsystem.setWristPosition(Units.degreesToRadians(90))), 
+      //     new InstantCommand(() -> diffyArmSubsystem.setWristPosition(Units.degreesToRadians(0))), 
+      //     () -> diffyArmSubsystem.atWristState(DiffyState.WTEST_0))
+      //   );
 
         
       //   new DiffyTestPivot90Command(diffyArmSubsystem), 

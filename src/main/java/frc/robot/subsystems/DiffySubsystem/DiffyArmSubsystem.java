@@ -167,11 +167,11 @@ public class DiffyArmSubsystem extends SubsystemBase{
         setMotorPositions(leftTarget, rightTarget);
     }
 
-    // public void setWristPosition(double wristPosition) {
-    //     leftTarget = (getMotorPositions()[0] + wristPosition);
-    //     rightTarget = (getMotorPositions()[1] - wristPosition);
-    //     setMotorPositions(leftTarget, rightTarget);
-    // }
+    public void setWristPosition(double wristPosition) { //this does not work  for a very abvious reason (offset does not take into account current position)
+        leftTarget = (getMotorPositions()[0] + wristPosition);
+        rightTarget = (getMotorPositions()[1] - wristPosition);
+        setMotorPositions(leftTarget, rightTarget);
+    }
 
 
     /*
