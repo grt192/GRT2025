@@ -122,6 +122,7 @@ public class LoggedSparkMax {
      */
     public void set(double value){
         motor.set(value);
+        targetReference = value;
     }
 
     /**
