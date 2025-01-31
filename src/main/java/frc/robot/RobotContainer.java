@@ -90,6 +90,7 @@ public class RobotContainer {
   private NetworkTable swerveTable;
   private NetworkTableEntry swerveTestAngleEntry;
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  private double thingy;  
 
   
   public RobotContainer() {
@@ -147,17 +148,29 @@ public class RobotContainer {
       //   new DifferentialTurnCommand(diffyArmSubsystem)
       // );
 
-      xButton.onTrue(new ConditionalCommand(
-        new DiffyTestPivot90Command(diffyArmSubsystem), 
-        new DiffyTestPivot0Command(diffyArmSubsystem), 
-        () -> diffyArmSubsystem.atArmState(DiffyState.TEST_0))
-      );
+      
+      xButton.onTrue(
+        new InstantCommand(() -> {
+          diffyArmSubsystem.setArmPosition((2 * Math.PI));
+        }));
 
-      sButton.onTrue(new ConditionalCommand(
-        new DiffyTestWrist90Command(diffyArmSubsystem), 
-        new DiffyTestWrist0Command(diffyArmSubsystem), 
-        () -> diffyArmSubsystem.atWristState(DiffyState.WTEST_0))
-      );
+      sButton.onTrue(
+        new InstantCommand(() -> {
+            diffyArmSubsystem.setArmPosition(-(2 * Math.PI));
+        }));
+
+
+        
+      //   new DiffyTestPivot90Command(diffyArmSubsystem), 
+      //   new DiffyTestPivot0Command(diffyArmSubsystem), 
+      //   () -> diffyArmSubsystem.atArmState(DiffyState.TEST_0))
+      // );
+
+      // sButton.onTrue(new ConditionalCommand(
+      //   new DiffyTestWrist90Command(diffyArmSubsystem), 
+      //   new DiffyTestWrist0Command(diffyArmSubsystem), 
+      //   () -> diffyArmSubsystem.atWristState(DiffyState.WTEST_0))
+      // );
       
 
 

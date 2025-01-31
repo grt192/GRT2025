@@ -47,7 +47,7 @@ public final class Constants {
 
     public static class DiffyConstants {
       public static final int LEFT_ID = 14;
-      public static final int RIGHT_ID = 15;
+      public static final int RIGHT_ID = 16;
       public static final double DIFFY_CONVERSION_FACTOR = (2 * Math.PI) / 30.;
 
       public static final double DIFFY_P = 1.5;
@@ -64,7 +64,7 @@ public final class Constants {
       public static final double WRIST_ANGLE_90 = 0; //change
       public static final double WRIST_ANGLE_CORAL = 0; //change
 
-      public static final double DIFFY_TOLERANCE = 0.05; //change
+      public static final double DIFFY_TOLERANCE = 1; //change to .05
 
   }
 }
