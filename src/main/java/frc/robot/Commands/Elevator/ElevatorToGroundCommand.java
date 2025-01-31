@@ -24,6 +24,6 @@ public class ElevatorToGroundCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return elevatorSubsystem.atState(ElevatorState.GROUND);
+        return elevatorSubsystem.atGround();
     }
 }
