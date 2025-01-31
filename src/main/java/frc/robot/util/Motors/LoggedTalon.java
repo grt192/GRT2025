@@ -83,10 +83,19 @@ public class LoggedTalon{
     }
 
     /**
+     * Sets the motor's position reference with feedforward
+     * @param position position reference
+     * @param arbFF arbitrary feedforward
+     */
+    public void setPositionReferenceWithArbFF(double position, double arbFF){
+        targetPosition = position;
+        motor.setControl(new PositionVoltage(position).withFeedForward(arbFF));
+    }
+    /**
      * Set the motor's velocity reference
      * @param velocity velocity reference
      */
-    public void setVelocityREference(double velocity){
+    public void setVelocityReference(double velocity){
         targetVelocity = velocity;
         motor.setControl(new VelocityVoltage(velocity));
     }
