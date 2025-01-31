@@ -4,6 +4,11 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 
@@ -62,27 +67,44 @@ public final class Constants {
   }
 
   public static class ElevatorConstants {
-    public static final double SOURCE_POSITION = 0.0; //change
-    public static final double ONE_DROP = 0.0; //change
-    public static final double TWO_DROP = 0.0; //change
-    public static final double THREE_DROP = 0.0; //change
-    public static final double FOUR_DROP = 0.0; //change
-    public static final double ZERO_STATE = 0.0; //change
+    public static final double SOURCE= 0.0; //change
+    public static final double L1 = 0.0; //change
+    public static final double L2 = 0.0; //change
+    public static final double L3 = 0.0; //change
+    public static final double L4 = 0.0; //change
+    public static final double GROUND = 0.0; //change
 
     public static final double TOLERANCE = 0.0; //change
 
-    public static final int KRAKEN_ID = 0; //change
+    public static final int KRAKEN_ID = 11; //change
     public static final int LIMIT_ID = 0; //change
 
-    public static final double ELEVATOR_P = 0; //change
-    public static final double ELEVATOR_I = 0; //change
-    public static final double ELEVATOR_D = 0; //change
+    private static final double kP = 0; //change
+    private static final double kI = 0; //change
+    private static final double kD = 0; //change
+    private static final double kS = 0; //chang
+    public static final double kArbFF = 0;
 
     public static final double GEAR_RATIO = 20; //motor to axle
     public static final double AXLE_RADIUS = 6. * .289 * .0254; //in meters
 
-    public static final double TICKS_TO_METERS = 2. * Math.PI * AXLE_RADIUS / GEAR_RATIO;
-    public static final double METERS_TO_TICKS = 1. / TICKS_TO_METERS;
+    public static final double DIST_TO_METERS = 2. * Math.PI * AXLE_RADIUS / GEAR_RATIO;
+    public static final double DIST_TO_TICKS = 1. / DIST_TO_METERS;
+    
+    private static final Slot0Configs slot0Configs = new Slot0Configs()
+      .withKP(kP)
+      .withKI(kI)
+      .withKD(kD)
+      .withKS(kS);
+    private static final MotorOutputConfigs motorOutputConfigs =
+      new MotorOutputConfigs()
+      .withNeutralMode(NeutralModeValue.Brake);
+    public static final TalonFXConfiguration TALON_CONFIG =
+      new TalonFXConfiguration()
+        .withSlot0(slot0Configs)
+        .withMotorOutput(motorOutputConfigs);
+
+    public static final boolean DEBUG = true;
   }
 
   public static class LoggingConstants{
