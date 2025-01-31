@@ -74,21 +74,33 @@ public class LoggedTalon{
     }
 
     /**
-     * Using PIDF to set the motor's position
+     * Sets the motor's position reference
      * @param position position reference
      */
-    public void setPosition(double position){
+    public void setPositionReference(double position){
         targetPosition = position;
         motor.setControl(new PositionVoltage(position));
     }
 
     /**
-     * Using PIDF to set the motor's velocity
+     * Set the motor's velocity reference
      * @param velocity velocity reference
      */
-    public void setVelocity(double velocity){
+    public void setVelocityREference(double velocity){
         targetVelocity = velocity;
         motor.setControl(new VelocityVoltage(velocity));
+    }
+
+    /**
+     * Sets the motor's position to a certain value
+     * @param position mechanisam position after taking the position conversion
+     * into account
+     */
+    public void setPosition(double position){
+        for (int i = 0; i < 4; i++) {
+            boolean error = motor.setPosition(position) == StatusCode.OK;
+            if (!error) break;
+        }
     }
 
     /**
