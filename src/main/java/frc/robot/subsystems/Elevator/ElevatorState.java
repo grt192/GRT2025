@@ -4,17 +4,17 @@ import frc.robot.Constants.ElevatorConstants;
 
 /** States of the elevator. */
 public enum ElevatorState {
-    ZERO_STATE(ElevatorConstants.ZERO_STATE),
-    SOURCE(ElevatorConstants.SOURCE_POSITION),
-    ONE_DROP(ElevatorConstants.ONE_DROP),
-    TWO_DROP(ElevatorConstants.TWO_DROP),
-    THREE_DROP(ElevatorConstants.THREE_DROP),
-    FOUR_DROP(ElevatorConstants.FOUR_DROP);
+    GROUND(ElevatorConstants.GROUND),
+    SOURCE(ElevatorConstants.SOURCE),
+    L1(ElevatorConstants.L1),
+    L2(ElevatorConstants.L2),
+    L3(ElevatorConstants.L3),
+    L4(ElevatorConstants.L4);
 
-    private final double extendedDistanceMeters;
+    private final double distance;
 
-    private ElevatorState(double extendedDistanceMeters) {
-        this.extendedDistanceMeters = extendedDistanceMeters;
+    private ElevatorState(double distance) {
+        this.distance = distance;
     }
 
     /**
@@ -22,12 +22,11 @@ public enum ElevatorState {
      *
      * @return meters in double.
      */
-    public double getExtendedDistanceMeters() {
-        return this.extendedDistanceMeters;
+    public double getDistance() {
+        return this.distance;
     }
 
-    public double getExtendInTicks() { 
-        return this.extendedDistanceMeters * ElevatorConstants.METERS_TO_TICKS;
+    public double getDistanceInTicks() { 
+        return this.distance * ElevatorConstants.DIST_TO_TICKS;
     }
-
 }
