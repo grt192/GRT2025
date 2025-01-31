@@ -150,15 +150,18 @@ public class RobotContainer {
 
       
       xButton.onTrue(
-        new InstantCommand(() -> {
-          diffyArmSubsystem.setArmPosition((2 * Math.PI));
-        }));
+        new ConditionalCommand(
+          new InstantCommand(() -> diffyArmSubsystem.setArmPosition(Units.degreesToRadians(90))), 
+          new InstantCommand(() -> diffyArmSubsystem.setArmPosition(Units.degreesToRadians(0))), 
+          () -> diffyArmSubsystem.atArmState(DiffyState.TEST_0))
+        );
 
       sButton.onTrue(
-        new InstantCommand(() -> {
-            diffyArmSubsystem.setArmPosition(-(2 * Math.PI));
-        }));
-
+        new ConditionalCommand(
+          new InstantCommand(() -> diffyArmSubsystem.setWristPosition(Units.degreesToRadians(90))), 
+          new InstantCommand(() -> diffyArmSubsystem.setWristPosition(Units.degreesToRadians(0))), 
+          () -> diffyArmSubsystem.atWristState(DiffyState.WTEST_0))
+        );
 
         
       //   new DiffyTestPivot90Command(diffyArmSubsystem), 

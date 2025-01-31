@@ -157,35 +157,20 @@ public class DiffyArmSubsystem extends SubsystemBase{
 
     // Setters
 
-
-
     /*
      * Sets the position of the arm in radians
      * @param target armPosition in radians
      */
     public void setArmPosition(double armPosition) {
-
-        if (armPosition < getDiffyArmPosition()){
-            leftTarget = getDiffyWristPosition() + armPosition;
-            rightTarget = getDiffyWristPosition() + armPosition;
-
-            System.out.println("LESS LEFT: " + leftTarget);
-            System.out.println("LESS RIGHT: " + rightTarget);
-
-        } else {
-            leftTarget = getDiffyWristPosition() - armPosition;
-            rightTarget = getDiffyWristPosition() - armPosition;
-
-            System.out.println("MORE LEFT: " + leftTarget);
-            System.out.println("MORE RIGHT: " + rightTarget);
-        }
+        leftTarget = armPosition - getDiffyWristPosition();
+        rightTarget = armPosition + getDiffyWristPosition();
         setMotorPositions(leftTarget, rightTarget);
     }
 
     // public void setWristPosition(double wristPosition) {
-    //     leftTarget = (getMotorPositions()[0] - wristPosition) * 2;
-    //     rightTarget = (getMotorPositions()[1] + wristPosition) * 2;
-    //     setMotorPositions(leftTarget / 2., rightTarget / 2.);
+    //     leftTarget = (getMotorPositions()[0] + wristPosition);
+    //     rightTarget = (getMotorPositions()[1] - wristPosition);
+    //     setMotorPositions(leftTarget, rightTarget);
     // }
 
 
@@ -194,11 +179,11 @@ public class DiffyArmSubsystem extends SubsystemBase{
      * @param target wristPosition in radians
      * basicaly how it works is it gets the diffrence then adds 180 to make it positive then %360 to make it between 0 and 360 then -180 to make it between -180 and 180 then *2 to make it between -360 and 360
      */
-    public void setWristPosition(double wristPosition) {
-        leftMotorPosition = leftDiffyEncoder.getPosition();
-        rightMotorPosition = rightDiffyEncoder.getPosition();
+    // public void setWristPosition(double wristPosition) {
+    //     leftMotorPosition = leftDiffyEncoder.getPosition();
+    //     rightMotorPosition = rightDiffyEncoder.getPosition();
 
-    }
+    // }
 
 
 
