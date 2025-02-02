@@ -23,83 +23,98 @@ public class AutoAlignCommand {
 
     private static String reefName = "reefAlignPath";
     private static String sourceName = "sourceAlignPath";
-
-    static List<Pose2d> ReefPoseList = List.of(
-        getAlignPath(reefName).getStartingHolonomicPose().get()
-    ); 
+    private static String closestPath;
     
-    static List<String> ReefPathList = List.of(
-        reefName
-    );
-
-    private static Command runAlignPath;
+        static List<Pose2d> RightReefPoseList = List.of(
+            getAlignPath(reefName).getStartingHolonomicPose().get()
+        ); 
     
-    static PathConstraints constraints = new PathConstraints(
-        4.6,
-        3,
-        Units.degreesToRadians(540), 
-        Units.degreesToRadians(720)
-    );
-
-    //Gets the path from pathplanner using the path name
-    private static PathPlannerPath getAlignPath(String path){
-        try {
-            getAlignPath = PathPlannerPath.fromPathFile(path);
-        } catch (Exception e) {
-            e.printStackTrace();
-            // Handle exception as needed, maybe use default values or fallback
-        }
-        return getAlignPath;
-    }
-
-    //runs the path from getAlignPath
-    public static Command runAlignPath (SwerveSubsystem swerveSubsystem, String pathName){
-        PathPlannerPath path = getAlignPath(pathName);
-
-        runAlignPath = AutoBuilder.pathfindThenFollowPath(
-            path,
-            constraints
+        static List<Pose2d> LeftReefPoseList = List.of(
+            getAlignPath(sourceName).getStartingHolonomicPose().get()
         );
-
-        runAlignPath.addRequirements(swerveSubsystem); 
-        return runAlignPath;
-    }
-    
-    //aligns to the reef L/K on test field
-    public static Command reefTest(SwerveSubsystem swerveSubsystem){
-
-        PathPlannerPath path = getAlignPath(reefName);
         
-        runAlignPath = AutoBuilder.pathfindThenFollowPath(
-            path,
-            constraints
+        //left before right
+        static List<String> ReefPathList = List.of(
+            reefName,
+            sourceName
         );
-
-        return runAlignPath(swerveSubsystem, reefName);
-    }
-
-    //aligns to top reef on test field
-    public static Command sourceTest(SwerveSubsystem swerveSubsystem){
-
-        PathPlannerPath path = getAlignPath(sourceName);
-        runAlignPath = AutoBuilder.pathfindThenFollowPath(
-            path,
-            constraints
+    
+        private static Command runAlignPath;
+        
+        static PathConstraints constraints = new PathConstraints(
+            4.6,
+            3,
+            Units.degreesToRadians(540), 
+            Units.degreesToRadians(720)
         );
+    
+        //Gets the path from pathplanner using the path name
+        private static PathPlannerPath getAlignPath(String path){
+            try {
+                getAlignPath = PathPlannerPath.fromPathFile(path);
+            } catch (Exception e) {
+                e.printStackTrace();
+                // Handle exception as needed, maybe use default values or fallback
+            }
+            return getAlignPath;
+        }
+    
+        //runs the path from getAlignPath
+        public static Command runAlignPath (SwerveSubsystem swerveSubsystem, String pathName){
+            PathPlannerPath path = getAlignPath(pathName);
+    
+            runAlignPath = AutoBuilder.pathfindThenFollowPath(
+                path,
+                constraints
+            );
+    
+            runAlignPath.addRequirements(swerveSubsystem); 
+            return runAlignPath;
+        }
+        
+        //aligns to the reef L/K on test field
+        public static Command reefTest(SwerveSubsystem swerveSubsystem){
+    
+            PathPlannerPath path = getAlignPath(reefName);
+            
+            runAlignPath = AutoBuilder.pathfindThenFollowPath(
+                path,
+                constraints
+            );
+    
+            return runAlignPath(swerveSubsystem, reefName);
+        }
+    
+        //aligns to top reef on test field
+        public static Command sourceTest(SwerveSubsystem swerveSubsystem){
+    
+            PathPlannerPath path = getAlignPath(sourceName);
+            runAlignPath = AutoBuilder.pathfindThenFollowPath(
+                path,
+                constraints
+            );
+    
+            return runAlignPath(swerveSubsystem, sourceName);
+        }
+    
+        //aligns to the closest reef pose from the ReefPoseList
+        public static Command closeReefAlign(SwerveSubsystem swerveSubsystem, Boolean goRight){
+    
+            if(goRight){
+                Pose2d closestReef = currentPose.nearest(RightReefPoseList);
+                int index = RightReefPoseList.indexOf(closestReef);
+                closestPath = ReefPathList.get(index+1);
+            }
 
-        return runAlignPath(swerveSubsystem, sourceName);
-    }
+            else {
+                Pose2d closestReef = currentPose.nearest(LeftReefPoseList);
+                int index = LeftReefPoseList.indexOf(closestReef);
+                closestPath = ReefPathList.get(index);
+            }
 
-    //aligns to the closest reef pose from the ReefPoseList
-    public static Command closeReefAlign(SwerveSubsystem swerveSubsystem){
+            return runAlignPath(swerveSubsystem, closestPath);   
+        }
 
-        currentPose = swerveSubsystem.getRobotPosition();
-        Pose2d closestReef = currentPose.nearest(ReefPoseList);
-        int index = ReefPoseList.indexOf(closestReef);
-        String closestPath =  ReefPathList.get(index); 
-
-        return runAlignPath(swerveSubsystem, closestPath);   
-    }
 
 }
 
