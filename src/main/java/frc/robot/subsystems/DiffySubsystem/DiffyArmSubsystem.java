@@ -164,6 +164,7 @@ public class DiffyArmSubsystem extends SubsystemBase{
     public void setArmPosition(double armPosition) {
         leftTarget = armPosition - getDiffyWristPosition();
         rightTarget = armPosition + getDiffyWristPosition();
+        System.out.println("running set Arm position!");
         setMotorPositions(leftTarget, rightTarget);
     }
 
@@ -174,8 +175,9 @@ public class DiffyArmSubsystem extends SubsystemBase{
      */
     public void setWristPosition(double wristPosition) {
         double currentWristPosition = getDiffyWristPosition();
-        leftTarget = getMotorPositions()[0] + (wristPosition - currentWristPosition);
-        rightTarget = getMotorPositions()[1] - (wristPosition - currentWristPosition);
+
+        leftTarget = getMotorPositions()[0] - (wristPosition - currentWristPosition);
+        rightTarget = getMotorPositions()[1] + (wristPosition - currentWristPosition);
         setMotorPositions(leftTarget, rightTarget);
     }
 

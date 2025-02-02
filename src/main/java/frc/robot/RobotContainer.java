@@ -91,6 +91,7 @@ public class RobotContainer {
   private NetworkTableEntry swerveTestAngleEntry;
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   private double thingy;  
+  private double thingy_2;
 
   
   public RobotContainer() {
@@ -106,6 +107,7 @@ public class RobotContainer {
     // Configure Differential Drive Subsystems
     diffyArmSubsystem = new DiffyArmSubsystem();
 
+    thingy_2 = Units.degreesToRadians(90);
 
     // swerveSubsystem = new SwerveSubsystem();
     
@@ -155,6 +157,13 @@ public class RobotContainer {
           new InstantCommand(() -> diffyArmSubsystem.setArmPosition(Units.degreesToRadians(0))), 
           () -> diffyArmSubsystem.atArmState(DiffyState.TEST_0))
         );
+
+      sButton.onTrue(
+        new ConditionalCommand(
+          new InstantCommand(() -> diffyArmSubsystem.setWristPosition(Units.degreesToRadians(90))),
+          new InstantCommand(() -> diffyArmSubsystem.setWristPosition(Units.degreesToRadians(0))),
+          () -> diffyArmSubsystem.atWristState(DiffyState.TEST_0))
+      );
 
       // sButton.onTrue(
       //   new ConditionalCommand(
