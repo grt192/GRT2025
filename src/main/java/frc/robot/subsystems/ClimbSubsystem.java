@@ -14,7 +14,7 @@ public class ClimbSubsystem extends SubsystemBase {
 
   private final LoggedSparkMax topMotor;
   private final LoggedSparkMax botMotor;
-  private double targetSpeed;
+  private double targetSpeed = 0;
 
   /** Creates a new ExampleSubsystem. */
   public ClimbSubsystem() {
@@ -25,11 +25,11 @@ public class ClimbSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     topMotor.set(targetSpeed);
-    topMotor.logStats();
-    botMotor.logStats();
+    // topMotor.logStats();
+    // botMotor.logStats();
     if(REV_DEBUG){
-      topMotor.publishStats();
-      botMotor.publishStats();
+      // topMotor.publishStats();
+      // botMotor.publishStats();
     }
   }
 
