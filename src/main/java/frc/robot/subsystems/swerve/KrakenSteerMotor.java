@@ -29,7 +29,7 @@ public class KrakenSteerMotor {
     private final SparkMax motor;
     private final SparkAbsoluteEncoder steerEncoder;
     
-    private SparkMaxConfig sparkMaxConfig;
+    private SparkBaseConfig sparkMaxConfig;
     private AbsoluteEncoderConfig encoderConfig;
     private ClosedLoopConfig closedLoopConfig;
     private MAXMotionConfig maxMotionConfig;
@@ -51,7 +51,7 @@ public class KrakenSteerMotor {
     private double targetDouble = 0;
 
     /**
-     * A Kraken steer motor for swerve steering
+     * A Neo steer motor for swerve steering
      * @param canId the motor's CAN ID
      */
     public KrakenSteerMotor(int canId) {
