@@ -1,5 +1,14 @@
 package frc.robot.subsystems.swerve;
 
+import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.AbsoluteEncoderConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig;
@@ -26,10 +35,11 @@ import com.revrobotics.spark.SparkBase.ControlType;
 
 public class KrakenSteerMotor {
 
-    private final SparkMax motor;
-    private final SparkAbsoluteEncoder steerEncoder;
+    private final TalonFX motor;
+    private final CANCoder steerEncoder;
     
-    private SparkBaseConfig sparkMaxConfig;
+    private final TalonFXConfiguration talonFXConfig;
+    private final CANCoderConfiguration canCoderConfig;
     private AbsoluteEncoderConfig encoderConfig;
     private ClosedLoopConfig closedLoopConfig;
     private MAXMotionConfig maxMotionConfig;
