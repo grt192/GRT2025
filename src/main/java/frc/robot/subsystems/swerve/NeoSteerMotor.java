@@ -98,6 +98,7 @@ public class NeoSteerMotor {
      * @param d kD
      * @param ff kFF
      */
+    
     public void configurePID(double p, double i, double d, double ff){
         closedLoopConfig.pidf(p, i, d, ff);
         sparkMaxConfig.apply(closedLoopConfig);
@@ -157,6 +158,7 @@ public class NeoSteerMotor {
      * Publishes Neo stats to NT
      */
     public void publishStats(){
+
         neoPositionPublisher.set(getPosition());
         neoSetPositionPublisher.set(targetDouble);
     }

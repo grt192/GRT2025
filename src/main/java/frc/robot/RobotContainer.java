@@ -17,10 +17,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.subsystems.FieldManagementSubsystem.FieldManagementSubsystem;
-import frc.robot.subsystems.PhoenixLoggingSubsystem.PhoenixLoggingSubsystem;
+import frc.robot.subsystems.Vision.VisionSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
-
+import frc.robot.Constants.VisionConstants;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -32,17 +31,18 @@ public class RobotContainer {
   private BaseDriveController driveController;
 
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
-
-  private final FieldManagementSubsystem fieldManagementSubsystem =
-    new FieldManagementSubsystem();
-
-  // private final PhoenixLoggingSubsystem phoenixLoggingSubsystem =
-    // new PhoenixLoggingSubsystem(fieldManagementSubsystem);
+  private final VisionSubsystem visionSubsystem1 = new VisionSubsystem(
+    VisionConstants.cameraConfigs[0]
+  );
+  private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(
+    VisionConstants.cameraConfigs[1]
+  );
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     constructDriveController(); 
     startLog();
+    setVisionDataInterface();
     configureBindings();
   }
 
@@ -55,7 +55,6 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
- 
   private void configureBindings() {
       /* Driving -- One joystick controls translation, the other rotation. If the robot-relative button is held down,
       * the robot is controlled along its own axes, otherwise controls apply to the field axes by default. If the
@@ -88,7 +87,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new PathPlannerAuto("3m Auto");
+    return new PathPlannerAuto("Three Meters");
   }
 
   /**
@@ -106,14 +105,22 @@ public class RobotContainer {
     else{
         driveController = new DualJoystickDriveController();
     }
-    driveController.setDeadZone(0.03);
+    driveController.setDeadZone(0.05);
   }
 
   /**
-   * Starts datalog at /media/sda1/robotLogs
+   * Starts datalog at /u/logs
    */
   private void startLog(){
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
+  }
+
+  /**
+   * Links vision and swerve
+   */
+  private void setVisionDataInterface(){
+    visionSubsystem1.setInterface(swerveSubsystem::addVisionMeasurements);
+    visionSubsystem2.setInterface(swerveSubsystem::addVisionMeasurements);
   }
 }

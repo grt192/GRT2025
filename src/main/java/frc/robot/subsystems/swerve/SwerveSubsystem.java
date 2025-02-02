@@ -15,9 +15,11 @@ import edu.wpi.first.util.datalog.StructLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.Vision.TimestampedVisionUpdate;
 import frc.robot.util.GRTUtil;
 
 import static frc.robot.Constants.SwerveConstants.*;
+
 import static frc.robot.Constants.LoggingConstants.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -46,6 +48,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     private NetworkTableInstance ntInstance;
     private NetworkTable swerveTable;
+
     private StructArrayPublisher<SwerveModuleState> swerveStatesPublisher;
 
     private StructPublisher<Pose2d> estimatedPosePublisher;
@@ -58,6 +61,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public SwerveSubsystem() {
         ahrs = new AHRS(NavXComType.kMXP_SPI);
+        ahrs.reset();
+        ahrs.zeroYaw();
 
         frontLeftModule = new SwerveModule(FL_DRIVE, FL_STEER, FL_OFFSET);
         frontRightModule = new SwerveModule(FR_DRIVE, FR_STEER, FR_OFFSET);
@@ -70,7 +75,7 @@ public class SwerveSubsystem extends SubsystemBase {
             getGyroHeading(), 
             getModulePositions(),
             new Pose2d()
-        );
+            );
 
         buildAuton(); 
         initNT();
@@ -119,9 +124,17 @@ public class SwerveSubsystem extends SubsystemBase {
         states = kinematics.toSwerveModuleStates(speeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(
             states, speeds,
-            MAX_VEL, MAX_VEL, MAX_OMEGA);
+            MAX_VEL, MAX_VEL, MAX_OMEGA
+        );
     }
 
+    public void addVisionMeasurements(TimestampedVisionUpdate update){
+        poseEstimator.addVisionMeasurement(
+            update.pose(), 
+            update.timestamp(),
+            update.stdDevs()
+        );
+    }
     /**
      * Gets the module positions.
      *
@@ -305,9 +318,11 @@ public class SwerveSubsystem extends SubsystemBase {
             this::getRobotRelativeChassisSpeeds,
             (speeds, feedforwards) -> setRobotRelativeDrivePowers(speeds),
             
+         //1.25/3.25
+         //
             new PPHolonomicDriveController(
-                new PIDConstants(1, 0.0, 0.0),
-                new PIDConstants(1.0, 0.0, 0.0)
+                new PIDConstants(1.25, 0, 0.0),
+                new PIDConstants(3.25, 0.0, 0.0)
             ),
 
             config,

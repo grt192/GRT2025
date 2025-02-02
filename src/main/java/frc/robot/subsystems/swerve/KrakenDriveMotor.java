@@ -39,6 +39,8 @@ public class KrakenDriveMotor {
     private DoublePublisher appliedVlotsPublisher;
     private DoublePublisher supplyCurrentPublisher;
     private DoublePublisher statorCurrentPublisher;
+    private DoublePublisher targetRPSPublisher;
+    private DoublePublisher positionPublisher;
 
     private StatusSignal<Angle> positionSignal;
     private StatusSignal<AngularVelocity> velocitySignal;
@@ -66,7 +68,10 @@ public class KrakenDriveMotor {
         // motorConfig.TorqueCurrent.PeakReverseTorqueCurrent = -80.0;
         // motorConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.02;
         motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        motorConfig.Voltage.PeakForwardVoltage = 12;
+        motorConfig.Voltage.PeakReverseVoltage = 12;
 
+        motor.setPosition(0);
         // Apply configs, apparently this fails a lot
         for (int i = 0; i < 4; i++) {
             boolean error = motor.getConfigurator().apply(motorConfig, 0.1) == StatusCode.OK;
@@ -85,6 +90,8 @@ public class KrakenDriveMotor {
     private void initNT(int canId){
         ntInstance = NetworkTableInstance.getDefault();
         swerveStatsTable = ntInstance.getTable(SWERVE_TABLE);
+        positionPublisher = swerveStatsTable.getDoubleTopic(canId + "position").publish();
+        targetRPSPublisher = swerveStatsTable.getDoubleTopic(canId + "targetRPS").publish();
         veloErrorPublisher = swerveStatsTable.getDoubleTopic(canId + "veloError").publish();
         veloPublisher = swerveStatsTable.getDoubleTopic(canId + "velo").publish();
         appliedVlotsPublisher = swerveStatsTable.getDoubleTopic(canId + "appliedVolts").publish();
@@ -181,6 +188,8 @@ public class KrakenDriveMotor {
      */
     public void publishStats(){
         // veloErrorPublisher.set(this.targetRps - motor.getVelocity().getValueAsDouble());
+        positionPublisher.set(getDistance());
+        targetRPSPublisher.set(targetRps);
         veloErrorPublisher.set(motor.getClosedLoopError().getValueAsDouble());
         veloPublisher.set(motor.getVelocity().getValueAsDouble());
         appliedVlotsPublisher.set(motor.getMotorVoltage().getValueAsDouble());
