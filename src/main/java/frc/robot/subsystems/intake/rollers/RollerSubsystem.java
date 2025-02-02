@@ -1,4 +1,4 @@
-package frc.robot.subsystems.intake.rollers;
+package frc.robot.subsystems.Intake.rollers;
 
 import static frc.robot.Constants.IntakeConstants.INTAKE_SENSOR_ID;
 import static frc.robot.Constants.IntakeConstants.ROLLER_ID;

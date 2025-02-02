@@ -1,4 +1,4 @@
-package frc.robot.subsystems.intake.pivot;
+package frc.robot.subsystems.Intake.pivot;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.util.Units;

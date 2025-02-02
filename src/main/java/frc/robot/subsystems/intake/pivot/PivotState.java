@@ -1,4 +1,4 @@
-package frc.robot.subsystems.intake.pivot;
+package frc.robot.subsystems.Intake.pivot;
 
 import frc.robot.Constants;
 
