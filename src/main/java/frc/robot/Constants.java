@@ -49,7 +49,7 @@ public final class Constants {
           .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
           .outputRange(0, 1),
         new EncoderConfig(),
-        null
+        OptionalInt.empty() 
       );
     public static final LoggedSparkMaxConfig BOT_MOTOR_CONFIG =
       new LoggedSparkMaxConfig(
