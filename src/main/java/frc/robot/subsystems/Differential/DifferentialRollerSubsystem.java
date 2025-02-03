@@ -1,56 +1,75 @@
 package frc.robot.subsystems.Differential;
 
-
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
-//TODO set current limit
+/**
+ * DifferentialRollerSubsystem controls the roller motor and manages the intake sensor.
+ */
+public class DifferentialRollerSubsystem extends SubsystemBase { 
 
-public class DifferentialRollerSubsystem { 
-
-    private SparkMax rollerMotor;
-    private double speed;
-    private int motorID;
+    private final SparkMax rollerMotor;
+    private double rollerSpeed;
     private final DigitalInput intakeSensor;
 
-
-    
-
-    public DifferentialRollerSubsystem(int motorID) {
-        this.motorID = motorID;
-        
-        speed = 0;
-
+    /**
+     * Constructor for DifferentialRollerSubsystem.
+     */
+    public DifferentialRollerSubsystem() {
+        rollerSpeed = Constants.DifferentialRollerConstants.ROLLER_SPEED;
         intakeSensor = new DigitalInput(0);
-
-        rollerMotor = new SparkMax(motorID, MotorType.kBrushless);
+        rollerMotor = new SparkMax(Constants.DifferentialRollerConstants.ROLLER_MOTOR_ID, MotorType.kBrushless);
     }
 
     /**
-     * Gets the back sensor value.
-     *
-     * @return If the sensor detects changes (boolean).
+     * Gets the intake sensor value.
+     * 
+     * @return The value of the intake sensor.
      */
-    public boolean getIntakeRollerSensorValue() {
+    public boolean getIntakeSensorValue() {
         return intakeSensor.get();
     }
 
+    /**
+     * Sets the speed of the roller motor.
+     * 
+     * @param speed The speed to set the roller motor to.
+     */
     public void setSpeed(double speed) {
-        this.speed = speed;
-        rollerMotor.set(speed);
+        rollerSpeed = speed;
+        rollerMotor.set(rollerSpeed );
     }
 
+    /**
+     * Stops the roller motor.
+     */
     public void stop() {
-        rollerMotor.setVoltage(motorID);
-
+        rollerMotor.setVoltage(0);
     }
 
+    /**
+     * Gets the current speed of the roller motor.
+     * 
+     * @return The current speed of the roller motor.
+     */
     public double getSpeed() {
         return rollerMotor.get();
     }
 
+    /**
+     * Runs the roller motor outwards at a predefined speed.
+     */
+    public void runOut() {
+        setSpeed(Constants.DifferentialRollerConstants.ROLLER_SPEED);
+    }
 
-
+    /**
+     * Runs the roller motor inwards at a predefined speed.
+     */
+    public void runIn() {
+        setSpeed(Constants.DifferentialRollerConstants.ROLLER_SPEED);
+    }
 }

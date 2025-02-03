@@ -15,6 +15,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -39,21 +40,25 @@ public class RobotContainer {
   private final FieldManagementSubsystem fieldManagementSubsystem = new FieldManagementSubsystem();
   private final PhoenixLoggingSubsystem phoenixLoggingSubsystem = new PhoenixLoggingSubsystem(fieldManagementSubsystem);
 
-  private final DifferentialRollerSubsystem differentialRoller = new DifferentialRollerSubsystem(10);
+  private final DifferentialRollerSubsystem differentialRollerSubsystem = new DifferentialRollerSubsystem();
   private final CommandPS5Controller mechController = new CommandPS5Controller(0);
 
 
-  Trigger xbutton;
+  //Button to run the differential roller
+  Trigger xbutton;  //Auto Intake
+  Trigger l1button; //Force rollers out
+  Trigger r1button; //Force rollers in
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
     xbutton = mechController.cross();
+    l1button = mechController.L1();
+    r1button = mechController.R1();
 
     constructDriveController(); 
     startLog();
-    rollerIntakeSensor();
     configureBindings();
   }
 
@@ -74,11 +79,20 @@ public class RobotContainer {
       * translation will be manually controllable. */
 
 
-    xbutton.onTrue(new RunCommand(() -> {
-      new DifferentialRollerCommand(differentialRoller);
-      
-      
+    //Mechanical Controls
+    xbutton.onTrue(new InstantCommand(() -> {
+      new DifferentialRollerCommand(differentialRollerSubsystem);
+    }).until(() -> differentialRollerSubsystem.getIntakeSensorValue()));
+
+    l1button.onTrue(new InstantCommand(() -> {
+      differentialRollerSubsystem.runIn();
     }));
+
+    r1button.onTrue(new InstantCommand(() -> {
+      differentialRollerSubsystem.runOut();
+    }));
+
+
     swerveSubsystem.setDefaultCommand(
       new RunCommand(() -> {
         swerveSubsystem.setDrivePowers(
@@ -110,8 +124,7 @@ public class RobotContainer {
   }
 
   /**
-   * Constructs the drive controller based on the name of the controller at port
-   * 0
+   * Constructs the drive controller based on the name of the controller at port 0
    */
   private void constructDriveController(){
     if(DriverStation.getJoystickName(0).equals("Controller (Xbox One For Windows)")) {
@@ -126,20 +139,12 @@ public class RobotContainer {
     driveController.setDeadZone(0.03);
   }
 
-  //bad but good for now type stuff, on skibs
-  private void rollerIntakeSensor(){
-    if(differentialRoller.getIntakeRollerSensorValue()){
-      differentialRoller.stop();
-    }
-
-  }
 
   /**
-   * Starts datalog at /media/sda1/robotLogs
+   * Starts datalog at /media/sda1/robotLogs.
    */
-  private void startLog(){
+  private void startLog() {
     DataLogManager.start("/media/sda1/robotLogs");
     DriverStation.startDataLog(DataLogManager.getLog());
-
   }
 }

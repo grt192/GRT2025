@@ -16,8 +16,14 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+  public static class DifferentialRollerConstants {
+    public static final int ROLLER_MOTOR_ID = 1; // Set the appropriate motor ID
+    public static final double ROLLER_SPEED = 0.5; // Set the appropriate roller speed
+  }
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+
   }
 
   /** Constants for the swerve subsystem. */
@@ -63,5 +69,6 @@ public final class Constants {
 
   public static class LoggingConstants{
     public static final String SWERVE_TABLE = "SwerveStats";
+
   }
 }
