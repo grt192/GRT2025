@@ -32,6 +32,7 @@ public class KrakenDriveMotor {
 
     private final TalonFXConfiguration motorConfig = new TalonFXConfiguration();
 
+    //logging
     private NetworkTableInstance ntInstance;
     private NetworkTable swerveStatsTable;
     private DoublePublisher veloErrorPublisher;
@@ -168,7 +169,7 @@ public class KrakenDriveMotor {
     }
 
     /**
-     * get swerve wheel's velocity in m/s
+     * Get swerve wheel's velocity in m/s
      * @return swerve wheel's velocity in m/s
      */
     public double getVelocity() {
@@ -186,7 +187,7 @@ public class KrakenDriveMotor {
     /**
      * Publishes motor stats to NT for logging
      */
-    public void publishStats(){
+    public void publishStats() {
         // veloErrorPublisher.set(this.targetRps - motor.getVelocity().getValueAsDouble());
         positionPublisher.set(getDistance());
         targetRPSPublisher.set(targetRps);
@@ -197,7 +198,7 @@ public class KrakenDriveMotor {
         statorCurrentPublisher.set(motor.getStatorCurrent().getValueAsDouble());
     }
 
-    public void logStats(){
+    public void logStats() {
         positionLogEntry.append(
             motor.getPosition().getValueAsDouble(), GRTUtil.getFPGATime()
         );
