@@ -3,6 +3,9 @@ package frc.robot.subsystems.Intake.pivot;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.IntakeConstants;
+import frc.robot.util.Motors.LoggedSparkMax;
+import frc.robot.util.Motors.LoggedSparkMaxConfig;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -28,17 +31,15 @@ import static frc.robot.Constants.IntakeConstants.PIVOT_KV;
 import static frc.robot.Constants.IntakeConstants.PIVOT_P;
 import static frc.robot.Constants.IntakeConstants.PIVOT_TOLERANCE;
 
+import java.util.Optional;
+import java.util.OptionalLong;
+
 
 public class PivotSubsystem extends SubsystemBase{
 
-    private SparkMax pivotMotor;
+    private LoggedSparkMax pivotMotor;
     private RelativeEncoder pivotEncoder; 
     private SparkClosedLoopController pivotPID;
-
-    private EncoderConfig encoderConfig;
-    private ClosedLoopConfig closedLoopConfig;
-    private SparkMaxConfig sparkMaxConfig;
-    private SoftLimitConfig softLimitConfig;
 
     private ArmFeedforward armFeedforward;
 
@@ -46,37 +47,10 @@ public class PivotSubsystem extends SubsystemBase{
     private double gravityFF;
 
     public PivotSubsystem(){
-
-        pivotMotor = new SparkMax(PIVOT_ID, MotorType.kBrushless);
-        pivotEncoder = pivotMotor.getEncoder();
-        pivotEncoder.setPosition(0);
-
-        encoderConfig = new EncoderConfig();
-        encoderConfig.positionConversionFactor(1./ PIVOT_CONVERSION_FACTOR);
-
-        softLimitConfig = new SoftLimitConfig();
-        softLimitConfig.forwardSoftLimitEnabled(true)
-                       .forwardSoftLimit(Units.degreesToRadians(90))
-                       .reverseSoftLimitEnabled(true)
-                       .reverseSoftLimit(0);
-
-        closedLoopConfig = new ClosedLoopConfig();
-        closedLoopConfig.pid(PIVOT_P, PIVOT_I, PIVOT_D, ClosedLoopSlot.kSlot0);
-
-        armFeedforward = new ArmFeedforward(PIVOT_KS, PIVOT_KG, PIVOT_KV);
-
-        sparkMaxConfig = new SparkMaxConfig();
-        sparkMaxConfig.apply(closedLoopConfig)
-                      .apply(encoderConfig);
-                    //   .apply(softLimitConfig);
-
-        pivotMotor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
-        pivotPID = pivotMotor.getClosedLoopController();
-
+        pivotMotor = new LoggedSparkMax(IntakeConstants.PivotMotorLoggedSparkMaxConfig);
         targetState = PivotState.ZERO;
+        armFeedforward = new ArmFeedforward(PIVOT_KS, PIVOT_KG, PIVOT_KV);
         gravityFF = 0;
-
     }
 
     public double getCurrentAngle() {

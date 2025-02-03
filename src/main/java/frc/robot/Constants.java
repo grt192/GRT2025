@@ -4,6 +4,21 @@
 
 package frc.robot;
 
+import java.util.OptionalInt;
+import java.util.Optional;
+
+import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.config.ClosedLoopConfig;
+import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.SoftLimitConfig;
+
+import java.util.OptionalInt;
+import java.util.Optional;
+import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.config.ClosedLoopConfig;
+import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.SoftLimitConfig;
+
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 import edu.wpi.first.math.geometry.Pose3d;
@@ -13,6 +28,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.Vision.CameraConfig;
 import frc.robot.util.PolynomialRegression;
+import frc.robot.util.Motors.LoggedSparkMaxConfig;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -158,7 +174,7 @@ public final class Constants {
     public static final int ROLLER_ID = 16;
     public static final int INTAKE_SENSOR_ID = 0;
 
-    public static final double PIVOT_CONVERSION_FACTOR = 30. / (2 * Math.PI);
+    public static final double PIVOT_CONVERSION_FACTOR = (2 * Math.PI) / 30.;
 
     public static final double ZERO_POSITION = 0;
     public static final double SOURCE_POSITION = 0; //TODO: change
@@ -175,7 +191,19 @@ public final class Constants {
     public static final double PIVOT_I = 0;
     public static final double PIVOT_D = 0;
 
-
+	public static final LoggedSparkMaxConfig PivotMotorLoggedSparkMaxConfig = new LoggedSparkMaxConfig(
+		PIVOT_ID,
+		new ClosedLoopConfig().pid(PIVOT_P, PIVOT_I, PIVOT_D, ClosedLoopSlot.kSlot0),
+		new EncoderConfig().positionConversionFactor(PIVOT_CONVERSION_FACTOR),
+		OptionalInt.empty(),
+		Optional.of(
+      new SoftLimitConfig()
+			.forwardSoftLimitEnabled(true)
+			.forwardSoftLimit(Units.degreesToRadians(90))
+			.reverseSoftLimitEnabled(true)
+			.reverseSoftLimit(0)
+    )
+	);
 
   }
 }
