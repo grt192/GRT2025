@@ -119,12 +119,12 @@ public class AutoAlignCommand {
             // if the closest pose is on the right, find the index of it in the list of right poses and get the matching left path using algebraic term 
             if (rightReefPoseList.contains(closestReef)) {
                 int index = rightReefPoseList.indexOf(closestReef);
-                closestPath = reefPathList.get( 2*(index-1)+2 );
+                closestPath = reefPathList.get( 2*index);
             }
             // if the closest pose is on the left, find the index and get the matching right path
             else {
                 int index = leftReefPoseList.indexOf(closestReef);
-                closestPath = reefPathList.get( 2*(index-1)+1 );
+                closestPath = reefPathList.get( 2*index+1 );
             }
 
         }
