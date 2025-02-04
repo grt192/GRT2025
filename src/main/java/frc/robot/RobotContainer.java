@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.VisionConstants;
@@ -42,13 +43,15 @@ import frc.robot.Constants.VisionConstants;
  */
 public class RobotContainer {
   private BaseDriveController driveController;
-
   private final CommandPS5Controller mechController = new CommandPS5Controller(1);
 
   // private final ElevatorSubsystemTest elevatorSubsystemTest = new ElevatorSubsystemTest();
   private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
 
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+
+  private final Trigger xButton;
+
   private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(
     VisionConstants.cameraConfigs[1]
   );
@@ -93,6 +96,18 @@ public class RobotContainer {
       * the robot is controlled along its own axes, otherwise controls apply to the field axes by default. If the
       * swerve aim button is held down, the robot will rotate automatically to always face a target, and only
       * translation will be manually controllable. */
+  
+    xButton.onTrue(new InstantCommand(() -> {
+      elevatorSubsystemTest.stop();
+    }));
+
+    elevatorSubsystemTest.setDefaultCommand(new InstantCommand(
+      () -> {
+        elevatorSubsystemTest.move(mechController.getL2Axis() - mechController.getR2Axis());
+      },
+      elevatorSubsystemTest
+    ));
+  
   
     // xButton.onTrue(new InstantCommand(() -> {
     //   elevatorSubsystemTest.stop();
