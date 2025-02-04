@@ -14,9 +14,12 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.Elevator.ElevatorSubsystemTest;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 
 /**
@@ -26,16 +29,26 @@ import frc.robot.subsystems.swerve.SwerveSubsystem;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-
   private BaseDriveController driveController;
 
+
+  private final CommandPS5Controller mechController = new CommandPS5Controller(0);
+
+  private final ElevatorSubsystemTest elevatorSubsystemTest = new ElevatorSubsystemTest();
+
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+
+  private final Trigger xButton;
+
 
   // private final PhoenixLoggingSubsystem phoenixLoggingSubsystem =
     // new PhoenixLoggingSubsystem(fieldManagementSubsystem);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    xButton = mechController.cross();
+
+
     constructDriveController(); 
     startLog();
     configureBindings();
@@ -56,6 +69,18 @@ public class RobotContainer {
       * the robot is controlled along its own axes, otherwise controls apply to the field axes by default. If the
       * swerve aim button is held down, the robot will rotate automatically to always face a target, and only
       * translation will be manually controllable. */
+  
+    xButton.onTrue(new InstantCommand(() -> {
+      elevatorSubsystemTest.stop();
+    }));
+
+    elevatorSubsystemTest.setDefaultCommand(new InstantCommand(
+      () -> {
+        elevatorSubsystemTest.move(mechController.getL2Axis() - mechController.getR2Axis());
+      },
+      elevatorSubsystemTest
+    ));
+  
     swerveSubsystem.setDefaultCommand(
       new RunCommand(() -> {
         swerveSubsystem.setDrivePowers(
