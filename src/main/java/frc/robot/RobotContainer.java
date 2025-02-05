@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Vision.VisionSubsystem;
@@ -53,6 +54,12 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
+    createTrigger = mechController.create();
+    optionTrigger = mechController.options();
+    xbutton = mechController.cross();
+
+    
     constructDriveController(); 
 
     createTrigger = new Trigger(mechController.create());
@@ -104,21 +111,34 @@ public class RobotContainer {
        * Pressing that button twice spits the algae out
        */
 
+    createTrigger.and(optionTrigger).whileTrue(
+      new RunCommand(() -> {
+      climbSubsystem.setSpeed(0.2);
+      }, climbSubsystem)
+    ).onFalse(
+      new RunCommand(() -> {
+      climbSubsystem.setSpeed(0);
+      }, climbSubsystem)
+    );
+
+    xbutton.whileTrue(
+      new RunCommand(() -> {
+      climbSubsystem.setSpeed(-0.2);
+      }, climbSubsystem)
+    ).onFalse(
+      new RunCommand(() -> {
+      climbSubsystem.setSpeed(0);
+      }, climbSubsystem)
+    );
+
+
+
+
+
     
 
 
-    createTrigger.and(optionTrigger).whileTrue(
-        new RunCommand(() -> {
-          climbSubsystem.setSpeed(0.1);
-          setRumble(1);
-        }, climbSubsystem)
-      ).onFalse(
-        new RunCommand(() -> {
-          climbSubsystem.setSpeed(0);
 
-        }, climbSubsystem)
-    );
-  
 
     swerveSubsystem.setDefaultCommand(
       new RunCommand(() -> {
