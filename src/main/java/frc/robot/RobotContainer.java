@@ -127,17 +127,35 @@ public class RobotContainer {
 
 
   
-    swerveSubsystem.setDefaultCommand(
-      new RunCommand(() -> {
-        swerveSubsystem.setDrivePowers(
-          driveController.getForwardPower(),
-          driveController.getLeftPower(),
-          driveController.getRotatePower()
-        );
-        }, 
-        swerveSubsystem
-      )
-    );
+    // xButton.onTrue(new InstantCommand(() -> {
+    //   elevatorSubsystemTest.stop();
+    // }));
+
+    sButton.onTrue(new ConditionalCommand(
+      new ElevatorToL1Command(elevatorSubsystem).withTimeout(4), 
+      new ElevatorToGroundCommand(elevatorSubsystem).withTimeout(4), 
+      () -> elevatorSubsystem.atState(ElevatorState.GROUND)));
+
+    // elevatorSubsystemTest.setDefaultCommand(new InstantCommand(
+    //   () -> {
+    //     elevatorSubsystemTest.move(mechController.getL2Axis() - mechController.getR2Axis());
+    //   },
+    //   elevatorSubsystemTest
+    // ));
+
+
+  
+    // swerveSubsystem.setDefaultCommand(
+    //   new RunCommand(() -> {
+    //     swerveSubsystem.setDrivePowers(
+    //       driveController.getForwardPower(),
+    //       driveController.getLeftPower(),
+    //       driveController.getRotatePower()
+    //     );
+    //     }, 
+    //     swerveSubsystem
+    //   )
+    // );
 
     /* Pressing the button resets the field axes to the current robot axes. */
     driveController.bindDriverHeadingReset(
