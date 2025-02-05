@@ -7,6 +7,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
@@ -56,6 +57,7 @@ public class SwerveSubsystem extends SubsystemBase {
             "estimatedPose",
             Pose2d.struct
         );
+    private DoublePublisher gyroHeadingPublisher;
 
     public SwerveSubsystem() {
         ahrs = new AHRS(NavXComType.kMXP_SPI);
@@ -234,6 +236,10 @@ public class SwerveSubsystem extends SubsystemBase {
             "estimatedPose",
             Pose2d.struct
         ).publish();
+
+        gyroHeadingPublisher = swerveTable
+            .getDoubleTopic("GyroHeading")
+            .publish();
     }
 
     /**
@@ -241,6 +247,7 @@ public class SwerveSubsystem extends SubsystemBase {
      */
     private void publishStats(){
         estimatedPosePublisher.set(estimatedPose);
+        gyroHeadingPublisher.set(ahrs.getAngle());
 
         if(STATE_DEBUG || DRIVE_DEBUG || STEER_DEBUG){
             swerveStatesPublisher.set(getModuleStates());

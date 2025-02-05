@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.Constants.ClimbConstants;
 import frc.robot.controllers.BaseDriveController;
 import frc.robot.controllers.DualJoystickDriveController;
 import frc.robot.controllers.PS5DriveController;
@@ -14,9 +15,12 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 
 /**
@@ -28,8 +32,10 @@ import frc.robot.subsystems.swerve.SwerveSubsystem;
 public class RobotContainer {
 
   private BaseDriveController driveController;
+  private CommandPS5Controller mechcontroller = new CommandPS5Controller(1);
 
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  private final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
 
   // private final PhoenixLoggingSubsystem phoenixLoggingSubsystem =
     // new PhoenixLoggingSubsystem(fieldManagementSubsystem);
@@ -83,6 +89,12 @@ public class RobotContainer {
         swerveSubsystem.resetDriverHeading();
       },
       swerveSubsystem
+    );
+
+    climbSubsystem.setDefaultCommand(
+      new InstantCommand(() -> {
+        climbSubsystem.setSpeed(mechcontroller.getL2Axis());
+      }, climbSubsystem)
     );
   }
 
