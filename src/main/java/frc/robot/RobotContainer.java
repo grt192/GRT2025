@@ -33,10 +33,14 @@ import frc.robot.subsystems.swerve.SwerveSubsystem;
 public class RobotContainer {
 
   private BaseDriveController driveController;
-  private CommandPS5Controller mechcontroller = new CommandPS5Controller(1);
+  private CommandPS5Controller mechController = new CommandPS5Controller(1);
 
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   private final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
+
+  private final Trigger createTrigger;
+  private final Trigger optionTrigger;
+  private final Trigger xbutton;
 
   // private final PhoenixLoggingSubsystem phoenixLoggingSubsystem =
     // new PhoenixLoggingSubsystem(fieldManagementSubsystem);
@@ -44,6 +48,11 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     constructDriveController(); 
+
+    createTrigger = new Trigger(mechController.create());
+    optionTrigger = new Trigger(mechController.options());
+    xbutton = new Trigger(mechController.cross());
+
     startLog();
     configureBindings();
   }
@@ -92,12 +101,21 @@ public class RobotContainer {
       swerveSubsystem
     );
 
-    climbSubsystem.setDefaultCommand(
-      new InstantCommand(() -> {
-        climbSubsystem.setSpeed(mechcontroller.getL2Axis());
+    // climbSubsystem.setDefaultCommand(
+    //   new InstantCommand(() -> {
+    //     climbSubsystem.setSpeed(mechcontroller.getL2Axis());
+    //     setRum(mechcontroller.getL2Axis());
 
-        setRum(mechcontroller.getL2Axis());
+    //   }, climbSubsystem)
+    // );
 
+    createTrigger.and(optionTrigger).whileTrue(
+      new RunCommand(() -> {
+        climbSubsystem.setSpeed(-0.2);
+      }, climbSubsystem)
+    ).onFalse(
+      new RunCommand(() -> {
+        climbSubsystem.setSpeed(0);
       }, climbSubsystem)
     );
   }
@@ -109,8 +127,8 @@ public class RobotContainer {
    * @param value the value of the rumble
    */
   public void setRum(double value) {
-    mechcontroller.getHID().setRumble(PS5Controller.RumbleType.kLeftRumble, value);
-    mechcontroller.getHID().setRumble(PS5Controller.RumbleType.kRightRumble, value);    
+    mechController.getHID().setRumble(PS5Controller.RumbleType.kLeftRumble, value);
+    mechController.getHID().setRumble(PS5Controller.RumbleType.kRightRumble, value);    
   }
 
 
