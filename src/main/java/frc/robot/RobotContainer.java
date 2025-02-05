@@ -14,6 +14,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PS5Controller;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -94,10 +95,26 @@ public class RobotContainer {
     climbSubsystem.setDefaultCommand(
       new InstantCommand(() -> {
         climbSubsystem.setSpeed(mechcontroller.getL2Axis());
+
+        setRum(mechcontroller.getL2Axis());
+
       }, climbSubsystem)
     );
   }
 
+
+  
+  /*
+   * Sets the rumble of the controller
+   * @param value the value of the rumble
+   */
+  public void setRum(double value) {
+    mechcontroller.getHID().setRumble(PS5Controller.RumbleType.kLeftRumble, value);
+    mechcontroller.getHID().setRumble(PS5Controller.RumbleType.kRightRumble, value);    
+  }
+
+
+  
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
