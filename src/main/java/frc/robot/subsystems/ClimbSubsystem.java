@@ -43,6 +43,15 @@ public class ClimbSubsystem extends SubsystemBase {
   }
 
   /**
+   * Gets the velocity of the top motor
+   * @return velocity of the top motor in RPM after taking the velocity
+   * conversion factor into account
+   */
+  public double getVelocity() {
+    return topMotor.getVelocity();
+  }
+
+  /**
    * Sets the speed of the motors
    * @param speed target speed from -1.0 to 1.0
    */

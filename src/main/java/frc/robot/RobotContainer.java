@@ -112,10 +112,12 @@ public class RobotContainer {
     createTrigger.and(optionTrigger).whileTrue(
       new RunCommand(() -> {
         climbSubsystem.setSpeed(-0.2);
+        setRum(climbSubsystem.getVelocity());
       }, climbSubsystem)
     ).onFalse(
       new RunCommand(() -> {
         climbSubsystem.setSpeed(0);
+        setRum(climbSubsystem.getVelocity());
       }, climbSubsystem)
     );
   }
