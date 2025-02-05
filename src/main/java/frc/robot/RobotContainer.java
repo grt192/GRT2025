@@ -15,9 +15,13 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj.PS5Controller;
+import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -28,14 +32,28 @@ import frc.robot.subsystems.swerve.SwerveSubsystem;
 public class RobotContainer {
 
   private BaseDriveController driveController;
+  private final CommandPS5Controller mechController = new CommandPS5Controller(0);
+
 
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  private final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
+
+  //Bindings
+  private final Trigger createTrigger;
+  private final Trigger optionTrigger; 
+  private final Trigger xbutton;
 
   // private final PhoenixLoggingSubsystem phoenixLoggingSubsystem =
     // new PhoenixLoggingSubsystem(fieldManagementSubsystem);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
+    createTrigger = mechController.create();
+    optionTrigger = mechController.options();
+    xbutton = mechController.cross();
+
+    
     constructDriveController(); 
     startLog();
     configureBindings();
@@ -65,6 +83,36 @@ public class RobotContainer {
        * Bind a button to move pivot into outtaking position
        * Pressing that button twice spits the algae out
        */
+
+    createTrigger.and(optionTrigger).whileTrue(
+      new RunCommand(() -> {
+      climbSubsystem.setSpeed(0.2);
+      }, climbSubsystem)
+    ).onFalse(
+      new RunCommand(() -> {
+      climbSubsystem.setSpeed(0);
+      }, climbSubsystem)
+    );
+
+    xbutton.whileTrue(
+      new RunCommand(() -> {
+      climbSubsystem.setSpeed(-0.2);
+      }, climbSubsystem)
+    ).onFalse(
+      new RunCommand(() -> {
+      climbSubsystem.setSpeed(0);
+      }, climbSubsystem)
+    );
+
+
+
+
+
+    
+
+
+
+
     swerveSubsystem.setDefaultCommand(
       new RunCommand(() -> {
         swerveSubsystem.setDrivePowers(
