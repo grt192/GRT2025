@@ -6,13 +6,20 @@ import static frc.robot.Constants.DebugConstants.REV_DEBUG;
 import frc.robot.util.Motors.LoggedTalon;
 import java.util.OptionalInt;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+
 public class ClimbSubsystem extends SubsystemBase {
 
   private final LoggedTalon motor;
+  private final TalonFXConfiguration talonConfig;
 
 
   /** Creates a new ClimbSubsystem. */
   public ClimbSubsystem() {
+
+
+    talonConfig = new TalonFXConfiguration();
+    motor = new LoggedTalon(MOTOR_ID, talonConfig);
     
     
   }
@@ -22,30 +29,22 @@ public class ClimbSubsystem extends SubsystemBase {
    * @return position of the motor
    */
   public double getPosition() {
-    return 0.0; // Blank function
+    return motor.getPosition();
   }
 
   /**
    * Sets the speed of the motor.
-   * @param speed target speed from -1.0 to 1.0
+   * @param speed target speed UNKNOWN USES SETVELOCITY
    */
   public void setSpeed(double speed) {
-    // Blank function
-  }
-
-  /**
-   * Sets the motor to reverse at a given speed.
-   * @param speed target speed from -1.0 to 1.0
-   */
-  public void setReverse(double speed) {
-    // Blank function
+    motor.setVelocity(speed);
   }
 
   /**
    * Stops the motor.
    */
   public void stop() {
-    // Blank function
+    motor.setVelocity(0);
   }
 
 
