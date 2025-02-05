@@ -89,26 +89,26 @@ public class RobotContainer {
     createTrigger.and(optionTrigger).whileTrue(
       new RunCommand(() -> {
         climbSubsystem.setSpeed(0.2);
-        setRumble(1.0);
+        setRumble(climbSubsystem.getSpeed);
       }, climbSubsystem)
 
     ).onFalse(
       new RunCommand(() -> {
         climbSubsystem.setSpeed(0);
-        setRumble(0);
+        setRumble(climbSubsystem.getSpeed);
       }, climbSubsystem)
     );
 
     xbutton.whileTrue(
       new RunCommand(() -> {
         climbSubsystem.setSpeed(-0.2);
-        setRumble(1.0);
+        setRumble(climbSubsystem.getSpeed());
       }, climbSubsystem)
 
     ).onFalse(
       new RunCommand(() -> {
         climbSubsystem.setSpeed(0);
-        setRumble(0);
+        setRumble(climbSubsystem.getSpeed);
       }, climbSubsystem)
     );
 
