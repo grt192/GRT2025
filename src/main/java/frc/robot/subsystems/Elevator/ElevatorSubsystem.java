@@ -35,7 +35,7 @@ public class ElevatorSubsystem extends SubsystemBase{
 
     //functions
     public void setTargetState(ElevatorState targetState) {
-        double targetPosition = targetState.getDistance();
+        double targetPosition = targetState.getDistanceInTicks();
         elevatorMotor.setPositionReference(targetPosition);
     }
 
@@ -44,7 +44,7 @@ public class ElevatorSubsystem extends SubsystemBase{
      */
     public void toGround(){
         elevatorMotor.setPositionReferenceWithArbFF(
-            ElevatorState.GROUND.getDistance(), ElevatorConstants.kArbFF
+            ElevatorState.GROUND.getDistanceInTicks(), ElevatorConstants.kArbFF
         );
     }
 

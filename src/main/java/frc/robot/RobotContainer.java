@@ -32,7 +32,7 @@ public class RobotContainer {
   private BaseDriveController driveController;
 
 
-  private final CommandPS5Controller mechController = new CommandPS5Controller(0);
+  private final CommandPS5Controller mechController = new CommandPS5Controller(1);
 
   private final ElevatorSubsystemTest elevatorSubsystemTest = new ElevatorSubsystemTest();
 
@@ -81,17 +81,17 @@ public class RobotContainer {
       elevatorSubsystemTest
     ));
   
-    swerveSubsystem.setDefaultCommand(
-      new RunCommand(() -> {
-        swerveSubsystem.setDrivePowers(
-          driveController.getForwardPower(),
-          driveController.getLeftPower(),
-          driveController.getRotatePower()
-        );
-        }, 
-        swerveSubsystem
-      )
-    );
+    // swerveSubsystem.setDefaultCommand(
+    //   new RunCommand(() -> {
+    //     swerveSubsystem.setDrivePowers(
+    //       driveController.getForwardPower(),
+    //       driveController.getLeftPower(),
+    //       driveController.getRotatePower()
+    //     );
+    //     }, 
+    //     swerveSubsystem
+    //   )
+    // );
 
     /* Pressing the button resets the field axes to the current robot axes. */
     driveController.bindDriverHeadingReset(

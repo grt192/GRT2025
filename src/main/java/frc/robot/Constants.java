@@ -6,7 +6,9 @@ package frc.robot;
 
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.geometry.Translation2d;
@@ -88,8 +90,8 @@ public final class Constants {
     public static final double GEAR_RATIO = 20; //motor to axle
     public static final double AXLE_RADIUS = 6. * .289 * .0254; //in meters
 
-    public static final double DIST_TO_METERS = 2. * Math.PI * AXLE_RADIUS / GEAR_RATIO;
-    public static final double DIST_TO_TICKS = 1. / DIST_TO_METERS;
+    public static final double TICKS_TO_DIST = 2. * Math.PI * AXLE_RADIUS / GEAR_RATIO;
+    public static final double DIST_TO_TICKS = 1. / TICKS_TO_DIST;
     
     private static final Slot0Configs slot0Configs = new Slot0Configs()
       .withKP(kP)
@@ -98,11 +100,17 @@ public final class Constants {
       .withKS(kS);
     private static final MotorOutputConfigs motorOutputConfigs =
       new MotorOutputConfigs()
-      .withNeutralMode(NeutralModeValue.Brake);
-    public static final TalonFXConfiguration TALON_CONFIG =
+      .withNeutralMode(NeutralModeValue.Brake)
+      .withInverted(InvertedValue.Clockwise_Positive);
+    private static final SoftwareLimitSwitchConfigs softwareLimitSwitchConfigs =
+      new SoftwareLimitSwitchConfigs()
+      .withReverseSoftLimitEnable(true)
+      .withReverseSoftLimitThreshold(0);
+    public static TalonFXConfiguration TALON_CONFIG =
       new TalonFXConfiguration()
         .withSlot0(slot0Configs)
-        .withMotorOutput(motorOutputConfigs);
+        .withMotorOutput(motorOutputConfigs)
+        .withSoftwareLimitSwitch(softwareLimitSwitchConfigs);
 
     public static final boolean DEBUG = true;
   }
