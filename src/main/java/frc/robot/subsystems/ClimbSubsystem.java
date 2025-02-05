@@ -1,52 +1,52 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import static frc.robot.Constants.ClimbConstants.TOP_MOTOR_CONFIG;
-import static frc.robot.Constants.ClimbConstants.BOT_MOTOR_CONFIG;
+import static frc.robot.Constants.ClimbConstants.MOTOR_ID;
 import static frc.robot.Constants.DebugConstants.REV_DEBUG;
-import frc.robot.util.Motors.LoggedSparkMax;
+import frc.robot.util.Motors.LoggedTalon;
+import java.util.OptionalInt;
 
 public class ClimbSubsystem extends SubsystemBase {
 
-  private final LoggedSparkMax topMotor;
-  private final LoggedSparkMax botMotor;
-  private double targetSpeed = 0;
+  private final LoggedTalon motor;
 
-  /** Creates a new ExampleSubsystem. */
+
+  /** Creates a new ClimbSubsystem. */
   public ClimbSubsystem() {
-    topMotor = new LoggedSparkMax(TOP_MOTOR_CONFIG);
-    botMotor = new LoggedSparkMax(BOT_MOTOR_CONFIG);
-  }
-
-  @Override
-  public void periodic() {
-    topMotor.set(targetSpeed);
-    // topMotor.logStats();
-    // botMotor.logStats();
-    if(REV_DEBUG){
-      // topMotor.publishStats();
-      // botMotor.publishStats();
-    }
+    
+    
   }
 
   /**
-   * Gets the position of the top motor
-   * @return position of the top motor in rotations after taking the position
-   * conversion factor into account
+   * Returns the position of the motor.
+   * @return position of the motor
    */
   public double getPosition() {
-    return topMotor.getPosition();
+    return 0.0; // Blank function
   }
 
   /**
-   * Sets the speed of the motors
+   * Sets the speed of the motor.
    * @param speed target speed from -1.0 to 1.0
    */
-  public void setSpeed(double speed){
-    targetSpeed = speed;
+  public void setSpeed(double speed) {
+    // Blank function
   }
+
+  /**
+   * Sets the motor to reverse at a given speed.
+   * @param speed target speed from -1.0 to 1.0
+   */
+  public void setReverse(double speed) {
+    // Blank function
+  }
+
+  /**
+   * Stops the motor.
+   */
+  public void stop() {
+    // Blank function
+  }
+
+
 }

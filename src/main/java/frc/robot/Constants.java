@@ -40,26 +40,8 @@ public final class Constants {
   }
 
   public static class ClimbConstants{
-    public static final int TOP_MOTOR_ID = 9;//Placeholder
-    public static final int BOT_MOTOR_ID = 10;//Placeholder
-    public static final LoggedSparkMaxConfig TOP_MOTOR_CONFIG = 
-      new LoggedSparkMaxConfig(
-        TOP_MOTOR_ID, 
-        new ClosedLoopConfig()
-          .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-          .outputRange(0, 1),
-        new EncoderConfig(),
-        OptionalInt.empty() 
-      );
-    public static final LoggedSparkMaxConfig BOT_MOTOR_CONFIG =
-      new LoggedSparkMaxConfig(
-        BOT_MOTOR_ID,
-        new ClosedLoopConfig()
-          .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-          .outputRange(0, 1),
-        new EncoderConfig(),
-        OptionalInt.of(TOP_MOTOR_ID)
-      );
+    public static final int MOTOR_ID = 9;//Placeholder
+
   }
     
     /** Constants for the swerve subsystem. */
