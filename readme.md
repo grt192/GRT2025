@@ -12,15 +12,13 @@
 | L2                             |  for Slow/FastMode |            |            |
 | R1                             |                    |            |            |
 | R2                             |                    |            |            |
-| L3 (Left Stick Click)          | Move Swerve        | Kraken     | 2,4,6,8    |
+| L3 (Left Stick Click)          | Move Swerve        | Kraken     | 2, 4, 6, 8 |
 | R3 (Right Stick Click)         | Turn Swerve        | Kraken     | 1, 3, 5, 7 |
 | D-Pad Up                       |                    |            |            |
 | D-Pad Down                     |                    |            |            |
 | D-Pad Left                     |                    |            |            |
 | D-Pad Right                    |                    |            |            |
 | Options Button + Create Button |                    |            |            |
-
----
 
 ## **Mech Controller (Operator)**
 
@@ -41,9 +39,6 @@
 | D-Pad Left                     | Stage 3 Elevator       | Kraken     | 13       |
 | D-Pad Right                    | Stage 2 Elevator       | Kraken     | 13       |
 | Options Button + Create Button | Deepclimb              | Neo        | 9, 10    |
-|                                |                        |            |          |
-
----
 
 ## **Motor Assignments**
 
