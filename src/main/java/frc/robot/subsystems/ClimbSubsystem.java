@@ -40,6 +40,14 @@ public class ClimbSubsystem extends SubsystemBase {
     motor.setVelocity(speed);
   }
 
+  /*
+   * Get the current speed of the motor
+   * @return the current speed of the motor
+   */
+  public double getSpeed() {
+    return motor.getVelocity();
+  }
+
   /**
    * Stops the motor.
    */

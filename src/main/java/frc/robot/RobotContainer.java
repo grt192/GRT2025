@@ -89,13 +89,13 @@ public class RobotContainer {
     createTrigger.and(optionTrigger).whileTrue(
       new RunCommand(() -> {
         climbSubsystem.setSpeed(0.2);
-        setRumble(climbSubsystem.getSpeed);
+        setRumble(climbSubsystem.getSpeed());
       }, climbSubsystem)
 
     ).onFalse(
       new RunCommand(() -> {
         climbSubsystem.setSpeed(0);
-        setRumble(climbSubsystem.getSpeed);
+        setRumble(climbSubsystem.getSpeed());
       }, climbSubsystem)
     );
 
@@ -108,7 +108,7 @@ public class RobotContainer {
     ).onFalse(
       new RunCommand(() -> {
         climbSubsystem.setSpeed(0);
-        setRumble(climbSubsystem.getSpeed);
+        setRumble(climbSubsystem.getSpeed());
       }, climbSubsystem)
     );
 
