@@ -84,34 +84,33 @@ public class RobotContainer {
        * Pressing that button twice spits the algae out
        */
 
+    
+
     createTrigger.and(optionTrigger).whileTrue(
       new RunCommand(() -> {
-      climbSubsystem.setSpeed(0.2);
+        climbSubsystem.setSpeed(0.2);
+        setRumble(1.0);
       }, climbSubsystem)
+
     ).onFalse(
       new RunCommand(() -> {
-      climbSubsystem.setSpeed(0);
+        climbSubsystem.setSpeed(0);
+        setRumble(0);
       }, climbSubsystem)
     );
 
     xbutton.whileTrue(
       new RunCommand(() -> {
-      climbSubsystem.setSpeed(-0.2);
+        climbSubsystem.setSpeed(-0.2);
+        setRumble(1.0);
       }, climbSubsystem)
+
     ).onFalse(
       new RunCommand(() -> {
-      climbSubsystem.setSpeed(0);
+        climbSubsystem.setSpeed(0);
+        setRumble(0);
       }, climbSubsystem)
     );
-
-
-
-
-
-    
-
-
-
 
     swerveSubsystem.setDefaultCommand(
       new RunCommand(() -> {
@@ -132,6 +131,15 @@ public class RobotContainer {
       },
       swerveSubsystem
     );
+  }
+
+  /*
+   * Sets the rumble of the controller
+   * @param value the value of the rumble
+   */
+  private void setRumble(double value) {
+    mechController.getHID().setRumble(PS5Controller.RumbleType.kLeftRumble, value);
+    mechController.getHID().setRumble(PS5Controller.RumbleType.kRightRumble, value);    
   }
 
   /**
