@@ -47,19 +47,19 @@
 
 ## **Motor Assignments**
 
-| Component    | Motor Type     | Position | Port | Status  |
-| ------------ | -------------- | -------- | ---- | ------- |
-| **Swerve**   | Neo (Steer)    | FL       | 1    | FLASHED |
-|              |                | FR       | 3    | FLASHED |
-|              |                | BR       | 5    | FLASHED |
-|              |                | BL       | 7    | FLASHED |
-|              | Kraken (Drive) | FL       | 2    | FLASHED |
-|              |                | FR       | 4    | FLASHED |
-|              |                | BL       | 6    | FLASHED |
-|              |                | BR       | 8    | FLASHED |
-| **Climb**    | Neo            | TOP      | 9    | FLASHED |
-|              |                | BOTTOM   | 10   | FLASHED |
-| **Elevator** | Kraken         | -        | 13   | FLASHED |
-| **Pivot**    | Neo            | -        | 14   | FLASHED |
-| **Intake**   | Neo            | -        | 16   | FLASHED |
-|              |                |          |      |         |
+| Component    | Motor Type     | Position | Port | 
+| ------------ | -------------- | -------- | ---- | 
+| **Swerve**   | Neo (Steer)    | FL       | 1    | 
+|              |                | FR       | 3    | 
+|              |                | BR       | 5    | 
+|              |                | BL       | 7    | 
+|              | Kraken (Drive) | FL       | 2    | 
+|              |                | FR       | 4    | 
+|              |                | BL       | 6    | 
+|              |                | BR       | 8    | 
+| **Climb**    | Neo            | TOP      | 9    | 
+|              |                | BOTTOM   | 10   | 
+| **Elevator** | Kraken         | -        | 13   | 
+| **Pivot**    | Neo            | -        | 14   | 
+| **Intake**   | Neo            | -        | 16   | 
+
