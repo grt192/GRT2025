@@ -15,6 +15,7 @@ import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.util.datalog.StructLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.GRTUtil;
 
@@ -61,6 +62,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public SwerveSubsystem() {
         ahrs = new AHRS(NavXComType.kMXP_SPI);
+        ahrs.configureVelocity(false, false, false, true);
 
         frontLeftModule = new SwerveModule(FL_DRIVE, FL_STEER, FL_OFFSET);
         frontRightModule = new SwerveModule(FR_DRIVE, FR_STEER, FR_OFFSET);
@@ -181,7 +183,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     /** Gets the gyro heading.*/
     private Rotation2d getGyroHeading() {
-        return Rotation2d.fromDegrees(ahrs.getAngle()); // Might need to flip depending on the robot setup
+        return Rotation2d.fromDegrees(-ahrs.getAngle()); // Works for Navx 2, flip for navx1
     }
 
     /**
