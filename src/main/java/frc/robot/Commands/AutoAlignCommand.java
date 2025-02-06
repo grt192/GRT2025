@@ -8,6 +8,7 @@ import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -16,8 +17,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class AutoAlignCommand {
 
-    //static Pose2d reefTestPose = new Pose2d(3.607, 5.312, Rotation2d.fromDegrees(-55));
-    private static Pose2d currentPose;
+    // static Pose2d reefTestPose = new Pose2d(3.607, 5.312, Rotation2d.fromDegrees(-55));
+    private static Pose2d currentPose = new Pose2d(3.607, 5.312, Rotation2d.fromDegrees(-55));
 
     static PathPlannerPath getAlignPath;
 
@@ -25,7 +26,7 @@ public class AutoAlignCommand {
 
     private static String reefName = "reefAlignPath";
     private static String sourceName = "sourceAlignPath";
-    private static String closestPath;
+    private static String followPath;
     
     static List<Pose2d> rightReefPoseList = List.of(
         getAlignPath(reefName).getStartingHolonomicPose().get()
@@ -75,6 +76,7 @@ public class AutoAlignCommand {
      */
     public static Command runAlignPath (SwerveSubsystem swerveSubsystem, String pathName) {
         PathPlannerPath path = getAlignPath(pathName);
+        System.out.print(pathName);
 
         runAlignPath = AutoBuilder.pathfindThenFollowPath(
             path,
@@ -98,6 +100,7 @@ public class AutoAlignCommand {
      * @param swerveSubsystem
      */
     public static Command sourceTest(SwerveSubsystem swerveSubsystem){
+       
         return runAlignPath(swerveSubsystem, sourceName);
     }
 
@@ -112,25 +115,59 @@ public class AutoAlignCommand {
         //align to closest pose
         if(switchPose == false) {
             int index = allReefPoseList.indexOf(closestReef);
-            closestPath = reefPathList.get(index);
+            followPath = reefPathList.get(index);
         }
         //align to the pose next to the closest pose 
         else {
             // if the closest pose is on the right, find the index of it in the list of right poses and get the matching left path using algebraic term 
             if (rightReefPoseList.contains(closestReef)) {
                 int index = rightReefPoseList.indexOf(closestReef);
-                closestPath = reefPathList.get( 2*index);
+                followPath = reefPathList.get( 2*index+1);
             }
             // if the closest pose is on the left, find the index and get the matching right path
             else {
                 int index = leftReefPoseList.indexOf(closestReef);
-                closestPath = reefPathList.get( 2*index+1 );
+                followPath = reefPathList.get( 2*index );
+            
             }
 
         }
-        
-        return runAlignPath(swerveSubsystem, closestPath);   
+        return runAlignPath(swerveSubsystem, followPath);
     }
+
+    public static void closeReefMath(SwerveSubsystem swerveSubsystem, Boolean switchPose) {
+
+        System.out.println("switch pose is " + switchPose);
+
+        Pose2d closestReef = currentPose.nearest(allReefPoseList);
+        //align to closest pose
+        if(switchPose == false) {
+            int index = allReefPoseList.indexOf(closestReef);
+            followPath = reefPathList.get(index);
+         
+        }
+        //align to the pose next to the closest pose 
+        else {
+            // if the closest pose is on the right, find the index of it in the list of right poses and get the matching left path using algebraic term 
+            if (rightReefPoseList.contains(closestReef)) {
+                int index = rightReefPoseList.indexOf(closestReef);
+                followPath = reefPathList.get( 2*index+1 );
+                System.out.println("Closest to right");
+               
+            }
+            // if the closest pose is on the left, find the index and get the matching right path
+            else {
+                int index = leftReefPoseList.indexOf(closestReef);
+                followPath = reefPathList.get( 2*index );
+                System.out.println("Closest to left");
+            }
+
+        }
+        System.out.println("CLOSE PATH"+ followPath);
+
+       
+    }
+
 
 }
 
