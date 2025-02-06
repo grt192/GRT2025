@@ -16,6 +16,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -89,16 +90,21 @@ public class RobotContainer {
       swerveSubsystem
     );
 
-    driveController.getAlignToReef().onTrue(
-      AutoAlignCommand.closeReefAlign(swerveSubsystem, false).onlyWhile(() -> driveController.getForwardPower() 
-      <= 0.05 && driveController.getLeftPower() <= 0.05));
+    //cross
+    driveController.getAlignToReef().onTrue(new InstantCommand (() -> AutoAlignCommand.closeReefMath(swerveSubsystem,false)));
+    // driveController.getAlignToReef().onTrue(
+    //   AutoAlignCommand.closeReefAlign(swerveSubsystem, false).onlyWhile(() -> driveController.getForwardPower() 
+    //   <= 0.05 && driveController.getLeftPower() <= 0.05));
 
+    // square
+    driveController.getAlignToSource().onTrue(new InstantCommand(() -> AutoAlignCommand.closeReefMath(swerveSubsystem, true)));
     // visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
-    driveController.getAlignToSource().onTrue(
-      AutoAlignCommand.closeReefAlign(swerveSubsystem, true).onlyWhile(() -> driveController.getForwardPower() 
-      <= 0.05 && driveController.getLeftPower() <= 0.05));
+    // driveController.getAlignToSource().onTrue(
+    //   AutoAlignCommand.closeReefAlign(swerveSubsystem, true).onlyWhile(() -> driveController.getForwardPower() 
+    //   <= 0.05 && driveController.getLeftPower() <= 0.05));
+   
 
-  }
+    }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
