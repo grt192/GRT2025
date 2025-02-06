@@ -138,13 +138,12 @@ public class KrakenSteerMotor {
      * @param s Static gain.
      * @param v Velocity gain.
      */
-    public void configurePID(double p, double i, double d, double s, double v) {
+    public void configurePID(double p, double i, double d, double ff) {
         Slot0Configs slot0Configs = new Slot0Configs();
         slot0Configs.kP = p;
         slot0Configs.kI = i;
         slot0Configs.kD = d;
-        slot0Configs.kS = s;
-        slot0Configs.kV = v;
+        slot0Configs.kS = ff;
         motor.getConfigurator().apply(slot0Configs);
     }
 
@@ -172,4 +171,5 @@ public class KrakenSteerMotor {
         positionPublisher.set(getPosition());
         targetPositionPublisher.set(targetDouble);
     }
+
 }

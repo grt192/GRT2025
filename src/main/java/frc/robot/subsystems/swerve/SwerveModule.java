@@ -13,7 +13,7 @@ import java.util.EnumSet;
 public class SwerveModule {
 
     private final KrakenDriveMotor driveMotor;
-    private final NeoSteerMotor steerMotor;
+    private final KrakenSteerMotor steerMotor;
 
     private int drivePort;
     private int steerPort;
@@ -38,7 +38,7 @@ public class SwerveModule {
         driveIndex = drivePort / 2;
         steerIndex = (steerPort -1) / 2;
 
-        steerMotor = new NeoSteerMotor(steerPort);
+        steerMotor = new KrakenSteerMotor(steerPort);
         steerMotor.configurePID(
             STEER_P[steerIndex],
             STEER_I[steerIndex],
@@ -154,7 +154,7 @@ public class SwerveModule {
 
     public void logStats(){
         driveMotor.logStats();
-        steerMotor.logStats();
+        //steerMotor.logStats(); ask jesse
     }
 
     public void steerDebug(){
