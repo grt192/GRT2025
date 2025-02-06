@@ -35,6 +35,7 @@ public class RobotContainer {
 
   private BaseDriveController driveController;
   private CommandPS5Controller mechController = new CommandPS5Controller(1);
+  private final GenericHID driverController = new GenericHID(0);
 
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   private final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
@@ -134,6 +135,15 @@ public class RobotContainer {
     mechController.setRumble(GenericHID.RumbleType.kRightRumble, value);   
   }
 
+  public void setRumble(GenericHID.RumbleType type, double value) {
+    System.out.println("Setting rumble: " + type + " to value: " + value);
+    driverController.setRumble(type, value);
+  }
+
+  public void testRumble() {
+    setRumble(GenericHID.RumbleType.kLeftRumble, 1.0);
+    setRumble(GenericHID.RumbleType.kRightRumble, 1.0);
+  }
 
   
   /**
