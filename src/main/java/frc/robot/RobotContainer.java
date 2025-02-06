@@ -14,6 +14,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PS5Controller;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -112,12 +113,12 @@ public class RobotContainer {
     createTrigger.and(optionTrigger).whileTrue(
       new RunCommand(() -> {
         climbSubsystem.setSpeed(-0.5);
-        setRum(climbSubsystem.getVelocity());
+        setRum(0.5);
       }, climbSubsystem)
     ).onFalse(
       new RunCommand(() -> {
         climbSubsystem.setSpeed(0);
-        setRum(climbSubsystem.getVelocity());
+        setRum(0);
       }, climbSubsystem)
     );
   }
@@ -129,8 +130,8 @@ public class RobotContainer {
    * @param value the value of the rumble
    */
   public void setRum(double value) {
-    mechController.getHID().setRumble(PS5Controller.RumbleType.kLeftRumble, value);
-    mechController.getHID().setRumble(PS5Controller.RumbleType.kRightRumble, value);    
+    mechController.setRumble(GenericHID.RumbleType.kLeftRumble, value); // Strong vibration
+    mechController.setRumble(GenericHID.RumbleType.kRightRumble, value);   
   }
 
 
