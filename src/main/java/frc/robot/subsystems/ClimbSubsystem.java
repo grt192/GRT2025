@@ -4,22 +4,66 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.ClimbConstants.TOP_MOTOR_CONFIG;
+import static frc.robot.Constants.ClimbConstants.TOP_MOTOR_ID;
 import static frc.robot.Constants.ClimbConstants.BOT_MOTOR_CONFIG;
+import static frc.robot.Constants.ClimbConstants.BOT_MOTOR_ID;
 import static frc.robot.Constants.DebugConstants.REV_DEBUG;
+
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.ClosedLoopConfig;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+
 import frc.robot.util.Motors.LoggedSparkMax;
 
 public class ClimbSubsystem extends SubsystemBase {
 
-  private final LoggedSparkMax topMotor;
-  private final LoggedSparkMax botMotor;
+  private final SparkMax topMotor;
+  private final SparkMax botMotor;
   private double targetSpeed = 0;
+
+  private ClosedLoopConfig closedLoopConfig;
+  private EncoderConfig encoderConfig;
+
+  private RelativeEncoder encoder;
+  private SparkMaxConfig topSparkMaxConfig, botSparkMaxConfig;
 
   /** Creates a new ExampleSubsystem. */
   public ClimbSubsystem() {
-    topMotor = new LoggedSparkMax(TOP_MOTOR_CONFIG);
-    botMotor = new LoggedSparkMax(BOT_MOTOR_CONFIG);
+    topMotor = new SparkMax(TOP_MOTOR_ID, MotorType.kBrushless);
+    botMotor = new SparkMax(BOT_MOTOR_ID, MotorType.kBrushless);
+
+    closedLoopConfig = new ClosedLoopConfig()
+      .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+      .outputRange(0, 1);
+    encoderConfig = new EncoderConfig();
+    encoder = topMotor.getEncoder();
+
+    topSparkMaxConfig = new SparkMaxConfig();
+    topSparkMaxConfig.apply(closedLoopConfig)
+                  .inverted(true);
+
+    botSparkMaxConfig = new SparkMaxConfig();
+    botSparkMaxConfig.apply(closedLoopConfig)
+                  .inverted(true)
+                  .follow(TOP_MOTOR_ID);
+
+    topMotor.configure(topSparkMaxConfig,
+    ResetMode.kResetSafeParameters, PersistMode.kPersistParameters
+    );
+    botMotor.configure(botSparkMaxConfig,
+    ResetMode.kResetSafeParameters, PersistMode.kPersistParameters
+    );
+
   }
 
   @Override
@@ -39,7 +83,7 @@ public class ClimbSubsystem extends SubsystemBase {
    * conversion factor into account
    */
   public double getPosition() {
-    return topMotor.getPosition();
+    return encoder.getPosition();
   }
 
   /**
@@ -48,7 +92,7 @@ public class ClimbSubsystem extends SubsystemBase {
    * conversion factor into account
    */
   public double getVelocity() {
-    return topMotor.getVelocity();
+    return encoder.getVelocity();
   }
 
   /**
