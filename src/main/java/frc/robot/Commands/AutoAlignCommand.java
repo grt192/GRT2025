@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class AutoAlignCommand {
 
     // static Pose2d reefTestPose = new Pose2d(3.607, 5.312, Rotation2d.fromDegrees(-55));
-    private static Pose2d currentPose = new Pose2d(3.607, 5.312, Rotation2d.fromDegrees(-55));
+    private static Pose2d currentPose = new Pose2d(3.473, 5.483, Rotation2d.fromDegrees(-57));
 
     static PathPlannerPath getAlignPath;
 
@@ -26,25 +26,31 @@ public class AutoAlignCommand {
 
     private static String reefName = "reefAlignPath";
     private static String sourceName = "sourceAlignPath";
+    private static String L_alignName = "L align";
+    private static String K_alignName = "K align";
+    private static String J_alignName = "J align";
     private static String followPath;
     
     static List<Pose2d> rightReefPoseList = List.of(
-        getAlignPath(reefName).getStartingHolonomicPose().get()
+        getAlignPath(L_alignName).getStartingHolonomicPose().get(),
+        getAlignPath(J_alignName).getStartingHolonomicPose().get()
     ); 
 
     static List<Pose2d> leftReefPoseList = List.of(
-        getAlignPath(sourceName).getStartingHolonomicPose().get()
+        getAlignPath(K_alignName).getStartingHolonomicPose().get()
     );
     
     static List<Pose2d> allReefPoseList = List.of(
-        getAlignPath(reefName).getStartingHolonomicPose().get(),
-        getAlignPath(sourceName).getStartingHolonomicPose().get()
+        getAlignPath(L_alignName).getStartingHolonomicPose().get(),
+        getAlignPath(K_alignName).getStartingHolonomicPose().get(),
+        getAlignPath(J_alignName).getStartingHolonomicPose().get()
     );
 
     //put the right poses before the left
     static List<String> reefPathList = List.of(
-        reefName,
-        sourceName
+        L_alignName,
+        K_alignName,
+        J_alignName
     );
     
     static PathConstraints constraints = new PathConstraints(
