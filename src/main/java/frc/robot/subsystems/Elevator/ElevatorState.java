@@ -6,7 +6,7 @@ import frc.robot.Constants.ElevatorConstants;
 public enum ElevatorState {
     GROUND(ElevatorConstants.GROUND),
     SOURCE(ElevatorConstants.SOURCE),
-    L1(ElevatorConstants.L1),
+    L1(ElevatorConstants.L1), //currently at test vlue
     L2(ElevatorConstants.L2),
     L3(ElevatorConstants.L3),
     L4(ElevatorConstants.L4);
@@ -27,6 +27,6 @@ public enum ElevatorState {
     }
 
     public double getDistanceInTicks() { 
-        return this.distance * ElevatorConstants.DIST_TO_TICKS;
+        return this.distance * ElevatorConstants.dutyCycletoticks;
     }
 }

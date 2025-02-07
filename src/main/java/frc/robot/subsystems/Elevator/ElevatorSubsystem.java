@@ -49,7 +49,7 @@ public class ElevatorSubsystem extends SubsystemBase{
     }
 
     public boolean atState(ElevatorState state) {
-        double distance = Math.abs(this.getCurrentPosition() - state.getDistance());
+        double distance = Math.abs(this.getCurrentPosition() - state.getDistanceInTicks());
         return distance < ElevatorConstants.TOLERANCE;
     }
 
@@ -58,7 +58,7 @@ public class ElevatorSubsystem extends SubsystemBase{
     }
 
     public boolean atGround() {
-        return zeroLimitSwitch.get();
+        return !zeroLimitSwitch.get();
     }
 
 }

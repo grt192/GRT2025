@@ -70,18 +70,18 @@ public final class Constants {
 
   public static class ElevatorConstants {
     public static final double SOURCE= 0.0; //change
-    public static final double L1 = 0.0; //change
+    public static final double L1 = 0.5; //change
     public static final double L2 = 0.0; //change
     public static final double L3 = 0.0; //change
     public static final double L4 = 0.0; //change
-    public static final double GROUND = 0.0; //change
+    public static final double GROUND = 0.0; 
 
-    public static final double TOLERANCE = 0.0; //change
+    public static final double TOLERANCE = 2; //change
 
-    public static final int KRAKEN_ID = 11; //change
+    public static final int KRAKEN_ID = 13; //change
     public static final int LIMIT_ID = 0; //change
 
-    private static final double kP = 0; //change
+    private static final double kP = 1; //change
     private static final double kI = 0; //change
     private static final double kD = 0; //change
     private static final double kS = 0; //chang
@@ -92,6 +92,8 @@ public final class Constants {
 
     public static final double TICKS_TO_DIST = 2. * Math.PI * AXLE_RADIUS / GEAR_RATIO;
     public static final double DIST_TO_TICKS = 1. / TICKS_TO_DIST;
+
+    public static final double dutyCycletoticks = 88.;
     
     private static final Slot0Configs slot0Configs = new Slot0Configs()
       .withKP(kP)
@@ -105,7 +107,9 @@ public final class Constants {
     private static final SoftwareLimitSwitchConfigs softwareLimitSwitchConfigs =
       new SoftwareLimitSwitchConfigs()
       .withReverseSoftLimitEnable(true)
-      .withReverseSoftLimitThreshold(0);
+      .withReverseSoftLimitThreshold(0)
+      .withForwardSoftLimitEnable(true)
+      .withForwardSoftLimitThreshold(88);
     public static TalonFXConfiguration TALON_CONFIG =
       new TalonFXConfiguration()
         .withSlot0(slot0Configs)

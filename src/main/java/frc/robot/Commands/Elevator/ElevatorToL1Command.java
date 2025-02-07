@@ -1,4 +1,4 @@
-package frc.robot.Commands.Elevator;
+package frc.robot.Commands.elevator;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Elevator.ElevatorState;
@@ -8,8 +8,8 @@ public class ElevatorToL1Command extends Command {
     private ElevatorSubsystem elevatorSubsystem;
 
     public ElevatorToL1Command(ElevatorSubsystem elevatorSubsystem) {
-        this.addRequirements(elevatorSubsystem);
         this.elevatorSubsystem = elevatorSubsystem;
+        addRequirements(elevatorSubsystem);
     }
 
     @Override

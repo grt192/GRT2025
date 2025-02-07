@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import frc.robot.Commands.elevator.ElevatorToGroundCommand;
+import frc.robot.Commands.elevator.ElevatorToL1Command;
 import frc.robot.controllers.BaseDriveController;
 import frc.robot.controllers.DualJoystickDriveController;
 import frc.robot.controllers.PS5DriveController;
@@ -14,11 +16,14 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.Elevator.ElevatorState;
+import frc.robot.subsystems.Elevator.ElevatorSubsystem;
 import frc.robot.subsystems.Elevator.ElevatorSubsystemTest;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 
@@ -34,11 +39,12 @@ public class RobotContainer {
 
   private final CommandPS5Controller mechController = new CommandPS5Controller(1);
 
-  private final ElevatorSubsystemTest elevatorSubsystemTest = new ElevatorSubsystemTest();
+  private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
 
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
-  private final Trigger xButton;
+  private final Trigger xButton, sButton;
+  private final Trigger lBumper, rBumper;
 
 
   // private final PhoenixLoggingSubsystem phoenixLoggingSubsystem =
@@ -46,7 +52,11 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    xButton = mechController.cross();
+    xButton = new Trigger(mechController.cross());
+    sButton = new Trigger(mechController.square());
+
+    lBumper = new Trigger(mechController.L1());
+    rBumper = new Trigger(mechController.R1());
 
 
     constructDriveController(); 
@@ -70,16 +80,23 @@ public class RobotContainer {
       * swerve aim button is held down, the robot will rotate automatically to always face a target, and only
       * translation will be manually controllable. */
   
-    xButton.onTrue(new InstantCommand(() -> {
-      elevatorSubsystemTest.stop();
-    }));
+    // xButton.onTrue(new InstantCommand(() -> {
+    //   elevatorSubsystemTest.stop();
+    // }));
 
-    elevatorSubsystemTest.setDefaultCommand(new InstantCommand(
-      () -> {
-        elevatorSubsystemTest.move(mechController.getL2Axis() - mechController.getR2Axis());
-      },
-      elevatorSubsystemTest
-    ));
+    sButton.onTrue(new ConditionalCommand(
+      new ElevatorToL1Command(elevatorSubsystem), 
+      new ElevatorToGroundCommand(elevatorSubsystem), 
+      () -> elevatorSubsystem.atState(ElevatorState.GROUND)));
+
+    // elevatorSubsystemTest.setDefaultCommand(new InstantCommand(
+    //   () -> {
+    //     elevatorSubsystemTest.move(mechController.getL2Axis() - mechController.getR2Axis());
+    //   },
+    //   elevatorSubsystemTest
+    // ));
+
+
   
     // swerveSubsystem.setDefaultCommand(
     //   new RunCommand(() -> {

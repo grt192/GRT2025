@@ -1,4 +1,4 @@
-package frc.robot.Commands.Elevator;
+package frc.robot.Commands.elevator;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Elevator.ElevatorState;
@@ -19,7 +19,7 @@ public class ElevatorToL4Command extends Command {
 
     @Override
     public void execute() {
-        this.elevatorSubsystem.setTargetState(ElevatorState.L4);
+        elevatorSubsystem.setTargetState(ElevatorState.L4);
     }
 
     @Override
