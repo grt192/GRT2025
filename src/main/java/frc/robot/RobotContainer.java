@@ -141,17 +141,10 @@ public class RobotContainer {
    * @param value the value of the rumble
    */
   public void setRum(double value) {
-    mechController.getHID().setOutputs((int) value); 
-  }
 
-  public void setRumble(GenericHID.RumbleType type, double value) {
-    System.out.println("Setting rumble: " + type + " to value: " + value);
-    driverController.setRumble(type, value);
-  }
-
-  public void testRumble() {
-    setRumble(GenericHID.RumbleType.kLeftRumble, 1.0);
-    setRumble(GenericHID.RumbleType.kRightRumble, 1.0);
+    mechController.getHID().setRumble(GenericHID.RumbleType.kLeftRumble, value);
+    mechController.getHID().setRumble(GenericHID.RumbleType.kRightRumble, value);
+    
   }
 
   
