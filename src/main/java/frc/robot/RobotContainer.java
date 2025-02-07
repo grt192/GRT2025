@@ -50,7 +50,8 @@ public class RobotContainer {
 
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
-  private final Trigger xButton;
+  private final Trigger xButton, sButton;
+  private final Trigger lBumper, rBumper;
 
   private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(
     VisionConstants.cameraConfigs[1]
@@ -97,9 +98,14 @@ public class RobotContainer {
       * swerve aim button is held down, the robot will rotate automatically to always face a target, and only
       * translation will be manually controllable. */
   
-    xButton.onTrue(new InstantCommand(() -> {
-      elevatorSubsystemTest.stop();
-    }));
+    // xButton.onTrue(new InstantCommand(() -> {
+    //   elevatorSubsystemTest.stop();
+    // }));
+
+    sButton.onTrue(new ConditionalCommand(
+      new ElevatorToL1Command(elevatorSubsystem), 
+      new ElevatorToGroundCommand(elevatorSubsystem), 
+      () -> elevatorSubsystem.atState(ElevatorState.GROUND)));
 
     elevatorSubsystemTest.setDefaultCommand(new InstantCommand(
       () -> {
