@@ -1,6 +1,6 @@
 package frc.robot.subsystems.Intake;
 
-import com.revrobotics.spark.SparkMax;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -11,7 +11,7 @@ import frc.robot.Constants;
  */
 public class IntakeRollerSubsystem extends SubsystemBase { 
 
-    private final SparkMax rollerMotor;
+    private final TalonFX rollerMotor;
     private double rollerSpeed;
     private final DigitalInput intakeSensor;
 
@@ -21,7 +21,7 @@ public class IntakeRollerSubsystem extends SubsystemBase {
     public IntakeRollerSubsystem() {
         rollerSpeed = Constants.DifferentialRollerConstants.ROLLER_SPEED;
         intakeSensor = new DigitalInput(0);
-        rollerMotor = new SparkMax(Constants.DifferentialRollerConstants.ROLLER_MOTOR_ID, MotorType.kBrushless);
+        rollerMotor = new TalonFX(Constants.DifferentialRollerConstants.ROLLER_MOTOR_ID);
     }
 
     /**
@@ -48,6 +48,7 @@ public class IntakeRollerSubsystem extends SubsystemBase {
      */
     public void stop() {
         rollerMotor.setVoltage(0);
+        
     }
 
     /**
@@ -63,13 +64,13 @@ public class IntakeRollerSubsystem extends SubsystemBase {
      * Runs the roller motor outwards at a predefined speed.
      */
     public void runOut() {
-        setSpeed(Constants.DifferentialRollerConstants.ROLLER_SPEED);
+        setSpeed(rollerSpeed);
     }
 
     /**
      * Runs the roller motor inwards at a predefined speed.
      */
     public void runIn() {
-        setSpeed(Constants.DifferentialRollerConstants.ROLLER_SPEED);
+        setSpeed(rollerSpeed);
     }
 }
