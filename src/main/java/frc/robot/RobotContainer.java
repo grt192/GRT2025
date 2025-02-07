@@ -40,7 +40,7 @@ public class RobotContainer {
 
   //Bindings
   private final Trigger createTrigger;
-  private final Trigger optionTrigger; 
+  private final Trigger optionTrigger;
   private final Trigger xbutton;
 
   // private final PhoenixLoggingSubsystem phoenixLoggingSubsystem =
@@ -49,12 +49,13 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
-    createTrigger = mechController.create();
-    optionTrigger = mechController.options();
-    xbutton = mechController.cross();
-
     
     constructDriveController(); 
+
+    createTrigger = new Trigger(mechController.create());
+    optionTrigger = new Trigger(mechController.options());
+    xbutton = new Trigger(mechController.cross());
+    
     startLog();
     configureBindings();
   }
@@ -86,31 +87,20 @@ public class RobotContainer {
 
     
 
+
     createTrigger.and(optionTrigger).whileTrue(
-      new RunCommand(() -> {
-        climbSubsystem.setSpeed(0.2);
-        setRumble(climbSubsystem.getSpeed());
-      }, climbSubsystem)
+        new RunCommand(() -> {
+          climbSubsystem.setSpeed(0.3);
+          System.out.println("Climbing");
 
-    ).onFalse(
-      new RunCommand(() -> {
-        climbSubsystem.setSpeed(0);
-        setRumble(climbSubsystem.getSpeed());
-      }, climbSubsystem)
+        }, climbSubsystem)
+      ).onFalse(
+        new RunCommand(() -> {
+          climbSubsystem.setSpeed(0);
+
+        }, climbSubsystem)
     );
-
-    xbutton.whileTrue(
-      new RunCommand(() -> {
-        climbSubsystem.setSpeed(-0.2);
-        setRumble(climbSubsystem.getSpeed());
-      }, climbSubsystem)
-
-    ).onFalse(
-      new RunCommand(() -> {
-        climbSubsystem.setSpeed(0);
-        setRumble(climbSubsystem.getSpeed());
-      }, climbSubsystem)
-    );
+  
 
     swerveSubsystem.setDefaultCommand(
       new RunCommand(() -> {

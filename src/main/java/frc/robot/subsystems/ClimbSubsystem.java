@@ -7,37 +7,42 @@ import frc.robot.util.Motors.LoggedTalon;
 import java.util.OptionalInt;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.hardware.TalonFX;
 
 public class ClimbSubsystem extends SubsystemBase {
 
-  private final LoggedTalon motor;
-  private final TalonFXConfiguration talonConfig;
+  // private final LoggedTalon motor;
+  // private final TalonFXConfiguration talonConfig;
+  private TalonFX motor;
+  private double speed;
 
 
   /** Creates a new ClimbSubsystem. */
   public ClimbSubsystem() {
 
 
-    talonConfig = new TalonFXConfiguration();
-    motor = new LoggedTalon(MOTOR_ID, talonConfig);
+    // talonConfig = new TalonFXConfiguration();
+    // motor = new LoggedTalon(MOTOR_ID, talonConfig);
+    motor = new TalonFX(MOTOR_ID);
     
     
   }
 
-  /**
-   * Returns the position of the motor.
-   * @return position of the motor
-   */
-  public double getPosition() {
-    return motor.getPosition();
-  }
+  // /**
+  //  * Returns the position of the motor.
+  //  * @return position of the motor
+  //  */
+  // public double getPosition() {
+  //   return 
+  // }
 
   /**
    * Sets the speed of the motor.
    * @param speed target speed UNKNOWN USES SETVELOCITY
    */
   public void setSpeed(double speed) {
-    motor.setVelocity(speed);
+    this.speed = speed;
+    motor.set(speed);
   }
 
   /*
@@ -45,14 +50,14 @@ public class ClimbSubsystem extends SubsystemBase {
    * @return the current speed of the motor
    */
   public double getSpeed() {
-    return motor.getVelocity();
+    return speed;
   }
 
   /**
    * Stops the motor.
    */
   public void stop() {
-    motor.setVelocity(0);
+    motor.set(0);
   }
 
 

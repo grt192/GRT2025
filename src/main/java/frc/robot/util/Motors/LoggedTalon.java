@@ -52,7 +52,7 @@ public class LoggedTalon{
     private double targetVelocity;
 
     public LoggedTalon(int canId, TalonFXConfiguration talonConfig){
-        motor = new TalonFX(canId, "can");
+        motor = new TalonFX(canId);
         for (int i = 0; i < 4; i++) {
             boolean error = motor.getConfigurator().apply(talonConfig, 0.1) == StatusCode.OK;
             if (!error) break;

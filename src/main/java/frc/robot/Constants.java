@@ -40,7 +40,7 @@ public final class Constants {
   }
 
   public static class ClimbConstants{
-    public static final int MOTOR_ID = 9;//Placeholder
+    public static final int MOTOR_ID = 0;//Placeholder
 
   }
     
