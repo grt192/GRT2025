@@ -179,7 +179,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     /** Gets the gyro heading.*/
     private Rotation2d getGyroHeading() {
-        return Rotation2d.fromDegrees(ahrs.getAngle()); // Might need to flip depending on the robot setup
+        return Rotation2d.fromDegrees(-ahrs.getAngle()); // Might need to flip depending on the robot setup
     }
 
     /**

@@ -98,17 +98,17 @@ public class RobotContainer {
 
 
   
-    // swerveSubsystem.setDefaultCommand(
-    //   new RunCommand(() -> {
-    //     swerveSubsystem.setDrivePowers(
-    //       driveController.getForwardPower(),
-    //       driveController.getLeftPower(),
-    //       driveController.getRotatePower()
-    //     );
-    //     }, 
-    //     swerveSubsystem
-    //   )
-    // );
+    swerveSubsystem.setDefaultCommand(
+      new RunCommand(() -> {
+        swerveSubsystem.setDrivePowers(
+          driveController.getForwardPower(),
+          driveController.getLeftPower(),
+          driveController.getRotatePower()
+        );
+        }, 
+        swerveSubsystem
+      )
+    );
 
     /* Pressing the button resets the field axes to the current robot axes. */
     driveController.bindDriverHeadingReset(

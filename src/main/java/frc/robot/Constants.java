@@ -81,7 +81,7 @@ public final class Constants {
     public static final int KRAKEN_ID = 13; //change
     public static final int LIMIT_ID = 0; //change
 
-    private static final double kP = 1; //change
+    private static final double kP = 0.6; //change
     private static final double kI = 0; //change
     private static final double kD = 0; //change
     private static final double kS = 0; //chang
