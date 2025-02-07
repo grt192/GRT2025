@@ -123,17 +123,25 @@ public class RobotContainer {
       }, climbSubsystem)
     );
 
+    xbutton.whileTrue(
+      new RunCommand(() -> {
+        climbSubsystem.setSpeed(-0.3);
+        setRum(0.5);
+      }, climbSubsystem)
+    ).onFalse(
+      new RunCommand(() -> {
+        climbSubsystem.setSpeed(0);
+        setRum(0);
+      }, climbSubsystem)
+    );
   }
 
-
-  
   /*
    * Sets the rumble of the controller
    * @param value the value of the rumble
    */
   public void setRum(double value) {
-    mechController.setRumble(GenericHID.RumbleType.kLeftRumble, value); // Strong vibration
-    mechController.setRumble(GenericHID.RumbleType.kRightRumble, value);   
+    mechController.getHID().setOutputs((int) value); 
   }
 
   public void setRumble(GenericHID.RumbleType type, double value) {
