@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Differential;
+package frc.robot.subsystems.Intake;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -9,7 +9,7 @@ import frc.robot.Constants;
 /**
  * DifferentialRollerSubsystem controls the roller motor and manages the intake sensor.
  */
-public class DifferentialRollerSubsystem extends SubsystemBase { 
+public class IntakeRollerSubsystem extends SubsystemBase { 
 
     private final SparkMax rollerMotor;
     private double rollerSpeed;
@@ -18,7 +18,7 @@ public class DifferentialRollerSubsystem extends SubsystemBase {
     /**
      * Constructor for DifferentialRollerSubsystem.
      */
-    public DifferentialRollerSubsystem() {
+    public IntakeRollerSubsystem() {
         rollerSpeed = Constants.DifferentialRollerConstants.ROLLER_SPEED;
         intakeSensor = new DigitalInput(0);
         rollerMotor = new SparkMax(Constants.DifferentialRollerConstants.ROLLER_MOTOR_ID, MotorType.kBrushless);

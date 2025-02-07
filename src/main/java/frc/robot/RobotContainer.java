@@ -4,7 +4,8 @@
 
 package frc.robot;
 
-import frc.robot.commands.DifferentialRollerCommand;
+import frc.robot.commands.Intake.IntakeRollerCommand;
+import frc.robot.commandss.DifferentialRollerCommand;
 import frc.robot.controllers.BaseDriveController;
 import frc.robot.controllers.DualJoystickDriveController;
 import frc.robot.controllers.PS5DriveController;
@@ -20,8 +21,8 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.subsystems.Differential.DifferentialRollerSubsystem;
 import frc.robot.subsystems.FieldManagementSubsystem.FieldManagementSubsystem;
+import frc.robot.subsystems.Intake.IntakeRollerSubsystem;
 import frc.robot.subsystems.PhoenixLoggingSubsystem.PhoenixLoggingSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 
@@ -40,7 +41,7 @@ public class RobotContainer {
   private final FieldManagementSubsystem fieldManagementSubsystem = new FieldManagementSubsystem();
   private final PhoenixLoggingSubsystem phoenixLoggingSubsystem = new PhoenixLoggingSubsystem(fieldManagementSubsystem);
 
-  private final DifferentialRollerSubsystem differentialRollerSubsystem = new DifferentialRollerSubsystem();
+  private final IntakeRollerSubsystem intakeRollerSubsystem = new IntakeRollerSubsystem();
   private final CommandPS5Controller mechController = new CommandPS5Controller(0);
 
 
@@ -81,15 +82,15 @@ public class RobotContainer {
 
     //Mechanical Controls
     xbutton.onTrue(new InstantCommand(() -> {
-      new DifferentialRollerCommand(differentialRollerSubsystem);
-    }).until(() -> differentialRollerSubsystem.getIntakeSensorValue()));
+      new IntakeRollerCommand(intakeRollerSubsystem);
+    }).until(() -> intakeRollerSubsystem.getIntakeSensorValue()));
 
     l1button.onTrue(new InstantCommand(() -> {
-      differentialRollerSubsystem.runIn();
+      intakeRollerSubsystem.runIn();
     }));
 
     r1button.onTrue(new InstantCommand(() -> {
-      differentialRollerSubsystem.runOut();
+      intakeRollerSubsystem.runOut();
     }));
 
 
