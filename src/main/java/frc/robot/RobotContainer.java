@@ -55,10 +55,6 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
-    createTrigger = mechController.create();
-    optionTrigger = mechController.options();
-    xbutton = mechController.cross();
-
     
     constructDriveController(); 
 
