@@ -188,8 +188,25 @@ public final class Constants {
           new Rotation3d(Math.PI / 2., 0., Math.PI)
         ),
         PoseStrategy.LOWEST_AMBIGUITY
+      ),
+      new CameraConfig(
+          "3",
+          new Transform3d(
+            -0.19, -0.065, 0.2,
+            new Rotation3d(Math.PI / 2., 0., Math.PI)
+          ),
+          PoseStrategy.LOWEST_AMBIGUITY
+      ),
+      new CameraConfig(
+          "4",
+          new Transform3d(
+            -0.19, -0.065, 0.2,
+            new Rotation3d(Math.PI / 2., 0., Math.PI)
+          ),
+          PoseStrategy.LOWEST_AMBIGUITY
       )
     };
+
     public static final PolynomialRegression xStdDevModel = new PolynomialRegression(
       VisionConstants.STD_DEV_DIST,VisionConstants.X_STD_DEV,2);
     public static final PolynomialRegression yStdDevModel = new PolynomialRegression(
