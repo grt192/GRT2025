@@ -17,6 +17,7 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.Vision.CameraConfig;
 import frc.robot.util.PolynomialRegression;
@@ -108,6 +109,10 @@ public final class Constants {
   }
 
   public static class VisionConstants{
+
+    public static final double FIELD_X = 17.5482504;
+    public static final double FIELD_Y = 8.05561;
+    public static final double ROBOT_RADIUS = 0.762;
 
     public static final double[] STD_DEV_DIST = new double[] {
       0.75, 1.00, 1.3, 1.69, 2., 2.51, 2.78, 3.07, 3.54, 4.1, 4.52 
