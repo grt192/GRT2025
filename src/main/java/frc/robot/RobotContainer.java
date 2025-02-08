@@ -35,7 +35,6 @@ public class RobotContainer {
 
   private BaseDriveController driveController;
   private CommandPS5Controller mechController = new CommandPS5Controller(1);
-  private final GenericHID driverController = new GenericHID(0);
 
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   private final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
@@ -54,6 +53,8 @@ public class RobotContainer {
     createTrigger = new Trigger(mechController.create());
     optionTrigger = new Trigger(mechController.options());
     xbutton = new Trigger(mechController.cross());
+
+    climbSubsystem.resetEncoderPos();
 
     startLog();
     configureBindings();
@@ -113,39 +114,32 @@ public class RobotContainer {
 
     createTrigger.and(optionTrigger).whileTrue(
       new RunCommand(() -> {
-        climbSubsystem.setSpeed(0.3);
-        setRum(0.5);
+        climbSubsystem.setSpeed(0.2);
+        System.out.println(climbSubsystem.getPosition());
+
       }, climbSubsystem)
     ).onFalse(
       new RunCommand(() -> {
         climbSubsystem.setSpeed(0);
-        setRum(0);
+  
       }, climbSubsystem)
     );
 
     xbutton.whileTrue(
       new RunCommand(() -> {
-        climbSubsystem.setSpeed(-0.3);
-        setRum(0.5);
+        climbSubsystem.setSpeed(-0.2);
+        System.out.println(climbSubsystem.getPosition());
+
       }, climbSubsystem)
     ).onFalse(
       new RunCommand(() -> {
         climbSubsystem.setSpeed(0);
-        setRum(0);
+
       }, climbSubsystem)
     );
   }
 
-  /*
-   * Sets the rumble of the controller
-   * @param value the value of the rumble
-   */
-  public void setRum(double value) {
 
-    mechController.getHID().setRumble(GenericHID.RumbleType.kLeftRumble, value);
-    mechController.getHID().setRumble(GenericHID.RumbleType.kRightRumble, value);
-    
-  }
 
   
   /**

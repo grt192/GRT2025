@@ -18,6 +18,7 @@ import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.SoftLimitConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -33,6 +34,7 @@ public class ClimbSubsystem extends SubsystemBase {
 
   private ClosedLoopConfig closedLoopConfig;
   private EncoderConfig encoderConfig;
+  private SoftLimitConfig softLimitConfig;
 
   private RelativeEncoder encoder;
   private SparkMaxConfig topSparkMaxConfig, botSparkMaxConfig;
@@ -41,6 +43,7 @@ public class ClimbSubsystem extends SubsystemBase {
   public ClimbSubsystem() {
     topMotor = new SparkMax(TOP_MOTOR_ID, MotorType.kBrushless);
     botMotor = new SparkMax(BOT_MOTOR_ID, MotorType.kBrushless);
+    
 
     closedLoopConfig = new ClosedLoopConfig()
       .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
@@ -48,13 +51,22 @@ public class ClimbSubsystem extends SubsystemBase {
     encoderConfig = new EncoderConfig();
     encoder = topMotor.getEncoder();
 
+    softLimitConfig = new SoftLimitConfig();
+      softLimitConfig.forwardSoftLimitEnabled(true)
+                     .forwardSoftLimit(53)
+                     .reverseSoftLimitEnabled(true)
+                     .reverseSoftLimit(0);
+
+
     topSparkMaxConfig = new SparkMaxConfig();
     topSparkMaxConfig.apply(closedLoopConfig)
+                  .apply(softLimitConfig)
                   .inverted(true);
 
     botSparkMaxConfig = new SparkMaxConfig();
     botSparkMaxConfig.apply(closedLoopConfig)
                   .inverted(true)
+                  .apply(softLimitConfig)
                   .follow(TOP_MOTOR_ID);
 
     topMotor.configure(topSparkMaxConfig,
@@ -78,6 +90,14 @@ public class ClimbSubsystem extends SubsystemBase {
   }
 
   /**
+   * Set encoder position to 0
+   */
+  public void resetEncoderPos(){
+    encoder.setPosition(0);
+  }
+
+
+  /**
    * Gets the position of the top motor
    * @return position of the top motor in rotations after taking the position
    * conversion factor into account
@@ -85,7 +105,6 @@ public class ClimbSubsystem extends SubsystemBase {
   public double getPosition() {
     return encoder.getPosition();
   }
-
   /**
    * Gets the velocity of the top motor
    * @return velocity of the top motor in RPM after taking the velocity
