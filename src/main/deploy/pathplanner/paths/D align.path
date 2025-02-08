@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.202385706018521,
-        "y": 2.7301519097222227
+        "x": 3.9401853867230603,
+        "y": 2.6142836050519214
       },
       "isLocked": false,
       "linkedName": null
@@ -20,12 +20,12 @@
         "y": 2.7742335792824067
       },
       "prevControl": {
-        "x": 4.1836370501941715,
-        "y": 2.9294831891226907
+        "x": 4.0848709250638615,
+        "y": 3.0045696838264035
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "D Pose"
     }
   ],
   "rotationTargets": [],

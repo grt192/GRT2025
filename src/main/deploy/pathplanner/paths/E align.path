@@ -20,12 +20,12 @@
         "y": 2.757404513888888
       },
       "prevControl": {
-        "x": 5.072388090991665,
-        "y": 2.5153426432869437
+        "x": 5.130868351709543,
+        "y": 2.5386257166850306
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "E Pose"
     }
   ],
   "rotationTargets": [],
