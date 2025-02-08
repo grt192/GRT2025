@@ -26,31 +26,69 @@ public class AutoAlignCommand {
 
     private static String reefName = "reefAlignPath";
     private static String sourceName = "sourceAlignPath";
-    private static String L_alignName = "L align";
-    private static String K_alignName = "K align";
+    private static String A_alignName = "A align";
+    private static String B_alignName = "B align";
+    private static String C_alignName = "C align";
+    private static String D_alignName = "D align";
+    private static String E_alignName = "E align";
+    private static String F_alignName = "F align";
+    private static String G_alignName = "G align";
+    private static String H_alignName = "H align";
+    private static String I_alignName = "I align";
     private static String J_alignName = "J align";
+    private static String K_alignName = "K align";
+    private static String L_alignName = "L align";
     private static String followPath;
-    
-    static List<Pose2d> rightReefPoseList = List.of(
-        getAlignPath(L_alignName).getStartingHolonomicPose().get(),
-        getAlignPath(J_alignName).getStartingHolonomicPose().get()
-    ); 
+
 
     static List<Pose2d> leftReefPoseList = List.of(
+        getAlignPath(A_alignName).getStartingHolonomicPose().get(),
+        getAlignPath(C_alignName).getStartingHolonomicPose().get(),
+        getAlignPath(E_alignName).getStartingHolonomicPose().get(),
+        getAlignPath(G_alignName).getStartingHolonomicPose().get(),
+        getAlignPath(I_alignName).getStartingHolonomicPose().get(),
         getAlignPath(K_alignName).getStartingHolonomicPose().get()
     );
     
+    static List<Pose2d> rightReefPoseList = List.of(
+        getAlignPath(B_alignName).getStartingHolonomicPose().get(),
+        getAlignPath(D_alignName).getStartingHolonomicPose().get(),
+        getAlignPath(F_alignName).getStartingHolonomicPose().get(),
+        getAlignPath(H_alignName).getStartingHolonomicPose().get(),
+        getAlignPath(J_alignName).getStartingHolonomicPose().get(),
+        getAlignPath(L_alignName).getStartingHolonomicPose().get()
+    ); 
+    
+    //put the left on top of right
     static List<Pose2d> allReefPoseList = List.of(
-        getAlignPath(L_alignName).getStartingHolonomicPose().get(),
+        getAlignPath(A_alignName).getStartingHolonomicPose().get(),
+        getAlignPath(B_alignName).getStartingHolonomicPose().get(),
+        getAlignPath(C_alignName).getStartingHolonomicPose().get(),
+        getAlignPath(D_alignName).getStartingHolonomicPose().get(),
+        getAlignPath(E_alignName).getStartingHolonomicPose().get(),
+        getAlignPath(F_alignName).getStartingHolonomicPose().get(),
+        getAlignPath(G_alignName).getStartingHolonomicPose().get(),
+        getAlignPath(H_alignName).getStartingHolonomicPose().get(),
+        getAlignPath(I_alignName).getStartingHolonomicPose().get(),
+        getAlignPath(J_alignName).getStartingHolonomicPose().get(),
         getAlignPath(K_alignName).getStartingHolonomicPose().get(),
-        getAlignPath(J_alignName).getStartingHolonomicPose().get()
+        getAlignPath(L_alignName).getStartingHolonomicPose().get()
     );
 
-    //put the right poses before the left
+    //put the left on top of right
     static List<String> reefPathList = List.of(
-        L_alignName,
+        A_alignName,
+        B_alignName,
+        C_alignName,
+        D_alignName,
+        E_alignName,
+        F_alignName,
+        G_alignName,
+        H_alignName,
+        I_alignName,
+        J_alignName,
         K_alignName,
-        J_alignName
+        L_alignName
     );
     
     static PathConstraints constraints = new PathConstraints(
@@ -128,12 +166,12 @@ public class AutoAlignCommand {
             // if the closest pose is on the right, find the index of it in the list of right poses and get the matching left path using algebraic term 
             if (rightReefPoseList.contains(closestReef)) {
                 int index = rightReefPoseList.indexOf(closestReef);
-                followPath = reefPathList.get( 2*index+1);
+                followPath = reefPathList.get( 2*index );
             }
             // if the closest pose is on the left, find the index and get the matching right path
             else {
                 int index = leftReefPoseList.indexOf(closestReef);
-                followPath = reefPathList.get( 2*index );
+                followPath = reefPathList.get( 2*index+1 );
             
             }
 
@@ -157,14 +195,14 @@ public class AutoAlignCommand {
             // if the closest pose is on the right, find the index of it in the list of right poses and get the matching left path using algebraic term 
             if (rightReefPoseList.contains(closestReef)) {
                 int index = rightReefPoseList.indexOf(closestReef);
-                followPath = reefPathList.get( 2*index+1 );
+                followPath = reefPathList.get( 2*index );
                 System.out.println("Closest to right");
                
             }
             // if the closest pose is on the left, find the index and get the matching right path
             else {
                 int index = leftReefPoseList.indexOf(closestReef);
-                followPath = reefPathList.get( 2*index );
+                followPath = reefPathList.get( 2*index+1 );
                 System.out.println("Closest to left");
             }
 

@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.571037198191031,
-        "y": 2.3614663701972125
+        "x": 5.4159863462477,
+        "y": 2.8258750547523834
       },
       "isLocked": false,
       "linkedName": null
@@ -25,7 +25,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "F Pose"
     }
   ],
   "rotationTargets": [],

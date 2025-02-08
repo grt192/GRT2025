@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.1489861834490736,
-        "y": 4.016731047453703
+        "x": 6.251526121896677,
+        "y": 3.853157190393518
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.8991332325762,
-        "y": 4.008157661884536
+        "x": 6.001673171023803,
+        "y": 3.844583804824351
       },
       "isLocked": false,
       "linkedName": null
@@ -25,7 +25,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "G Align"
     }
   ],
   "rotationTargets": [],
@@ -48,7 +48,7 @@
   "folder": "Aligning",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -176.51601465089422
+    "rotation": -179.5428223582974
   },
   "useDefaultConstraints": true
 }
