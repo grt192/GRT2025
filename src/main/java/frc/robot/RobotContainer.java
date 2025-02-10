@@ -114,7 +114,7 @@ public class RobotContainer {
 
     createTrigger.and(optionTrigger).whileTrue(
       new RunCommand(() -> {
-        climbSubsystem.setSpeed(0.2);
+        climbSubsystem.setSpeed(0.3);
         System.out.println(climbSubsystem.getPosition());
 
       }, climbSubsystem)
@@ -127,7 +127,7 @@ public class RobotContainer {
 
     xbutton.whileTrue(
       new RunCommand(() -> {
-        climbSubsystem.setSpeed(-0.2);
+        climbSubsystem.setSpeed(-0.3);
         System.out.println(climbSubsystem.getPosition());
 
       }, climbSubsystem)

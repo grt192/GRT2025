@@ -53,7 +53,7 @@ public class ClimbSubsystem extends SubsystemBase {
 
     softLimitConfig = new SoftLimitConfig();
       softLimitConfig.forwardSoftLimitEnabled(true)
-                     .forwardSoftLimit(53)
+                     .forwardSoftLimit(67)
                      .reverseSoftLimitEnabled(true)
                      .reverseSoftLimit(0);
 
