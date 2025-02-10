@@ -39,6 +39,7 @@ public class RobotContainer {
 
   private final CommandPS5Controller mechController = new CommandPS5Controller(1);
 
+  // private final ElevatorSubsystemTest elevatorSubsystemTest = new ElevatorSubsystemTest();
   private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
 
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
@@ -85,8 +86,8 @@ public class RobotContainer {
     // }));
 
     sButton.onTrue(new ConditionalCommand(
-      new ElevatorToL1Command(elevatorSubsystem), 
-      new ElevatorToGroundCommand(elevatorSubsystem), 
+      new ElevatorToL1Command(elevatorSubsystem).withTimeout(4), 
+      new ElevatorToGroundCommand(elevatorSubsystem).withTimeout(4), 
       () -> elevatorSubsystem.atState(ElevatorState.GROUND)));
 
     // elevatorSubsystemTest.setDefaultCommand(new InstantCommand(
@@ -98,17 +99,17 @@ public class RobotContainer {
 
 
   
-    swerveSubsystem.setDefaultCommand(
-      new RunCommand(() -> {
-        swerveSubsystem.setDrivePowers(
-          driveController.getForwardPower(),
-          driveController.getLeftPower(),
-          driveController.getRotatePower()
-        );
-        }, 
-        swerveSubsystem
-      )
-    );
+    // swerveSubsystem.setDefaultCommand(
+    //   new RunCommand(() -> {
+    //     swerveSubsystem.setDrivePowers(
+    //       driveController.getForwardPower(),
+    //       driveController.getLeftPower(),
+    //       driveController.getRotatePower()
+    //     );
+    //     }, 
+    //     swerveSubsystem
+    //   )
+    // );
 
     /* Pressing the button resets the field axes to the current robot axes. */
     driveController.bindDriverHeadingReset(

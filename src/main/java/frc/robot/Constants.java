@@ -76,7 +76,7 @@ public final class Constants {
     public static final double L4 = 0.0; //change
     public static final double GROUND = 0.0; 
 
-    public static final double TOLERANCE = 2; //change
+    public static final double TOLERANCE = 4; //change
 
     public static final int KRAKEN_ID = 13; //change
     public static final int LIMIT_ID = 0; //change
