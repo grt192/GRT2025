@@ -76,15 +76,15 @@ public final class Constants {
     public static final double L4 = 0.0; //change
     public static final double GROUND = 0.0; 
 
-    public static final double TOLERANCE = 4; //change
+    public static final double TOLERANCE = 8; //change
 
     public static final int KRAKEN_ID = 13; //change
     public static final int LIMIT_ID = 0; //change
 
-    private static final double kP = 0.6; //change
+    private static final double kP = 1; //change
     private static final double kI = 0; //change
     private static final double kD = 0; //change
-    private static final double kS = 0; //chang
+    private static final double kG = 4; //chang
     public static final double kArbFF = 0;
 
     public static final double GEAR_RATIO = 20; //motor to axle
@@ -99,7 +99,7 @@ public final class Constants {
       .withKP(kP)
       .withKI(kI)
       .withKD(kD)
-      .withKS(kS);
+      .withKG(kG);
     private static final MotorOutputConfigs motorOutputConfigs =
       new MotorOutputConfigs()
       .withNeutralMode(NeutralModeValue.Brake)
