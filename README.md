@@ -1,3 +1,4 @@
+[Section Title](#section_id)
 # Reef Naming Diagram
 Used in **auto align** and naming **autons**
 
@@ -15,10 +16,10 @@ Every auton name consists of the path names separated by an exclamation point
 - P is processor
 
 
-## Auton naming example
+## Auton naming example 
 **Auton:** 1! 1J! JTS!
 
-**Explanation:**
+**Explanation:**<a id="section_id"></a>
 
 **1!** the first path leaves the first starting position (left-most from alliance wall)
 
@@ -33,7 +34,7 @@ Every auton name consists of the path names separated by an exclamation point
 <img width="400" src ="https://github.com/user-attachments/assets/a762738d-5ce7-4dd8-92ae-60dabd413042"/>
 
 
-## Naming explanation
+## Naming explanation 
 
 
 The **first path** always leaves the starting zone. The starting positions are labeled 1-3 starting from the left-most position from the alliance wall. Ends with velocity of 1 m/s.
