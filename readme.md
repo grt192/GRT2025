@@ -1,60 +1,73 @@
-# Robot Control and Motor Assignments
+# Table of Contents
 
-## **Drive Controller (Pilot)**
+1. [Pose Names](#pose-names)
+2. [Auton](#auton)
 
-| PS5 Button                     | Assigned Function  | Motor Type | Motor ID   |
-| ------------------------------ | ------------------ | ---------- | ---------- |
-| X (Cross)                      |                    |            |            |
-| O (Circle)                     |                    |            |            |
-| △ (Triangle)                   |                    |            |            |
-| □ (Square)                     |                    |            |            |
-| L1                             |                    |            |            |
-| L2                             |  for Slow/FastMode |            |            |
-| R1                             |                    |            |            |
-| R2                             |                    |            |            |
-| L3 (Left Stick Click)          | Move Swerve        | Kraken     | 2, 4, 6, 8 |
-| R3 (Right Stick Click)         | Turn Swerve        | Kraken     | 1, 3, 5, 7 |
-| D-Pad Up                       |                    |            |            |
-| D-Pad Down                     |                    |            |            |
-| D-Pad Left                     |                    |            |            |
-| D-Pad Right                    |                    |            |            |
-| Options Button + Create Button |                    |            |            |
+   
+    1. [Naming example](#naming-example)
+    2. [Naming explanation](#naming-explanation)
+       
 
-## **Mech Controller (Operator)**
+# Pose Names 
 
-| PS5 Button                     | Assigned Mech Function | Motor Type | Motor ID |
-| ------------------------------ | ---------------------- | ---------- | -------- |
-| X (Cross)                      | Pivot In , pivot out   | Neo        | 14       |
-| O (Circle)                     | Intake Coral           | Neo        | 16       |
-| △ (Triangle)                   | Outtake Coral          | Neo        | 16       |
-| □ (Square)                     |                        |            |          |
-| L1                             | Rollers Outtake        | Neo        | 16       |
-| R1                             | Rollers Intake         | Neo        | 16       |
-| L2                             | Elevator Up            | Kraken     | 13       |
-| R2                             | Elevator Down          | Kraken     | 13       |
-| L3 (Left Stick Click)          |                        |            |          |
-| R3 (Right Stick Click)         |                        |            |          |
-| D-Pad Up                       | Stage 1 Elevator       | Kraken     | 13       |
-| D-Pad Down                     | Stage 4 Elevator       | Kraken     | 13       |
-| D-Pad Left                     | Stage 3 Elevator       | Kraken     | 13       |
-| D-Pad Right                    | Stage 2 Elevator       | Kraken     | 13       |
-| Options Button + Create Button | Deepclimb              | Neo        | 9, 10    |
 
-## **Motor Assignments**
+Used in **auto align** and naming **autons**
 
-| Component    | Motor Type     | Position | Port | 
-| ------------ | -------------- | -------- | ---- | 
-| **Swerve**   | Neo (Steer)    | FL       | 1    | 
-|              |                | FR       | 3    | 
-|              |                | BR       | 5    | 
-|              |                | BL       | 7    | 
-|              | Kraken (Drive) | FL       | 2    | 
-|              |                | FR       | 4    | 
-|              |                | BL       | 6    | 
-|              |                | BR       | 8    | 
-| **Climb**    | Neo            | TOP      | 9    | 
-|              |                | BOTTOM   | 10   | 
-| **Elevator** | Kraken         | -        | 13   | 
-| **Pivot**    | Neo            | -        | 14   | 
-| **Intake**   | Neo            | -        | 16   | 
+
+- A-L are reef poses
+- LS and RS are Left Source (from alliance wall)  and Right Source respectively
+- P is processor
+
+  
+## Reef Naming Diagram
+
+
+
+<img width="262" alt="Screenshot 2025-02-07 at 8 15 35 PM" src="https://github.com/user-attachments/assets/2f59b383-8e66-4062-a129-31e69f7fe6b3" />
+
+
+# Auton 
+Every auton name consists of the path names separated by an exclamation point
+
+
+## Naming example 
+**Auton:** 1! 1J! JTS!
+
+**Explanation:**<a id="section_id"></a>
+
+**1!** the first path leaves the first starting position (left-most from alliance wall)
+
+
+**1J!** the second path goes from the first path to reef J
+
+
+**JtLS!** the third path goes from reef J to the Left Source 
+
+**results in:** 
+
+<img width="400" src ="https://github.com/user-attachments/assets/a762738d-5ce7-4dd8-92ae-60dabd413042"/>
+
+
+## Naming explanation 
+
+
+The **first path** always leaves the starting zone. The starting positions are labeled 1-3 starting from the left-most position from the alliance wall. Ends with velocity of 1 m/s.
+
+
+<img width="100" alt="Screenshot 2025-02-07 at 8 34 27 PM" src="https://github.com/user-attachments/assets/df266e97-971f-464a-9452-caf26d9d7718" />
+<img width= "250" src = "https://github.com/user-attachments/assets/d633ae7e-2277-4dba-a05a-a0a45abb18f7"/> (path 1!) 
+
+
+The **second path** starts from the end of the first path and goes to the next position listed. These end with a velocity of 0. 
+
+
+<img width = "250" src ="https://github.com/user-attachments/assets/c1163390-53f9-41c9-a466-11bb1e2a7194"/> (path 1J!)
+
+
+
+The **following paths** start from the first position listed and end at the last. The positions are seperated with a "t". For example LtRS is pose L to Right Source. 
+
+
+<img width = "250" src="https://github.com/user-attachments/assets/21595538-5714-4bbe-8fd0-a374f7cc71d1" /> (path JtLS!)
+
 
