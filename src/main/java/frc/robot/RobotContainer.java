@@ -33,6 +33,7 @@ public class RobotContainer {
 
   private BaseDriveController driveController;
 
+  private final SendableChooser<Command> autoChooser;
 
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(
@@ -54,7 +55,17 @@ public class RobotContainer {
     // startLog();
     setVisionDataInterface();
     configureBindings();
-  }
+    
+
+    autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
+      (stream) -> isCompetition
+        ? stream.filter(auto -> auto.getName().startsWith("C;"))
+        : stream
+      );
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+}
+
+
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -112,7 +123,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new PathPlannerAuto("Three Meters");
+    return autoChooser.getSelected(); 
   }
 
   /**
