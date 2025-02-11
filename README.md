@@ -1,6 +1,26 @@
-[Section Title](#section_id)
-# Reef Naming Diagram
+# Table of Contents
+
+1. [Pose Names](#pose-names)
+2. [Auton](#auton)
+
+   
+    1. [Naming example](#auton-naming-example)
+    2. [Naming explanation](#auton-naming-explanation)
+       
+
+# Pose Names 
+
+
 Used in **auto align** and naming **autons**
+
+
+- A-L are reef poses
+- LS and RS are Left Source (from alliance wall)  and Right Source respectively
+- P is processor
+
+  
+## Reef Naming Diagram
+
 
 
 <img width="262" alt="Screenshot 2025-02-07 at 8 15 35 PM" src="https://github.com/user-attachments/assets/2f59b383-8e66-4062-a129-31e69f7fe6b3" />
@@ -8,12 +28,6 @@ Used in **auto align** and naming **autons**
 
 # Auton 
 Every auton name consists of the path names separated by an exclamation point
-
-
-### Pose names: 
-- A-L are reef poses
-- LS and RS are Left Source (from alliance wall)  and Right Source respectively
-- P is processor
 
 
 ## Auton naming example 
