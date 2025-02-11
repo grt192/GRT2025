@@ -4,8 +4,8 @@
 2. [Auton](#auton)
 
    
-    1. [Naming example](#auton-naming-example)
-    2. [Naming explanation](#auton-naming-explanation)
+    1. [Naming example](#naming-example)
+    2. [Naming explanation](#naming-explanation)
        
 
 # Pose Names 
@@ -30,7 +30,7 @@ Used in **auto align** and naming **autons**
 Every auton name consists of the path names separated by an exclamation point
 
 
-## Auton naming example 
+## Naming example 
 **Auton:** 1! 1J! JTS!
 
 **Explanation:**<a id="section_id"></a>
