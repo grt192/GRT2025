@@ -4,22 +4,23 @@
 
 package frc.robot;
 
-import frc.robot.controllers.BaseDriveController;
-import frc.robot.controllers.DualJoystickDriveController;
-import frc.robot.controllers.PS5DriveController;
-import frc.robot.controllers.XboxDriveController;
-
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.VisionConstants;
+import frc.robot.controllers.BaseDriveController;
+import frc.robot.controllers.DualJoystickDriveController;
+import frc.robot.controllers.PS5DriveController;
+import frc.robot.controllers.XboxDriveController;
 import frc.robot.subsystems.Vision.VisionSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
-import frc.robot.Constants.VisionConstants;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -38,8 +39,14 @@ public class RobotContainer {
     VisionConstants.cameraConfigs[1]
   );
 
+  private final CommandPS5Controller mechController = new CommandPS5Controller(1);
+
+  Trigger xbutton;  //Auto Intake
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
+    xbutton = mechController.cross();
+
     constructDriveController(); 
     startLog();
     setVisionDataInterface();
@@ -72,6 +79,8 @@ public class RobotContainer {
       )
     );
 
+
+    //
     /* Pressing the button resets the field axes to the current robot axes. */
     driveController.bindDriverHeadingReset(
       () ->{
@@ -79,6 +88,7 @@ public class RobotContainer {
       },
       swerveSubsystem
     );
+
   }
 
   /**
