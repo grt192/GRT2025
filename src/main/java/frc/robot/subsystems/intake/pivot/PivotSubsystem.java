@@ -49,12 +49,13 @@ public class PivotSubsystem extends SubsystemBase{
     public PivotSubsystem(){
         pivotMotor = new LoggedSparkMax(IntakeConstants.PivotMotorLoggedSparkMaxConfig);
         targetState = PivotState.ZERO;
+        pivotMotor.setPosition(Units.degreesToRadians(82));
         armFeedforward = new ArmFeedforward(PIVOT_KS, PIVOT_KG, PIVOT_KV);
         gravityFF = 0;
     }
 
     public double getCurrentAngle() {
-        return pivotEncoder.getPosition();
+        return pivotMotor.getPosition();
     }
 
     public PivotState getTargetState() {
@@ -62,8 +63,14 @@ public class PivotSubsystem extends SubsystemBase{
     }
 
     public void setState(PivotState targetState) {
-        gravityFF = armFeedforward.calculate(targetState.getTargetAngle(), 2);
-        pivotPID.setReference(targetState.getTargetAngle(), ControlType.kPosition, ClosedLoopSlot.kSlot0, gravityFF, ArbFFUnits.kVoltage);
+        if (getCurrentAngle() < targetState.getTargetAngle()) {
+            gravityFF = armFeedforward.calculate((targetState.getTargetAngle()), 1.5);
+            // System.out.println(targetState.getTargetAngle() + Units.degreesToRadians(90));
+        }
+        else {
+            gravityFF = 0;
+        }
+        pivotMotor.setReference(targetState.getTargetAngle(), ControlType.kPosition, ClosedLoopSlot.kSlot0, gravityFF, ArbFFUnits.kVoltage);
         // System.out.println("state set to : " + targetState.getTargetAngle());
         this.targetState = targetState;
     }
@@ -79,5 +86,11 @@ public class PivotSubsystem extends SubsystemBase{
     public double getPositionError() {
         return Math.abs(getCurrentAngle() - targetState.getTargetAngle());
     }
+
+    @Override
+    public void periodic() {
+        pivotMotor.publishStats();
+    }
+
     }
 

@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import frc.robot.commands.Pivot.SetPivotOuttakeCommand;
+import frc.robot.commands.Pivot.SetPivotSourceCommand;
+import frc.robot.commands.Pivot.SetPivotVerticalCommand;
+import frc.robot.commands.Pivot.SetPivotZeroCommand;
 // import frc.robot.commands.pivot.SetPivotVerticalCommand;
 // import frc.robot.commands.pivot.SetPivotZeroCommand;
 import frc.robot.controllers.BaseDriveController;
@@ -58,7 +62,7 @@ public class RobotContainer {
   );
 
   private CommandPS5Controller mechController;
-  private Trigger aButton, lTrigger, rTrigger;
+  private Trigger aButton, lTrigger, rTrigger, lBumper, rBumper;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -66,6 +70,9 @@ public class RobotContainer {
     aButton = new Trigger(mechController.cross());
     lTrigger = new Trigger(mechController.L2());
     rTrigger = new Trigger(mechController.R2());
+
+    lBumper = new Trigger(mechController.L1());
+    rBumper = new Trigger(mechController.R1());
 
     constructDriveController(); 
     // startLog();
@@ -99,17 +106,30 @@ public class RobotContainer {
     //   )
     // );
 
-    // aButton.onTrue(
-    //   new ConditionalCommand(
-    //     new SetPivotZeroCommand(pivotSubsystem),
-    //     new SetPivotVerticalCommand(pivotSubsystem),
-    //     () -> (pivotSubsystem.getTargetState() == PivotState.VERTICAL)
-    //     ).withTimeout(3)
-    // );
+    rBumper.onTrue(
+      new ConditionalCommand(
+        new SetPivotOuttakeCommand(pivotSubsystem),
+        new ConditionalCommand(
+          new SetPivotZeroCommand(pivotSubsystem).andThen(new SetPivotSourceCommand(pivotSubsystem)), 
+          new SetPivotSourceCommand(pivotSubsystem), 
+          () -> (pivotSubsystem.getCurrentAngle() < PivotState.ZERO.getTargetAngle())),
+        () -> (pivotSubsystem.getTargetState() == PivotState.SOURCE)
+        )
+    );
 
-    rollerSubsystem.setDefaultCommand(new InstantCommand( () -> {
-      rollerSubsystem.setRollerPower(.25 * (mechController.getL2Axis() - mechController.getR2Axis()));
-    }, rollerSubsystem));
+    lBumper.onTrue(
+      new SetPivotVerticalCommand(pivotSubsystem).withTimeout(2.5)
+    );
+
+    rollerSubsystem.setDefaultCommand(new ConditionalCommand(
+      new InstantCommand( () -> {
+        //ps5 trigger's range is -1 to 1, with non-input position being -1. This maps the range -1 to 1 to 0 to 1.
+        rollerSubsystem.setRollerPower(.25 * (mechController.getR2Axis() + 1.) / 2.); 
+      }, rollerSubsystem), 
+      new InstantCommand( () -> {
+        rollerSubsystem.setRollerPower(.25 * (mechController.getR2Axis() - mechController.getL2Axis()));
+      }, rollerSubsystem), 
+      () -> rollerSubsystem.getIntakeSensor()));
 
     // aButton.onTrue(
     //     new SetPivotVerticalCommand(pivotSubsystem)

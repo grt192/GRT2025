@@ -1,4 +1,4 @@
-package frc.robot.commands.pivot;
+package frc.robot.commands.Pivot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake.pivot.PivotState;
@@ -15,7 +15,7 @@ public class SetPivotVerticalCommand extends Command{
     @Override
     public void execute() {
         this.pivotSubsystem.setState(PivotState.VERTICAL);
-        System.out.println("vertical" + pivotSubsystem.getPositionError());
+        // System.out.println("vertical" + pivotSubsystem.getPositionError());
     }
 
     @Override

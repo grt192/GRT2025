@@ -135,6 +135,14 @@ public class LoggedSparkMax {
     }
 
     /**
+     * Sets the position of the motor in rotations after taking the position
+     * conversion factor into account
+     */
+    public void setPosition(double value){
+        encoder.setPosition(value);
+    }
+
+    /**
      * Gets the velocity of the motor in RPM after taking the velocity
      * conversion factor into account
      */

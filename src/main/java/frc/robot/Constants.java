@@ -10,6 +10,7 @@ import java.util.Optional;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.MAXMotionConfig;
 import com.revrobotics.spark.config.SoftLimitConfig;
 
 import java.util.OptionalInt;
@@ -17,10 +18,10 @@ import java.util.Optional;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.MAXMotionConfig;
 import com.revrobotics.spark.config.SoftLimitConfig;
 
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -172,24 +173,24 @@ public final class Constants {
   public static class IntakeConstants {
     public static final int PIVOT_ID = 14;
     public static final int ROLLER_ID = 16;
-    public static final int INTAKE_SENSOR_ID = 0;
+    public static final int INTAKE_SENSOR_ID = 1;
 
     public static final double PIVOT_CONVERSION_FACTOR = (2 * Math.PI) / 30.;
 
     public static final double ZERO_POSITION = 0;
-    public static final double SOURCE_POSITION = 0; //TODO: change
-    public static final double OUTTAKE_POSITION = 0; //TODO: change
-    public static final double VERTICAL_POSITION = Units.degreesToRadians(90); //TODO: change
+    public static final double SOURCE_POSITION = Units.degreesToRadians(45); //TODO: change
+    public static final double OUTTAKE_POSITION = Units.degreesToRadians(-45); //TODO: change
+    public static final double VERTICAL_POSITION = Units.degreesToRadians(82); //TODO: change
 
-    public static final double PIVOT_TOLERANCE = .05; //TODO: change
+    public static final double PIVOT_TOLERANCE = .08; //TODO: change
 
-    public static final double PIVOT_KG = 1.2;
+    public static final double PIVOT_KG = 3;
     public static final double PIVOT_KS = 0;
     public static final double PIVOT_KV = 0;
 
-    public static final double PIVOT_P = 2.1;
+    public static final double PIVOT_P = .3;
     public static final double PIVOT_I = 0;
-    public static final double PIVOT_D = 0;
+    public static final double PIVOT_D = 0.3;
 
 	public static final LoggedSparkMaxConfig PivotMotorLoggedSparkMaxConfig = new LoggedSparkMaxConfig(
 		PIVOT_ID,
@@ -199,9 +200,9 @@ public final class Constants {
 		Optional.of(
       new SoftLimitConfig()
 			.forwardSoftLimitEnabled(true)
-			.forwardSoftLimit(Units.degreesToRadians(90))
+			.forwardSoftLimit(Units.degreesToRadians(85))
 			.reverseSoftLimitEnabled(true)
-			.reverseSoftLimit(0)
+			.reverseSoftLimit(Units.degreesToRadians(-50))
     )
 	);
 
