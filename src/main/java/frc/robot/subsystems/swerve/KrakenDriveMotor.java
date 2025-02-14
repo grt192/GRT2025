@@ -9,7 +9,7 @@ import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -27,11 +27,13 @@ import frc.robot.util.GRTUtil;
 public class KrakenDriveMotor {
     
     private TalonFX motor;
-    private VelocityVoltage request = new VelocityVoltage(0).withSlot(0);
+    private VelocityTorqueCurrentFOC request = new VelocityTorqueCurrentFOC(0).withSlot(0);
+    
     private double targetRps = 0;
 
     private final TalonFXConfiguration motorConfig = new TalonFXConfiguration();
 
+    //logging
     //logging
     private NetworkTableInstance ntInstance;
     private NetworkTable swerveStatsTable;
@@ -65,12 +67,10 @@ public class KrakenDriveMotor {
     public KrakenDriveMotor(int canId) {
         motor = new TalonFX(canId, "can");
 
-        // motorConfig.TorqueCurrent.PeakForwardTorqueCurrent = 80.0;
-        // motorConfig.TorqueCurrent.PeakReverseTorqueCurrent = -80.0;
-        // motorConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.02;
+        motorConfig.TorqueCurrent.PeakForwardTorqueCurrent = 80.0;
+        motorConfig.TorqueCurrent.PeakReverseTorqueCurrent = -80.0;
+        motorConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.02;
         motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        motorConfig.Voltage.PeakForwardVoltage = 12;
-        motorConfig.Voltage.PeakReverseVoltage = 12;
 
         motor.setPosition(0);
         // Apply configs, apparently this fails a lot
