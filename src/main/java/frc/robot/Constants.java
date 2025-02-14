@@ -146,24 +146,24 @@ public final class Constants {
       new CameraConfig(
         "2",
         new Transform3d(
-          -0.19, -0.065, 0.2,
-          new Rotation3d(Math.PI / 2., 0., Math.PI)
+          -0.019912, 0.029982, 0.997269,
+          new Rotation3d(0, 0., Math.PI * 8. / 9.)
         ),
         PoseStrategy.LOWEST_AMBIGUITY
       ),
       new CameraConfig(
           "3",
-          new Transform3d(
-            -0.19, -0.065, 0.2,
-            new Rotation3d(Math.PI / 2., 0., Math.PI)
+          new Transform3d(//11.3 in above ground
+            0.2032, -0.2413, 0.28702 ,
+            new Rotation3d(0, 0.,Math.PI/9.)
           ),
           PoseStrategy.LOWEST_AMBIGUITY
       ),
       new CameraConfig(
           "4",
           new Transform3d(
-            -0.19, -0.065, 0.2,
-            new Rotation3d(Math.PI / 2., 0., Math.PI)
+            -0.019912, -0.029982, 0.997269,
+            new Rotation3d(0, 0., -Math.PI * 8./ 9.)
           ),
           PoseStrategy.LOWEST_AMBIGUITY
       )
