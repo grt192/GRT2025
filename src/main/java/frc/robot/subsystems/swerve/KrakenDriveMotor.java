@@ -1,8 +1,7 @@
 package frc.robot.subsystems.swerve;
 
 import static frc.robot.Constants.LoggingConstants.SWERVE_TABLE;
-import static frc.robot.Constants.SwerveConstants.DRIVE_GEAR_REDUCTION;
-import static frc.robot.Constants.SwerveConstants.DRIVE_WHEEL_CIRCUMFERENCE;
+import static frc.robot.Constants.SwerveConstants.*;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusCode;
@@ -66,9 +65,10 @@ public class KrakenDriveMotor {
     public KrakenDriveMotor(int canId) {
         motor = new TalonFX(canId, "can");
 
-        motorConfig.TorqueCurrent.PeakForwardTorqueCurrent = 80.0;
-        motorConfig.TorqueCurrent.PeakReverseTorqueCurrent = -80.0;
-        motorConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = 0.02;
+        motorConfig.TorqueCurrent.PeakForwardTorqueCurrent = PEAK_CURRENT;
+        motorConfig.TorqueCurrent.PeakReverseTorqueCurrent = - PEAK_CURRENT;
+
+        motorConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = RAMP_RATE;
         motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
         motor.setPosition(0);
@@ -151,11 +151,12 @@ public class KrakenDriveMotor {
     public void configPID(double p, double i, double d, double s, double v) {
         Slot0Configs slot0Configs = new Slot0Configs();
 
-        slot0Configs.kP = p;
-        slot0Configs.kI = i;
-        slot0Configs.kD = d;
-        slot0Configs.kS = s;
-        slot0Configs.kV = v;
+        //dividing by KT to convert volts to current
+        slot0Configs.kP = p / KT;
+        slot0Configs.kI = i / KT;
+        slot0Configs.kD = d / KT;
+        slot0Configs.kS = s / KT;
+        slot0Configs.kV = v / KT;
 
         motor.getConfigurator().apply(slot0Configs);
     }
@@ -183,6 +184,16 @@ public class KrakenDriveMotor {
     public double getError() {
         return motor.getClosedLoopError().getValueAsDouble();
     }
+
+    /**
+     * Gets the tempature of the motor
+     * @return temperature of the motor in double
+     */
+    public double getTemperature() {
+        return motor.getDeviceTemp().getValueAsDouble();
+    }
+
+
 
     /**
      * Publishes motor stats to NT for logging
