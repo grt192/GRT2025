@@ -71,7 +71,7 @@ public class RobotContainer {
 
 
     constructDriveController(); 
-    startLog();
+    // startLog();
     setVisionDataInterface();
     configureBindings();
   }
