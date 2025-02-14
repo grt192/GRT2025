@@ -97,7 +97,11 @@ public final class Constants {
     public static final double[] STEER_P = new double[] {5.62, 5.5, 5.45, 5.54};
     public static final double[] STEER_I = new double[] {0, 0, 0, 0};
     public static final double[] STEER_D = new double[] {0, 0, 0, 0};
-    public static final double[] STEER_FF = new double[] {0.036, 0.024, 0.0182, 0.05};
+    public static final double[] STEER_FF = new double[] {0.023,.02,0.025,0.03}; //{0.036, 0.024, 0.0182, 0.05};
+    
+    public static final boolean DRIVE_DEBUG = false;
+    public static final boolean STEER_DEBUG = false;
+    public static final boolean STATE_DEBUG = false;
   }
 
   public static class LoggingConstants{

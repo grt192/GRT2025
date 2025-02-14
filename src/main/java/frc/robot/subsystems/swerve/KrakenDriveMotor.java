@@ -9,6 +9,7 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -26,7 +27,8 @@ import frc.robot.util.GRTUtil;
 public class KrakenDriveMotor {
     
     private TalonFX motor;
-    private VelocityTorqueCurrentFOC request = new VelocityTorqueCurrentFOC(0).withSlot(0);
+    // private VelocityTorqueCurrentFOC request = new VelocityTorqueCurrentFOC(0).withSlot(0);
+     private VelocityVoltage request = new VelocityVoltage(0).withSlot(0);
     
     private double targetRps = 0;
 
@@ -65,11 +67,16 @@ public class KrakenDriveMotor {
     public KrakenDriveMotor(int canId) {
         motor = new TalonFX(canId, "can");
 
-        motorConfig.TorqueCurrent.PeakForwardTorqueCurrent = PEAK_CURRENT;
-        motorConfig.TorqueCurrent.PeakReverseTorqueCurrent = - PEAK_CURRENT;
+        // motorConfig.TorqueCurrent.PeakForwardTorqueCurrent = PEAK_CURRENT;
+        // motorConfig.TorqueCurrent.PeakReverseTorqueCurrent = - PEAK_CURRENT;
 
-        motorConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = RAMP_RATE;
+        // motorConfig.ClosedLoopRamps.TorqueClosedLoopRampPeriod = RAMP_RATE;
+        // motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+
         motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        motorConfig.Voltage.PeakForwardVoltage = 12;
+        motorConfig.Voltage.PeakReverseVoltage = 12;
+        
 
         motor.setPosition(0);
         // Apply configs, apparently this fails a lot
@@ -152,11 +159,17 @@ public class KrakenDriveMotor {
         Slot0Configs slot0Configs = new Slot0Configs();
 
         //dividing by KT to convert volts to current
-        slot0Configs.kP = p / KT;
-        slot0Configs.kI = i / KT;
-        slot0Configs.kD = d / KT;
-        slot0Configs.kS = s / KT;
-        slot0Configs.kV = v / KT;
+        // slot0Configs.kP = p / KT;
+        // slot0Configs.kI = i / KT;
+        // slot0Configs.kD = d / KT;
+        // slot0Configs.kS = s / KT;
+        // slot0Configs.kV = v / KT;
+
+        slot0Configs.kP = p;
+        slot0Configs.kI = i;
+        slot0Configs.kD = d;
+        slot0Configs.kS = s;
+        slot0Configs.kV = v;
 
         motor.getConfigurator().apply(slot0Configs);
     }
