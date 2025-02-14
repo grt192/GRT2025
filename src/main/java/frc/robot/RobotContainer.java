@@ -44,12 +44,15 @@ public class RobotContainer {
   private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
 
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
-  private final VisionSubsystem visionSubsystem1 = new VisionSubsystem(
-    VisionConstants.cameraConfigs[0]
+  // private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(
+  //   VisionConstants.cameraConfigs[1]
+  // );
+  private final VisionSubsystem visionSubsystem3 = new VisionSubsystem(
+    VisionConstants.cameraConfigs[2]
   );
-  private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(
-    VisionConstants.cameraConfigs[1]
-  );
+  // private final VisionSubsystem visionSubsystem4 = new VisionSubsystem(
+  //   VisionConstants.cameraConfigs[3]
+  // );
 
 
   private final Trigger xButton, sButton;
@@ -177,7 +180,9 @@ public class RobotContainer {
    * Links vision and swerve
    */
   private void setVisionDataInterface(){
-    visionSubsystem1.setInterface(swerveSubsystem::addVisionMeasurements);
-    visionSubsystem2.setInterface(swerveSubsystem::addVisionMeasurements);
+    //visionSubsystem2.setInterface(swerveSubsystem::addVisionMeasurements);
+    visionSubsystem3.setInterface(swerveSubsystem::addVisionMeasurements);
+    //visionSubsystem4.setInterface(swerveSubsystem::addVisionMeasurements);
+
   }
 }

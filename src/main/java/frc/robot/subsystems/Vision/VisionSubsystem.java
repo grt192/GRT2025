@@ -15,6 +15,7 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.networktables.DoubleArrayPublisher;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -37,7 +38,7 @@ public class VisionSubsystem extends SubsystemBase {
     private StructPublisher<Pose2d> visionPosePublisher;
     private DoublePublisher visionDistPublisher;
     private StructPublisher<Pose3d> cameraPosePublisher;
-
+    private DoubleArrayPublisher tagDistancePublisher;
     private StructLogEntry<Pose2d> estimatedPoseLogEntry;
     private DoubleArrayLogEntry tagDistanceLogEntry;
     private IntegerArrayLogEntry tagIDLogEntry;
@@ -105,6 +106,10 @@ public class VisionSubsystem extends SubsystemBase {
                     tagIDs[i] = target.getFiducialId();
                     tagDistances[i] = distance;
                 }
+                tagDistancePublisher.set(tagDistances);
+                tagDistanceLogEntry.append(tagDistances);
+                tagIDLogEntry.append(tagIDs);
+                visionDistPublisher.set(minDistance);
 
                 //Don't use vision measurement if tags are too far
                 if(minDistance > 3) continue;
@@ -118,10 +123,10 @@ public class VisionSubsystem extends SubsystemBase {
                     double x = estimatedPose2d.getTranslation().getX();
                     double y = estimatedPose2d.getTranslation().getY();
 
-                    if (x - VisionConstants.ROBOT_RADIUS > 0 ||
-                        x + VisionConstants.ROBOT_RADIUS < VisionConstants.FIELD_X || 
-                        y - VisionConstants.ROBOT_RADIUS > 0 ||
-                        y + VisionConstants.ROBOT_RADIUS < VisionConstants.FIELD_Y
+                    if (x - VisionConstants.ROBOT_RADIUS < 0 ||
+                        x + VisionConstants.ROBOT_RADIUS > VisionConstants.FIELD_X || 
+                        y - VisionConstants.ROBOT_RADIUS < 0 ||
+                        y + VisionConstants.ROBOT_RADIUS > VisionConstants.FIELD_Y
                     ){
                         continue;
                     }
@@ -138,10 +143,7 @@ public class VisionSubsystem extends SubsystemBase {
                     );
                     visionPosePublisher.set(estimatedPose2d);
                     estimatedPoseLogEntry.update(estimatedPose2d);
-                    tagDistanceLogEntry.append(tagDistances);
-                    tagIDLogEntry.append(tagIDs);
-                }
-                visionDistPublisher.set(minDistance);
+                                    }
             }
         }
     }
@@ -165,11 +167,15 @@ public class VisionSubsystem extends SubsystemBase {
         visionPosePublisher = visionStatsTable.getStructTopic(
             "estimated pose", Pose2d.struct
         ).publish();
+
         visionDistPublisher = visionStatsTable.getDoubleTopic(
             "dist"
         ).publish();
         cameraPosePublisher = visionStatsTable.getStructTopic(
             "camera pose", Pose3d.struct
+        ).publish();
+        tagDistancePublisher = visionStatsTable.getDoubleArrayTopic(
+            "Tag Distances"
         ).publish();
         cameraPosePublisher.set(
             new Pose3d().transformBy(cameraConfig.getCameraPose())
