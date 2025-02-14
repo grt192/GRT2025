@@ -56,16 +56,22 @@ public final class Constants {
     public static final double MAX_VEL = 6000. / 6.923 / 60. * 2. * 2. * Math.PI * .0254; // Kraken speed / gear ratio / reduced to per second * circumference * convert to meters
     public static final double MAX_OMEGA = MAX_VEL / FL_POS.getNorm();
 
+
+    public static final double PEAK_CURRENT = 80; //Recomended by CTRE for avarage current
+    public static final double RAMP_RATE = 0.1;
+    public static final double KT = 0.01937; // Torque constant in Nm/A, refer to ctre Motor Performance Analysis Report
+
     public static final double[] DRIVE_P = new double[] {0.32, 0.32, 0.32, 0.32};
     public static final double[] DRIVE_I = new double[] {0, 0, 0, 0}; 
     public static final double[] DRIVE_D = new double[] {0, 0, 0, 0};
-    public static final double[] DRIVE_S = new double[] {0.1499, 0.1499, 0.1499, 0.1499};
+    public static final double[] DRIVE_S = new double[] {0.16, 0.1499, 0.1499, 0.1499};
     public static final double[] DRIVE_V = new double[] {0.11, 0.112, 0.112, 0.112};
 
-    public static final double[] STEER_P = new double[] {5.4, 5.4, 5.4, 5.4};
+
+    public static final double[] STEER_P = new double[] {5.62, 5.5, 5.45, 5.54};
     public static final double[] STEER_I = new double[] {0, 0, 0, 0};
     public static final double[] STEER_D = new double[] {0, 0, 0, 0};
-    public static final double[] STEER_FF = new double[] {0.036, 0.024, 0.0182, 0.05};
+    public static final double[] STEER_FF = new double[] {0.023,.02,0.025,0.03}; //{0.036, 0.024, 0.0182, 0.05};
     
     public static final boolean DRIVE_DEBUG = false;
     public static final boolean STEER_DEBUG = false;
