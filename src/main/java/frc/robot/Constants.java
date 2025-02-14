@@ -66,9 +66,9 @@ public final class Constants {
     public static final double MAX_OMEGA = MAX_VEL / FL_POS.getNorm();
 
 
-    public static final double PEAK_CURRENT = 80;
+    public static final double PEAK_CURRENT = 80; //Recomended by CTRE for avarage current
     public static final double RAMP_RATE = 0.1;
-    public static final double KT = 0.018; // Torque constant in Nm/A
+    public static final double KT = 0.01937; // Torque constant in Nm/A, refer to ctre Motor Performance Analysis Report
 
     public static final double[] DRIVE_P = new double[] {0.32, 0.32, 0.32, 0.32};
     public static final double[] DRIVE_I = new double[] {0, 0, 0, 0}; 
