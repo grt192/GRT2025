@@ -159,11 +159,11 @@ public class KrakenDriveMotor {
         Slot0Configs slot0Configs = new Slot0Configs();
 
         //dividing by KT to convert volts to current
-        slot0Configs.kP = p / KT;
-        slot0Configs.kI = i / KT;
-        slot0Configs.kD = d / KT;
-        slot0Configs.kS = s / KT;
-        slot0Configs.kV = v / KT;
+        slot0Configs.kP = p;
+        slot0Configs.kI = i;
+        slot0Configs.kD = d;
+        slot0Configs.kS = s;
+        slot0Configs.kV = v;
 
         // slot0Configs.kP = p;
         // slot0Configs.kI = i;
