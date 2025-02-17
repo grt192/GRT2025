@@ -148,6 +148,19 @@ public class AutoAlignCommand {
         return runAlignPath(swerveSubsystem, sourceName);
     }
 
+    public static Command lrReefAlign(SwerveSubsystem swerveSubsystem, Boolean Right) {
+        if (Right){
+            Pose2d closestRight = currentPose.nearest(rightReefPoseList);
+            int index = rightReefPoseList.indexOf(closestRight);
+            followPath =reefPathList.get(2*index +1);
+        }
+        else {
+            Pose2d closestLeft = currentPose.nearest(leftReefPoseList);
+            int index = rightReefPoseList.indexOf(closestLeft);
+            followPath = reefPathList.get(2*index);
+        }
+        return runAlignPath(swerveSubsystem, followPath);
+    }
     /**
      * Aligns to the closest reef pose unless boolean switchPose is true then it aligns to the pose next to it
      * @param swerveSubsystem

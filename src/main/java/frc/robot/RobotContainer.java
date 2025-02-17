@@ -102,13 +102,13 @@ public class RobotContainer {
     );
 
     //cross
-    driveController.getAlignToReef().onTrue(new InstantCommand (() -> AutoAlignCommand.closeReefMath(swerveSubsystem,false)));
+    driveController.getAlignToReef().onTrue(new InstantCommand (() -> AutoAlignCommand.lrReefAlign(swerveSubsystem,true)));
     // driveController.getAlignToReef().onTrue(
     //   AutoAlignCommand.closeReefAlign(swerveSubsystem, false).onlyWhile(() -> driveController.getForwardPower() 
     //   <= 0.05 && driveController.getLeftPower() <= 0.05));
 
     // square
-    driveController.getAlignToSource().onTrue(new InstantCommand(() -> AutoAlignCommand.closeReefMath(swerveSubsystem, true)));
+    driveController.getAlignToSource().onTrue(new InstantCommand(() -> AutoAlignCommand.;lrReefAlign(swerveSubsystem, false )));
     // visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
     // driveController.getAlignToSource().onTrue(
     //   AutoAlignCommand.closeReefAlign(swerveSubsystem, true).onlyWhile(() -> driveController.getForwardPower() 
