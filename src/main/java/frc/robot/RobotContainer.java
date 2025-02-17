@@ -108,7 +108,7 @@ public class RobotContainer {
     //   <= 0.05 && driveController.getLeftPower() <= 0.05));
 
     // square
-    driveController.getAlignToSource().onTrue(new InstantCommand(() -> AutoAlignCommand.;lrReefAlign(swerveSubsystem, false )));
+    driveController.getAlignToSource().onTrue(new InstantCommand(() -> AutoAlignCommand.lrReefAlign(swerveSubsystem, false )));
     // visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
     // driveController.getAlignToSource().onTrue(
     //   AutoAlignCommand.closeReefAlign(swerveSubsystem, true).onlyWhile(() -> driveController.getForwardPower() 
