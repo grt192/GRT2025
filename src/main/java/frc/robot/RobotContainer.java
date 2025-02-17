@@ -41,16 +41,15 @@ public class RobotContainer {
   private final Trigger createTrigger;
   private final Trigger optionTrigger;
   private final Trigger xbutton;
-  private final VisionSubsystem visionSubsystem = new VisionSubsystem();
-  // private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(
-  //   VisionConstants.cameraConfigs[1]
-  // );
+  private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(
+    VisionConstants.cameraConfigs[1]
+  );
   private final VisionSubsystem visionSubsystem3 = new VisionSubsystem(
     VisionConstants.cameraConfigs[2]
   );
-  // private final VisionSubsystem visionSubsystem4 = new VisionSubsystem(
-  //   VisionConstants.cameraConfigs[3]
-  // );
+  private final VisionSubsystem visionSubsystem4 = new VisionSubsystem(
+    VisionConstants.cameraConfigs[3]
+  );
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -181,9 +180,9 @@ public class RobotContainer {
    * Links vision and swerve
    */
   private void setVisionDataInterface(){
-    //visionSubsystem2.setInterface(swerveSubsystem::addVisionMeasurements);
+    visionSubsystem2.setInterface(swerveSubsystem::addVisionMeasurements);
     visionSubsystem3.setInterface(swerveSubsystem::addVisionMeasurements);
-    //visionSubsystem4.setInterface(swerveSubsystem::addVisionMeasurements);
+    visionSubsystem4.setInterface(swerveSubsystem::addVisionMeasurements);
 
   }
 }
