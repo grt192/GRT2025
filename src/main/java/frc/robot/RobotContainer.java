@@ -31,15 +31,15 @@ public class RobotContainer {
   private BaseDriveController driveController;
 
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
-  // private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(
-  //   VisionConstants.cameraConfigs[1]
-  // );
+  private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(
+    VisionConstants.cameraConfigs[1]
+  );
   private final VisionSubsystem visionSubsystem3 = new VisionSubsystem(
     VisionConstants.cameraConfigs[2]
   );
-  // private final VisionSubsystem visionSubsystem4 = new VisionSubsystem(
-  //   VisionConstants.cameraConfigs[3]
-  // );
+  private final VisionSubsystem visionSubsystem4 = new VisionSubsystem(
+    VisionConstants.cameraConfigs[3]
+  );
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -123,9 +123,9 @@ public class RobotContainer {
    * Links vision and swerve
    */
   private void setVisionDataInterface(){
-    //visionSubsystem2.setInterface(swerveSubsystem::addVisionMeasurements);
+    visionSubsystem2.setInterface(swerveSubsystem::addVisionMeasurements);
     visionSubsystem3.setInterface(swerveSubsystem::addVisionMeasurements);
-    //visionSubsystem4.setInterface(swerveSubsystem::addVisionMeasurements);
+    visionSubsystem4.setInterface(swerveSubsystem::addVisionMeasurements);
 
   }
 }

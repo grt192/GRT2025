@@ -53,17 +53,17 @@ public final class Constants {
 
     public static final double DRIVE_GEAR_REDUCTION = 9. * 20. / 26.;
     public static final double DRIVE_WHEEL_CIRCUMFERENCE = Units.inchesToMeters(4 * Math.PI);
-    public static final double MAX_VEL = 4800. / 6.923 / 60. * 2. * 2. * Math.PI * .0254; // Kraken speed / gear ratio / reduced to per second * circumference * convert to meters
+    public static final double MAX_VEL = 3250. / 6.923 / 60. * 2. * 2. * Math.PI * .0254; // Kraken speed / gear ratio / reduced to per second * circumference * convert to meters
     public static final double MAX_OMEGA = MAX_VEL / FL_POS.getNorm();
 
 
-    public static final double PEAK_CURRENT = 180; //Recomended by CTRE for avarage current
+    public static final double PEAK_CURRENT = 60; //Recomended by CTRE for avarage current
     public static final double RAMP_RATE = 0;
     public static final double KT = 0.01937; // Torque constant in Nm/A, refer to ctre Motor Performance Analysis Report
 
     public static final double[] DRIVE_P = new double[] {10, 10, 10, 10}; //.32
     public static final double[] DRIVE_I = new double[] {0, 0, 0, 0}; 
-    public static final double[] DRIVE_D = new double[] {0.02, 0.02, 0.02, 0.02};
+    public static final double[] DRIVE_D = new double[] {0.01, 0.01, 0.01, 0.01};
     public static final double[] DRIVE_S = new double[] {5, 5, 5, 5};//{0.16, 0.1499, 0.1499, 0.1499};
     public static final double[] DRIVE_V = new double[] {0.0, 0.0, 0.0, 0.0}; //{0.11, 0.112, 0.112, 0.112};
 
@@ -120,24 +120,24 @@ public final class Constants {
       new CameraConfig(
         "2",
         new Transform3d(
-          -0.019912, 0.029982, 0.997269,
-          new Rotation3d(0, 0., Math.PI * 8. / 9.)
+          0.0508, -0.0476,1.13,
+          new Rotation3d(Math.PI, -Math.PI * 8. / 9.,  0.)
         ),
         PoseStrategy.LOWEST_AMBIGUITY
       ),
       new CameraConfig(
           "3",
           new Transform3d(//11.3 in above ground
-            0.2032, -0.2413, 0.28702 ,
-            new Rotation3d(0, 0.,Math.PI/9.)
+            0.211, -0.2695, 0.28702 ,
+            new Rotation3d(0, 0., Math.PI / 180. * 19.)
           ),
           PoseStrategy.LOWEST_AMBIGUITY
       ),
       new CameraConfig(
           "4",
           new Transform3d(
-            -0.019912, -0.029982, 0.997269,
-            new Rotation3d(0, 0., -Math.PI * 8./ 9.)
+            0.127, 0, 1.13,
+            new Rotation3d(0, -Math.PI / 9., 0.)
           ),
           PoseStrategy.LOWEST_AMBIGUITY
       )
