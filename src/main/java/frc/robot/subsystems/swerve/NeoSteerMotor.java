@@ -98,7 +98,6 @@ public class NeoSteerMotor {
      * @param d kD
      * @param ff kFF
      */
-    
     public void configurePID(double p, double i, double d, double ff){
         closedLoopConfig.pidf(p, i, d, ff);
         sparkMaxConfig.apply(closedLoopConfig);
@@ -108,6 +107,7 @@ public class NeoSteerMotor {
 
     /**
      * Using PID to move to target position
+     * 
      * @param targetRads target position in radiants
      */
     public void setPosition(double targetRads) {
@@ -117,24 +117,26 @@ public class NeoSteerMotor {
 
     /**
      * Gets the motor's position through the absolute encoder
+     * 
      * @return position in double from 0 to 1
      */
-    public double getPosition(){
+    public double getPosition() {
         return steerEncoder.getPosition();
     }
 
     /**
      * Initializes NetworkTables
+     * 
      * @param canId
      */
-    private void initNT (int canId){
+    private void initNT (int canId) {
         ntInstance = NetworkTableInstance.getDefault();
         swerveStatsTable = ntInstance.getTable(SWERVE_TABLE); 
         neoPositionPublisher = swerveStatsTable.getDoubleTopic(canId + "neoPosition").publish(); 
         neoSetPositionPublisher = swerveStatsTable.getDoubleTopic(canId + "neoSetPosition").publish();
     }
     
-    private void initLogs(int canId){
+    private void initLogs(int canId) {
         positionLogEntry =
             new DoubleLogEntry(DataLogManager.getLog(), canId + "position");
         
@@ -157,13 +159,13 @@ public class NeoSteerMotor {
     /**
      * Publishes Neo stats to NT
      */
-    public void publishStats(){
+    public void publishStats() {
 
         neoPositionPublisher.set(getPosition());
         neoSetPositionPublisher.set(targetDouble);
     }
 
-    public void logStats(){
+    public void logStats() {
         positionLogEntry.append(getPosition(), GRTUtil.getFPGATime());
         targetPositionLogEntry.append(targetDouble, GRTUtil.getFPGATime());
         busVoltageLogEntry.append(motor.getBusVoltage(), GRTUtil.getFPGATime());

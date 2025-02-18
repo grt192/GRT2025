@@ -4,13 +4,12 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Translation2d;
-
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.Vision.CameraConfig;
 import frc.robot.util.PolynomialRegression;
@@ -54,21 +53,27 @@ public final class Constants {
 
     public static final double DRIVE_GEAR_REDUCTION = 9. * 20. / 26.;
     public static final double DRIVE_WHEEL_CIRCUMFERENCE = Units.inchesToMeters(4 * Math.PI);
-    public static final double MAX_VEL = 6000. / 6.923 / 60. * 2. * 2. * Math.PI * .0254; // Kraken speed / gear ratio / reduced to per second * circumference * convert to meters
+    public static final double MAX_VEL = 4800. / 6.923 / 60. * 2. * 2. * Math.PI * .0254; // Kraken speed / gear ratio / reduced to per second * circumference * convert to meters
     public static final double MAX_OMEGA = MAX_VEL / FL_POS.getNorm();
 
-    public static final double[] DRIVE_P = new double[] {0.32, 0.32, 0.32, 0.32};
-    public static final double[] DRIVE_I = new double[] {0, 0, 0, 0}; 
-    public static final double[] DRIVE_D = new double[] {0, 0, 0, 0};
-    public static final double[] DRIVE_S = new double[] {0.1499, 0.1499, 0.1499, 0.1499};
-    public static final double[] DRIVE_V = new double[] {0.11, 0.112, 0.112, 0.112};
 
-    public static final double[] STEER_P = new double[] {5.4, 5.4, 5.4, 5.4};
+    public static final double PEAK_CURRENT = 60; //Recomended by CTRE for avarage current
+    public static final double RAMP_RATE = 0;
+    // public static final double KT = 0.01937; // Torque constant in Nm/A, refer to ctre Motor Performance Analysis Report
+
+    public static final double[] DRIVE_P = new double[] {10, 10, 10, 10}; //.32
+    public static final double[] DRIVE_I = new double[] {0, 0, 0, 0}; 
+    public static final double[] DRIVE_D = new double[] {0.01, 0.01, 0.01, 0.01};
+    public static final double[] DRIVE_S = new double[] {5, 5, 5, 5};//{0.16, 0.1499, 0.1499, 0.1499};
+    public static final double[] DRIVE_V = new double[] {0.0, 0.0, 0.0, 0.0}; //{0.11, 0.112, 0.112, 0.112};
+
+
+    public static final double[] STEER_P = new double[] {5.62, 5.5, 5.45, 5.54};
     public static final double[] STEER_I = new double[] {0, 0, 0, 0};
     public static final double[] STEER_D = new double[] {0, 0, 0, 0};
-    public static final double[] STEER_FF = new double[] {0.036, 0.024, 0.0182, 0.05};
+    public static final double[] STEER_FF = new double[] {0.023,.02,0.025,0.03}; //{0.036, 0.024, 0.0182, 0.05};
     
-    public static final boolean DRIVE_DEBUG = false;
+    public static final boolean DRIVE_DEBUG = true;
     public static final boolean STEER_DEBUG = false;
     public static final boolean STATE_DEBUG = false;
   }
@@ -78,6 +83,10 @@ public final class Constants {
   }
 
   public static class VisionConstants{
+
+    public static final double FIELD_X = 17.5482504;
+    public static final double FIELD_Y = 8.05561;
+    public static final double ROBOT_RADIUS = 0.762;
 
     public static final double[] STD_DEV_DIST = new double[] {
       0.75, 1.00, 1.3, 1.69, 2., 2.51, 2.78, 3.07, 3.54, 4.1, 4.52 
@@ -111,12 +120,29 @@ public final class Constants {
       new CameraConfig(
         "2",
         new Transform3d(
-          -0.19, -0.065, 0.2,
-          new Rotation3d(Math.PI / 2., 0., Math.PI)
+          0.0508, -0.0476,1.13,
+          new Rotation3d(Math.PI, -Math.PI * 8. / 9.,  0.)
         ),
         PoseStrategy.LOWEST_AMBIGUITY
+      ),
+      new CameraConfig(
+          "3",
+          new Transform3d(//11.3 in above ground
+            0.211, -0.2695, 0.28702 ,
+            new Rotation3d(0, 0., Math.PI / 180. * 19.)
+          ),
+          PoseStrategy.LOWEST_AMBIGUITY
+      ),
+      new CameraConfig(
+          "4",
+          new Transform3d(
+            0.127, 0, 1.13,
+            new Rotation3d(0, -Math.PI / 9., 0.)
+          ),
+          PoseStrategy.LOWEST_AMBIGUITY
       )
     };
+
     public static final PolynomialRegression xStdDevModel = new PolynomialRegression(
       VisionConstants.STD_DEV_DIST,VisionConstants.X_STD_DEV,2);
     public static final PolynomialRegression yStdDevModel = new PolynomialRegression(
