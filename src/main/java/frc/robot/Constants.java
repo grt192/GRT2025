@@ -62,13 +62,13 @@ public final class Constants {
 
     public static final double DRIVE_GEAR_REDUCTION = 9. * 20. / 26.;
     public static final double DRIVE_WHEEL_CIRCUMFERENCE = Units.inchesToMeters(4 * Math.PI);
-    public static final double MAX_VEL = 3250. / 6.923 / 60. * 2. * 2. * Math.PI * .0254; // Kraken speed / gear ratio / reduced to per second * circumference * convert to meters
+    public static final double MAX_VEL = 4800. / 6.923 / 60. * 2. * 2. * Math.PI * .0254; // Kraken speed / gear ratio / reduced to per second * circumference * convert to meters
     public static final double MAX_OMEGA = MAX_VEL / FL_POS.getNorm();
 
 
     public static final double PEAK_CURRENT = 60; //Recomended by CTRE for avarage current
     public static final double RAMP_RATE = 0;
-    public static final double KT = 0.01937; // Torque constant in Nm/A, refer to ctre Motor Performance Analysis Report
+    // public static final double KT = 0.01937; // Torque constant in Nm/A, refer to ctre Motor Performance Analysis Report
 
     public static final double[] DRIVE_P = new double[] {10, 10, 10, 10}; //.32
     public static final double[] DRIVE_I = new double[] {0, 0, 0, 0}; 
