@@ -4,9 +4,8 @@
 
 package frc.robot;
 
-import frc.robot.Commands.AutoAlignCommand;
-import frc.robot.Commands.elevator.ElevatorToGroundCommand;
-import frc.robot.Commands.elevator.ElevatorToL1Command;
+import frc.robot.Commands.Elevator.ElevatorToGroundCommand;
+import frc.robot.Commands.Elevator.ElevatorToL1Command;
 import frc.robot.controllers.BaseDriveController;
 import frc.robot.controllers.DualJoystickDriveController;
 import frc.robot.controllers.PS5DriveController;
@@ -18,23 +17,15 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.VisionConstants;
-import frc.robot.controllers.BaseDriveController;
-import frc.robot.controllers.DualJoystickDriveController;
-import frc.robot.controllers.PS5DriveController;
-import frc.robot.controllers.XboxDriveController;
 import frc.robot.subsystems.Elevator.ElevatorState;
 import frc.robot.subsystems.Elevator.ElevatorSubsystem;
-import frc.robot.subsystems.Elevator.ElevatorSubsystemTest;
-import frc.robot.subsystems.FieldManagementSubsystem.FieldManagementSubsystem;
 import frc.robot.subsystems.Vision.VisionSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
-import frc.robot.Constants.VisionConstants;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -66,10 +57,6 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
-    mechController = new CommandPS5Controller(1);
-
-    xButton = new Trigger(mechController.cross());
-    squareButton = new Trigger(mechController.square());
     xButton = new Trigger(mechController.cross());
     sButton = new Trigger(mechController.square());
 
@@ -107,13 +94,6 @@ public class RobotContainer {
       new ElevatorToGroundCommand(elevatorSubsystem), 
       () -> elevatorSubsystem.atState(ElevatorState.GROUND)));
 
-    elevatorSubsystemTest.setDefaultCommand(new InstantCommand(
-      () -> {
-        elevatorSubsystemTest.move(mechController.getL2Axis() - mechController.getR2Axis());
-      },
-      elevatorSubsystemTest
-    ));
-  
   
     // xButton.onTrue(new InstantCommand(() -> {
     //   elevatorSubsystemTest.stop();

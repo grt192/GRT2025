@@ -15,10 +15,6 @@ public class DualJoystickDriveController extends BaseDriveController {
     // TODO: Better names for these
     private final Joystick leftJoystick = new Joystick(0);
     private final JoystickButton leftTrigger = new JoystickButton(leftJoystick, 1);
-    private final JoystickButton leftMiddleButton = new JoystickButton(leftJoystick, 2);
-    private final JoystickButton leftTopLeftButton = new JoystickButton(leftJoystick, 3);
-    private final JoystickButton leftTopRightButton = new JoystickButton(leftJoystick, 4);
-    private final JoystickButton leftBottomLeftButton = new JoystickButton(leftJoystick, 5);
 
     private final Joystick rightJoystick = new Joystick(1);
     private final JoystickButton rightTrigger = new JoystickButton(rightJoystick, 1);
