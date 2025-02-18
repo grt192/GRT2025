@@ -66,13 +66,6 @@ public class RobotContainer {
     setVisionDataInterface();
     configureBindings();
 
-    mechController = new CommandPS5Controller(1);
-    
-    xButton = new Trigger(mechController.cross());
-    squareButton = new Trigger(mechController.square());
-
-    
-
     // autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
     // (stream) -> isCompetition
     //   ? stream.filter(auto -> auto.getName().startsWith("C;"))

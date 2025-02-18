@@ -49,6 +49,7 @@ public final class Constants {
   }
 
   public static class ClimbConstants{
+    public static final int MOTOR_ID = 9;
     public static final int TOP_MOTOR_ID = 9;//Placeholder
     public static final int BOT_MOTOR_ID = 10;//Placeholder
     public static final LoggedSparkMaxConfig TOP_MOTOR_CONFIG = 
