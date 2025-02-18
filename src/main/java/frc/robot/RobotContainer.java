@@ -11,6 +11,7 @@ import frc.robot.controllers.DualJoystickDriveController;
 import frc.robot.controllers.PS5DriveController;
 import frc.robot.controllers.XboxDriveController;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathConstraints;
 
@@ -18,6 +19,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PS5Controller;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -36,6 +39,7 @@ import frc.robot.commands.pivot.SetPivotOuttakeCommand;
 import frc.robot.commands.pivot.SetPivotSourceCommand;
 import frc.robot.commands.pivot.SetPivotVerticalCommand;
 import frc.robot.commands.pivot.SetPivotZeroCommand;
+import frc.robot.Commands.AutoAlignCommand;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -47,6 +51,7 @@ public class RobotContainer {
   private BaseDriveController driveController;
 
   private final SendableChooser<Command> autoChooser;
+  private boolean isCompetition = false;
 
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   private final PivotSubsystem pivotSubsystem = new PivotSubsystem();
