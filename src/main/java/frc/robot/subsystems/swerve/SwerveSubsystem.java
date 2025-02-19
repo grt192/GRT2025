@@ -1,5 +1,6 @@
 package frc.robot.subsystems.swerve;
 
+import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -66,7 +67,7 @@ public class SwerveSubsystem extends SubsystemBase {
         ahrs.reset();
         ahrs.zeroYaw();
 
-        estimatedPose = new Pose2d(3.607, 5.312, Rotation2d.fromDegrees(-55));
+        estimatedPose = new Pose2d(5, 5, Rotation2d.fromDegrees(0));
 
         frontLeftModule = new SwerveModule(FL_DRIVE, FL_STEER, FL_OFFSET);
         frontRightModule = new SwerveModule(FR_DRIVE, FR_STEER, FR_OFFSET);
@@ -102,10 +103,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
         //update the poseestimator with curent gyro reading      
         Rotation2d gyroAngle = getGyroHeading();
-        // estimatedPose = poseEstimator.update(
-        //     gyroAngle,
-        //     getModulePositions()
-        // );
+        estimatedPose = poseEstimator.update(
+            gyroAngle,
+            getModulePositions()
+        );
 
         //logging
         estimatedPoseLogEntry.append(estimatedPose, GRTUtil.getFPGATime()); 
