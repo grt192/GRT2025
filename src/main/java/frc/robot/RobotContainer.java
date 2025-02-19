@@ -110,16 +110,7 @@ public class RobotContainer {
    * 0
    */
   private void constructDriveController(){
-    DriverStation.refreshData();
-    // if(DriverStation.getJoystickName(0).equals("Controller (Xbox One For Windows)")) {
-    //     driveController = new XboxDriveController();
-    // }
-    // else if(DriverStation.getJoystickName(0).equals("DualSense Wireless Controller")){
-        driveController = new PS5DriveController();
-    // }
-    // else{
-    //     driveController = new DualJoystickDriveController();
-    // }
+    driveController = new PS5DriveController();
     driveController.setDeadZone(0.05);
   }
 
