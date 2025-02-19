@@ -24,9 +24,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.VisionConstants;
-import frc.robot.subsystems.Elevator.ElevatorState;
-import frc.robot.subsystems.Elevator.ElevatorSubsystem;
 import frc.robot.subsystems.Vision.VisionSubsystem;
+import frc.robot.subsystems.elevator.ElevatorState;
+import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
