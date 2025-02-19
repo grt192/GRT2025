@@ -5,7 +5,7 @@
 package frc.robot;
 
 import frc.robot.Commands.Elevator.ElevatorToGroundCommand;
-import frc.robot.Commands.Elevator.ElevatorToL1Command;
+import frc.robot.Commands.Elevator.ElevatorToL4Command;
 import frc.robot.controllers.BaseDriveController;
 import frc.robot.controllers.DualJoystickDriveController;
 import frc.robot.controllers.PS5DriveController;
@@ -16,7 +16,9 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -89,38 +91,21 @@ public class RobotContainer {
     //   elevatorSubsystemTest.stop();
     // }));
 
-    sButton.onTrue(new ConditionalCommand(
-      new ElevatorToL1Command(elevatorSubsystem), 
-      new ElevatorToGroundCommand(elevatorSubsystem), 
-      () -> elevatorSubsystem.atState(ElevatorState.GROUND)));
+    // sButton.onTrue(new ConditionalCommand(
+    //   new ElevatorToL1Command(elevatorSubsystem), 
+    //   new ElevatorToGroundCommand(elevatorSubsystem), 
+    //   () -> elevatorSubsystem.atState(ElevatorState.GROUND)));
 
-  
-    // xButton.onTrue(new InstantCommand(() -> {
-    //   elevatorSubsystemTest.stop();
-    // }));
-
-    sButton.onTrue(new ConditionalCommand(
-      new ElevatorToL1Command(elevatorSubsystem).withTimeout(4), 
-      new ElevatorToGroundCommand(elevatorSubsystem).withTimeout(4), 
-      () -> elevatorSubsystem.atState(ElevatorState.GROUND)));
-
-    // elevatorSubsystemTest.setDefaultCommand(new InstantCommand(
-    //   () -> {
-    //     elevatorSubsystemTest.move(mechController.getL2Axis() - mechController.getR2Axis());
-    //   },
-    //   elevatorSubsystemTest
-    // ));
-
-
-  
-    // xButton.onTrue(new InstantCommand(() -> {
-    //   elevatorSubsystemTest.stop();
-    // }));
-
-    sButton.onTrue(new ConditionalCommand(
-      new ElevatorToL1Command(elevatorSubsystem).withTimeout(4), 
-      new ElevatorToGroundCommand(elevatorSubsystem).withTimeout(4), 
-      () -> elevatorSubsystem.atState(ElevatorState.GROUND)));
+    xButton.onTrue(Commands.sequence(
+      new ElevatorToL4Command(elevatorSubsystem),  
+      Commands.waitSeconds(2),                   
+      new ElevatorToGroundCommand(elevatorSubsystem)
+    ));
+    
+    // sButton.onTrue(new ConditionalCommand(
+    //   new ElevatorToL1Command(elevatorSubsystem).withTimeout(4), 
+    //   new ElevatorToGroundCommand(elevatorSubsystem).withTimeout(4), 
+    //   () -> elevatorSubsystem.atState(ElevatorState.GROUND)));
 
     // elevatorSubsystemTest.setDefaultCommand(new InstantCommand(
     //   () -> {
@@ -130,6 +115,22 @@ public class RobotContainer {
     // ));
 
 
+  
+    // xButton.onTrue(new InstantCommand(() -> {
+    //   elevatorSubsystemTest.stop();
+    // }));
+
+    // sButton.onTrue(new ConditionalCommand(
+    //   new ElevatorToL1Command(elevatorSubsystem).withTimeout(4), 
+    //   new ElevatorToGroundCommand(elevatorSubsystem).withTimeout(4), 
+    //   () -> elevatorSubsystem.atState(ElevatorState.GROUND)));
+
+    // elevatorSubsystemTest.setDefaultCommand(new InstantCommand(
+    //   () -> {
+    //     elevatorSubsystemTest.move(mechController.getL2Axis() - mechController.getR2Axis());
+    //   },
+    //   elevatorSubsystemTest
+    // ));
   
     swerveSubsystem.setDefaultCommand(
       new RunCommand(() -> {
