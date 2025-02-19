@@ -4,10 +4,7 @@
 
 package frc.robot;
 
-import frc.robot.controllers.BaseDriveController;
-import frc.robot.controllers.DualJoystickDriveController;
 import frc.robot.controllers.PS5DriveController;
-import frc.robot.controllers.XboxDriveController;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
@@ -28,7 +25,7 @@ import frc.robot.Constants.VisionConstants;
  */
 public class RobotContainer {
 
-  private BaseDriveController driveController;
+  private PS5DriveController driveController;
 
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(
@@ -98,16 +95,7 @@ public class RobotContainer {
    * 0
    */
   private void constructDriveController(){
-    DriverStation.refreshData();
-    if(DriverStation.getJoystickName(0).equals("Controller (Xbox One For Windows)")) {
-        driveController = new XboxDriveController();
-    }
-    else if(DriverStation.getJoystickName(0).equals("DualSense Wireless Controller")){
-        driveController = new PS5DriveController();
-    }
-    else{
-        driveController = new DualJoystickDriveController();
-    }
+    driveController = new PS5DriveController();
     driveController.setDeadZone(0.05);
   }
 
