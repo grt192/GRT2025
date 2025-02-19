@@ -39,7 +39,7 @@ import frc.robot.commands.pivot.SetPivotOuttakeCommand;
 import frc.robot.commands.pivot.SetPivotSourceCommand;
 import frc.robot.commands.pivot.SetPivotVerticalCommand;
 import frc.robot.commands.pivot.SetPivotZeroCommand;
-import frc.robot.Commands.AutoAlignCommand;
+import frc.robot.commands.LRReefAlignCommand;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -130,17 +130,19 @@ public class RobotContainer {
     );
 
     //cross
-    driveController.getAlignToReef().onTrue(new InstantCommand (() -> AutoAlignCommand.lrReefAlign(swerveSubsystem,true)));
-    // driveController.getAlignToReef().onTrue(
-    //   AutoAlignCommand.closeReefAlign(swerveSubsystem, false).onlyWhile(() -> driveController.getForwardPower() 
-    //   <= 0.05 && driveController.getLeftPower() <= 0.05));
+    // driveController.getAlignToReef().onTrue(AutoAlignCommand.lrReefAlign(swerveSubsystem,true));
+    // driveController.getAlignToReef().onTrue( AutoAlignCommand.reefTest(swerveSubsystem));
+
+    driveController.getAlignToReef().onTrue(
+      new LRReefAlignCommand(swerveSubsystem, false)
+      .onlyWhile(() -> driveController.getForwardPower() <= 0.05 && driveController.getLeftPower() <= 0.05));
 
     // square
-    driveController.getAlignToSource().onTrue(new InstantCommand(() -> AutoAlignCommand.lrReefAlign(swerveSubsystem, false )));
-    // visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
-    // driveController.getAlignToSource().onTrue(
-    //   AutoAlignCommand.closeReefAlign(swerveSubsystem, true).onlyWhile(() -> driveController.getForwardPower() 
-    //   <= 0.05 && driveController.getLeftPower() <= 0.05));
+    // driveController.getAlignToSource().onTrue(AutoAlignCommand.lrReefAlign(swerveSubsystem, false));
+    // // visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
+    driveController.getAlignToSource().onTrue(
+      new LRReefAlignCommand(swerveSubsystem, true).onlyWhile(() -> driveController.getForwardPower() 
+      <= 0.05 && driveController.getLeftPower() <= 0.05));
    
 
 
