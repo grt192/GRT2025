@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.FieldManagementSubsystem.FieldManagementSubsystem;
 import frc.robot.subsystems.Vision.VisionSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.Constants.VisionConstants;
@@ -50,6 +51,8 @@ public class RobotContainer {
   private final VisionSubsystem visionSubsystem4 = new VisionSubsystem(
     VisionConstants.cameraConfigs[3]
   );
+
+  private final FieldManagementSubsystem fmsSubsystem = new FieldManagementSubsystem();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -108,14 +111,14 @@ public class RobotContainer {
     // driveController.getAlignToReef().onTrue( AutoAlignCommand.reefTest(swerveSubsystem));
 
     driveController.getAlignToReef().onTrue(
-      new LRReefAlignCommand(swerveSubsystem, false)
+      new LRReefAlignCommand(swerveSubsystem, fmsSubsystem, false)
       .onlyWhile(() -> driveController.getForwardPower() <= 0.05 && driveController.getLeftPower() <= 0.05));
 
     // square
     // driveController.getAlignToSource().onTrue(AutoAlignCommand.lrReefAlign(swerveSubsystem, false));
     // // visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
     driveController.getAlignToSource().onTrue(
-      new LRReefAlignCommand(swerveSubsystem, true).onlyWhile(() -> driveController.getForwardPower() 
+      new LRReefAlignCommand(swerveSubsystem, fmsSubsystem, true).onlyWhile(() -> driveController.getForwardPower() 
       <= 0.05 && driveController.getLeftPower() <= 0.05));
    
 

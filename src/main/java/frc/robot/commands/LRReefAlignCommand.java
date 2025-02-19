@@ -10,10 +10,14 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.subsystems.FieldManagementSubsystem.FieldManagementSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 
 public class LRReefAlignCommand extends Command{
     static SwerveSubsystem swerveSubsystem;
+    static FieldManagementSubsystem fmsSubsystem;
+    static List<Pose2d> currentRightPoseList;
+    static List<Pose2d> currentLeftPoseList;
     Boolean isRight;
     static PathPlannerPath getAlignPath;
 
@@ -36,7 +40,7 @@ public class LRReefAlignCommand extends Command{
     private static String followPath;
 
 
-    static List<Pose2d> leftReefPoseList = List.of(
+    static List<Pose2d> blueLeftReefPoseList = List.of(
         getAlignPath(A_alignName).getStartingHolonomicPose().get(),
         getAlignPath(C_alignName).getStartingHolonomicPose().get(),
         getAlignPath(E_alignName).getStartingHolonomicPose().get(),
@@ -45,13 +49,32 @@ public class LRReefAlignCommand extends Command{
         getAlignPath(K_alignName).getStartingHolonomicPose().get()
     );
     
-    static List<Pose2d> rightReefPoseList = List.of(
+    static List<Pose2d> blueRightReefPoseList = List.of(
         getAlignPath(B_alignName).getStartingHolonomicPose().get(),
         getAlignPath(D_alignName).getStartingHolonomicPose().get(),
         getAlignPath(F_alignName).getStartingHolonomicPose().get(),
         getAlignPath(H_alignName).getStartingHolonomicPose().get(),
         getAlignPath(J_alignName).getStartingHolonomicPose().get(),
         getAlignPath(L_alignName).getStartingHolonomicPose().get()
+    ); 
+
+    
+    static List<Pose2d> redLeftReefPoseList = List.of(
+        getAlignPath(A_alignName).flipPath().getStartingHolonomicPose().get(),
+        getAlignPath(C_alignName).flipPath().getStartingHolonomicPose().get(),
+        getAlignPath(E_alignName).flipPath().getStartingHolonomicPose().get(),
+        getAlignPath(G_alignName).flipPath().getStartingHolonomicPose().get(),
+        getAlignPath(I_alignName).flipPath().getStartingHolonomicPose().get(),
+        getAlignPath(K_alignName).flipPath().getStartingHolonomicPose().get()
+    );
+    
+    static List<Pose2d> redRightReefPoseList = List.of(
+        getAlignPath(B_alignName).flipPath().getStartingHolonomicPose().get(),
+        getAlignPath(D_alignName).flipPath().getStartingHolonomicPose().get(),
+        getAlignPath(F_alignName).flipPath().getStartingHolonomicPose().get(),
+        getAlignPath(H_alignName).flipPath().getStartingHolonomicPose().get(),
+        getAlignPath(J_alignName).flipPath().getStartingHolonomicPose().get(),
+        getAlignPath(L_alignName).flipPath().getStartingHolonomicPose().get()
     ); 
     
     //put the left on top of right
@@ -93,24 +116,34 @@ public class LRReefAlignCommand extends Command{
         Units.degreesToRadians(720)
     );
 
-    public LRReefAlignCommand(SwerveSubsystem swerveSubsystem, Boolean isRight) {
+    public LRReefAlignCommand(SwerveSubsystem swerveSubsystem, FieldManagementSubsystem fmsSubsystem, Boolean isRight) {
         this.swerveSubsystem = swerveSubsystem;
+        this.fmsSubsystem = fmsSubsystem;
         this.isRight = isRight;
     }
 
     @Override
     public void initialize() {
+        if (fmsSubsystem.isRedAlliance()) {
+            currentRightPoseList = redRightReefPoseList;
+            currentLeftPoseList = redLeftReefPoseList;
+        }
+        else {
+            currentRightPoseList = blueRightReefPoseList;
+            currentLeftPoseList = blueLeftReefPoseList;
+        }
         if (isRight){
-            Pose2d closestRight = swerveSubsystem.getRobotPosition().nearest(rightReefPoseList);
-            int index = rightReefPoseList.indexOf(closestRight);
+            Pose2d closestRight = swerveSubsystem.getRobotPosition().nearest(currentRightPoseList);
+            int index = currentRightPoseList.indexOf(closestRight);
             followPath = reefPathList.get(2 * index + 1);
         }
         else {
-            Pose2d closestLeft = swerveSubsystem.getRobotPosition().nearest(leftReefPoseList);
-            System.out.println(swerveSubsystem.getRobotPosition());
-            int index = leftReefPoseList.indexOf(closestLeft);
+            Pose2d closestLeft = swerveSubsystem.getRobotPosition().nearest(currentLeftPoseList);
+            // System.out.println(swerveSubsystem.getRobotPosition());
+            int index = currentLeftPoseList.indexOf(closestLeft);
             followPath = reefPathList.get(2 * index);
         }
+        System.out.println("InITing");
         runAlignPath(followPath).schedule();
     }
 
@@ -126,7 +159,7 @@ public class LRReefAlignCommand extends Command{
      */
     public static Command runAlignPath (String pathName) {
         PathPlannerPath path = getAlignPath(pathName);
-        System.out.print(path);
+        // System.out.print(path);
 
         runAlignPath = AutoBuilder.pathfindThenFollowPath(
             path,
