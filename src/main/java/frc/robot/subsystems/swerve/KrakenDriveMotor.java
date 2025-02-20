@@ -138,6 +138,7 @@ public class KrakenDriveMotor {
         statorCurrLogEntry = new DoubleLogEntry(DataLogManager.getLog(), canId + "statorCurrent");
         temperatureLogEntry = new DoubleLogEntry(DataLogManager.getLog(), canId + "temperature");
     }
+
     /**
      * Set motor velo to target velo
      * @param metersPerSec target velo in m/s

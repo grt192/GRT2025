@@ -4,8 +4,24 @@
 
 package frc.robot;
 
-import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import java.util.OptionalInt;
+import java.util.Optional;
 
+import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.config.ClosedLoopConfig;
+import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.MAXMotionConfig;
+import com.revrobotics.spark.config.SoftLimitConfig;
+
+import java.util.OptionalInt;
+import java.util.Optional;
+import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.config.ClosedLoopConfig;
+import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.MAXMotionConfig;
+import com.revrobotics.spark.config.SoftLimitConfig;
+
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -13,6 +29,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.Vision.CameraConfig;
 import frc.robot.util.PolynomialRegression;
+import frc.robot.util.Motors.LoggedSparkMaxConfig;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -78,8 +95,15 @@ public final class Constants {
     public static final boolean STATE_DEBUG = false;
   }
 
+  public static class DebugConstants{
+    public static final Boolean REV_DEBUG = false;
+    public static final Boolean CTRE_DEBUG = false;
+  }
+
   public static class LoggingConstants{
     public static final String SWERVE_TABLE = "SwerveStats";
+    public static final String REV_TABLE = "MotorStats";
+    public static final String CTRE_TABLE = "MotorStats";
   }
 
   public static class VisionConstants{
@@ -149,5 +173,43 @@ public final class Constants {
       VisionConstants.STD_DEV_DIST,VisionConstants.Y_STD_DEV,2);
     public static final PolynomialRegression oStdDevModel = new PolynomialRegression(
       VisionConstants.STD_DEV_DIST,VisionConstants.O_STD_DEV,1);
+  }
+
+  public static class IntakeConstants {
+    public static final int PIVOT_ID = 14;
+    public static final int ROLLER_ID = 16;
+    public static final int INTAKE_SENSOR_ID = 1;
+
+    public static final double PIVOT_CONVERSION_FACTOR = (2 * Math.PI) / 30.;
+
+    public static final double ZERO_POSITION = 0;
+    public static final double SOURCE_POSITION = Units.degreesToRadians(45); //TODO: change
+    public static final double OUTTAKE_POSITION = Units.degreesToRadians(-45); //TODO: change
+    public static final double VERTICAL_POSITION = Units.degreesToRadians(82); //TODO: change
+
+    public static final double PIVOT_TOLERANCE = .08; //TODO: change
+
+    public static final double PIVOT_KG = 3;
+    public static final double PIVOT_KS = 0;
+    public static final double PIVOT_KV = 0;
+
+    public static final double PIVOT_P = .3;
+    public static final double PIVOT_I = 0;
+    public static final double PIVOT_D = 0.3;
+
+	public static final LoggedSparkMaxConfig PivotMotorLoggedSparkMaxConfig = new LoggedSparkMaxConfig(
+		PIVOT_ID,
+		new ClosedLoopConfig().pid(PIVOT_P, PIVOT_I, PIVOT_D, ClosedLoopSlot.kSlot0),
+		new EncoderConfig().positionConversionFactor(PIVOT_CONVERSION_FACTOR),
+		OptionalInt.empty(),
+		Optional.of(
+      new SoftLimitConfig()
+			.forwardSoftLimitEnabled(true)
+			.forwardSoftLimit(Units.degreesToRadians(85))
+			.reverseSoftLimitEnabled(true)
+			.reverseSoftLimit(Units.degreesToRadians(-50))
+    )
+	);
+
   }
 }
