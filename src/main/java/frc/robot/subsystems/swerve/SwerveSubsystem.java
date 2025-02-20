@@ -330,7 +330,7 @@ public class SwerveSubsystem extends SubsystemBase {
             
             //1.25/3.25
             new PPHolonomicDriveController(
-                new PIDConstants(3, 0, 0.0),
+                new PIDConstants(3.05, 0, 0.0),
                 new PIDConstants(4.2, 0.0, 0.0)
             ),
 

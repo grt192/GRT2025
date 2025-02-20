@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import java.util.List;
 
+import com.fasterxml.jackson.databind.JsonSerializable.Base;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -9,15 +10,17 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.controllers.BaseDriveController;
 import frc.robot.subsystems.FieldManagementSubsystem.FieldManagementSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 
 public class LRReefAlignCommand extends Command{
-    static SwerveSubsystem swerveSubsystem;
-    static FieldManagementSubsystem fmsSubsystem;
-    static List<Pose2d> currentRightPoseList;
-    static List<Pose2d> currentLeftPoseList;
+    private final SwerveSubsystem swerveSubsystem;
+    private final FieldManagementSubsystem fmsSubsystem;
+    private List<Pose2d> currentRightPoseList;
+    private List<Pose2d> currentLeftPoseList;
     Boolean isRight;
     static PathPlannerPath getAlignPath;
 
@@ -40,7 +43,7 @@ public class LRReefAlignCommand extends Command{
     private static String followPath;
 
 
-    static List<Pose2d> blueLeftReefPoseList = List.of(
+    final List<Pose2d> blueLeftReefPoseList = List.of(
         getAlignPath(A_alignName).getStartingHolonomicPose().get(),
         getAlignPath(C_alignName).getStartingHolonomicPose().get(),
         getAlignPath(E_alignName).getStartingHolonomicPose().get(),
@@ -49,7 +52,7 @@ public class LRReefAlignCommand extends Command{
         getAlignPath(K_alignName).getStartingHolonomicPose().get()
     );
     
-    static List<Pose2d> blueRightReefPoseList = List.of(
+    final List<Pose2d> blueRightReefPoseList = List.of(
         getAlignPath(B_alignName).getStartingHolonomicPose().get(),
         getAlignPath(D_alignName).getStartingHolonomicPose().get(),
         getAlignPath(F_alignName).getStartingHolonomicPose().get(),
@@ -59,7 +62,7 @@ public class LRReefAlignCommand extends Command{
     ); 
 
     
-    static List<Pose2d> redLeftReefPoseList = List.of(
+    final List<Pose2d> redLeftReefPoseList = List.of(
         getAlignPath(A_alignName).flipPath().getStartingHolonomicPose().get(),
         getAlignPath(C_alignName).flipPath().getStartingHolonomicPose().get(),
         getAlignPath(E_alignName).flipPath().getStartingHolonomicPose().get(),
@@ -68,7 +71,7 @@ public class LRReefAlignCommand extends Command{
         getAlignPath(K_alignName).flipPath().getStartingHolonomicPose().get()
     );
     
-    static List<Pose2d> redRightReefPoseList = List.of(
+    final List<Pose2d> redRightReefPoseList = List.of(
         getAlignPath(B_alignName).flipPath().getStartingHolonomicPose().get(),
         getAlignPath(D_alignName).flipPath().getStartingHolonomicPose().get(),
         getAlignPath(F_alignName).flipPath().getStartingHolonomicPose().get(),
@@ -76,22 +79,6 @@ public class LRReefAlignCommand extends Command{
         getAlignPath(J_alignName).flipPath().getStartingHolonomicPose().get(),
         getAlignPath(L_alignName).flipPath().getStartingHolonomicPose().get()
     ); 
-    
-    //put the left on top of right
-    static List<Pose2d> allReefPoseList = List.of(
-        getAlignPath(A_alignName).getStartingHolonomicPose().get(),
-        getAlignPath(B_alignName).getStartingHolonomicPose().get(),
-        getAlignPath(C_alignName).getStartingHolonomicPose().get(),
-        getAlignPath(D_alignName).getStartingHolonomicPose().get(),
-        getAlignPath(E_alignName).getStartingHolonomicPose().get(),
-        getAlignPath(F_alignName).getStartingHolonomicPose().get(),
-        getAlignPath(G_alignName).getStartingHolonomicPose().get(),
-        getAlignPath(H_alignName).getStartingHolonomicPose().get(),
-        getAlignPath(I_alignName).getStartingHolonomicPose().get(),
-        getAlignPath(J_alignName).getStartingHolonomicPose().get(),
-        getAlignPath(K_alignName).getStartingHolonomicPose().get(),
-        getAlignPath(L_alignName).getStartingHolonomicPose().get()
-    );
 
     //put the left on top of right
     static List<String> reefPathList = List.of(
@@ -120,6 +107,7 @@ public class LRReefAlignCommand extends Command{
         this.swerveSubsystem = swerveSubsystem;
         this.fmsSubsystem = fmsSubsystem;
         this.isRight = isRight;
+        // this.addRequirements(swerveSubsystem);
     }
 
     @Override
@@ -132,7 +120,7 @@ public class LRReefAlignCommand extends Command{
             currentRightPoseList = blueRightReefPoseList;
             currentLeftPoseList = blueLeftReefPoseList;
         }
-        if (isRight){
+        if (isRight) {
             Pose2d closestRight = swerveSubsystem.getRobotPosition().nearest(currentRightPoseList);
             int index = currentRightPoseList.indexOf(closestRight);
             followPath = reefPathList.get(2 * index + 1);
@@ -144,22 +132,33 @@ public class LRReefAlignCommand extends Command{
             followPath = reefPathList.get(2 * index);
         }
         System.out.println("InITing");
+
         runAlignPath(followPath).schedule();
     }
 
     @Override
     public void end(boolean interrupted) {
-        swerveSubsystem.getCurrentCommand().cancel();
+        if (swerveSubsystem.getCurrentCommand() != null) {
+            swerveSubsystem.getCurrentCommand().cancel();
+        }
     }
 
-        /**
+    // @Override
+    // public boolean isFinished() {
+    //     return driveController.getForwardPower() <= 0.05 && (driveController.getLeftPower() <= 0.05);
+    // }
+
+    /**
      * Uses getAlignPath to get the pathplanner path and follows it
      * @param swerveSubsystem
      * @param pathName name of the path
      */
-    public static Command runAlignPath (String pathName) {
+    public Command runAlignPath (String pathName) {
         PathPlannerPath path = getAlignPath(pathName);
-        // System.out.print(path);
+        if (path == null) {
+            this.cancel();
+        }
+        System.out.print(pathName);
 
         runAlignPath = AutoBuilder.pathfindThenFollowPath(
             path,
@@ -176,7 +175,7 @@ public class LRReefAlignCommand extends Command{
      * @param pathName
      * @return path file
      */
-    private static PathPlannerPath getAlignPath(String pathName) {
+    private PathPlannerPath getAlignPath(String pathName) {
         try {
             getAlignPath = PathPlannerPath.fromPathFile(pathName);
         } catch (Exception e) {

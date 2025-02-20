@@ -111,15 +111,15 @@ public class RobotContainer {
     // driveController.getAlignToReef().onTrue( AutoAlignCommand.reefTest(swerveSubsystem));
 
     driveController.getAlignToReef().onTrue(
-      new LRReefAlignCommand(swerveSubsystem, fmsSubsystem, false)
-      .onlyWhile(() -> driveController.getForwardPower() <= 0.05 && driveController.getLeftPower() <= 0.05));
+      new LRReefAlignCommand(swerveSubsystem, fmsSubsystem, false).onlyWhile(() -> (driveController.getForwardPower() 
+      <= 0.05) && (driveController.getLeftPower() <= 0.05)));
 
     // square
     // driveController.getAlignToSource().onTrue(AutoAlignCommand.lrReefAlign(swerveSubsystem, false));
     // // visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
     driveController.getAlignToSource().onTrue(
-      new LRReefAlignCommand(swerveSubsystem, fmsSubsystem, true).onlyWhile(() -> driveController.getForwardPower() 
-      <= 0.05 && driveController.getLeftPower() <= 0.05));
+      new LRReefAlignCommand(swerveSubsystem, fmsSubsystem, true).onlyWhile(() -> (driveController.getForwardPower() 
+      <= 0.05) && (driveController.getLeftPower() <= 0.05)));
    
 
     }
@@ -163,9 +163,9 @@ public class RobotContainer {
    * Links vision and swerve
    */
   private void setVisionDataInterface(){
-    visionSubsystem2.setInterface(swerveSubsystem::addVisionMeasurements);
-    visionSubsystem3.setInterface(swerveSubsystem::addVisionMeasurements);
-    visionSubsystem4.setInterface(swerveSubsystem::addVisionMeasurements);
+    // visionSubsystem2.setInterface(swerveSubsystem::addVisionMeasurements);
+    // visionSubsystem3.setInterface(swerveSubsystem::addVisionMeasurements);
+    // visionSubsystem4.setInterface(swerveSubsystem::addVisionMeasurements);
 
   }
 }
