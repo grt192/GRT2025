@@ -4,10 +4,6 @@
 
 package frc.robot;
 
-import frc.robot.commands.Pivot.SetPivotOuttakeCommand;
-import frc.robot.commands.Pivot.SetPivotSourceCommand;
-import frc.robot.commands.Pivot.SetPivotVerticalCommand;
-import frc.robot.commands.Pivot.SetPivotZeroCommand;
 // import frc.robot.commands.pivot.SetPivotVerticalCommand;
 // import frc.robot.commands.pivot.SetPivotZeroCommand;
 import frc.robot.controllers.BaseDriveController;
@@ -28,16 +24,16 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.FieldManagementSubsystem.FieldManagementSubsystem;
-import frc.robot.subsystems.Intake.pivot.PivotState;
-import frc.robot.subsystems.Intake.pivot.PivotSubsystem;
-import frc.robot.subsystems.Intake.rollers.RollerSubsystem;
-import frc.robot.subsystems.PhoenixLoggingSubsystem.PhoenixLoggingSubsystem;
 import frc.robot.subsystems.Vision.VisionSubsystem;
 import frc.robot.subsystems.intake.pivot.PivotState;
 import frc.robot.subsystems.intake.pivot.PivotSubsystem;
 import frc.robot.subsystems.intake.rollers.RollerSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.commands.pivot.SetPivotOuttakeCommand;
+import frc.robot.commands.pivot.SetPivotSourceCommand;
+import frc.robot.commands.pivot.SetPivotVerticalCommand;
+import frc.robot.commands.pivot.SetPivotZeroCommand;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -48,7 +44,7 @@ public class RobotContainer {
 
   private BaseDriveController driveController;
 
-  // private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   private final PivotSubsystem pivotSubsystem = new PivotSubsystem();
   private final RollerSubsystem rollerSubsystem = new RollerSubsystem();
   private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(

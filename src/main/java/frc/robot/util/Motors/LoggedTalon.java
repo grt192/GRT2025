@@ -1,7 +1,7 @@
 package frc.robot.util.Motors;
 
-import static frc.robot.Constants.LoggingConstants.CTRE_TABLE;
 import static frc.robot.Constants.DebugConstants.CTRE_DEBUG;
+import static frc.robot.Constants.LoggingConstants.CTRE_TABLE;
 
 import java.util.EnumSet;
 

@@ -95,6 +95,11 @@ public final class Constants {
     public static final boolean STATE_DEBUG = false;
   }
 
+  public static class DebugConstants{
+    public static final Boolean REV_DEBUG = false;
+    public static final Boolean CTRE_DEBUG = false;
+  }
+
   public static class LoggingConstants{
     public static final String SWERVE_TABLE = "SwerveStats";
     public static final String REV_TABLE = "MotorStats";
