@@ -12,6 +12,7 @@ import frc.robot.controllers.PS5DriveController;
 import frc.robot.controllers.XboxDriveController;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathConstraints;
 
@@ -52,7 +53,7 @@ public class RobotContainer {
   private BaseDriveController driveController;
 
   private final SendableChooser<Command> autoChooser;
-  private boolean isCompetition = false;
+  private boolean isCompetition = true;
 
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   private final PivotSubsystem pivotSubsystem = new PivotSubsystem();
@@ -87,10 +88,11 @@ public class RobotContainer {
     setVisionDataInterface();
     configureBindings();
     
-
+    NamedCommands.registerCommand("PivotToOuttake", new SetPivotOuttakeCommand(pivotSubsystem));
+    NamedCommands.registerCommand("PivotToVertical", new SetPivotVerticalCommand(pivotSubsystem));
     autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
       (stream) -> isCompetition
-        ? stream.filter(auto -> auto.getName().startsWith("C;"))
+        ? stream.filter(auto -> auto.getName().startsWith("Test"))
         : stream
       );
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -211,6 +213,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return autoChooser.getSelected(); 
+  // return new PathPlannerAuto ("Test Auto");
   }
 
   /**
