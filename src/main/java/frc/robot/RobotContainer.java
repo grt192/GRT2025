@@ -42,6 +42,7 @@ import frc.robot.commands.pivot.SetPivotSourceCommand;
 import frc.robot.commands.pivot.SetPivotVerticalCommand;
 import frc.robot.commands.pivot.SetPivotZeroCommand;
 import frc.robot.commands.LRReefAlignCommand;
+import frc.robot.commands.intake.SetRollersOuttakeCommand;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -90,6 +91,7 @@ public class RobotContainer {
     
     NamedCommands.registerCommand("PivotToOuttake", new SetPivotOuttakeCommand(pivotSubsystem));
     NamedCommands.registerCommand("PivotToVertical", new SetPivotVerticalCommand(pivotSubsystem));
+    NamedCommands.registerCommand("RollerOuttake", new SetRollersOuttakeCommand(rollerSubsystem));
     autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
       (stream) -> isCompetition
         ? stream.filter(auto -> auto.getName().startsWith("Test"))
@@ -189,9 +191,9 @@ public class RobotContainer {
       }, rollerSubsystem), 
       () -> rollerSubsystem.getIntakeSensor()));
 
-    // aButton.onTrue(
-    //     new SetPivotVerticalCommand(pivotSubsystem)
-    // );
+    aButton.onTrue(
+        new SetRollersOuttakeCommand(rollerSubsystem)
+    );
 
     // rollerSubsystem.setDefaultCommand(new InstantCommand( () -> {
     //   rollerSubsystem.setRollerPower(mechController.getL2Axis() - mechController.getR2Axis());

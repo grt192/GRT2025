@@ -15,6 +15,12 @@
           "data": {
             "name": "PivotToOuttake"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RollerOuttake"
+          }
         }
       ]
     }
