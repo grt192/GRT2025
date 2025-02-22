@@ -35,6 +35,7 @@ public class LoggedTalon{
     private DoublePublisher temperaturePublisher;
     private DoublePublisher targetPositionPublisher;
     private DoublePublisher targetVelocityPublisher;
+    private DoublePublisher closedLoopErrorPublisher;
 
     private DoubleLogEntry positionLogEntry;
     private DoubleLogEntry veloLogEntry;
@@ -44,6 +45,7 @@ public class LoggedTalon{
     private DoubleLogEntry temperatureLogEntry;
     private DoubleLogEntry targetPositionLogEntry; 
     private DoubleLogEntry targetVelocityLogEntry;
+    private DoubleLogEntry closedLoopErrorLogEntry;
 
     private double targetPosition;
     private double targetVelocity;
@@ -176,6 +178,10 @@ public class LoggedTalon{
         targetVelocityPublisher = motorStatsTable.getDoubleTopic(
             canId + "targetVelocity"
         ).publish();
+
+        closedLoopErrorPublisher = motorStatsTable.getDoubleTopic(
+            canId + "closedLoopError"
+        ).publish();
     }
 
     /**
@@ -213,6 +219,10 @@ public class LoggedTalon{
 
         targetVelocityLogEntry = new DoubleLogEntry(
             DataLogManager.getLog(), canId + "targetVelocity"
+        );
+        
+        closedLoopErrorLogEntry = new DoubleLogEntry(
+            DataLogManager.getLog(), canId + "closedLoopError"
         );
     }
 
@@ -255,6 +265,13 @@ public class LoggedTalon{
         return motor.getVelocity().getValueAsDouble();
     }
 
+    /**
+     * Gets motor's closed loop error
+     * @return closed loop error
+     */
+    public double getCloseLoopError(){
+        return motor.getClosedLoopError().getValueAsDouble();
+    }
     /**
      * Publishes motor stats to NT for logging
      */
