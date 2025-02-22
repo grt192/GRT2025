@@ -190,7 +190,7 @@ public final class Constants {
 
     public static final double ZERO_POSITION = 0;
     public static final double SOURCE_POSITION = Units.degreesToRadians(45); //TODO: change
-    public static final double OUTTAKE_POSITION = Units.degreesToRadians(-45); //TODO: change
+    public static final double OUTTAKE_POSITION = Units.degreesToRadians(0); //TODO: change
     public static final double VERTICAL_POSITION = Units.degreesToRadians(82); //TODO: change
 
     public static final double PIVOT_TOLERANCE = .08; //TODO: change

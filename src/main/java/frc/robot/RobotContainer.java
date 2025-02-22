@@ -140,16 +140,16 @@ public class RobotContainer {
     // driveController.getAlignToReef().onTrue(AutoAlignCommand.lrReefAlign(swerveSubsystem,true));
     // driveController.getAlignToReef().onTrue( AutoAlignCommand.reefTest(swerveSubsystem));
 
-    driveController.getAlignToReef().onTrue(
-      new LRReefAlignCommand(swerveSubsystem, fmsSubsystem, false)
-      .onlyWhile(() -> driveController.getForwardPower() <= 0.05 && driveController.getLeftPower() <= 0.05));
+    // driveController.getAlignToReef().onTrue(
+    //   new LRReefAlignCommand(swerveSubsystem, fmsSubsystem, false)
+    //   .onlyWhile(() -> driveController.getForwardPower() <= 0.05 && driveController.getLeftPower() <= 0.05));
 
-    // square
-    // driveController.getAlignToSource().onTrue(AutoAlignCommand.lrReefAlign(swerveSubsystem, false));
-    // // visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
-    driveController.getAlignToSource().onTrue(
-      new LRReefAlignCommand(swerveSubsystem, fmsSubsystem, true).onlyWhile(() -> driveController.getForwardPower() 
-      <= 0.05 && driveController.getLeftPower() <= 0.05));
+    // // square
+    // // driveController.getAlignToSource().onTrue(AutoAlignCommand.lrReefAlign(swerveSubsystem, false));
+    // // // visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
+    // driveController.getAlignToSource().onTrue(
+    //   new LRReefAlignCommand(swerveSubsystem, fmsSubsystem, true).onlyWhile(() -> driveController.getForwardPower() 
+    //   <= 0.05 && driveController.getLeftPower() <= 0.05));
    
 
 
@@ -167,29 +167,30 @@ public class RobotContainer {
     // );
 
     rBumper.onTrue(
-      new ConditionalCommand(
-        new SetPivotOuttakeCommand(pivotSubsystem),
-        new ConditionalCommand(
-          new SetPivotZeroCommand(pivotSubsystem).andThen(new SetPivotSourceCommand(pivotSubsystem)), 
-          new SetPivotSourceCommand(pivotSubsystem), 
-          () -> (pivotSubsystem.getCurrentAngle() < PivotState.ZERO.getTargetAngle())),
-        () -> (pivotSubsystem.getTargetState() == PivotState.SOURCE)
-        )
+      new SetPivotOuttakeCommand(pivotSubsystem).withTimeout(3)
+      // new ConditionalCommand(
+      //   new SetPivotOuttakeCommand(pivotSubsystem),
+      //   new ConditionalCommand(
+      //     new SetPivotZeroCommand(pivotSubsystem).andThen(new SetPivotSourceCommand(pivotSubsystem)), 
+      //     new SetPivotSourceCommand(pivotSubsystem), 
+      //     () -> (pivotSubsystem.getCurrentAngle() < PivotState.ZERO.getTargetAngle())),
+      //   () -> (pivotSubsystem.getTargetState() == PivotState.SOURCE)
+      //   )
     );
 
     lBumper.onTrue(
       new SetPivotVerticalCommand(pivotSubsystem).withTimeout(2.5)
     );
 
-    rollerSubsystem.setDefaultCommand(new ConditionalCommand(
-      new InstantCommand( () -> {
-        //ps5 trigger's range is -1 to 1, with non-input position being -1. This maps the range -1 to 1 to 0 to 1.
-        rollerSubsystem.setRollerPower(.25 * (mechController.getR2Axis() + 1.) / 2.); 
-      }, rollerSubsystem), 
-      new InstantCommand( () -> {
-        rollerSubsystem.setRollerPower(.25 * (mechController.getR2Axis() - mechController.getL2Axis()));
-      }, rollerSubsystem), 
-      () -> rollerSubsystem.getIntakeSensor()));
+    // rollerSubsystem.setDefaultCommand(new ConditionalCommand(
+    //   new InstantCommand( () -> {
+    //     //ps5 trigger's range is -1 to 1, with non-input position being -1. This maps the range -1 to 1 to 0 to 1.
+    //     rollerSubsystem.setRollerPower(.25 * (mechController.getR2Axis() + 1.) / 2.); 
+    //   }, rollerSubsystem), 
+    //   new InstantCommand( () -> {
+    //     rollerSubsystem.setRollerPower(.25 * (mechController.getR2Axis() - mechController.getL2Axis()));
+    //   }, rollerSubsystem), 
+    //   () -> rollerSubsystem.getIntakeSensor()));
 
     aButton.onTrue(
         new SetRollersOuttakeCommand(rollerSubsystem)

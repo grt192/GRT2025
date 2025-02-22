@@ -9,12 +9,6 @@
           "data": {
             "pathName": "Test anti-path"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "PivotToVertical"
-          }
         }
       ]
     }

@@ -32,5 +32,6 @@ public class SetRollersOuttakeCommand extends Command{
     @Override
     public void end(boolean interrupted) {
         rollerSubsystem.setRollerPower(0);
+        rollTime.reset();
     }
 }
