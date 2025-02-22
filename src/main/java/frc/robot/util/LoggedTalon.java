@@ -286,6 +286,7 @@ public class LoggedTalon{
         temperaturePublisher.set(motor.getDeviceTemp().getValueAsDouble());
         targetPositionPublisher.set(targetPosition);
         targetVelocityPublisher.set(targetVelocity);
+        closedLoopErrorPublisher.set(motor.getClosedLoopError().getValueAsDouble());
     }    
 
     /**
@@ -319,5 +320,9 @@ public class LoggedTalon{
         targetPositionLogEntry.append(targetPosition, GRTUtil.getFPGATime());
 
         targetVelocityLogEntry.append(targetVelocity, GRTUtil.getFPGATime());
+
+        closedLoopErrorLogEntry.append(
+            motor.getClosedLoopError().getValueAsDouble(), GRTUtil.getFPGATime()
+        );
     }
 }
