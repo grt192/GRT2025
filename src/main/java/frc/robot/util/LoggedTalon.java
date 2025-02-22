@@ -247,6 +247,7 @@ public class LoggedTalon{
             }
         );
     }
+
     /**
      * Gets motor's position in rotations after taking the 
      * SensorToMechanismRatio into account 
@@ -269,9 +270,10 @@ public class LoggedTalon{
      * Gets motor's closed loop error
      * @return closed loop error
      */
-    public double getCloseLoopError(){
+    public double getClosedLoopError(){
         return motor.getClosedLoopError().getValueAsDouble();
     }
+
     /**
      * Publishes motor stats to NT for logging
      */
