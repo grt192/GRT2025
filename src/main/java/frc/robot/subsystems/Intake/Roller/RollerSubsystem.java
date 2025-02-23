@@ -43,7 +43,6 @@ public class RollerSubsystem extends SubsystemBase{
         if(MASTER_DEBUG || ROLLER_DEBUG){
             rollerMotor.publishStats();
         }
-        rollerMotor.logStats();
     }
     /**
      * Set the speed of the roller motor
