@@ -17,15 +17,18 @@ public class SetRollersOuttakeCommand extends Command{
     @Override
     public void initialize() {
         rollTime.start();
+        System.out.println("Rollers started ");
     }
 
     @Override
     public void execute() {
         rollerSubsystem.setRollerPower(-.25);
+        System.out.println("roll");
     }
 
     @Override
     public boolean isFinished() {
+        // return true;
         return rollTime.hasElapsed(1.5);
     }
 

@@ -30,19 +30,15 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.FieldManagementSubsystem.FieldManagementSubsystem;
-import frc.robot.subsystems.FieldManagementSubsystem.FieldManagementSubsystem;
 import frc.robot.subsystems.Vision.VisionSubsystem;
-import frc.robot.subsystems.intake.pivot.PivotState;
 import frc.robot.subsystems.intake.pivot.PivotSubsystem;
 import frc.robot.subsystems.intake.rollers.RollerSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
-import frc.robot.Constants.VisionConstants;
-import frc.robot.commands.pivot.SetPivotOuttakeCommand;
-import frc.robot.commands.pivot.SetPivotSourceCommand;
-import frc.robot.commands.pivot.SetPivotVerticalCommand;
-import frc.robot.commands.pivot.SetPivotZeroCommand;
-import frc.robot.commands.LRReefAlignCommand;
 import frc.robot.commands.intake.SetRollersOuttakeCommand;
+import frc.robot.commands.pivot.SetPivotOuttakeCommand;
+import frc.robot.commands.pivot.SetPivotVerticalCommand;
+import frc.robot.Constants.VisionConstants;
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -91,7 +87,7 @@ public class RobotContainer {
     
     NamedCommands.registerCommand("PivotToOuttake", new SetPivotOuttakeCommand(pivotSubsystem));
     NamedCommands.registerCommand("PivotToVertical", new SetPivotVerticalCommand(pivotSubsystem));
-    NamedCommands.registerCommand("RollerOuttake", new SetRollersOuttakeCommand(rollerSubsystem));
+    // NamedCommands.registerCommand("RollerOuttake", new SetRollersOuttakeCommand(rollerSubsystem));
     autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
       (stream) -> isCompetition
         ? stream.filter(auto -> auto.getName().startsWith("Test"))
@@ -193,7 +189,7 @@ public class RobotContainer {
     //   () -> rollerSubsystem.getIntakeSensor()));
 
     aButton.onTrue(
-        new SetRollersOuttakeCommand(rollerSubsystem)
+        new SetRollersOuttakeCommand(rollerSubsystem).withTimeout(3)
     );
 
     // rollerSubsystem.setDefaultCommand(new InstantCommand( () -> {

@@ -16,10 +16,17 @@ public class RollerSubsystem extends SubsystemBase{
     public RollerSubsystem() {
         rollerMotor = new SparkMax(ROLLER_ID, MotorType.kBrushless);
         intakeSensor = new DigitalInput(INTAKE_SENSOR_ID);
+        // rollerMotor.set(0.2);
+    }
+
+    @Override
+    public void periodic(){
+        // rollerMotor.set(0.2);
     }
 
     public void setRollerPower(double speed) {
         rollerMotor.set(speed);
+        System.out.println("Speed set to" + speed);
     }
 
     public boolean getIntakeSensor() {
