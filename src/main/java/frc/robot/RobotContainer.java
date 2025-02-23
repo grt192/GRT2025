@@ -13,12 +13,16 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Vision.VisionSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.subsystems.LED.BatteryLEDSubsystem;
 import frc.robot.Constants.VisionConstants;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -37,6 +41,7 @@ public class RobotContainer {
   private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(
     VisionConstants.cameraConfigs[1]
   );
+  private final BatteryLEDSubsystem batteryLEDSubsystem = new BatteryLEDSubsystem(5,5);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -44,6 +49,7 @@ public class RobotContainer {
     startLog();
     setVisionDataInterface();
     configureBindings();
+    scheduleBatteryLEDUpdate();
   }
 
   /**
@@ -122,5 +128,40 @@ public class RobotContainer {
   private void setVisionDataInterface(){
     visionSubsystem1.setInterface(swerveSubsystem::addVisionMeasurements);
     visionSubsystem2.setInterface(swerveSubsystem::addVisionMeasurements);
+  }
+
+  /**
+   * Schedules the battery LED update command
+   */
+  private void scheduleBatteryLEDUpdate() {
+    Timer timer = new Timer();
+    timer.start();
+    CommandScheduler.getInstance().schedule(new RunCommand(() -> {
+      if (timer.hasElapsed(1.0)) {
+        updateBatteryLED();
+        timer.reset();
+      }
+    }));
+  }
+
+  /**
+   * Updates the battery LED based on the current battery percentage
+   */
+  private void updateBatteryLED() {
+    double batteryPercentage = getBatteryPercentage();
+    batteryLEDSubsystem.updateBatteryLevel(batteryPercentage);
+  }
+
+  /**
+   * Gets the current battery percentage
+   */
+  private double getBatteryPercentage() {
+    double voltage = RobotController.getBatteryVoltage();
+
+    double maxVoltage = 12; // Fully charged battery voltage
+    double minVoltage = 11;  // Minimum operational voltage (change)
+
+    double percentage = ((voltage - minVoltage) / (maxVoltage - minVoltage)) * 100;
+    return Math.max(0, Math.min(100, percentage)); 
   }
 }
