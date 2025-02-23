@@ -27,6 +27,24 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
 
+  public static class ClimbConstants{
+    public static int MOTOR_ID = 0;
+    
+    public static final double kP = 0.0;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
+    public static final double kS = 0.0;
+    public static final double kV = 0.0;
+
+    public static final double CLIMB_TOLLERANCE = 0.1;
+
+    public static final double CLIMB_CURRENT_LIMIT = 60.;
+
+    public static final double CLIMB_SPEED = 0.5;
+
+    public static final boolean CLIMB_DEBUG = false;
+  }
+
   /** Constants for the swerve subsystem. */
   public static class SwerveConstants {
     public static final int FL_DRIVE = 0;
