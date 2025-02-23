@@ -32,19 +32,6 @@ public void setAllLEDsColor(int r, int g, int b) {
     }
     led.setData(ledBuffer);
 }
-
-public void setRed() {
-    setAllLEDsColor(255, 0, 0);
-}
-
-public void setGreen() {
-    setAllLEDsColor(0, 255, 0);
-}
-
-public void setBlue() {
-    setAllLEDsColor(0, 0, 255);
-}
-
 public void setRainbow() {
     for (int i = 0; i < length; i++) {
         final int hue = (i * 180 / length) % 180;

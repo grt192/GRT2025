@@ -77,6 +77,17 @@ public final class Constants {
     public static final String SWERVE_TABLE = "SwerveStats";
   }
 
+  public final class LEDStripConstants {
+    public static final int[] RED = {255, 0, 0};
+    public static final int[] GREEN = {0, 255, 0};
+    public static final int[] BLUE = {0, 0, 255};
+    public static final int[] YELLOW = {255, 255, 0};
+    public static final int[] CYAN = {0, 255, 255};
+    public static final int[] MAGENTA = {255, 0, 255};
+    public static final int[] WHITE = {255, 255, 255};
+    public static final int[] OFF = {0, 0, 0};
+  }
+
   public static class VisionConstants{
 
     public static final double[] STD_DEV_DIST = new double[] {
