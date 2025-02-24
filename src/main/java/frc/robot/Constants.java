@@ -31,6 +31,7 @@ public final class Constants {
 
     public static class PivotConstants{
       public static final int PIVOT_CAN_ID = 1;
+      public static final String PIVOT_CAN_NAME = "can";
 
       public static final double PIVOT_KP = 0.;
       public static final double PIVOT_KI = 0.;
@@ -53,6 +54,7 @@ public final class Constants {
 
     public static class RollerConstants{
       public static final int ROLLER_CAN_ID = 0;
+      public static final String ROLLER_CAN_NAME = "can";
       public static final double ROLLER_SPEED = 0.5;
       public static final double ROLLER_KP = 0;
       public static final double ROLLER_KI = 0;
@@ -60,7 +62,8 @@ public final class Constants {
       public static final double ROLLER_KS = 0;
       public static final double ROLLER_KV = 0;
 
-      public static final double ROLLER_ON_SPEED = 0.5;
+      public static final double ROLLER_IN_SPEED = 0.5;
+      public static final double ROLLER_OUT_SPEED = -0.5;
       public static final double ROLLER_OFF_SPEED = 0;
       public static final double ROLLER_TOLERANCE = 0.1;
 

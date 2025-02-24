@@ -33,8 +33,10 @@ public class RollerSubsystem extends SubsystemBase{
                 .withStatorCurrentLimit(RollerConstants.ROLLER_CURRENT_LIMIT)
         );
 
-    public RollerSubsystem(int canId, String canBusName){
-        rollerMotor = new LoggedTalon(canId, canBusName, rollerConfig);
+    public RollerSubsystem(){
+        rollerMotor = new LoggedTalon(
+            RollerConstants.ROLLER_CAN_ID, RollerConstants.ROLLER_CAN_NAME, rollerConfig
+        );
     }
 
     @Override

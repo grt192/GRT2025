@@ -12,10 +12,17 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.Intake.Pivot.PivotSubsystem;
+import frc.robot.subsystems.Intake.Roller.RollerSubsystem;
 import frc.robot.subsystems.Vision.VisionSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.Commands.Intake.Pivot.PivotToSourceCommand;
+import frc.robot.Commands.Intake.Roller.RollerInCommand;
+import frc.robot.Commands.Intake.Roller.RollerOutCommand;
+import frc.robot.Commands.Intake.Roller.RollerStopCommand;
 import frc.robot.Constants.VisionConstants;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -26,6 +33,10 @@ import frc.robot.Constants.VisionConstants;
 public class RobotContainer {
 
   private PS5DriveController driveController;
+  private CommandPS5Controller mechController;
+  
+  private final PivotSubsystem pivotSubsystem = new PivotSubsystem();
+  private final RollerSubsystem rollerSubsystem = new RollerSubsystem();
 
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(
@@ -41,6 +52,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     constructDriveController(); 
+    constructMechController();
     // startLog();
     setVisionDataInterface();
     configureBindings();
@@ -95,8 +107,32 @@ public class RobotContainer {
    * 0
    */
   private void constructDriveController(){
-    driveController = new PS5DriveController();
+    DriverStation.refreshData();
+    // if(DriverStation.getJoystickName(0).equals("Controller (Xbox One For Windows)")) {
+    //     driveController = new XboxDriveController();
+    // }
+    // else if(DriverStation.getJoystickName(0).equals("DualSense Wireless Controller")){
+        driveController = new PS5DriveController();
+    // }
+    // else{
+    //     driveController = new DualJoystickDriveController();
+    // }
     driveController.setDeadZone(0.05);
+  }
+
+  private void constructMechController(){
+    mechController = new CommandPS5Controller(1);
+    pivotSubsystem.setDefaultCommand(
+      new RunCommand(() -> {
+        pivotSubsystem.setVelocityReference(mechController.getLeftY());
+      },
+      pivotSubsystem
+      )
+    );
+    mechController.triangle().onTrue(new RollerOutCommand(rollerSubsystem));
+    mechController.circle().onTrue(new RollerInCommand(rollerSubsystem));
+    mechController.square().onTrue(new RollerStopCommand(rollerSubsystem));
+    mechController.cross().onTrue(new PivotToSourceCommand(pivotSubsystem));
   }
 
   /**

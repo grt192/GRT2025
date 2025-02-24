@@ -4,18 +4,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.IntakeConstans.RollerConstants;
 import frc.robot.subsystems.Intake.Roller.RollerSubsystem;
 
-public class RollerOnCommand extends Command{
+public class RollerInCommand extends Command{
    
     private final RollerSubsystem rollerSubsystem;
 
-    public RollerOnCommand(RollerSubsystem rollerSubsystem){
+    public RollerInCommand(RollerSubsystem rollerSubsystem){
         this.rollerSubsystem = rollerSubsystem;
         this.addRequirements(rollerSubsystem);
     }
 
     @Override
     public void initialize(){
-        rollerSubsystem.setRollerSpeed(RollerConstants.ROLLER_ON_SPEED);
+        rollerSubsystem.setRollerSpeed(RollerConstants.ROLLER_IN_SPEED);
     }
 
     @Override

@@ -53,8 +53,10 @@ public class PivotSubsystem extends SubsystemBase{
         );
 
 
-    public PivotSubsystem(int canId, String canBusName){
-        pivotMotor = new LoggedTalon(canId, canBusName, pivotConfig);
+    public PivotSubsystem(){
+        pivotMotor = new LoggedTalon(
+            PivotConstants.PIVOT_CAN_ID, PivotConstants.PIVOT_CAN_NAME, pivotConfig
+        );
         pivotMotor.setPosition(PivotConstants.PIVOT_INIT_POS);
     }
 
@@ -68,6 +70,10 @@ public class PivotSubsystem extends SubsystemBase{
 
     public void setPositionReference(double position){
         pivotMotor.setPositionReference(position);
+    }
+
+    public void setVelocityReference(double velocity){
+        pivotMotor.setVelocityReference(velocity);
     }
 
     public double getClosedLoopError(){
