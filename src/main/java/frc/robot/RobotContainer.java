@@ -12,10 +12,14 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.ClimbSubsystem;
 import frc.robot.subsystems.Vision.VisionSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.Commands.Climb.StartClimbCommand;
+import frc.robot.Commands.Climb.StopClimbCommand;
 import frc.robot.Constants.VisionConstants;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -26,7 +30,10 @@ import frc.robot.Constants.VisionConstants;
 public class RobotContainer {
 
   private PS5DriveController driveController;
+  private CommandPS5Controller mechController;
+  private Trigger climbTrigger;
 
+  private final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(
     VisionConstants.cameraConfigs[1]
@@ -41,6 +48,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     constructDriveController(); 
+    constructMechController();
     // startLog();
     setVisionDataInterface();
     configureBindings();
@@ -97,6 +105,13 @@ public class RobotContainer {
   private void constructDriveController(){
     driveController = new PS5DriveController();
     driveController.setDeadZone(0.05);
+  }
+
+  private void constructMechController(){
+    mechController = new CommandPS5Controller(1);
+    climbTrigger = mechController.create().and(mechController.options());
+    climbTrigger.onTrue(new StartClimbCommand(climbSubsystem));
+    climbTrigger.onFalse(new StopClimbCommand(climbSubsystem));
   }
 
   /**
