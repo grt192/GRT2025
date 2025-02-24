@@ -72,8 +72,12 @@ public class PivotSubsystem extends SubsystemBase{
         pivotMotor.setPositionReferenceWithVoltage(position);
     }
 
-    public void setVelocityReference(double velocity){
+    public void setVelocityReferenceWithVoltage(double velocity){
         pivotMotor.setVelocityReferenceWithVoltage(velocity);
+    }
+
+    public void setVelocityReference(double velocity){
+        pivotMotor.setVelocityReference(velocity);
     }
 
     public void setVelocityReference(double velocity){
