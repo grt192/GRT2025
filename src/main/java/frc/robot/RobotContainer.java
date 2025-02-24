@@ -12,10 +12,18 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.Elevator.ElevatorSubsystem;
 import frc.robot.subsystems.Vision.VisionSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.Commands.Elevator.ElevatorToGroundCommand;
+import frc.robot.Commands.Elevator.ElevatorToL1Command;
+import frc.robot.Commands.Elevator.ElevatorToL2Command;
+import frc.robot.Commands.Elevator.ElevatorToL3Command;
+import frc.robot.Commands.Elevator.ElevatorToL4Command;
+import frc.robot.Commands.Elevator.ElevatorToSourceCommand;
 import frc.robot.Constants.VisionConstants;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -26,7 +34,9 @@ import frc.robot.Constants.VisionConstants;
 public class RobotContainer {
 
   private PS5DriveController driveController;
+  private CommandPS5Controller mechController;
 
+  private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(
     VisionConstants.cameraConfigs[1]
@@ -41,6 +51,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     constructDriveController(); 
+    constructMechController();
     // startLog();
     setVisionDataInterface();
     configureBindings();
@@ -97,6 +108,24 @@ public class RobotContainer {
   private void constructDriveController(){
     driveController = new PS5DriveController();
     driveController.setDeadZone(0.05);
+  }
+
+  private void constructMechController(){
+    mechController = new CommandPS5Controller(0);
+    elevatorSubsystem.setDefaultCommand(
+      new RunCommand(
+        () -> {
+          elevatorSubsystem.setVelocityReference(mechController.getLeftY());
+        },
+        elevatorSubsystem
+      )
+    ); 
+    mechController.circle().onTrue(new ElevatorToGroundCommand(elevatorSubsystem));
+    mechController.cross().onTrue(new ElevatorToL1Command(elevatorSubsystem));
+    mechController.square().onTrue(new ElevatorToL2Command(elevatorSubsystem));
+    mechController.triangle().onTrue(new ElevatorToL3Command(elevatorSubsystem));
+    mechController.L1().onTrue(new ElevatorToL4Command(elevatorSubsystem));
+    mechController.R1().onTrue(new ElevatorToSourceCommand(elevatorSubsystem));
   }
 
   /**

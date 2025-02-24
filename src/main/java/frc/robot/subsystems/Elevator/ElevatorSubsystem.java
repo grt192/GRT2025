@@ -80,6 +80,10 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void setPositionReference(double positionReference){
     motor.setPositionReference(positionReference);
   }
+
+  public void setVelocityReference(double velocityReference){
+    motor.setVelocityReference(velocityReference);
+  }
   
   /**
    * Gets the closed loop error of the motor.
