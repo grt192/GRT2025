@@ -1,14 +1,15 @@
 {
-  "robotWidth": 0.762,
-  "robotLength": 0.762,
+  "robotWidth": 0.6858,
+  "robotLength": 0.8382,
   "holonomicMode": true,
   "pathFolders": [
+    "Aligning",
     "Leave 1",
     "Leave 2",
     "Leave 3",
-    "Aligning",
-    "Testing",
-    "Top Source"
+    "Left Source",
+    "Right Source",
+    "Testing"
   ],
   "autoFolders": [
     "Testing"

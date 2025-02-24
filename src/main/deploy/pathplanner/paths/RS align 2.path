@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.039029565436535,
-        "y": 2.7406331985491352
+        "x": 1.5284601869541483,
+        "y": 1.3748673751364617
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.581268650705207,
-        "y": 2.668262624209427
+        "x": 1.3417060418941047,
+        "y": 1.193950856304584
       },
       "isLocked": false,
-      "linkedName": "E Pose"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.768032786885246,
-        "y": 1.9211577868852465
+        "x": 1.216970438728166,
+        "y": 1.0746038311954136
       },
       "prevControl": {
-        "x": 7.440053352212356,
-        "y": 1.7951743344907418
+        "x": 1.3570083912316055,
+        "y": 1.2817013248032405
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Test start"
+      "linkedName": "RS 2"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -127.19833534037137
   },
   "reversed": false,
-  "folder": "Testing",
+  "folder": "Aligning",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 120.37912601136837
+    "rotation": -129.18786049691124
   },
   "useDefaultConstraints": true
 }

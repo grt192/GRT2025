@@ -26,7 +26,7 @@ public class RollerSubsystem extends SubsystemBase{
 
     public void setRollerPower(double speed) {
         rollerMotor.set(speed);
-        System.out.println("Speed set to" + speed);
+        //System.out.println("Speed set to" + speed);
     }
 
     public boolean getIntakeSensor() {
