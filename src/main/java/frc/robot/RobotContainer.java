@@ -52,6 +52,7 @@ public class RobotContainer {
   public RobotContainer() {
     constructDriveController(); 
     constructMechController();
+    bindElevator();
     // startLog();
     setVisionDataInterface();
     configureBindings();
@@ -110,8 +111,17 @@ public class RobotContainer {
     driveController.setDeadZone(0.05);
   }
 
+  /**
+   * Constructs mech controller
+   */
   private void constructMechController(){
     mechController = new CommandPS5Controller(0);
+  }
+
+  /**
+   * Binds elevator commands to mech controller
+   */
+  private void bindElevator(){
     elevatorSubsystem.setDefaultCommand(
       new RunCommand(
         () -> {
@@ -120,12 +130,12 @@ public class RobotContainer {
         elevatorSubsystem
       )
     ); 
-    mechController.circle().onTrue(new ElevatorToGroundCommand(elevatorSubsystem));
-    mechController.cross().onTrue(new ElevatorToL1Command(elevatorSubsystem));
+    mechController.cross().onTrue(new ElevatorToSourceCommand(elevatorSubsystem));
     mechController.square().onTrue(new ElevatorToL2Command(elevatorSubsystem));
-    mechController.triangle().onTrue(new ElevatorToL3Command(elevatorSubsystem));
-    mechController.L1().onTrue(new ElevatorToL4Command(elevatorSubsystem));
-    mechController.R1().onTrue(new ElevatorToSourceCommand(elevatorSubsystem));
+    mechController.circle().onTrue(new ElevatorToL3Command(elevatorSubsystem));
+    mechController.triangle().onTrue(new ElevatorToL4Command(elevatorSubsystem));
+    // mechController.L1().onTrue(new ElevatorToGroundCommand(elevatorSubsystem));
+    mechController.R1().onTrue(new ElevatorToGroundCommand(elevatorSubsystem));
   }
 
   /**
