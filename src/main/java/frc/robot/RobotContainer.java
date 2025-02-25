@@ -131,6 +131,7 @@ public class RobotContainer {
       },
       pivotSubsystem
       )
+        .onlyWhile(() -> Math.abs(mechController.getLeftY()) > 0.05)
     );
     mechController.L2().onTrue(new RollerOutCommand(rollerSubsystem));
     mechController.L2().toggleOnFalse(new RollerStopCommand(rollerSubsystem));
