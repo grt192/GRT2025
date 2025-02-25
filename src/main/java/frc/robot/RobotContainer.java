@@ -19,7 +19,9 @@ import frc.robot.subsystems.Intake.Pivot.PivotSubsystem;
 import frc.robot.subsystems.Intake.Roller.RollerSubsystem;
 import frc.robot.subsystems.Vision.VisionSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.Commands.Intake.Pivot.PivotToOuttakeCommand;
 import frc.robot.Commands.Intake.Pivot.PivotToSourceCommand;
+import frc.robot.Commands.Intake.Pivot.PivotUp90Command;
 import frc.robot.Commands.Intake.Roller.RollerInCommand;
 import frc.robot.Commands.Intake.Roller.RollerOutCommand;
 import frc.robot.Commands.Intake.Roller.RollerStopCommand;
@@ -53,6 +55,7 @@ public class RobotContainer {
   public RobotContainer() {
     constructDriveController(); 
     constructMechController();
+    bindIntake();
     // startLog();
     setVisionDataInterface();
     configureBindings();
@@ -120,8 +123,17 @@ public class RobotContainer {
     driveController.setDeadZone(0.05);
   }
 
+  /**
+   * Constructs the mech controller at port 1
+   */
   private void constructMechController(){
     mechController = new CommandPS5Controller(1);
+  }
+
+  /**
+   * Binds the intake commands to the mech controller
+   */
+  private void bindIntake(){
     pivotSubsystem.setDefaultCommand(
       new RunCommand(() -> {
         pivotSubsystem.setVelocityReference(mechController.getLeftY());
@@ -129,10 +141,13 @@ public class RobotContainer {
       pivotSubsystem
       )
     );
-    mechController.triangle().onTrue(new RollerOutCommand(rollerSubsystem));
-    mechController.circle().onTrue(new RollerInCommand(rollerSubsystem));
-    mechController.square().onTrue(new RollerStopCommand(rollerSubsystem));
-    mechController.cross().onTrue(new PivotToSourceCommand(pivotSubsystem));
+    mechController.L2().onTrue(new RollerOutCommand(rollerSubsystem));
+    mechController.L2().toggleOnFalse(new RollerStopCommand(rollerSubsystem));
+    mechController.R2().onTrue(new RollerInCommand(rollerSubsystem));
+    mechController.R2().toggleOnFalse(new RollerStopCommand(rollerSubsystem));
+    mechController.povDown().onTrue(new PivotToOuttakeCommand(pivotSubsystem));
+    mechController.povUp().onTrue(new PivotToSourceCommand(pivotSubsystem));
+    mechController.L1().onTrue(new PivotUp90Command(pivotSubsystem));
   }
 
   /**
