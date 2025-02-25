@@ -14,7 +14,7 @@ public class PivotUp90Command extends Command{
 
    @Override
    public void initialize(){
-       pivotSubsystem.setPositionReference(PivotConstants.PIVOT_MAX_POS);
+       pivotSubsystem.setPositionReferenceWithVoltage(PivotConstants.PIVOT_MAX_POS);
    }
 
    @Override

@@ -14,7 +14,7 @@ public class PivotToSourceCommand extends Command{
 
    @Override
    public void initialize(){
-       pivotSubsystem.setPositionReference(PivotConstants.SOURCE_POS);
+       pivotSubsystem.setPositionReferenceWithVoltage(PivotConstants.SOURCE_POS);
    }
 
    @Override

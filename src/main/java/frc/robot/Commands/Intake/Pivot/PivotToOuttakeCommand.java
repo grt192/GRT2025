@@ -14,7 +14,7 @@ public class PivotToOuttakeCommand extends Command{
 
    @Override
    public void initialize(){
-       pivotSubsystem.setPositionReference(PivotConstants.OUTTAKE_POS);
+       pivotSubsystem.setPositionReferenceWithVoltage(PivotConstants.OUTTAKE_POS);
    }
 
    @Override
