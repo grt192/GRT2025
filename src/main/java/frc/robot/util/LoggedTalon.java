@@ -6,7 +6,9 @@ import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.networktables.DoublePublisher;
@@ -87,6 +89,15 @@ public class LoggedTalon{
     }
 
     /**
+     * Sets the motor's position reference with voltage
+     * @param position position reference
+     */
+    public void setPositionReferenceWithVoltage(double position){
+        targetPosition = position;
+        motor.setControl(new PositionVoltage(position));
+    }
+
+    /**
      * Sets the motor's position reference with feedforward
      * @param position position reference
      * @param arbFF arbitrary feedforward
@@ -97,6 +108,7 @@ public class LoggedTalon{
             new PositionTorqueCurrentFOC(position).withFeedForward(arbFF)
         );
     }
+
     /**
      * Set the motor's velocity reference
      * @param velocity velocity reference
@@ -104,6 +116,14 @@ public class LoggedTalon{
     public void setVelocityReference(double velocity){
         targetVelocity = velocity;
         motor.setControl(new VelocityTorqueCurrentFOC(velocity));
+    }
+    /**
+     * Sets the motor's velocity reference with voltage
+     * @param velocity velocity reference
+     */
+    public void setVelocityReferenceWithVoltage(double velocity){
+        targetVelocity = velocity;
+        motor.setControl(new VelocityVoltage(velocity));
     }
 
     /**
