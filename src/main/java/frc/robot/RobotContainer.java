@@ -49,6 +49,7 @@ public class RobotContainer {
   public RobotContainer() {
     constructDriveController(); 
     constructMechController();
+    bindClimb();
     // startLog();
     setVisionDataInterface();
     configureBindings();
@@ -99,16 +100,24 @@ public class RobotContainer {
   }
 
   /**
-   * Constructs the drive controller based on the name of the controller at port
-   * 0
+   * Constructs the drive controller at port 0
    */
   private void constructDriveController(){
     driveController = new PS5DriveController();
     driveController.setDeadZone(0.05);
   }
 
+  /**
+   * Constructs mech controller at port 1
+   */
   private void constructMechController(){
     mechController = new CommandPS5Controller(1);
+  }
+
+  /**
+   * Binds climb commands to mech controller
+   */
+  private void bindClimb(){
     climbTrigger = mechController.create().and(mechController.options());
     climbTrigger.onTrue(new StartClimbCommand(climbSubsystem));
     climbTrigger.onFalse(new StopClimbCommand(climbSubsystem));
