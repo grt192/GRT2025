@@ -46,12 +46,13 @@ public class RollerSubsystem extends SubsystemBase{
             rollerMotor.publishStats();
         }
     }
+
     /**
      * Set the speed of the roller motor
      * @param speed target speed in RPS
      */
     public void setRollerSpeed(double speed){
-        rollerMotor.setVelocityReference(speed);
+        rollerMotor.setVelocityReferenceWithVoltage(speed);
     }
 
     public double getClosedLoopError(){
