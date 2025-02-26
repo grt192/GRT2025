@@ -24,6 +24,7 @@ import frc.robot.commands.Elevator.ElevatorToL1Command;
 import frc.robot.commands.Elevator.ElevatorToL2Command;
 import frc.robot.commands.Elevator.ElevatorToL3Command;
 import frc.robot.commands.Elevator.ElevatorToL4Command;
+import frc.robot.commands.Elevator.ElevatorToLimitSwitchCommand;
 import frc.robot.commands.Elevator.ElevatorToSourceCommand;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -115,7 +116,7 @@ public class RobotContainer {
    * Constructs mech controller
    */
   private void constructMechController(){
-    mechController = new CommandPS5Controller(0);
+    mechController = new CommandPS5Controller(1);
   }
 
   /**
@@ -125,17 +126,20 @@ public class RobotContainer {
     elevatorSubsystem.setDefaultCommand(
       new RunCommand(
         () -> {
-          elevatorSubsystem.setVelocityReference(mechController.getLeftY());
+          elevatorSubsystem.setPower(-mechController.getLeftY());
         },
         elevatorSubsystem
       )
-    ); 
+    );
+    mechController.L1().whileTrue(new ElevatorToLimitSwitchCommand(elevatorSubsystem));
     mechController.cross().onTrue(new ElevatorToSourceCommand(elevatorSubsystem));
-    mechController.square().onTrue(new ElevatorToL2Command(elevatorSubsystem));
+    mechController.square().onTrue(new ElevatorToL1Command(elevatorSubsystem));
     mechController.circle().onTrue(new ElevatorToL3Command(elevatorSubsystem));
     mechController.triangle().onTrue(new ElevatorToL4Command(elevatorSubsystem));
     // mechController.L1().onTrue(new ElevatorToGroundCommand(elevatorSubsystem));
     mechController.R1().onTrue(new ElevatorToGroundCommand(elevatorSubsystem));
+
+    // mechController.L1
   }
 
   /**

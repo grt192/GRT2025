@@ -6,6 +6,7 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -22,6 +23,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   //motor stuff and configs
   private final LoggedTalon motor;
   private final TalonFXConfiguration motorConfig;
+  private double arbFF;
   
   //limit switch
   private final DigitalInput zeroLimitSwitch;
@@ -36,18 +38,18 @@ public class ElevatorSubsystem extends SubsystemBase {
           .withKP(ElevatorConstants.kP)
           .withKI(ElevatorConstants.kI)
           .withKD(ElevatorConstants.kD)
-          .withKS(ElevatorConstants.kS)
       )
       .withMotorOutput(
         new MotorOutputConfigs()
-          .withNeutralMode(NeutralModeValue.Brake)  
+          .withNeutralMode(NeutralModeValue.Brake)
+          .withInverted(InvertedValue.Clockwise_Positive)
       )
       .withSoftwareLimitSwitch(
         new SoftwareLimitSwitchConfigs()
-          .withForwardSoftLimitEnable(true)
-          .withForwardSoftLimitThreshold(ElevatorConstants.FORWARD_LIMIT)
           .withReverseSoftLimitEnable(true)
+          .withForwardSoftLimitEnable(true)
           .withReverseSoftLimitThreshold(ElevatorConstants.REVERSE_LIMIT)
+          .withForwardSoftLimitThreshold(ElevatorConstants.FORWARD_LIMIT)
       )
       .withCurrentLimits(
         new CurrentLimitsConfigs()
@@ -64,9 +66,11 @@ public class ElevatorSubsystem extends SubsystemBase {
   
   @Override
   public void periodic() {
-    if(zeroLimitSwitch.get()){
+    if(!zeroLimitSwitch.get()){
       motor.setPosition(0);
+      motor.setPower(0);
     }
+    System.out.println(motor.getPosition());
     motor.logStats();
     if(DebugConstants.MASTER_DEBUG || ElevatorConstants.ELEVATOR_DEBUG) {
       motor.publishStats();
@@ -78,11 +82,21 @@ public class ElevatorSubsystem extends SubsystemBase {
    * @param positionReference target position
    */
   public void setPositionReference(double positionReference){
-    motor.setPositionReference(positionReference);
+    if (positionReference > motor.getPosition()) {
+      arbFF = ElevatorConstants.arbFF;
+    }
+    else {
+      arbFF = 0;
+    }
+    motor.setPositionReferenceWithArbFF(positionReference, arbFF);
   }
 
   public void setVelocityReference(double velocityReference){
     motor.setVelocityReference(velocityReference);
+  }
+
+  public void setPower(double power) {
+    motor.setPower(power);
   }
   
   /**

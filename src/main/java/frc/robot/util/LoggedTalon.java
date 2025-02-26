@@ -118,6 +118,10 @@ public class LoggedTalon{
         }
     }
 
+    public void setPower(double power) {
+        motor.set(power);
+    }
+
     /**
      * Configures drive motor's PIDSV
      * @param p kP
