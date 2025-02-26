@@ -345,5 +345,10 @@ public final class Constants {
         L_alignName
     );
   }
+
+  public static class AligningConstants {
+    // distance to use path on the fly instead of pathfinding (distance from starting position/node)
+    public static double distanceTolerance = 3.5; 
+  }
 }
 }

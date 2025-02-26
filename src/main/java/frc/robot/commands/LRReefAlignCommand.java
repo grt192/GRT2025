@@ -15,6 +15,8 @@ import frc.robot.subsystems.FieldManagementSubsystem.FieldManagementSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.Constants.IntakeConstants.ReefAlignConstants;
 import frc.robot.subsystems.AlignSubsystem;
+import edu.wpi.first.math.geometry.Translation2d;
+import frc.robot.Constants.IntakeConstants.AligningConstants;
 
 public class LRReefAlignCommand extends Command{
     static SwerveSubsystem swerveSubsystem;
@@ -45,6 +47,7 @@ public class LRReefAlignCommand extends Command{
 
     @Override
     public void initialize() {
+        Translation2d currentTrans =  swerveSubsystem.getRobotPosition().getTranslation();
         if (fmsSubsystem.isRedAlliance()) {
             currentRightPoseList = ReefAlignConstants.redRightReefPoseList;
             currentLeftPoseList = ReefAlignConstants.redLeftReefPoseList;
