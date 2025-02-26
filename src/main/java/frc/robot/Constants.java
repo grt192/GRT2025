@@ -112,26 +112,26 @@ public final class Constants {
 
     public static final CameraConfig[] cameraConfigs = new CameraConfig[]{
       new CameraConfig(
-        "1",
+        "7",
         new Transform3d(
-          0.31, 0.01, 0.2,
-          new Rotation3d(- Math.PI / 2., 0, 0)
+          -0.019, -0.071, 0.981,
+          new Rotation3d(0, -Math.PI/6., Math.PI)
         ),
         PoseStrategy.LOWEST_AMBIGUITY
       ),
       new CameraConfig(
-        "2",
+        "3",
         new Transform3d(
-          0.0508, -0.0476,1.13,
-          new Rotation3d(Math.PI, -Math.PI * 8. / 9.,  0.)
+          0.031, -0.071,0.981,
+          new Rotation3d(0, -Math.PI * 6.,  0)
         ),
         PoseStrategy.LOWEST_AMBIGUITY
       ),
       new CameraConfig(
-          "3",
+          "4",
           new Transform3d(//11.3 in above ground
-            0.211, -0.2695, 0.28702 ,
-            new Rotation3d(0, 0., Math.PI / 180. * 19.)
+            0.235, -0.286, 0.220 ,
+            new Rotation3d(0, -Math.PI/9., Math.PI / 9.)
           ),
           PoseStrategy.LOWEST_AMBIGUITY
       ),

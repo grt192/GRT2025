@@ -3,9 +3,41 @@
     "mode": "Client (NT4)",
     "serverTeam": "192"
   },
+  "Retained Values": {
+    "open": false
+  },
   "transitory": {
+    "MotorStats": {
+      "open": true
+    },
+    "PathPlanner": {
+      "open": true
+    },
+    "Shuffleboard": {
+      "open": true
+    },
+    "SmartDashboard": {
+      "open": true
+    },
     "Swerve": {
       "open": true
+    },
+    "SwerveStats": {
+      "Pose2d##v_/SwerveStats/estimatedPose": {
+        "Rotation2d##v_rotation": {
+          "open": true
+        },
+        "Translation2d##v_translation": {
+          "open": true
+        },
+        "open": true
+      },
+      "open": true
+    },
+    "photonvision": {
+      "Arducam_OV9281_USB_Camera": {
+        "open": true
+      }
     }
   }
 }
