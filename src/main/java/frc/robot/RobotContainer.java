@@ -35,7 +35,7 @@ import frc.robot.commands.Elevator.ElevatorToSourceCommand;
 public class RobotContainer {
 
   private PS5DriveController driveController;
-  private CommandPS5Controller mechController;
+  private CommandPS5Controller mechController = new CommandPS5Controller(1);
 
   private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
@@ -48,6 +48,8 @@ public class RobotContainer {
   private final VisionSubsystem visionSubsystem4 = new VisionSubsystem(
     VisionConstants.cameraConfigs[3]
   );
+
+  private Trigger yAxis;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -123,19 +125,12 @@ public class RobotContainer {
    * Binds elevator commands to mech controller
    */
   private void bindElevator(){
-    elevatorSubsystem.setDefaultCommand(
-      new RunCommand(
-        () -> {
-          elevatorSubsystem.setPower(-mechController.getLeftY());
-        },
-        elevatorSubsystem
-      )
-    );
+    
     mechController.L1().whileTrue(new ElevatorToLimitSwitchCommand(elevatorSubsystem));
-    mechController.cross().onTrue(new ElevatorToSourceCommand(elevatorSubsystem));
-    mechController.square().onTrue(new ElevatorToL1Command(elevatorSubsystem));
-    mechController.circle().onTrue(new ElevatorToL3Command(elevatorSubsystem));
-    mechController.triangle().onTrue(new ElevatorToL4Command(elevatorSubsystem));
+    mechController.cross().onTrue(new ElevatorToL1Command(elevatorSubsystem));
+    mechController.square().onTrue(new ElevatorToL2Command(elevatorSubsystem));
+    mechController.triangle().onTrue(new ElevatorToL3Command(elevatorSubsystem));
+    mechController.circle().onTrue(new ElevatorToL4Command(elevatorSubsystem));
     // mechController.L1().onTrue(new ElevatorToGroundCommand(elevatorSubsystem));
     mechController.R1().onTrue(new ElevatorToGroundCommand(elevatorSubsystem));
 

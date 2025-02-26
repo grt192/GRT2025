@@ -42,10 +42,10 @@ public final class Constants {
     public static final int MOTOR_ID = 13; //change
     public static final int LIMIT_ID = 0; //change
 
-    public static final double kP = 4; //change
+    public static final double kP = 1; //change
     public static final double kI = 0; //change
     public static final double kD = 0; //change
-    public static final double arbFF = 2; //chang
+    public static final double arbFF = 30; //chang
 
     public static final double FORWARD_LIMIT = 126; //change
     public static final double REVERSE_LIMIT = 0; //change
