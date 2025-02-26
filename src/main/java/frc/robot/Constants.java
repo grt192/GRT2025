@@ -28,12 +28,12 @@ public final class Constants {
   }
 
   public static class ClimbConstants{
-    public static int MOTOR_ID = 0;
+    public static int MOTOR_ID = 9;
     
     public static final double kP = 0.0;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
-    public static final double kS = 0.0;
+    public static final double kS = 10.;
     public static final double kV = 0.0;
 
     public static final double CLIMB_TOLLERANCE = 0.1;
