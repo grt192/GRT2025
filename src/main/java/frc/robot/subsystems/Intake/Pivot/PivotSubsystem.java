@@ -105,10 +105,6 @@ public class PivotSubsystem extends SubsystemBase{
         pivotMotor.setVelocityReference(velocity);
     }
 
-    public void setVelocityReference(double velocity){
-        pivotMotor.setVelocityReference(velocity);
-    }
-
     public double getClosedLoopError(){
         return pivotMotor.getClosedLoopError();
     }
