@@ -30,8 +30,8 @@ public final class Constants {
   public static class IntakeConstans{
 
     public static class PivotConstants{
-      public static final int PIVOT_CAN_ID = 1;
-      public static final String PIVOT_CAN_NAME = "can";
+      public static final int PIVOT_CAN_ID = 14;
+      public static final String PIVOT_CAN_NAME = "rio";
 
       public static final double PIVOT_KP = 0.;
       public static final double PIVOT_KI = 0.;
@@ -57,8 +57,8 @@ public final class Constants {
     }
 
     public static class RollerConstants{
-      public static final int ROLLER_CAN_ID = 0;
-      public static final String ROLLER_CAN_NAME = "can";
+      public static final int ROLLER_CAN_ID = 16;
+      public static final String ROLLER_CAN_NAME = "rio";
       public static final double ROLLER_SPEED = 0.5;
       public static final double ROLLER_KP = 0;
       public static final double ROLLER_KI = 0;

@@ -11,6 +11,8 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -133,10 +135,17 @@ public class RobotContainer {
       )
         .onlyWhile(() -> Math.abs(mechController.getLeftY()) > 0.05)
     );
-    mechController.L2().onTrue(new RollerOutCommand(rollerSubsystem));
-    mechController.L2().toggleOnFalse(new RollerStopCommand(rollerSubsystem));
-    mechController.R2().onTrue(new RollerInCommand(rollerSubsystem));
-    mechController.R2().toggleOnFalse(new RollerStopCommand(rollerSubsystem));
+
+    rollerSubsystem.setDefaultCommand(new ConditionalCommand(
+      new InstantCommand( () -> {
+        //ps5 trigger's range is -1 to 1, with non-input position being -1. This maps the range -1 to 1 to 0 to 1.
+        rollerSubsystem.setRollerSpeed(.25 * (mechController.getL2Axis() + 1.) / 2.); 
+      }, rollerSubsystem), 
+      new InstantCommand( () -> {
+        rollerSubsystem.setRollerSpeed(.15 * (mechController.getL2Axis() - mechController.getR2Axis()));
+      }, rollerSubsystem), 
+      () -> rollerSubsystem.getIntakeSensor()));
+      
     mechController.povDown().onTrue(new PivotToOuttakeCommand(pivotSubsystem));
     mechController.povUp().onTrue(new PivotToSourceCommand(pivotSubsystem));
     mechController.L1().onTrue(new PivotUp90Command(pivotSubsystem));
