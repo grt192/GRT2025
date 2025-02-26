@@ -19,13 +19,13 @@ import frc.robot.subsystems.Elevator.ElevatorSubsystem;
 import frc.robot.subsystems.Vision.VisionSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.Constants.VisionConstants;
-import frc.robot.commands.Elevator.ElevatorToGroundCommand;
-import frc.robot.commands.Elevator.ElevatorToL1Command;
-import frc.robot.commands.Elevator.ElevatorToL2Command;
-import frc.robot.commands.Elevator.ElevatorToL3Command;
-import frc.robot.commands.Elevator.ElevatorToL4Command;
-import frc.robot.commands.Elevator.ElevatorToLimitSwitchCommand;
-import frc.robot.commands.Elevator.ElevatorToSourceCommand;
+import frc.robot.Commands.Elevator.ElevatorToGroundCommand;
+import frc.robot.Commands.Elevator.ElevatorToL1Command;
+import frc.robot.Commands.Elevator.ElevatorToL2Command;
+import frc.robot.Commands.Elevator.ElevatorToL3Command;
+import frc.robot.Commands.Elevator.ElevatorToL4Command;
+import frc.robot.Commands.Elevator.ElevatorToLimitSwitchCommand;
+import frc.robot.Commands.Elevator.ElevatorToSourceCommand;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
