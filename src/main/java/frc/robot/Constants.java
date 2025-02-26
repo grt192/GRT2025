@@ -82,6 +82,7 @@ public final class Constants {
 
   public static class LoggingConstants{
     public static final String SWERVE_TABLE = "SwerveStats";
+    public static final String SENSOR_TABLE = "Sensors";
   }
 
   public static class VisionConstants{
