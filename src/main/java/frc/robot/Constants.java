@@ -42,15 +42,15 @@ public final class Constants {
 
       public static final double PIVOT_MANUAL_SPEED = 0.15;
 
-      public static final double SOURCE_POS = 0.;
-      public static final double OUTTAKE_POS = -0.15;
+      public static final double SOURCE_POS = Units.degreesToRadians(50);
+      public static final double OUTTAKE_POS = Units.degreesToRadians(-45);
       
       public static final double PIVOT_TOLERANCE = 0.1;
 
-      public static final double ROTOR_TO_SENSOR_RATIO = 20.;
-      public static final double PIVOT_INIT_POS = 0.25;
-      public static final double PIVOT_MAX_POS = 0.25;
-      public static final double PIVOT_MIN_POS = -0.25;
+      public static final double ROTOR_TO_SENSOR_RATIO = 20. / (2. * Math.PI);
+      public static final double PIVOT_INIT_POS = Units.degreesToRadians(94);
+      public static final double PIVOT_MAX_POS = Units.degreesToRadians(94);
+      public static final double PIVOT_MIN_POS = Units.degreesToRadians(-45);
 
       public static final double PIVOT_RAMP_RATE = 0.02;
       public static final double PIVOT_CURRENT_LIMIT = 100.;

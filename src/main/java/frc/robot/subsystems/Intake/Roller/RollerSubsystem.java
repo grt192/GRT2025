@@ -54,7 +54,6 @@ public class RollerSubsystem extends SubsystemBase{
         if(MASTER_DEBUG || ROLLER_DEBUG){
             rollerMotor.publishStats();
         }
-        System.out.println(!intakeSensor.get());
     }
 
     public boolean getIntakeSensor() {

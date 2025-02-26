@@ -10,6 +10,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DebugConstants;
 import frc.robot.Constants.IntakeConstans.PivotConstants;
@@ -50,7 +51,8 @@ public class PivotSubsystem extends SubsystemBase{
         )
         .withFeedback(
             new FeedbackConfigs()
-                .withRotorToSensorRatio(PivotConstants.ROTOR_TO_SENSOR_RATIO)
+                // .withRotorToSensorRatio(PivotConstants.ROTOR_TO_SENSOR_RATIO)
+                .withSensorToMechanismRatio(PivotConstants.ROTOR_TO_SENSOR_RATIO)
         )
         .withSoftwareLimitSwitch(
             new SoftwareLimitSwitchConfigs()
@@ -74,6 +76,7 @@ public class PivotSubsystem extends SubsystemBase{
         if(DebugConstants.MASTER_DEBUG || DebugConstants.PIVOT_DEBUG){
             pivotMotor.publishStats();
         }
+        System.out.println(Units.radiansToDegrees(pivotMotor.getPosition()));
     }
 
     public void setPositionReferenceWithVoltage(double position){
@@ -86,12 +89,10 @@ public class PivotSubsystem extends SubsystemBase{
      */
     public void setPositionReference(double positionReference){
         if (positionReference > pivotMotor.getPosition()) {
-
-        double angleRad = Math.toRadians(pivotMotor.getPosition());
-        arbFF = feedforward.calculate(angleRad, 0.0);
+            arbFF = feedforward.calculate(positionReference, 0.0);
         }
         else {
-        arbFF = 0;
+            arbFF = 0;
         }
         pivotMotor.setPositionReferenceWithArbFF(positionReference, arbFF);
     }
