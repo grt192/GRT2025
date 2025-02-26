@@ -2,11 +2,15 @@ package frc.robot.util;
 
 import java.util.EnumSet;
 
+import javax.xml.crypto.Data;
+
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -37,6 +41,8 @@ public class LoggedTalon{
     private DoublePublisher temperaturePublisher;
     private DoublePublisher targetPositionPublisher;
     private DoublePublisher targetVelocityPublisher;
+    private DoublePublisher targetTorqueCurrentFOCPublisher;
+    private DoublePublisher targetDutyCyclePublisher; 
     private DoublePublisher closedLoopErrorPublisher;
 
     private DoubleLogEntry positionLogEntry;
@@ -47,10 +53,14 @@ public class LoggedTalon{
     private DoubleLogEntry temperatureLogEntry;
     private DoubleLogEntry targetPositionLogEntry; 
     private DoubleLogEntry targetVelocityLogEntry;
+    private DoubleLogEntry targetTorqueCurrentFOCLogEntry;
+    private DoubleLogEntry targetDutyCycleLogEntry; 
     private DoubleLogEntry closedLoopErrorLogEntry;
 
     private double targetPosition;
     private double targetVelocity;
+    private double targetTorqueCurrentFOC;
+    private double targetDutyCycle;
 
     public LoggedTalon(
         int canId, String canBusName, TalonFXConfiguration talonConfig
@@ -127,6 +137,24 @@ public class LoggedTalon{
     }
 
     /**
+     * Set the current of the motor directly
+     * @param current target current output
+     */
+    public void setTorqueCurrentFOC(double current){
+        targetTorqueCurrentFOC = current;
+        motor.setControl(new TorqueCurrentFOC(current));
+    } 
+
+    /**
+     * Set duty cycle output
+     * @param output duty cycle output from -1.0 to 1.0
+     */
+    public void setDutyCycle(double output){
+        targetDutyCycle = output;
+        motor.setControl(new DutyCycleOut(output));
+    }
+
+    /**
      * Sets the motor's position to a certain value
      * @param position mechanisam position after taking the position conversion
      * into account
@@ -199,6 +227,14 @@ public class LoggedTalon{
             canId + "targetVelocity"
         ).publish();
 
+        targetTorqueCurrentFOCPublisher = motorStatsTable.getDoubleTopic(
+            canId + "targetTorqueCurrentFOC"
+        ).publish();
+
+        targetDutyCyclePublisher = motorStatsTable.getDoubleTopic(
+            canId + "targetDutyCycle"
+        ).publish();
+
         closedLoopErrorPublisher = motorStatsTable.getDoubleTopic(
             canId + "closedLoopError"
         ).publish();
@@ -239,6 +275,14 @@ public class LoggedTalon{
 
         targetVelocityLogEntry = new DoubleLogEntry(
             DataLogManager.getLog(), canId + "targetVelocity"
+        );
+
+        targetTorqueCurrentFOCLogEntry = new DoubleLogEntry(
+            DataLogManager.getLog(), canId + "targetTorqueCurrentFOC"
+        );
+
+        targetDutyCycleLogEntry = new DoubleLogEntry(
+            DataLogManager.getLog(), canId + "targetDutyCycle"
         );
         
         closedLoopErrorLogEntry = new DoubleLogEntry(
