@@ -38,6 +38,7 @@ public final class Constants {
       public static final double PIVOT_KD = 0.;
       public static final double PIVOT_KG = 0.;
       public static final double PIVOT_KV = 0.;
+      public static final double PIVOT_KS = 0.;
 
       public static final double PIVOT_MANUAL_SPEED = 0.15;
 

@@ -9,6 +9,7 @@ import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DebugConstants;
 import frc.robot.Constants.IntakeConstans.PivotConstants;
@@ -17,6 +18,13 @@ import frc.robot.util.LoggedTalon;
 public class PivotSubsystem extends SubsystemBase{
     
     private LoggedTalon pivotMotor;
+    private double arbFF;
+
+    ArmFeedforward feedforward = new ArmFeedforward(
+        PivotConstants.PIVOT_KS,
+        PivotConstants.PIVOT_KG,
+        PivotConstants.PIVOT_KV);
+
 
     private TalonFXConfiguration pivotConfig = new TalonFXConfiguration()
         .withSlot0(
@@ -70,6 +78,22 @@ public class PivotSubsystem extends SubsystemBase{
 
     public void setPositionReferenceWithVoltage(double position){
         pivotMotor.setPositionReferenceWithVoltage(position);
+    }
+
+    /**
+     * Sets the elevator to a specific position.
+     * @param positionReference target position
+     */
+    public void setPositionReference(double positionReference){
+        if (positionReference > pivotMotor.getPosition()) {
+
+        double angleRad = Math.toRadians(pivotMotor.getPosition());
+        arbFF = feedforward.calculate(angleRad, 0.0);
+        }
+        else {
+        arbFF = 0;
+        }
+        pivotMotor.setPositionReferenceWithArbFF(positionReference, arbFF);
     }
 
     public void setVelocityReferenceWithVoltage(double velocity){
