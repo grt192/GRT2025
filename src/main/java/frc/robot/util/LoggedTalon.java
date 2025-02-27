@@ -98,6 +98,10 @@ public class LoggedTalon{
         motor.setControl(new PositionTorqueCurrentFOC(position));
     }
 
+    public void setSpeed(double speed) {
+        motor.set(speed);
+    }
+
     /**
      * Sets the motor's position reference with voltage
      * @param position position reference

@@ -60,6 +60,56 @@ public final class Constants {
 
     public static final boolean ELEVATOR_DEBUG = true;
   }
+  public static class IntakeConstans{
+
+    public static class PivotConstants{
+      public static final int PIVOT_CAN_ID = 14;
+      public static final String PIVOT_CAN_NAME = "rio";
+
+      public static final double PIVOT_KP = 5.4;
+      public static final double PIVOT_KI = 0.;
+      public static final double PIVOT_KD = .6;
+      public static final double PIVOT_KG = 500.;
+      public static final double PIVOT_KV = 0.;
+      public static final double PIVOT_KS = 0.;
+
+      public static final double PIVOT_MANUAL_SPEED = 0.15;
+
+      public static final double SOURCE_POS = Units.degreesToRadians(45.);
+      public static final double OUTTAKE_POS = Units.degreesToRadians(-45.);
+      
+      public static final double PIVOT_TOLERANCE = 0.1;
+
+      public static final double ROTOR_TO_SENSOR_RATIO = 20. / (2. * Math.PI);
+      public static final double PIVOT_INIT_POS = Units.degreesToRadians(95.);
+      public static final double PIVOT_HORIZONTAL = Units.degreesToRadians(0);
+      public static final double PIVOT_MAX_POS = Units.degreesToRadians(95.);
+      public static final double PIVOT_MIN_POS = Units.degreesToRadians(-45.);
+
+      public static final double PIVOT_RAMP_RATE = 0.03;
+      public static final double PIVOT_CURRENT_LIMIT = 100.;
+    }
+
+    public static class RollerConstants{
+      public static final int ROLLER_CAN_ID = 16;
+      public static final String ROLLER_CAN_NAME = "rio";
+      public static final double ROLLER_SPEED = 0.5;
+      public static final double ROLLER_KP = 0;
+      public static final double ROLLER_KI = 0;
+      public static final double ROLLER_KD = 0;
+      public static final double ROLLER_KS = 0;
+      public static final double ROLLER_KV = 0;
+
+      public static final double ROLLER_IN_SPEED = 0.5;
+      public static final double ROLLER_OUT_SPEED = -0.5;
+      public static final double ROLLER_OFF_SPEED = 0;
+      public static final double ROLLER_TOLERANCE = 0.1;
+
+      public static final double ROLLER_RAMP_RATE = 0.02;
+      public static final double ROLLER_CURRENT_LIMIT = 100.;
+    }
+  }
+
   /** Constants for the swerve subsystem. */
   public static class SwerveConstants {
     public static final int FL_DRIVE = 0;
@@ -115,6 +165,13 @@ public final class Constants {
 
   public static class LoggingConstants{
     public static final String SWERVE_TABLE = "SwerveStats";
+    public static final String SENSOR_TABLE = "Sensors";
+  }
+
+  public static class DebugConstants{
+    public static final boolean MASTER_DEBUG = true;
+    public static final boolean PIVOT_DEBUG = true;
+    public static final boolean ROLLER_DEBUG = true;
   }
 
   public static class DebugConstants{
