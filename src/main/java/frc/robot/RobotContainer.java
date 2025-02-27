@@ -11,12 +11,32 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.Elevator.ElevatorSubsystem;
+import frc.robot.subsystems.Intake.Pivot.PivotSubsystem;
+import frc.robot.subsystems.Intake.Roller.RollerSubsystem;
 import frc.robot.subsystems.Vision.VisionSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.Commands.Intake.Pivot.PivotToHorizontalCommand;
+import frc.robot.Commands.Intake.Pivot.PivotToOuttakeCommand;
+import frc.robot.Commands.Intake.Pivot.PivotToSourceCommand;
+import frc.robot.Commands.Intake.Pivot.PivotUp90Command;
+import frc.robot.Commands.Intake.Roller.RollerInCommand;
+import frc.robot.Commands.Intake.Roller.RollerOutCommand;
+import frc.robot.Commands.Intake.Roller.RollerStopCommand;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.Commands.Elevator.ElevatorToGroundCommand;
+import frc.robot.Commands.Elevator.ElevatorToL1Command;
+import frc.robot.Commands.Elevator.ElevatorToL2Command;
+import frc.robot.Commands.Elevator.ElevatorToL3Command;
+import frc.robot.Commands.Elevator.ElevatorToL4Command;
+import frc.robot.Commands.Elevator.ElevatorToLimitSwitchCommand;
+import frc.robot.Commands.Elevator.ElevatorToSourceCommand;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -26,7 +46,12 @@ import frc.robot.Constants.VisionConstants;
 public class RobotContainer {
 
   private PS5DriveController driveController;
+  private CommandPS5Controller mechController = new CommandPS5Controller(1);
+  
+  private final PivotSubsystem pivotSubsystem = new PivotSubsystem();
+  private final RollerSubsystem rollerSubsystem = new RollerSubsystem();
 
+  private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(
     VisionConstants.cameraConfigs[1]
@@ -41,6 +66,8 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     constructDriveController(); 
+    bindElevator();
+    // bindIntake();
     // startLog();
     setVisionDataInterface();
     configureBindings();
@@ -100,6 +127,77 @@ public class RobotContainer {
   }
 
   /**
+   * Constructs mech controller
+   */
+  private void constructMechController(){
+    mechController = new CommandPS5Controller(1);
+  }
+
+  /**
+   * Binds elevator commands to mech controller
+   */
+  private void bindElevator(){
+
+    elevatorSubsystem.setDefaultCommand(
+      new InstantCommand(() -> {
+        elevatorSubsystem.setPower(-mechController.getLeftY());
+      }, elevatorSubsystem)
+    );
+    
+    // mechController.L1().whileTrue(new ElevatorToLimitSwitchCommand(elevatorSubsystem));
+    // mechController.cross().onTrue(new ElevatorToL1Command(elevatorSubsystem));
+    // mechController.square().onTrue(new ElevatorToL2Command(elevatorSubsystem));
+    // mechController.triangle().onTrue(new ElevatorToL3Command(elevatorSubsystem));
+    // mechController.circle().onTrue(new ElevatorToL4Command(elevatorSubsystem));
+    // // mechController.L1().onTrue(new ElevatorToGroundCommand(elevatorSubsystem));
+    // mechController.R1().onTrue(new ElevatorToGroundCommand(elevatorSubsystem));
+  }
+    // mechController.L1
+    //Binds the intake commands to the mech controller
+  private void bindIntake(){
+    // pivotSubsystem.setDefaultCommand(
+    //   new InstantCommand(() -> {
+    //     pivotSubsystem.setPower(mechController.getLeftY());
+    //   },
+    //   pivotSubsystem
+    //   )
+    // );
+
+    rollerSubsystem.setDefaultCommand(new ConditionalCommand(
+      new InstantCommand( () -> {
+        //ps5 trigger's range is -1 to 1, with non-input position being -1. This maps the range -1 to 1 to 0 to 1.
+        rollerSubsystem.setRollerSpeed(.25 * (mechController.getL2Axis() + 1.) / 2.); 
+      }, rollerSubsystem), 
+      new InstantCommand( () -> {
+        rollerSubsystem.setRollerSpeed(.15 * (mechController.getL2Axis() - mechController.getR2Axis()));
+      }, rollerSubsystem), 
+      () -> rollerSubsystem.getIntakeSensor()));
+      
+    // mechController.povUp().onTrue(
+    //   new ConditionalCommand(
+    //     new PivotToSourceCommand(pivotSubsystem),
+    //     new PivotToHorizontalCommand(pivotSubsystem).andThen(new PivotToSourceCommand(pivotSubsystem)),
+    //     () -> pivotSubsystem.getPosition() > 0
+    //     ));
+    
+    // mechController.L1().onTrue(
+    //   new ConditionalCommand(
+    //     new PivotUp90Command(pivotSubsystem),
+    //     new PivotToHorizontalCommand(pivotSubsystem).andThen(new PivotUp90Command(pivotSubsystem)),
+    //     () -> pivotSubsystem.getPosition() > 0
+    //     ));
+
+    mechController.povUp().onTrue(
+      new PivotToSourceCommand(pivotSubsystem)
+    );
+    mechController.L1().onTrue(
+      new PivotUp90Command(pivotSubsystem)
+    );
+
+    mechController.povDown().onTrue(new PivotToOuttakeCommand(pivotSubsystem));
+  }
+
+  /**
    * Starts datalog at /u/logs
    */
   private void startLog(){
@@ -111,9 +209,9 @@ public class RobotContainer {
    * Links vision and swerve
    */
   private void setVisionDataInterface(){
-    visionSubsystem2.setInterface(swerveSubsystem::addVisionMeasurements);
-    visionSubsystem3.setInterface(swerveSubsystem::addVisionMeasurements);
-    visionSubsystem4.setInterface(swerveSubsystem::addVisionMeasurements);
+    // visionSubsystem2.setInterface(swerveSubsystem::addVisionMeasurements);
+    // visionSubsystem3.setInterface(swerveSubsystem::addVisionMeasurements);
+    // visionSubsystem4.setInterface(swerveSubsystem::addVisionMeasurements);
 
   }
 }
