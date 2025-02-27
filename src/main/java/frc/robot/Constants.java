@@ -33,10 +33,10 @@ public final class Constants {
       public static final int PIVOT_CAN_ID = 14;
       public static final String PIVOT_CAN_NAME = "rio";
 
-      public static final double PIVOT_KP = 0.;
+      public static final double PIVOT_KP = 7;
       public static final double PIVOT_KI = 0.;
-      public static final double PIVOT_KD = 0.;
-      public static final double PIVOT_KG = 0.;
+      public static final double PIVOT_KD = 5;
+      public static final double PIVOT_KG = 100.;
       public static final double PIVOT_KV = 0.;
       public static final double PIVOT_KS = 0.;
 
@@ -48,11 +48,12 @@ public final class Constants {
       public static final double PIVOT_TOLERANCE = 0.1;
 
       public static final double ROTOR_TO_SENSOR_RATIO = 20. / (2. * Math.PI);
-      public static final double PIVOT_INIT_POS = Units.degreesToRadians(94);
-      public static final double PIVOT_MAX_POS = Units.degreesToRadians(94);
+      public static final double PIVOT_INIT_POS = Units.degreesToRadians(95);
+      public static final double PIVOT_HORIZONTAL = Units.degreesToRadians(0);
+      public static final double PIVOT_MAX_POS = Units.degreesToRadians(95);
       public static final double PIVOT_MIN_POS = Units.degreesToRadians(-45);
 
-      public static final double PIVOT_RAMP_RATE = 0.02;
+      public static final double PIVOT_RAMP_RATE = 0.03;
       public static final double PIVOT_CURRENT_LIMIT = 100.;
     }
 

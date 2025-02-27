@@ -33,13 +33,6 @@ public class PivotSubsystem extends SubsystemBase{
                 .withKP(PivotConstants.PIVOT_KP)
                 .withKI(PivotConstants.PIVOT_KI)
                 .withKD(PivotConstants.PIVOT_KD)
-                .withKG(PivotConstants.PIVOT_KG)
-                .withKV(PivotConstants.PIVOT_KV)
-                .withGravityType(GravityTypeValue.Arm_Cosine)
-        )
-        .withClosedLoopGeneral(
-            new ClosedLoopGeneralConfigs()
-                .withContinuousWrap(true)
         )
         .withClosedLoopRamps(
             new ClosedLoopRampsConfigs()
@@ -89,7 +82,7 @@ public class PivotSubsystem extends SubsystemBase{
      */
     public void setPositionReference(double positionReference){
         if (positionReference > pivotMotor.getPosition()) {
-            arbFF = feedforward.calculate(positionReference, 0.0);
+            arbFF = feedforward.calculate(positionReference, 5);
         }
         else {
             arbFF = 0;
@@ -107,5 +100,9 @@ public class PivotSubsystem extends SubsystemBase{
 
     public double getClosedLoopError(){
         return pivotMotor.getClosedLoopError();
+    }
+
+    public double getPosition() {
+        return pivotMotor.getPosition();
     }
 }

@@ -21,6 +21,7 @@ import frc.robot.subsystems.Intake.Pivot.PivotSubsystem;
 import frc.robot.subsystems.Intake.Roller.RollerSubsystem;
 import frc.robot.subsystems.Vision.VisionSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.Commands.Intake.Pivot.PivotToHorizontalCommand;
 import frc.robot.Commands.Intake.Pivot.PivotToOuttakeCommand;
 import frc.robot.Commands.Intake.Pivot.PivotToSourceCommand;
 import frc.robot.Commands.Intake.Pivot.PivotUp90Command;
@@ -77,25 +78,25 @@ public class RobotContainer {
       * the robot is controlled along its own axes, otherwise controls apply to the field axes by default. If the
       * swerve aim button is held down, the robot will rotate automatically to always face a target, and only
       * translation will be manually controllable. */
-    swerveSubsystem.setDefaultCommand(
-      new RunCommand(() -> {
-        swerveSubsystem.setDrivePowers(
-          driveController.getForwardPower(),
-          driveController.getLeftPower(),
-          driveController.getRotatePower()
-        );
-        }, 
-        swerveSubsystem
-      )
-    );
+    // swerveSubsystem.setDefaultCommand(
+    //   new RunCommand(() -> {
+    //     swerveSubsystem.setDrivePowers(
+    //       driveController.getForwardPower(),
+    //       driveController.getLeftPower(),
+    //       driveController.getRotatePower()
+    //     );
+    //     }, 
+    //     swerveSubsystem
+    //   )
+    // );
 
-    /* Pressing the button resets the field axes to the current robot axes. */
-    driveController.bindDriverHeadingReset(
-      () ->{
-        swerveSubsystem.resetDriverHeading();
-      },
-      swerveSubsystem
-    );
+    // /* Pressing the button resets the field axes to the current robot axes. */
+    // driveController.bindDriverHeadingReset(
+    //   () ->{
+    //     swerveSubsystem.resetDriverHeading();
+    //   },
+    //   swerveSubsystem
+    // );
   }
 
   /**
@@ -127,14 +128,14 @@ public class RobotContainer {
    * Binds the intake commands to the mech controller
    */
   private void bindIntake(){
-    pivotSubsystem.setDefaultCommand(
-      new RunCommand(() -> {
-        pivotSubsystem.setVelocityReference(mechController.getLeftY());
-      },
-      pivotSubsystem
-      )
-        .onlyWhile(() -> Math.abs(mechController.getLeftY()) > 0.05)
-    );
+    // pivotSubsystem.setDefaultCommand(
+    //   new RunCommand(() -> {
+    //     pivotSubsystem.setVelocityReference(mechController.getLeftY());
+    //   },
+    //   pivotSubsystem
+    //   )
+    //     .onlyWhile(() -> Math.abs(mechController.getLeftY()) > 0.05)
+    // );
 
     rollerSubsystem.setDefaultCommand(new ConditionalCommand(
       new InstantCommand( () -> {
@@ -146,9 +147,28 @@ public class RobotContainer {
       }, rollerSubsystem), 
       () -> rollerSubsystem.getIntakeSensor()));
       
+    // mechController.povUp().onTrue(
+    //   new ConditionalCommand(
+    //     new PivotToSourceCommand(pivotSubsystem),
+    //     new PivotToHorizontalCommand(pivotSubsystem).andThen(new PivotToSourceCommand(pivotSubsystem)),
+    //     () -> pivotSubsystem.getPosition() > 0
+    //     ));
+    
+    // mechController.L1().onTrue(
+    //   new ConditionalCommand(
+    //     new PivotUp90Command(pivotSubsystem),
+    //     new PivotToHorizontalCommand(pivotSubsystem).andThen(new PivotUp90Command(pivotSubsystem)),
+    //     () -> pivotSubsystem.getPosition() > 0
+    //     ));
+
+    mechController.povUp().onTrue(
+      new PivotToSourceCommand(pivotSubsystem)
+    );
+    mechController.L1().onTrue(
+      new PivotUp90Command(pivotSubsystem)
+    );
+
     mechController.povDown().onTrue(new PivotToOuttakeCommand(pivotSubsystem));
-    mechController.povUp().onTrue(new PivotToSourceCommand(pivotSubsystem));
-    mechController.L1().onTrue(new PivotUp90Command(pivotSubsystem));
   }
 
   /**
@@ -163,9 +183,9 @@ public class RobotContainer {
    * Links vision and swerve
    */
   private void setVisionDataInterface(){
-    visionSubsystem2.setInterface(swerveSubsystem::addVisionMeasurements);
-    visionSubsystem3.setInterface(swerveSubsystem::addVisionMeasurements);
-    visionSubsystem4.setInterface(swerveSubsystem::addVisionMeasurements);
+    // visionSubsystem2.setInterface(swerveSubsystem::addVisionMeasurements);
+    // visionSubsystem3.setInterface(swerveSubsystem::addVisionMeasurements);
+    // visionSubsystem4.setInterface(swerveSubsystem::addVisionMeasurements);
 
   }
 }
