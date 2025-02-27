@@ -27,6 +27,56 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
 
+  public static class IntakeConstans{
+
+    public static class PivotConstants{
+      public static final int PIVOT_CAN_ID = 14;
+      public static final String PIVOT_CAN_NAME = "rio";
+
+      public static final double PIVOT_KP = 5.4;
+      public static final double PIVOT_KI = 0.;
+      public static final double PIVOT_KD = .6;
+      public static final double PIVOT_KG = 500.;
+      public static final double PIVOT_KV = 0.;
+      public static final double PIVOT_KS = 0.;
+
+      public static final double PIVOT_MANUAL_SPEED = 0.15;
+
+      public static final double SOURCE_POS = Units.degreesToRadians(45.);
+      public static final double OUTTAKE_POS = Units.degreesToRadians(-45.);
+      
+      public static final double PIVOT_TOLERANCE = 0.1;
+
+      public static final double ROTOR_TO_SENSOR_RATIO = 20. / (2. * Math.PI);
+      public static final double PIVOT_INIT_POS = Units.degreesToRadians(95.);
+      public static final double PIVOT_HORIZONTAL = Units.degreesToRadians(0);
+      public static final double PIVOT_MAX_POS = Units.degreesToRadians(95.);
+      public static final double PIVOT_MIN_POS = Units.degreesToRadians(-45.);
+
+      public static final double PIVOT_RAMP_RATE = 0.03;
+      public static final double PIVOT_CURRENT_LIMIT = 100.;
+    }
+
+    public static class RollerConstants{
+      public static final int ROLLER_CAN_ID = 16;
+      public static final String ROLLER_CAN_NAME = "rio";
+      public static final double ROLLER_SPEED = 0.5;
+      public static final double ROLLER_KP = 0;
+      public static final double ROLLER_KI = 0;
+      public static final double ROLLER_KD = 0;
+      public static final double ROLLER_KS = 0;
+      public static final double ROLLER_KV = 0;
+
+      public static final double ROLLER_IN_SPEED = 0.5;
+      public static final double ROLLER_OUT_SPEED = -0.5;
+      public static final double ROLLER_OFF_SPEED = 0;
+      public static final double ROLLER_TOLERANCE = 0.1;
+
+      public static final double ROLLER_RAMP_RATE = 0.02;
+      public static final double ROLLER_CURRENT_LIMIT = 100.;
+    }
+  }
+
   /** Constants for the swerve subsystem. */
   public static class SwerveConstants {
     public static final int FL_DRIVE = 0;
@@ -82,6 +132,13 @@ public final class Constants {
 
   public static class LoggingConstants{
     public static final String SWERVE_TABLE = "SwerveStats";
+    public static final String SENSOR_TABLE = "Sensors";
+  }
+
+  public static class DebugConstants{
+    public static final boolean MASTER_DEBUG = true;
+    public static final boolean PIVOT_DEBUG = true;
+    public static final boolean ROLLER_DEBUG = true;
   }
 
   public static class VisionConstants{
@@ -112,26 +169,26 @@ public final class Constants {
 
     public static final CameraConfig[] cameraConfigs = new CameraConfig[]{
       new CameraConfig(
-        "1",
+        "7",
         new Transform3d(
-          0.31, 0.01, 0.2,
-          new Rotation3d(- Math.PI / 2., 0, 0)
+          -0.019, -0.071, 0.981,
+          new Rotation3d(0, -Math.PI/6., Math.PI)
         ),
         PoseStrategy.LOWEST_AMBIGUITY
       ),
       new CameraConfig(
-        "2",
+        "3",
         new Transform3d(
-          0.0508, -0.0476,1.13,
-          new Rotation3d(Math.PI, -Math.PI * 8. / 9.,  0.)
+          0.031, -0.071,0.981,
+          new Rotation3d(0, -Math.PI * 6.,  0)
         ),
         PoseStrategy.LOWEST_AMBIGUITY
       ),
       new CameraConfig(
-          "3",
+          "4",
           new Transform3d(//11.3 in above ground
-            0.211, -0.2695, 0.28702 ,
-            new Rotation3d(0, 0., Math.PI / 180. * 19.)
+            0.235, -0.286, 0.220 ,
+            new Rotation3d(0, -Math.PI/9., Math.PI / 9.)
           ),
           PoseStrategy.LOWEST_AMBIGUITY
       ),
