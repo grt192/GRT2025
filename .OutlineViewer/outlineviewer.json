@@ -3,9 +3,6 @@
     "mode": "Client (NT4)",
     "serverTeam": "192"
   },
-  "Retained Values": {
-    "open": false
-  },
   "transitory": {
     "MotorStats": {
       "open": true
