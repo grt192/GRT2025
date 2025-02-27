@@ -63,14 +63,11 @@ public class RobotContainer {
     VisionConstants.cameraConfigs[3]
   );
 
-  private Trigger yAxis;
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     constructDriveController(); 
-    constructMechController();
     bindElevator();
-    bindIntake();
+    // bindIntake();
     // startLog();
     setVisionDataInterface();
     configureBindings();
@@ -140,15 +137,21 @@ public class RobotContainer {
    * Binds elevator commands to mech controller
    */
   private void bindElevator(){
-    
-    mechController.L1().whileTrue(new ElevatorToLimitSwitchCommand(elevatorSubsystem));
-    mechController.cross().onTrue(new ElevatorToL1Command(elevatorSubsystem));
-    mechController.square().onTrue(new ElevatorToL2Command(elevatorSubsystem));
-    mechController.triangle().onTrue(new ElevatorToL3Command(elevatorSubsystem));
-    mechController.circle().onTrue(new ElevatorToL4Command(elevatorSubsystem));
-    // mechController.L1().onTrue(new ElevatorToGroundCommand(elevatorSubsystem));
-    mechController.R1().onTrue(new ElevatorToGroundCommand(elevatorSubsystem));
 
+    elevatorSubsystem.setDefaultCommand(
+      new InstantCommand(() -> {
+        elevatorSubsystem.setPower(-mechController.getLeftY());
+      }, elevatorSubsystem)
+    );
+    
+    // mechController.L1().whileTrue(new ElevatorToLimitSwitchCommand(elevatorSubsystem));
+    // mechController.cross().onTrue(new ElevatorToL1Command(elevatorSubsystem));
+    // mechController.square().onTrue(new ElevatorToL2Command(elevatorSubsystem));
+    // mechController.triangle().onTrue(new ElevatorToL3Command(elevatorSubsystem));
+    // mechController.circle().onTrue(new ElevatorToL4Command(elevatorSubsystem));
+    // // mechController.L1().onTrue(new ElevatorToGroundCommand(elevatorSubsystem));
+    // mechController.R1().onTrue(new ElevatorToGroundCommand(elevatorSubsystem));
+  }
     // mechController.L1
     //Binds the intake commands to the mech controller
   private void bindIntake(){

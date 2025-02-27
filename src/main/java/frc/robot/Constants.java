@@ -174,9 +174,6 @@ public final class Constants {
     public static final boolean ROLLER_DEBUG = true;
   }
 
-  public static class DebugConstants{
-    public static final boolean MASTER_DEBUG = true;
-  }
 
   public static class VisionConstants{
 

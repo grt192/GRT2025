@@ -69,7 +69,7 @@ public class PivotSubsystem extends SubsystemBase{
         if(DebugConstants.MASTER_DEBUG || DebugConstants.PIVOT_DEBUG){
             pivotMotor.publishStats();
         }
-        System.out.println(Units.radiansToDegrees(pivotMotor.getPosition()));
+        // System.out.println(Units.radiansToDegrees(pivotMotor.getPosition()));
     }
 
     public void setPositionReferenceWithVoltage(double position){

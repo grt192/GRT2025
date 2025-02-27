@@ -98,6 +98,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void setPower(double power) {
+    System.out.println(power);
     motor.setPower(power);
   }
   
