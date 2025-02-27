@@ -78,25 +78,25 @@ public class RobotContainer {
       * the robot is controlled along its own axes, otherwise controls apply to the field axes by default. If the
       * swerve aim button is held down, the robot will rotate automatically to always face a target, and only
       * translation will be manually controllable. */
-    // swerveSubsystem.setDefaultCommand(
-    //   new RunCommand(() -> {
-    //     swerveSubsystem.setDrivePowers(
-    //       driveController.getForwardPower(),
-    //       driveController.getLeftPower(),
-    //       driveController.getRotatePower()
-    //     );
-    //     }, 
-    //     swerveSubsystem
-    //   )
-    // );
+    swerveSubsystem.setDefaultCommand(
+      new RunCommand(() -> {
+        swerveSubsystem.setDrivePowers(
+          driveController.getForwardPower(),
+          driveController.getLeftPower(),
+          driveController.getRotatePower()
+        );
+        }, 
+        swerveSubsystem
+      )
+    );
 
-    // /* Pressing the button resets the field axes to the current robot axes. */
-    // driveController.bindDriverHeadingReset(
-    //   () ->{
-    //     swerveSubsystem.resetDriverHeading();
-    //   },
-    //   swerveSubsystem
-    // );
+    /* Pressing the button resets the field axes to the current robot axes. */
+    driveController.bindDriverHeadingReset(
+      () ->{
+        swerveSubsystem.resetDriverHeading();
+      },
+      swerveSubsystem
+    );
   }
 
   /**
@@ -129,12 +129,11 @@ public class RobotContainer {
    */
   private void bindIntake(){
     // pivotSubsystem.setDefaultCommand(
-    //   new RunCommand(() -> {
-    //     pivotSubsystem.setVelocityReference(mechController.getLeftY());
+    //   new InstantCommand(() -> {
+    //     pivotSubsystem.setPower(mechController.getLeftY());
     //   },
     //   pivotSubsystem
     //   )
-    //     .onlyWhile(() -> Math.abs(mechController.getLeftY()) > 0.05)
     // );
 
     rollerSubsystem.setDefaultCommand(new ConditionalCommand(

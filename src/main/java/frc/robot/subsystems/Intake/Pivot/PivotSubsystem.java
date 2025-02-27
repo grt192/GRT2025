@@ -85,7 +85,7 @@ public class PivotSubsystem extends SubsystemBase{
             arbFF = feedforward.calculate(positionReference, 5);
         }
         else {
-            arbFF = 0;
+            arbFF = feedforward.calculate(positionReference, .1, .01);
         }
         pivotMotor.setPositionReferenceWithArbFF(positionReference, arbFF);
     }
@@ -104,5 +104,9 @@ public class PivotSubsystem extends SubsystemBase{
 
     public double getPosition() {
         return pivotMotor.getPosition();
+    }
+
+    public void setPower(double speed) {
+        pivotMotor.setPower(speed);
     }
 }
