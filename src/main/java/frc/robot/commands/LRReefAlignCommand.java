@@ -26,19 +26,10 @@ public class LRReefAlignCommand extends Command{
     static List<Pose2d> currentLeftPoseList;
     Boolean isRight;
     static PathPlannerPath getAlignPath;
-
-    private static Command runAlignPath;
-
     private static String followPath;
     
-    static PathConstraints constraints = new PathConstraints(
-        4.6,
-        3,
-        Units.degreesToRadians(540), 
-        Units.degreesToRadians(720)
-    );
-
     public LRReefAlignCommand(SwerveSubsystem swerveSubsystem, FieldManagementSubsystem fmsSubsystem, AlignSubsystem alignSubsystem, Boolean isRight) {
+        this.addRequirements(swerveSubsystem); 
         this.swerveSubsystem = swerveSubsystem;
         this.fmsSubsystem = fmsSubsystem;
         this.alignSubsystem = alignSubsystem;
@@ -47,7 +38,6 @@ public class LRReefAlignCommand extends Command{
 
     @Override
     public void initialize() {
-        Translation2d currentTrans =  swerveSubsystem.getRobotPosition().getTranslation();
         if (fmsSubsystem.isRedAlliance()) {
             currentRightPoseList = ReefAlignConstants.redRightReefPoseList;
             currentLeftPoseList = ReefAlignConstants.redLeftReefPoseList;

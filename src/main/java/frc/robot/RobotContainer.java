@@ -11,6 +11,8 @@ import frc.robot.controllers.DualJoystickDriveController;
 import frc.robot.controllers.PS5DriveController;
 import frc.robot.controllers.XboxDriveController;
 
+import javax.xml.transform.Source;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -29,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.AlignSubsystem;
 import frc.robot.subsystems.FieldManagementSubsystem.FieldManagementSubsystem;
 import frc.robot.subsystems.Vision.VisionSubsystem;
 import frc.robot.subsystems.intake.pivot.PivotSubsystem;
@@ -38,6 +41,8 @@ import frc.robot.commands.intake.SetRollersOuttakeCommand;
 import frc.robot.commands.pivot.SetPivotOuttakeCommand;
 import frc.robot.commands.pivot.SetPivotVerticalCommand;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.commands.LRReefAlignCommand;
+import frc.robot.commands.SourceAlignCommand;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -64,11 +69,13 @@ public class RobotContainer {
   private final VisionSubsystem visionSubsystem4 = new VisionSubsystem(
     VisionConstants.cameraConfigs[3]
   );
+  private final AlignSubsystem alignSubsystem = new AlignSubsystem();
 
   private CommandPS5Controller mechController;
-  private Trigger aButton, lTrigger, rTrigger, lBumper, rBumper;
+  private Trigger aButton, lTrigger, rTrigger, lBumper, rBumper, sourceBumpers;
 
   private final FieldManagementSubsystem fmsSubsystem = new FieldManagementSubsystem();
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -79,6 +86,8 @@ public class RobotContainer {
 
     lBumper = new Trigger(mechController.L1());
     rBumper = new Trigger(mechController.R1());
+
+    bindSourceAlign();
 
     constructDriveController(); 
     // startLog();
@@ -133,38 +142,21 @@ public class RobotContainer {
     );
 
     //cross
-    // driveController.getAlignToReef().onTrue(AutoAlignCommand.lrReefAlign(swerveSubsystem,true));
-    // driveController.getAlignToReef().onTrue( AutoAlignCommand.reefTest(swerveSubsystem));
+    driveController.getAlignToReef().onTrue(
+      new LRReefAlignCommand(swerveSubsystem, fmsSubsystem, alignSubsystem, false)
+      .onlyWhile(() -> driveController.getForwardPower() <= 0.05 && driveController.getLeftPower() <= 0.05));
 
-    // driveController.getAlignToReef().onTrue(
-    //   new LRReefAlignCommand(swerveSubsystem, fmsSubsystem, false)
-    //   .onlyWhile(() -> driveController.getForwardPower() <= 0.05 && driveController.getLeftPower() <= 0.05));
+    // square
+    // // visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
+    driveController.getAlignToSource().onTrue(
+      new SourceAlignCommand(swerveSubsystem, fmsSubsystem, alignSubsystem).onlyWhile(() -> driveController.getForwardPower() 
+      <= 0.05 && driveController.getLeftPower() <= 0.05));
+    
+    // source align after configure bindings
 
-    // // square
-    // // driveController.getAlignToSource().onTrue(AutoAlignCommand.lrReefAlign(swerveSubsystem, false));
-    // // // visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
-    // driveController.getAlignToSource().onTrue(
-    //   new LRReefAlignCommand(swerveSubsystem, fmsSubsystem, true).onlyWhile(() -> driveController.getForwardPower() 
-    //   <= 0.05 && driveController.getLeftPower() <= 0.05));
-   
-
-
-
-    // swerveSubsystem.setDefaultCommand(
-    //   new RunCommand(() -> {
-    //     swerveSubsystem.setDrivePowers(
-    //       driveController.getForwardPower(),
-    //       driveController.getLeftPower(),
-    //       driveController.getRotatePower()
-    //     );
-    //     }, 
-    //     swerveSubsystem
-    //   )
-    // );
-
-    rBumper.onTrue(
-      new SetPivotOuttakeCommand(pivotSubsystem).withTimeout(3)
-      // new ConditionalCommand(
+    // rBumper.onTrue(
+    //   new SetPivotOuttakeCommand(pivotSubsystem).withTimeout(3)
+    //   // new ConditionalCommand(
       //   new SetPivotOuttakeCommand(pivotSubsystem),
       //   new ConditionalCommand(
       //     new SetPivotZeroCommand(pivotSubsystem).andThen(new SetPivotSourceCommand(pivotSubsystem)), 
@@ -172,11 +164,11 @@ public class RobotContainer {
       //     () -> (pivotSubsystem.getCurrentAngle() < PivotState.ZERO.getTargetAngle())),
       //   () -> (pivotSubsystem.getTargetState() == PivotState.SOURCE)
       //   )
-    );
+    // );
 
-    lBumper.onTrue(
-      new SetPivotVerticalCommand(pivotSubsystem).withTimeout(2.5)
-    );
+    // lBumper.onTrue(
+    //   new SetPivotVerticalCommand(pivotSubsystem).withTimeout(2.5)
+    // );
 
     // rollerSubsystem.setDefaultCommand(new ConditionalCommand(
     //   new InstantCommand( () -> {
@@ -185,12 +177,12 @@ public class RobotContainer {
     //   }, rollerSubsystem), 
     //   new InstantCommand( () -> {
     //     rollerSubsystem.setRollerPower(.25 * (mechController.getR2Axis() - mechController.getL2Axis()));
-    //   }, rollerSubsystem), 
-    //   () -> rollerSubsystem.getIntakeSensor()));
+    // //   }, rollerSubsystem), 
+    // //   () -> rollerSubsystem.getIntakeSensor()));
 
-    aButton.onTrue(
-        new SetRollersOuttakeCommand(rollerSubsystem).withTimeout(3)
-    );
+    // aButton.onTrue(
+    //     new SetRollersOuttakeCommand(rollerSubsystem).withTimeout(3)
+    // );
 
     // rollerSubsystem.setDefaultCommand(new InstantCommand( () -> {
     //   rollerSubsystem.setRollerPower(mechController.getL2Axis() - mechController.getR2Axis());
@@ -231,6 +223,13 @@ public class RobotContainer {
         driveController = new DualJoystickDriveController();
     }
     driveController.setDeadZone(0.05);
+  }
+
+  private void bindSourceAlign(){
+    sourceBumpers = mechController.L1().and(mechController.R1());
+    sourceBumpers.whileTrue(
+      new SourceAlignCommand(swerveSubsystem, fmsSubsystem, alignSubsystem)
+      .onlyWhile(() -> driveController.getForwardPower() <= 0.05 && driveController.getLeftPower() <= 0.05));
   }
 
   /**

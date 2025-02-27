@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 public class MechController {
     public CommandPS5Controller controller;
     private double deadZone;
+
     public MechController(int port, double deadZone) {
         controller = new CommandPS5Controller(port);
         this.deadZone = deadZone;

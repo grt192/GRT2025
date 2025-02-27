@@ -15,7 +15,6 @@ import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.AlignSubsystem;
 import frc.robot.Constants.IntakeConstants.SourceAlignConstants;
 
-
 public class SourceAlignCommand extends Command {
     private final SwerveSubsystem swerveSubsystem;
     private final FieldManagementSubsystem fmsSubsystem;
@@ -25,11 +24,14 @@ public class SourceAlignCommand extends Command {
     static Pose2d currentPose;
     
 
-    public SourceAlignCommand(AlignSubsystem alignSubsystem, SwerveSubsystem swerveSubsystem, FieldManagementSubsystem fmsSubsystem){
-        this.alignSubsystem = alignSubsystem;
+    public SourceAlignCommand(SwerveSubsystem swerveSubsystem, FieldManagementSubsystem fmsSubsystem, AlignSubsystem alignSubsystem){
+        this.addRequirements(swerveSubsystem); 
         this.swerveSubsystem = swerveSubsystem;
         this.fmsSubsystem = fmsSubsystem;
+        this.alignSubsystem = alignSubsystem;
+
     }
+
 
    @Override
    public void initialize() {
@@ -42,7 +44,7 @@ public class SourceAlignCommand extends Command {
     currentPose = swerveSubsystem.getRobotPosition().nearest(currentPoseList);
     int index = currentPoseList.indexOf(currentPose);
     followPath = SourceAlignConstants.sourcePathList.get(index);
-
+    System.out.println(followPath);
     alignSubsystem.runAlignPath(followPath).schedule();
    }
 

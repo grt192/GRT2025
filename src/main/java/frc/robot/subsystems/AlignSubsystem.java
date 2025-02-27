@@ -56,21 +56,19 @@ public class AlignSubsystem extends SubsystemBase{
                 path,
                 constraints
             );
-    
-            runAlignPath.addRequirements(swerveSubsystem); 
            // System.out.println("RUNNING");
-            return runAlignPath;
         }
         else {
+
             PathPlannerPath path = getAlignPath(pathName);
             List<Waypoint> pathWaypoints = path.getWaypoints();
             GoalEndState goalEndState = path.getGoalEndState();
             PathPlannerPath onTheFlyPath = getAlignPath(pathWaypoints, goalEndState);
+
             runAlignPath = AutoBuilder.followPath(onTheFlyPath);
 
-            return runAlignPath;
         }
-
+        return runAlignPath;
     }
 
         /**
