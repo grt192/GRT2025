@@ -27,6 +27,39 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
 
+  public static class ElevatorConstants {
+    
+    public static final double dutyCycletoticks = 123.;
+    public static final double SOURCE_POS= 0.0; //change
+    public static final double L1_POS = 0.3 * dutyCycletoticks; //change
+    public static final double L2_POS = 0.5 * dutyCycletoticks; //change
+    public static final double L3_POS = 0.6 * dutyCycletoticks; //change
+    public static final double L4_POS = 0.9 * dutyCycletoticks; //change
+    public static final double GROUND_POS = 0.0; 
+
+    public static final double ELEVATOR_TOLERANCE = 8; //change
+
+    public static final int MOTOR_ID = 13; //change
+    public static final int LIMIT_ID = 0; //change
+
+    public static final double kP = 1; //change
+    public static final double kI = 0; //change
+    public static final double kD = 0; //change
+    public static final double arbFF = 30; //chang
+
+    public static final double FORWARD_LIMIT = 126; //change
+    public static final double REVERSE_LIMIT = 0; //change
+
+    public static final double CURRENT_LIMIT = 100;
+
+    public static final double GEAR_RATIO = 20; //motor to axle
+    public static final double AXLE_RADIUS = 6. * .289 * .0254; //in meters
+
+    public static final double TICKS_TO_DIST = 2. * Math.PI * AXLE_RADIUS / GEAR_RATIO;
+    public static final double DIST_TO_TICKS = 1. / TICKS_TO_DIST;
+
+    public static final boolean ELEVATOR_DEBUG = true;
+  }
   public static class IntakeConstans{
 
     public static class PivotConstants{
@@ -140,6 +173,7 @@ public final class Constants {
     public static final boolean PIVOT_DEBUG = true;
     public static final boolean ROLLER_DEBUG = true;
   }
+
 
   public static class VisionConstants{
 

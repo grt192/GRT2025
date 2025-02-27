@@ -170,8 +170,8 @@ public class LoggedTalon{
         }
     }
 
-    public void setPower(double speed) {
-        motor.set(speed);
+    public void setPower(double power) {
+        motor.set(power);
     }
 
     /**
