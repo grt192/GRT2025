@@ -68,5 +68,7 @@ public abstract class BaseDriveController {
     public abstract Trigger getAlignToReef();
 
     public abstract Trigger getAlignToSource();
-    
+
+    public abstract Trigger getL1();
+    public abstract Trigger getL2();    
 }

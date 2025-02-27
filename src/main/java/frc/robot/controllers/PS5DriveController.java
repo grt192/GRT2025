@@ -90,5 +90,13 @@ public class PS5DriveController extends BaseDriveController{
         return square;
     }
 
+    public Trigger getL1(){
+        return L1; 
+    }
+
+    public Trigger getL2(){
+        return R1;
+    }
+
     
 }

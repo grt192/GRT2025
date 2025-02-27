@@ -152,6 +152,7 @@ public class RobotContainer {
       new SourceAlignCommand(swerveSubsystem, fmsSubsystem, alignSubsystem).onlyWhile(() -> driveController.getForwardPower() 
       <= 0.05 && driveController.getLeftPower() <= 0.05));
     
+    
     // source align after configure bindings
 
     // rBumper.onTrue(
@@ -226,7 +227,7 @@ public class RobotContainer {
   }
 
   private void bindSourceAlign(){
-    sourceBumpers = mechController.L1().and(mechController.R1());
+    sourceBumpers = driveController.getL1().and(driveController.getR1());
     sourceBumpers.whileTrue(
       new SourceAlignCommand(swerveSubsystem, fmsSubsystem, alignSubsystem)
       .onlyWhile(() -> driveController.getForwardPower() <= 0.05 && driveController.getLeftPower() <= 0.05));
