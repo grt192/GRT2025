@@ -29,16 +29,16 @@ public class RobotContainer {
 
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   // private final VisionSubsystem visionSubsystem1 = new VisionSubsystem(
-  //   VisionConstants.cameraConfigs[1]
+  //   VisionConstants.cameraConfigs[0]
   // );
   // private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(
-  //   VisionConstants.cameraConfigs[2]
+  //   VisionConstants.cameraConfigs[1]
   // );
   private final VisionSubsystem visionSubsystem3 = new VisionSubsystem(
-    VisionConstants.cameraConfigs[3]
+    VisionConstants.cameraConfigs[2]
   );
   private final VisionSubsystem visionSubsystem4 = new VisionSubsystem(
-    VisionConstants.cameraConfigs[4]
+    VisionConstants.cameraConfigs[3]
   );
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
