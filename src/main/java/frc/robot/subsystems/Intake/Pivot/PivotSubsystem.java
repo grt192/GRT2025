@@ -11,6 +11,7 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DebugConstants;
 import frc.robot.Constants.IntakeConstans.PivotConstants;
@@ -20,6 +21,9 @@ public class PivotSubsystem extends SubsystemBase{
     
     private LoggedTalon pivotMotor;
     private double arbFF;
+
+    DigitalInput limitSwitch = new DigitalInput(PivotConstants.LimitSwitchID);
+
 
     ArmFeedforward feedforward = new ArmFeedforward(
         PivotConstants.PIVOT_KS,
@@ -106,6 +110,10 @@ public class PivotSubsystem extends SubsystemBase{
         return pivotMotor.getPosition();
     }
 
+    public boolean getLimitSwitch(){
+        return limitSwitch.get();
+    }
+
     public void setPower(double speed) {
         pivotMotor.setPower(speed);
     }
@@ -121,4 +129,9 @@ public class PivotSubsystem extends SubsystemBase{
     public void setPosition(double position){
         pivotMotor.setPosition(position);
     }
+
+    public void setEncoderZero(){
+        pivotMotor.resetEncoder();
+    }
+
 }

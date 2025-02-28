@@ -98,6 +98,8 @@ public final class Constants {
       public static final double PIVOT_CURRENT_LIMIT = 100.;
 
       public static final double CONTROLLER_DEADZONE = 0.1;
+
+      public static final int LimitSwitchID = 20;
     }
 
     public static class RollerConstants{

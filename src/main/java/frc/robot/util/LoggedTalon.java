@@ -175,6 +175,13 @@ public class LoggedTalon{
     }
 
     /**
+     * Resets the encoder position to zero
+     */
+    public void resetEncoder() {
+        motor.setPosition(0.0);
+    }
+
+    /**
      * Configures drive motor's PIDSV
      * @param p kP
      * @param i kI
