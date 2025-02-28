@@ -90,7 +90,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("RollerOuttake", new SetRollersOuttakeCommand(rollerSubsystem));
     autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
       (stream) -> isCompetition
-        ? stream.filter(auto -> auto.getName().startsWith("Test"))
+        ? stream.filter(auto -> auto.getName().startsWith("Pine"))
         : stream
       );
     SmartDashboard.putData("Auto Chooser", autoChooser);
