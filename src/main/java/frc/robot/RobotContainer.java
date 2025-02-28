@@ -6,8 +6,17 @@ package frc.robot;
 
 import frc.robot.controllers.PS5DriveController;
 
+import java.util.EnumSet;
+
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.cscore.MjpegServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableEvent;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.util.PixelFormat;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -64,6 +73,18 @@ public class RobotContainer {
 
   private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+
+  
+  //driver camera stuff:
+  private UsbCamera driverCamera;
+  private MjpegServer driverCameraServer;
+  private UsbCamera driverCamera2;
+
+  private NetworkTableInstance ntInstance;
+  private NetworkTable testTable; 
+  private NetworkTable FMStable;
+  private NetworkTableEntry cameraSelectionEntry;
+
   private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(
     VisionConstants.cameraConfigs[1]
   );
@@ -83,6 +104,9 @@ public class RobotContainer {
     // startLog();
     setVisionDataInterface();
     configureBindings();
+    constructDriverCameras();
+    constructNetworkTableListeners();
+
   }
 
   /**
@@ -314,4 +338,55 @@ public class RobotContainer {
     // visionSubsystem4.setInterface(swerveSubsystem::addVisionMeasurements);
 
   }
+
+  public void constructDriverCameras(){
+    try {
+      driverCamera = new UsbCamera("fisheye", 0);
+      driverCamera.setVideoMode(PixelFormat.kMJPEG, 160, 120, 30);
+      driverCamera.setExposureManual(40);
+      driverCameraServer = new MjpegServer("m1", 1181);
+      driverCameraServer.setSource(driverCamera);
+    } catch (Exception e) {
+      System.out.print(e);
+    }
+    try {
+      driverCamera2 = new UsbCamera("fisheye2", 1);
+      driverCamera2.setVideoMode(PixelFormat.kMJPEG, 160, 120, 30);
+      driverCamera2.setExposureManual(40);
+    } catch (Exception e) {
+      System.out.print(e);
+    }
+  }
+
+  public void constructNetworkTableListeners(){
+
+    ntInstance = NetworkTableInstance.getDefault();
+    FMStable = ntInstance.getTable("FMSInfo");
+    testTable = ntInstance.getTable("testTable");
+
+    //allianceEntry = FMStable.getEntry("IsRedAlliance");
+    cameraSelectionEntry = testTable.getEntry("cameraSelection");
+    // FMStable.addListener("IsRedAlliance", EnumSet.of(NetworkTableEvent.Kind.kValueAll), (table, key, event) -> {
+            
+    //     });
+    testTable.addListener("cameraSelection", EnumSet.of(NetworkTableEvent.Kind.kValueAll), (table, key, event) ->{
+      if (event.valueData.value.getBoolean()){
+        //server1.setSource(camera1);
+        driverCameraServer.setSource(driverCamera);
+
+        System.out.println("CAMERA1!");
+      }
+      else{
+        //server1.setSource(camera2);
+        driverCameraServer.setSource(driverCamera2);
+
+        System.out.println("CAMERA2!");
+
+      }
+    });
+
+  }
+
+
+
 }
