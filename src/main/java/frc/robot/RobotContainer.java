@@ -187,18 +187,26 @@ public class RobotContainer {
     //   }, elevatorSubsystem)
     // );
 
-    // manualElevatorTrigger = new Trigger(
-    //   () -> mechController.getRightY() >= ElevatorConstants.CONTROLLER_DEADZONE
-    // );
+    manualElevatorTrigger = new Trigger(
+      () -> Math.abs(mechController.getRightY()) >= ElevatorConstants.CONTROLLER_DEADZONE
+    );
 
-    // manualElevatorTrigger.onTrue(
-    //   new InstantCommand(
-    //     () -> {
-    //       elevatorSubsystem.setDutyCycle(mechController.getRightY());
-    //     },
-    //     elevatorSubsystem
-    //   ).handleInterrupt(() -> elevatorSubsystem.setDutyCycle(0))
-    // );
+    manualElevatorTrigger.onTrue(
+      new InstantCommand(
+        () -> {
+          elevatorSubsystem.setPower(-mechController.getRightY());
+        },
+        elevatorSubsystem
+      ).handleInterrupt(() -> elevatorSubsystem.setPower(0))
+    );
+    manualElevatorTrigger.toggleOnFalse(
+      new InstantCommand(
+        () -> {
+          elevatorSubsystem.setPower(0);
+        },
+        elevatorSubsystem
+      )
+    );
 
     mechController.R1().onTrue(new ElevatorToLimitSwitchCommand(elevatorSubsystem));
     mechController.triangle().onTrue(new ElevatorToL4Command(elevatorSubsystem));
@@ -239,6 +247,10 @@ public class RobotContainer {
 
     mechController.povRight().onTrue(
       new PivotToSourceCommand(pivotSubsystem)
+    );
+
+    mechController.L1().onTrue(
+      new PivotUp90Command(pivotSubsystem)
     );
 
     // mechController.povUp().onTrue(
@@ -322,9 +334,6 @@ public class RobotContainer {
     //     () -> pivotSubsystem.getPosition() > 0
     //     ));
 
-    // mechController.L1().onTrue(
-    //   new PivotUp90Command(pivotSubsystem)
-    // );
     // mechController.povDown().onTrue(
     //   new PivotToOuttakeCommand(pivotSubsystem)
     // );

@@ -47,7 +47,7 @@ public final class Constants {
     public static final int MOTOR_ID = 13; //change
     public static final int LIMIT_ID = 0; //change
 
-    public static final double kP = 1.8; //change
+    public static final double kP = 2.2; //change
     public static final double kI = 0; //change
     public static final double kD = 0; //change
     public static final double kS = 0;
@@ -77,7 +77,7 @@ public final class Constants {
       public static final double PIVOT_KP = 5.4;
       public static final double PIVOT_KI = 0.;
       public static final double PIVOT_KD = .6;
-      public static final double PIVOT_KG = 500.;
+      public static final double PIVOT_KG = 600.;
       public static final double PIVOT_KV = 0.;
       public static final double PIVOT_KS = 0.;
 
