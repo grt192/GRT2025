@@ -17,6 +17,11 @@ public class ElevatorToLimitSwitchCommand extends Command{
         elevatorSubsystem.setPositionReference(ElevatorConstants.GROUND_POS);
     }
 
+    // @Override
+    // public void end(boolean interrupted) {
+    //     elevatorSubsystem.setPositionReference(elevatorSubsystem.getPosition());
+    // }
+
     @Override
     public boolean isFinished(){
         return elevatorSubsystem.getLimitSwitch();

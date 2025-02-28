@@ -17,6 +17,11 @@ public class ElevatorToL2Command extends Command {
         elevatorSubsystem.setPositionReference(ElevatorConstants.L2_POS);
     }
 
+    // @Override
+    // public void end(boolean interrupted) {
+    //     elevatorSubsystem.setPositionReference(elevatorSubsystem.getPosition());
+    // }
+
     @Override
     public boolean isFinished() {
         return elevatorSubsystem.getClosedLoopError()

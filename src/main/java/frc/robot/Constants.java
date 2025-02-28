@@ -30,14 +30,14 @@ public final class Constants {
   public static class ElevatorConstants {
     
     public static final double dutyCycletoticks = 123.;
-    public static final double SOURCE_POS = 29.4755; //change
+    public static final double SOURCE_POS = 26.4755; //change
     public static final double L1_POS = 0.3 * dutyCycletoticks; //change
-    public static final double L2_POS = 52.014;
+    public static final double L2_POS = 49.014;
     // public static final double L2_POS = 0.5 * dutyCycletoticks; //change
-    public static final double L3_POS = 81.318;
+    public static final double L3_POS = 78.318;
     // public static final double L3_POS = 0.6 * dutyCycletoticks; //change
     // public static final double L4_POS = 0.9 * dutyCycletoticks; //change
-    public static final double L4_POS = 125.;
+    public static final double L4_POS = 123.;
     public static final double GROUND_POS = 0.0; 
 
     public static final double DUTY_CYCLE_TO_GROUND_SPEED = 0.3;
@@ -47,13 +47,13 @@ public final class Constants {
     public static final int MOTOR_ID = 13; //change
     public static final int LIMIT_ID = 0; //change
 
-    public static final double kP = 2.8; //change
+    public static final double kP = 1.8; //change
     public static final double kI = 0; //change
     public static final double kD = 0; //change
     public static final double kS = 0;
-    public static final double arbFF = 12; //30; //chang
+    public static final double arbFF = 18; //30; //chang
 
-    public static final double FORWARD_LIMIT = 126; //change
+    public static final double FORWARD_LIMIT = 123; //change
     public static final double REVERSE_LIMIT = 0; //change
 
     public static final double CURRENT_LIMIT = 100;
