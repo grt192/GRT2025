@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.controllers.PS5DriveController;
+import frc.robot.controllers.PS5MechController;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
@@ -13,7 +14,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -26,10 +29,15 @@ import frc.robot.Commands.Intake.Pivot.PivotToHorizontalCommand;
 import frc.robot.Commands.Intake.Pivot.PivotToOuttakeCommand;
 import frc.robot.Commands.Intake.Pivot.PivotToSourceCommand;
 import frc.robot.Commands.Intake.Pivot.PivotUp90Command;
+import frc.robot.Commands.Intake.Pivot.PivotZeroTo90Command;
 import frc.robot.Commands.Intake.Roller.RollerInCommand;
+import frc.robot.Commands.Intake.Roller.RollerInTillSensorCommand;
 import frc.robot.Commands.Intake.Roller.RollerOutCommand;
 import frc.robot.Commands.Intake.Roller.RollerStopCommand;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.Constants.IntakeConstans.PivotConstants;
+import frc.robot.Constants.IntakeConstans.RollerConstants;
 import frc.robot.Commands.Elevator.ElevatorToGroundCommand;
 import frc.robot.Commands.Elevator.ElevatorToL1Command;
 import frc.robot.Commands.Elevator.ElevatorToL2Command;
@@ -46,7 +54,11 @@ import frc.robot.Commands.Elevator.ElevatorToSourceCommand;
 public class RobotContainer {
 
   private PS5DriveController driveController;
-  private CommandPS5Controller mechController = new CommandPS5Controller(1);
+  private CommandPS5Controller mechController;
+  private Trigger manualElevatorTrigger;
+  private Trigger manualPivotTrigger;
+  private Trigger manualRollerInTrigger;
+  private Trigger manualRollerOutTrigger;
   
   private final PivotSubsystem pivotSubsystem = new PivotSubsystem();
   private final RollerSubsystem rollerSubsystem = new RollerSubsystem();
@@ -66,8 +78,9 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     constructDriveController(); 
+    constructMechController();
     bindElevator();
-    // bindIntake();
+    bindIntake();
     // startLog();
     setVisionDataInterface();
     configureBindings();
@@ -138,40 +151,122 @@ public class RobotContainer {
    */
   private void bindElevator(){
 
-    elevatorSubsystem.setDefaultCommand(
-      new InstantCommand(() -> {
-        elevatorSubsystem.setPower(-mechController.getLeftY());
-      }, elevatorSubsystem)
+    // elevatorSubsystem.setDefaultCommand(
+    //   new InstantCommand(() -> {
+    //     elevatorSubsystem.setDutyCycle(-mechController.getLeftY());
+    //   }, elevatorSubsystem)
+    // );
+
+    manualElevatorTrigger = new Trigger(
+      () -> mechController.getRightY() >= ElevatorConstants.CONTROLLER_DEADZONE
     );
-    
-    // mechController.L1().whileTrue(new ElevatorToLimitSwitchCommand(elevatorSubsystem));
-    // mechController.cross().onTrue(new ElevatorToL1Command(elevatorSubsystem));
-    // mechController.square().onTrue(new ElevatorToL2Command(elevatorSubsystem));
-    // mechController.triangle().onTrue(new ElevatorToL3Command(elevatorSubsystem));
-    // mechController.circle().onTrue(new ElevatorToL4Command(elevatorSubsystem));
-    // // mechController.L1().onTrue(new ElevatorToGroundCommand(elevatorSubsystem));
-    // mechController.R1().onTrue(new ElevatorToGroundCommand(elevatorSubsystem));
+
+    manualElevatorTrigger.onTrue(
+      new InstantCommand(
+        () -> {
+          elevatorSubsystem.setDutyCycle(mechController.getRightY());
+        },
+        elevatorSubsystem
+      )
+    );
+
+    mechController.R1().onTrue(new ElevatorToLimitSwitchCommand(elevatorSubsystem));
+    mechController.triangle().onTrue(new ElevatorToL4Command(elevatorSubsystem));
+    mechController.circle().onTrue(new ElevatorToL3Command(elevatorSubsystem));
+    mechController.square().onTrue(new ElevatorToL2Command(elevatorSubsystem));
+    mechController.cross().onTrue(new ElevatorToSourceCommand(elevatorSubsystem));
   }
-    // mechController.L1
-    //Binds the intake commands to the mech controller
-  private void bindIntake(){
+
+  private void bindPivot(){
     // pivotSubsystem.setDefaultCommand(
     //   new InstantCommand(() -> {
-    //     pivotSubsystem.setPower(mechController.getLeftY());
+    //     pivotSubsystem.setDutyCycle(mechController.getRightY());
     //   },
     //   pivotSubsystem
     //   )
     // );
+    
+    manualPivotTrigger = new Trigger(
+      () -> mechController.getLeftY() >= PivotConstants.CONTROLLER_DEADZONE
+    );
 
-    rollerSubsystem.setDefaultCommand(new ConditionalCommand(
-      new InstantCommand( () -> {
-        //ps5 trigger's range is -1 to 1, with non-input position being -1. This maps the range -1 to 1 to 0 to 1.
-        rollerSubsystem.setRollerSpeed(.25 * (mechController.getL2Axis() + 1.) / 2.); 
-      }, rollerSubsystem), 
-      new InstantCommand( () -> {
-        rollerSubsystem.setRollerSpeed(.15 * (mechController.getL2Axis() - mechController.getR2Axis()));
-      }, rollerSubsystem), 
-      () -> rollerSubsystem.getIntakeSensor()));
+    manualPivotTrigger.onTrue(
+      new InstantCommand(
+        () -> {
+          pivotSubsystem.setDutyCycle(mechController.getLeftY());
+        },
+        pivotSubsystem
+      )
+    );
+
+    mechController.povDown().onTrue(
+      new PivotToOuttakeCommand(pivotSubsystem)
+    );
+    
+    mechController.povLeft().onTrue(
+      new PivotToHorizontalCommand(pivotSubsystem)
+    );
+
+    mechController.povRight().onTrue(
+      new PivotToSourceCommand(pivotSubsystem)
+    );
+
+    mechController.povUp().onTrue(
+      new ConditionalCommand(
+        new ParallelCommandGroup(
+          new ElevatorToGroundCommand(elevatorSubsystem),
+          new PivotUp90Command(pivotSubsystem)
+        ),
+        new SequentialCommandGroup(
+          new ParallelCommandGroup(
+            new ElevatorToSourceCommand(elevatorSubsystem),
+            new PivotToSourceCommand(pivotSubsystem)
+          ),
+          new RollerInTillSensorCommand(rollerSubsystem),
+          new ParallelCommandGroup(
+            new ElevatorToGroundCommand(elevatorSubsystem),
+            new PivotUp90Command(pivotSubsystem)
+          )
+        ),
+        rollerSubsystem::getIntakeSensor
+      )
+    );
+  }
+
+  private void bindRollers(){
+    manualRollerInTrigger = new Trigger(
+      () -> 
+        mechController.getL2Axis()
+          >= RollerConstants.ROLLER_CONTROLLER_DEADZONE
+    );
+    manualRollerOutTrigger = new Trigger(
+      () ->
+        mechController.getR2Axis()
+          >= RollerConstants.ROLLER_CONTROLLER_DEADZONE
+    );
+
+    manualRollerInTrigger.onTrue(
+      new RollerInCommand(rollerSubsystem)
+    );
+
+    manualRollerOutTrigger.onTrue(
+      new RollerOutCommand(rollerSubsystem)
+    );
+  }
+  //Binds the intake commands to the mech controller
+  private void bindIntake(){
+    // mechController.R1().onTrue(new PivotZeroTo90Command(pivotSubsystem));
+    bindPivot();
+    bindRollers();
+    // rollerSubsystem.setDefaultCommand(new ConditionalCommand(
+    //   new InstantCommand( () -> {
+    //     //ps5 trigger's range is -1 to 1, with non-input position being -1. This maps the range -1 to 1 to 0 to 1.
+    //     rollerSubsystem.setRollerSpeed(.25 * (me   chController.getL2Axis() + 1.) / 2.); 
+    //   }, rollerSubsystem), 
+    //   new InstantCommand( () -> {
+    //     rollerSubsystem.setRollerSpeed(.15 * (mechController.getL2Axis() - mechController.getR2Axis()));
+    //   }, rollerSubsystem), 
+    //   () -> rollerSubsystem.getIntakeSensor()));
       
     // mechController.povUp().onTrue(
     //   new ConditionalCommand(
@@ -187,14 +282,20 @@ public class RobotContainer {
     //     () -> pivotSubsystem.getPosition() > 0
     //     ));
 
-    mechController.povUp().onTrue(
-      new PivotToSourceCommand(pivotSubsystem)
-    );
-    mechController.L1().onTrue(
-      new PivotUp90Command(pivotSubsystem)
-    );
+    // mechController.L1().onTrue(
+    //   new PivotUp90Command(pivotSubsystem)
+    // );
+    // mechController.povDown().onTrue(
+    //   new PivotToOuttakeCommand(pivotSubsystem)
+    // );
 
-    mechController.povDown().onTrue(new PivotToOuttakeCommand(pivotSubsystem));
+    // mechController.povRight().onTrue(
+    //   new PivotToSourceCommand(pivotSubsystem)
+    // );
+
+    // mechController.povUp().onTrue(
+    //   new PivotToHorizontalCommand(pivotSubsystem)
+    // );
   }
 
   /**
