@@ -111,16 +111,16 @@ public final class Constants {
     };
 
     public static final CameraConfig[] cameraConfigs = new CameraConfig[]{
-      new CameraConfig(
-        "7",
+      new CameraConfig(//back top cam
+        "8",
         new Transform3d(
           -0.019, -0.071, 0.981,
           new Rotation3d(0, -Math.PI/6., Math.PI)
         ),
         PoseStrategy.LOWEST_AMBIGUITY
       ),
-      new CameraConfig(
-        "3",
+      new CameraConfig(//front top cam
+        "0",
         new Transform3d(
           0.031, -0.071,0.981,
           new Rotation3d(0, -Math.PI * 6.,  0)
@@ -128,7 +128,7 @@ public final class Constants {
         PoseStrategy.LOWEST_AMBIGUITY
       ),
       new CameraConfig(
-          "4",
+          "6",
           new Transform3d(//11.3 in above ground
             0.235, -0.286, 0.220 ,
             new Rotation3d(0, -Math.PI/9., Math.PI / 9.)
@@ -136,7 +136,7 @@ public final class Constants {
           PoseStrategy.LOWEST_AMBIGUITY
       ),
       new CameraConfig(
-          "2",
+          "5",
           new Transform3d(
             0.2921, 0.2921, 0.1651,
             new Rotation3d(0, -Math.PI / 9., -Math.PI/18)
