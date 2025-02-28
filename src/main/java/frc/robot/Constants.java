@@ -40,7 +40,7 @@ public final class Constants {
 
     public static final double CLIMB_CURRENT_LIMIT = 60.;
 
-    public static final double CLIMB_SPEED = 0.5;
+    public static final double CLIMB_SPEED = 0.2;
 
     public static final boolean CLIMB_DEBUG = false;
   }

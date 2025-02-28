@@ -19,7 +19,6 @@ public class StopClimbCommand extends Command{
 
     @Override
     public boolean isFinished(){
-        return climbSubsystem.getClosedLoopError() 
-            < ClimbConstants.CLIMB_TOLLERANCE;
+        return true;
     }
 }

@@ -1,5 +1,7 @@
 package frc.robot.Commands.Climb;
 
+import static frc.robot.Constants.ClimbConstants.CLIMB_SPEED;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ClimbConstants;
 import frc.robot.subsystems.ClimbSubsystem;
@@ -19,7 +21,6 @@ public class StartClimbCommand extends Command{
 
     @Override
     public boolean isFinished(){
-        return climbSubsystem.getClosedLoopError() 
-            < ClimbConstants.CLIMB_TOLLERANCE;
+        return true;
     }
 }

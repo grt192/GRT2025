@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import static frc.robot.Constants.ClimbConstants.CLIMB_SPEED;
 import static frc.robot.Constants.ClimbConstants.MOTOR_ID;
 
 import frc.robot.Constants.ClimbConstants;
@@ -56,14 +58,16 @@ public class ClimbSubsystem extends SubsystemBase {
    * Sets the motor to climb speed.
    */
   public void start() {
-    motor.setVelocityReference(ClimbConstants.CLIMB_SPEED);
+    // motor.setVelocityReference(ClimbConstants.CLIMB_SPEED);
+    motor.setDutyCycle(CLIMB_SPEED);
   }
 
   /**
    * Stops the motor.
    */
   public void stop() {
-    motor.setVelocityReference(0);
+    // motor.setVelocityReference(0);
+    motor.setDutyCycle(CLIMB_SPEED);
   }
 
   /**
