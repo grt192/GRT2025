@@ -9,12 +9,14 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.epilogue.Logged;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.Constants.DebugConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.controllers.MechController;
+import frc.robot.util.LoggedBooleanSensor;
 import frc.robot.util.LoggedTalon;
 
 /**
@@ -28,7 +30,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private double arbFF;
   
   //limit switch
-  private final DigitalInput zeroLimitSwitch;
+  private final LoggedBooleanSensor zeroLimitSwitch;
   
   /** 
    * Constructs limit switch and motors.
@@ -40,6 +42,7 @@ public class ElevatorSubsystem extends SubsystemBase {
           .withKP(ElevatorConstants.kP)
           .withKI(ElevatorConstants.kI)
           .withKD(ElevatorConstants.kD)
+          .withKS(ElevatorConstants.kS)
       )
       .withMotorOutput(
         new MotorOutputConfigs()
@@ -48,8 +51,8 @@ public class ElevatorSubsystem extends SubsystemBase {
       )
       .withSoftwareLimitSwitch(
         new SoftwareLimitSwitchConfigs()
-          .withReverseSoftLimitEnable(true)
-          .withForwardSoftLimitEnable(true)
+          .withReverseSoftLimitEnable(false)
+          .withForwardSoftLimitEnable(false)
           .withReverseSoftLimitThreshold(ElevatorConstants.REVERSE_LIMIT)
           .withForwardSoftLimitThreshold(ElevatorConstants.FORWARD_LIMIT)
       )
@@ -63,19 +66,23 @@ public class ElevatorSubsystem extends SubsystemBase {
       ElevatorConstants.MOTOR_ID, "can", motorConfig 
     );
 
-    zeroLimitSwitch = new DigitalInput(ElevatorConstants.LIMIT_ID); 
+    zeroLimitSwitch = new LoggedBooleanSensor(
+      "Elevator Limit Switch", ElevatorConstants.LIMIT_ID
+    ); 
   }
   
   @Override
   public void periodic() {
     if(!zeroLimitSwitch.get()){
       motor.setPosition(0);
-      motor.setPower(0);
+      // motor.setPower(0);
     }
-    System.out.println(motor.getPosition());
+    // System.out.println(motor.getPosition());
     motor.logStats();
+    zeroLimitSwitch.logStats();
     if(DebugConstants.MASTER_DEBUG || ElevatorConstants.ELEVATOR_DEBUG) {
       motor.publishStats();
+      zeroLimitSwitch.publishStats();
     }
   }
   
@@ -98,15 +105,26 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void setPower(double power) {
-    System.out.println(power);
+    // System.out.println(power);
     motor.setPower(power);
   }
   
+  public void setTorqueCurrentFOC(double current){
+    motor.setTorqueCurrentFOC(current);
+  }
+
+  public void setDutyCycle(double output){
+    motor.setDutyCycle(output);
+  }
   /**
    * Gets the closed loop error of the motor.
    * @return closed loop error
    */
   public double getClosedLoopError(){
     return motor.getClosedLoopError();
+  }
+
+  public boolean getLimitSwitch(){
+    return zeroLimitSwitch.get();
   }
 }
