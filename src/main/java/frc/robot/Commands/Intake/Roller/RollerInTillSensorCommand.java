@@ -15,7 +15,7 @@ public class RollerInTillSensorCommand extends Command{
 
     @Override
     public void initialize(){
-        rollerSubsystem.setDutyCycle(RollerConstants.ROLLER_DUTY_CYCLE_IN_SPEED);
+        rollerSubsystem.setDutyCycle(-RollerConstants.ROLLER_DUTY_CYCLE_IN_SPEED);
     }
 
     @Override

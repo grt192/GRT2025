@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -268,26 +269,27 @@ public class RobotContainer {
       new PivotUp90Command(pivotSubsystem)
     );
 
-    // mechController.povUp().onTrue(
-    //   new ConditionalCommand(
-    //     new ParallelCommandGroup(
-    //       new ElevatorToGroundCommand(elevatorSubsystem),
-    //       new PivotUp90Command(pivotSubsystem)
-    //     ),
-    //     new SequentialCommandGroup(
-    //       new ParallelCommandGroup(
-    //         new ElevatorToSourceCommand(elevatorSubsystem),
-    //         new PivotToSourceCommand(pivotSubsystem)
-    //       ),
-    //       new RollerInTillSensorCommand(rollerSubsystem),
-    //       new ParallelCommandGroup(
-    //         new ElevatorToGroundCommand(elevatorSubsystem),
-    //         new PivotUp90Command(pivotSubsystem)
-    //       )
-    //     ),
-    //     rollerSubsystem::getIntakeSensor
-    //   )
-    // );
+    mechController.povUp().onTrue(
+      new ConditionalCommand(
+        new ParallelCommandGroup(
+          new ElevatorToGroundCommand(elevatorSubsystem),
+          new PivotUp90Command(pivotSubsystem)
+        ),
+        new SequentialCommandGroup(
+          new ParallelCommandGroup(
+            new ElevatorToSourceCommand(elevatorSubsystem),
+            new PivotToSourceCommand(pivotSubsystem)
+          ),
+          new RollerInTillSensorCommand(rollerSubsystem),
+          new WaitCommand(1),
+          new ParallelCommandGroup(
+            new ElevatorToGroundCommand(elevatorSubsystem),
+            new PivotUp90Command(pivotSubsystem)
+          )
+        ),
+        rollerSubsystem::getIntakeSensor
+      )
+    );
   }
 
   private void bindRollers(){
