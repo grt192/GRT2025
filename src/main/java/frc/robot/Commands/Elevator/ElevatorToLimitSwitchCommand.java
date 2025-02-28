@@ -14,9 +14,7 @@ public class ElevatorToLimitSwitchCommand extends Command{
 
     @Override
     public void initialize() {
-        elevatorSubsystem.setDutyCycle(
-            ElevatorConstants.DUTY_CYCLE_TO_GROUND_SPEED
-        );
+        elevatorSubsystem.setPositionReference(ElevatorConstants.GROUND_POS);
     }
 
     @Override
@@ -24,8 +22,4 @@ public class ElevatorToLimitSwitchCommand extends Command{
         return elevatorSubsystem.getLimitSwitch();
     }
 
-    @Override
-    public void end(boolean interrupted) {
-        elevatorSubsystem.setDutyCycle(0);
-    }
 }

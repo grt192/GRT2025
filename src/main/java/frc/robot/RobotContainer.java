@@ -183,22 +183,22 @@ public class RobotContainer {
 
     // elevatorSubsystem.setDefaultCommand(
     //   new InstantCommand(() -> {
-    //     elevatorSubsystem.setDutyCycle(-mechController.getLeftY());
+    //     elevatorSubsystem.setPower(-mechController.getLeftY());
     //   }, elevatorSubsystem)
     // );
 
-    manualElevatorTrigger = new Trigger(
-      () -> mechController.getRightY() >= ElevatorConstants.CONTROLLER_DEADZONE
-    );
+    // manualElevatorTrigger = new Trigger(
+    //   () -> mechController.getRightY() >= ElevatorConstants.CONTROLLER_DEADZONE
+    // );
 
-    manualElevatorTrigger.onTrue(
-      new InstantCommand(
-        () -> {
-          elevatorSubsystem.setDutyCycle(mechController.getRightY());
-        },
-        elevatorSubsystem
-      )
-    );
+    // manualElevatorTrigger.onTrue(
+    //   new InstantCommand(
+    //     () -> {
+    //       elevatorSubsystem.setDutyCycle(mechController.getRightY());
+    //     },
+    //     elevatorSubsystem
+    //   ).handleInterrupt(() -> elevatorSubsystem.setDutyCycle(0))
+    // );
 
     mechController.R1().onTrue(new ElevatorToLimitSwitchCommand(elevatorSubsystem));
     mechController.triangle().onTrue(new ElevatorToL4Command(elevatorSubsystem));
@@ -216,18 +216,18 @@ public class RobotContainer {
     //   )
     // );
     
-    manualPivotTrigger = new Trigger(
-      () -> mechController.getLeftY() >= PivotConstants.CONTROLLER_DEADZONE
-    );
+    // manualPivotTrigger = new Trigger(
+    //   () -> mechController.getLeftY() >= PivotConstants.CONTROLLER_DEADZONE
+    // );
 
-    manualPivotTrigger.onTrue(
-      new InstantCommand(
-        () -> {
-          pivotSubsystem.setDutyCycle(mechController.getLeftY());
-        },
-        pivotSubsystem
-      )
-    );
+    // manualPivotTrigger.onTrue(
+    //   new InstantCommand(
+    //     () -> {
+    //       pivotSubsystem.setDutyCycle(mechController.getLeftY());
+    //     },
+    //     pivotSubsystem
+    //   )
+    // );
 
     mechController.povDown().onTrue(
       new PivotToOuttakeCommand(pivotSubsystem)
@@ -241,26 +241,26 @@ public class RobotContainer {
       new PivotToSourceCommand(pivotSubsystem)
     );
 
-    mechController.povUp().onTrue(
-      new ConditionalCommand(
-        new ParallelCommandGroup(
-          new ElevatorToGroundCommand(elevatorSubsystem),
-          new PivotUp90Command(pivotSubsystem)
-        ),
-        new SequentialCommandGroup(
-          new ParallelCommandGroup(
-            new ElevatorToSourceCommand(elevatorSubsystem),
-            new PivotToSourceCommand(pivotSubsystem)
-          ),
-          new RollerInTillSensorCommand(rollerSubsystem),
-          new ParallelCommandGroup(
-            new ElevatorToGroundCommand(elevatorSubsystem),
-            new PivotUp90Command(pivotSubsystem)
-          )
-        ),
-        rollerSubsystem::getIntakeSensor
-      )
-    );
+    // mechController.povUp().onTrue(
+    //   new ConditionalCommand(
+    //     new ParallelCommandGroup(
+    //       new ElevatorToGroundCommand(elevatorSubsystem),
+    //       new PivotUp90Command(pivotSubsystem)
+    //     ),
+    //     new SequentialCommandGroup(
+    //       new ParallelCommandGroup(
+    //         new ElevatorToSourceCommand(elevatorSubsystem),
+    //         new PivotToSourceCommand(pivotSubsystem)
+    //       ),
+    //       new RollerInTillSensorCommand(rollerSubsystem),
+    //       new ParallelCommandGroup(
+    //         new ElevatorToGroundCommand(elevatorSubsystem),
+    //         new PivotUp90Command(pivotSubsystem)
+    //       )
+    //     ),
+    //     rollerSubsystem::getIntakeSensor
+    //   )
+    // );
   }
 
   private void bindRollers(){

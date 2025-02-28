@@ -37,7 +37,7 @@ public final class Constants {
     public static final double L3_POS = 81.318;
     // public static final double L3_POS = 0.6 * dutyCycletoticks; //change
     // public static final double L4_POS = 0.9 * dutyCycletoticks; //change
-    public static final double L4_POS = 126.;
+    public static final double L4_POS = 125.;
     public static final double GROUND_POS = 0.0; 
 
     public static final double DUTY_CYCLE_TO_GROUND_SPEED = 0.3;
@@ -47,11 +47,11 @@ public final class Constants {
     public static final int MOTOR_ID = 13; //change
     public static final int LIMIT_ID = 0; //change
 
-    public static final double kP = 1; //change
+    public static final double kP = 2.8; //change
     public static final double kI = 0; //change
     public static final double kD = 0; //change
     public static final double kS = 0;
-    public static final double arbFF = 30; //chang
+    public static final double arbFF = 12; //30; //chang
 
     public static final double FORWARD_LIMIT = 126; //change
     public static final double REVERSE_LIMIT = 0; //change
@@ -176,7 +176,7 @@ public final class Constants {
     public static final double[] STEER_D = new double[] {0, 0, 0, 0};
     public static final double[] STEER_FF = new double[] {0.023,.02,0.025,0.03}; //{0.036, 0.024, 0.0182, 0.05};
     
-    public static final boolean DRIVE_DEBUG = true;
+    public static final boolean DRIVE_DEBUG = false;
     public static final boolean STEER_DEBUG = false;
     public static final boolean STATE_DEBUG = false;
   }
@@ -187,9 +187,9 @@ public final class Constants {
   }
 
   public static class DebugConstants{
-    public static final boolean MASTER_DEBUG = true;
-    public static final boolean PIVOT_DEBUG = true;
-    public static final boolean ROLLER_DEBUG = true;
+    public static final boolean MASTER_DEBUG = false;
+    public static final boolean PIVOT_DEBUG = false;
+    public static final boolean ROLLER_DEBUG = false;
   }
 
 

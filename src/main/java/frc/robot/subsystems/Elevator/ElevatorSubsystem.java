@@ -42,17 +42,16 @@ public class ElevatorSubsystem extends SubsystemBase {
           .withKP(ElevatorConstants.kP)
           .withKI(ElevatorConstants.kI)
           .withKD(ElevatorConstants.kD)
-          .withKS(ElevatorConstants.kS)
       )
       .withMotorOutput(
         new MotorOutputConfigs()
-          .withNeutralMode(NeutralModeValue.Brake)
+          // .withNeutralMode(NeutralModeValue.Brake)
           .withInverted(InvertedValue.Clockwise_Positive)
       )
       .withSoftwareLimitSwitch(
         new SoftwareLimitSwitchConfigs()
-          .withReverseSoftLimitEnable(false)
-          .withForwardSoftLimitEnable(false)
+          .withReverseSoftLimitEnable(true)
+          .withForwardSoftLimitEnable(true)
           .withReverseSoftLimitThreshold(ElevatorConstants.REVERSE_LIMIT)
           .withForwardSoftLimitThreshold(ElevatorConstants.FORWARD_LIMIT)
       )
@@ -77,7 +76,7 @@ public class ElevatorSubsystem extends SubsystemBase {
       motor.setPosition(0);
       // motor.setPower(0);
     }
-    // System.out.println(motor.getPosition());
+    System.out.println(motor.getPosition());
     motor.logStats();
     zeroLimitSwitch.logStats();
     if(DebugConstants.MASTER_DEBUG || ElevatorConstants.ELEVATOR_DEBUG) {
@@ -125,6 +124,6 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public boolean getLimitSwitch(){
-    return zeroLimitSwitch.get();
+    return !zeroLimitSwitch.get();
   }
 }
