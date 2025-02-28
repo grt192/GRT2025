@@ -49,9 +49,9 @@ public class PivotSubsystem extends SubsystemBase{
         )
         .withSoftwareLimitSwitch(
             new SoftwareLimitSwitchConfigs()
-                .withForwardSoftLimitEnable(true)
+                .withForwardSoftLimitEnable(false)
                 .withForwardSoftLimitThreshold(PivotConstants.PIVOT_MAX_POS)
-                .withReverseSoftLimitEnable(true)
+                .withReverseSoftLimitEnable(false)
                 .withReverseSoftLimitThreshold(PivotConstants.PIVOT_MIN_POS)
         );
 
@@ -108,5 +108,17 @@ public class PivotSubsystem extends SubsystemBase{
 
     public void setPower(double speed) {
         pivotMotor.setPower(speed);
+    }
+
+    public void setTorqueCurrentFOC(double current){
+        pivotMotor.setTorqueCurrentFOC(current);
+    }
+    
+    public void setDutyCycle(double output){
+        pivotMotor.setDutyCycle(output);
+    }
+
+    public void setPosition(double position){
+        pivotMotor.setPosition(position);
     }
 }
