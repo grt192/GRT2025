@@ -11,13 +11,15 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.util.datalog.StructLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.Vision.TimestampedVisionUpdate;
+import frc.robot.util.GRTUtil;
 
 import static frc.robot.Constants.SwerveConstants.*;
+
 import static frc.robot.Constants.LoggingConstants.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -42,20 +44,27 @@ public class SwerveSubsystem extends SubsystemBase {
     private final SwerveDrivePoseEstimator poseEstimator;
     private Rotation2d driverHeadingOffset = new Rotation2d();
 
-
     private final AHRS ahrs;
 
+    //logging
     private NetworkTableInstance ntInstance;
     private NetworkTable swerveTable;
+
     private StructArrayPublisher<SwerveModuleState> swerveStatesPublisher;
 
-    private final Field2d fieldVisual = new Field2d();
-    private final ShuffleboardTab tab = Shuffleboard.getTab("Swerve");
-
     private StructPublisher<Pose2d> estimatedPosePublisher;
+    private StructLogEntry<Pose2d> estimatedPoseLogEntry =
+        StructLogEntry.create(
+            DataLogManager.getLog(),
+            "estimatedPose",
+            Pose2d.struct
+        );
 
     public SwerveSubsystem() {
+        //initialize and reset the NavX gyro
         ahrs = new AHRS(NavXComType.kMXP_SPI);
+        ahrs.reset();
+        ahrs.zeroYaw();
 
         frontLeftModule = new SwerveModule(FL_DRIVE, FL_STEER, FL_OFFSET);
         frontRightModule = new SwerveModule(FR_DRIVE, FR_STEER, FR_OFFSET);
@@ -68,26 +77,38 @@ public class SwerveSubsystem extends SubsystemBase {
             getGyroHeading(), 
             getModulePositions(),
             new Pose2d()
-        );
+            );
 
         buildAuton(); 
         initNT();
+
+        if(DRIVE_DEBUG) {
+            enableDriveDebug();
+        }
+        if(STEER_DEBUG) {
+            enableSteerDebug();
+        }
     }
 
     @Override
     public void periodic() {
+        //update the swerve modules based on the current desired states from states[]
         frontLeftModule.setDesiredState(states[0]);
         frontRightModule.setDesiredState(states[1]);
         backLeftModule.setDesiredState(states[2]);
         backRightModule.setDesiredState(states[3]);
-                
+
+        //update the poseestimator with curent gyro reading      
         Rotation2d gyroAngle = getGyroHeading();
         estimatedPose = poseEstimator.update(
             gyroAngle,
             getModulePositions()
         );
-        
+
+        //logging
+        estimatedPoseLogEntry.append(estimatedPose, GRTUtil.getFPGATime()); 
         publishStats();
+        logStats();
     }
 
     /**
@@ -108,12 +129,21 @@ public class SwerveSubsystem extends SubsystemBase {
         states = kinematics.toSwerveModuleStates(speeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(
             states, speeds,
-            MAX_VEL, MAX_VEL, MAX_OMEGA);
+            MAX_VEL, MAX_VEL, MAX_OMEGA
+        );
+    }
+
+    public void addVisionMeasurements(TimestampedVisionUpdate update) {
+        poseEstimator.addVisionMeasurement(
+            update.pose(), 
+            update.timestamp(),
+            update.stdDevs()
+        );
     }
 
     /**
      * Gets the module positions.
-     *
+     * 
      * @return The array of module positions.
      */
     public SwerveModulePosition[] getModulePositions() {
@@ -127,9 +157,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
     /**
      * Gets the states of the module
+     * 
      * @return The array of module states
      */
-    public SwerveModuleState[] getModuleStates(){
+    public SwerveModuleState[] getModuleStates() {
         return new SwerveModuleState[] {
             frontLeftModule.getState(),
             frontRightModule.getState(),
@@ -167,7 +198,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     /** Gets the gyro heading.*/
     private Rotation2d getGyroHeading() {
-        return Rotation2d.fromDegrees(ahrs.getAngle()); // Might need to flip depending on the robot setup
+        return Rotation2d.fromDegrees(-ahrs.getAngle()); // Might need to flip depending on the robot setup
     }
 
     /**
@@ -210,7 +241,7 @@ public class SwerveSubsystem extends SubsystemBase {
         );
     }
 
-    private void initNT(){
+    private void initNT() {
         ntInstance = NetworkTableInstance.getDefault();
         swerveTable = ntInstance.getTable(SWERVE_TABLE);
 
@@ -222,24 +253,64 @@ public class SwerveSubsystem extends SubsystemBase {
             "estimatedPose",
             Pose2d.struct
         ).publish();
-
-        tab.add("Field", fieldVisual);
     }
 
     /**
      * publishes swerve stats to NT
      */
-    private void publishStats(){
-        swerveStatesPublisher.set(getModuleStates());
+    private void publishStats() {
         estimatedPosePublisher.set(estimatedPose);
-        fieldVisual.setRobotPose(estimatedPose);
-        frontLeftModule.driveMotor.publishStats();
-        frontRightModule.driveMotor.publishStats();
-        backLeftModule.driveMotor.publishStats();
-        backRightModule.driveMotor.publishStats();
+
+        if(STATE_DEBUG || DRIVE_DEBUG || STEER_DEBUG) {
+            swerveStatesPublisher.set(getModuleStates());
+        }
+
+        if(DRIVE_DEBUG) {
+            frontLeftModule.publishDriveStats();
+            frontRightModule.publishDriveStats();
+            backLeftModule.publishDriveStats();
+            backRightModule.publishDriveStats();
+        }
+
+        if(STEER_DEBUG) {
+            frontLeftModule.publishSteerStats();
+            frontRightModule.publishSteerStats();
+            backLeftModule.publishSteerStats();
+            backRightModule.publishSteerStats();
+        }
     }
 
-    private void buildAuton(){
+    private void logStats() {
+        frontLeftModule.logStats();
+        frontRightModule.logStats();
+        backLeftModule.logStats();
+        backRightModule.logStats();
+    }
+
+    /**
+     * Enables drive debug
+     */
+    private void enableDriveDebug() {
+        frontLeftModule.driveDebug();
+        frontRightModule.driveDebug();
+        backLeftModule.driveDebug();
+        backRightModule.driveDebug();
+    }
+
+    /**
+     * Enables steer debug
+     */
+    private void enableSteerDebug() {
+        frontLeftModule.steerDebug();
+        frontRightModule.steerDebug();
+        backLeftModule.steerDebug();
+        backRightModule.steerDebug();
+    }
+
+    /** 
+     * Builds the auton builder
+     */
+    private void buildAuton() {
         RobotConfig config = null;
         try {
             config = RobotConfig.fromGUISettings();
@@ -254,9 +325,10 @@ public class SwerveSubsystem extends SubsystemBase {
             this::getRobotRelativeChassisSpeeds,
             (speeds, feedforwards) -> setRobotRelativeDrivePowers(speeds),
             
+            //1.25/3.25
             new PPHolonomicDriveController(
-                new PIDConstants(1, 0.0, 0.0),
-                new PIDConstants(1.0, 0.0, 0.0)
+                new PIDConstants(1.25, 0, 0.0),
+                new PIDConstants(3.25, 0.0, 0.0)
             ),
 
             config,
