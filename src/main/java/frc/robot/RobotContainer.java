@@ -74,8 +74,6 @@ public class RobotContainer {
   private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
-  private final FieldManagementSubsystem fieldManagementSubsystem = new FieldManagementSubsystem();
-  private final PhoenixLoggingSubsystem phoenixLoggingSubsystem = new PhoenixLoggingSubsystem(fieldManagementSubsystem);
   
   //driver camera stuff:
   private UsbCamera driverCamera;
