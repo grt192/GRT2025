@@ -8,6 +8,7 @@ import frc.robot.controllers.PS5DriveController;
 
 import java.util.EnumSet;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.cscore.MjpegServer;
@@ -19,6 +20,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.util.PixelFormat;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -29,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Elevator.ElevatorSubsystem;
+import frc.robot.subsystems.FieldManagementSubsystem.FieldManagementSubsystem;
 import frc.robot.subsystems.Intake.Pivot.PivotSubsystem;
 import frc.robot.subsystems.Intake.Roller.RollerSubsystem;
 import frc.robot.subsystems.Vision.VisionSubsystem;
@@ -60,6 +64,9 @@ import frc.robot.Commands.Elevator.ElevatorToSourceCommand;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+
+  private final SendableChooser<Command> autoChooser;
+  private boolean isCompetition = true;
 
   private PS5DriveController driveController;
   private CommandPS5Controller mechController;
@@ -102,6 +109,8 @@ public class RobotContainer {
     VisionConstants.cameraConfigs[3]
   );
 
+  private final FieldManagementSubsystem fmsSubsystem = new FieldManagementSubsystem();
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     constructDriveController(); 
@@ -114,6 +123,12 @@ public class RobotContainer {
     constructDriverCameras();
     constructNetworkTableListeners();
 
+    autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
+      (stream) -> isCompetition
+      ? stream.filter(auto -> auto.getName().startsWith("Pine"))
+      : stream
+    );
+    SmartDashboard.putData("AutoChooser", autoChooser);
   }
 
   /**
@@ -157,7 +172,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new PathPlannerAuto("Three Meters");
+    return autoChooser.getSelected();
   }
 
   /**
