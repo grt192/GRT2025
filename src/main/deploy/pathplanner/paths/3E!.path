@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.0,
-        "y": 0.0
+        "x": 6.523049768518518,
+        "y": 1.3585539641203694
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.2668554985956595,
-        "y": 0.0
+        "x": 6.299538317990757,
+        "y": 1.4705478545027324
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Leave 3"
     },
     {
       "anchor": {
-        "x": 3.0,
-        "y": 0.0
+        "x": 5.039029565436535,
+        "y": 2.7406331985491352
       },
       "prevControl": {
-        "x": 3.0,
-        "y": -0.25
+        "x": 5.148989613612636,
+        "y": 2.5161141841982126
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "E Pose"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 120.37912601136837
   },
   "reversed": false,
-  "folder": "Testing",
+  "folder": "Leave 3",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }
