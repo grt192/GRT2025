@@ -5,7 +5,6 @@
 package frc.robot;
 
 import frc.robot.controllers.PS5DriveController;
-import frc.robot.controllers.PS5MechController;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
