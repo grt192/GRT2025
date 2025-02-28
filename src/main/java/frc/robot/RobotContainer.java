@@ -264,24 +264,34 @@ public class RobotContainer {
   }
 
   private void bindRollers(){
-    manualRollerInTrigger = new Trigger(
-      () -> 
-        mechController.getL2Axis()
-          >= RollerConstants.ROLLER_CONTROLLER_DEADZONE
-    );
-    manualRollerOutTrigger = new Trigger(
-      () ->
-        mechController.getR2Axis()
-          >= RollerConstants.ROLLER_CONTROLLER_DEADZONE
-    );
+    // manualRollerInTrigger = new Trigger(
+    //   () -> 
+    //     mechController.getL2Axis()
+    //       >= RollerConstants.ROLLER_CONTROLLER_DEADZONE
+    // );
+    // manualRollerOutTrigger = new Trigger(
+    //   () ->
+    //     mechController.getR2Axis()
+    //       >= RollerConstants.ROLLER_CONTROLLER_DEADZONE
+    // );
 
-    manualRollerInTrigger.onTrue(
-      new RollerInCommand(rollerSubsystem)
-    );
+    // manualRollerInTrigger.onTrue(
+    //   new RollerInCommand(rollerSubsystem)
+    // );
 
-    manualRollerOutTrigger.onTrue(
-      new RollerOutCommand(rollerSubsystem)
-    );
+    // manualRollerOutTrigger.onTrue(
+    //   new RollerOutCommand(rollerSubsystem)
+    // );
+
+    rollerSubsystem.setDefaultCommand(new ConditionalCommand(
+      new InstantCommand( () -> {
+        //ps5 trigger's range is -1 to 1, with non-input position being -1. This maps the range -1 to 1 to 0 to 1.
+        rollerSubsystem.setRollerSpeed(.25 * (mechController.getL2Axis() + 1.) / 2.); 
+      }, rollerSubsystem), 
+      new InstantCommand( () -> {
+        rollerSubsystem.setRollerSpeed(.15 * (mechController.getL2Axis() - mechController.getR2Axis()));
+      }, rollerSubsystem), 
+      () -> rollerSubsystem.getIntakeSensor()));
   }
   //Binds the intake commands to the mech controller
   private void bindIntake(){
