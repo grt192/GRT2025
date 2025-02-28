@@ -30,12 +30,17 @@ public final class Constants {
   public static class ElevatorConstants {
     
     public static final double dutyCycletoticks = 123.;
-    public static final double SOURCE_POS= 0.0; //change
+    public static final double SOURCE_POS = 29.4755; //change
     public static final double L1_POS = 0.3 * dutyCycletoticks; //change
-    public static final double L2_POS = 0.5 * dutyCycletoticks; //change
-    public static final double L3_POS = 0.6 * dutyCycletoticks; //change
-    public static final double L4_POS = 0.9 * dutyCycletoticks; //change
+    public static final double L2_POS = 52.014;
+    // public static final double L2_POS = 0.5 * dutyCycletoticks; //change
+    public static final double L3_POS = 81.318;
+    // public static final double L3_POS = 0.6 * dutyCycletoticks; //change
+    // public static final double L4_POS = 0.9 * dutyCycletoticks; //change
+    public static final double L4_POS = 126.;
     public static final double GROUND_POS = 0.0; 
+
+    public static final double DUTY_CYCLE_TO_GROUND_SPEED = 0.3;
 
     public static final double ELEVATOR_TOLERANCE = 8; //change
 
@@ -45,6 +50,7 @@ public final class Constants {
     public static final double kP = 1; //change
     public static final double kI = 0; //change
     public static final double kD = 0; //change
+    public static final double kS = 0;
     public static final double arbFF = 30; //chang
 
     public static final double FORWARD_LIMIT = 126; //change
@@ -59,6 +65,8 @@ public final class Constants {
     public static final double DIST_TO_TICKS = 1. / TICKS_TO_DIST;
 
     public static final boolean ELEVATOR_DEBUG = true;
+
+    public static final double CONTROLLER_DEADZONE = 0.1;
   }
   public static class IntakeConstans{
 
@@ -75,8 +83,8 @@ public final class Constants {
 
       public static final double PIVOT_MANUAL_SPEED = 0.15;
 
-      public static final double SOURCE_POS = Units.degreesToRadians(45.);
-      public static final double OUTTAKE_POS = Units.degreesToRadians(-45.);
+      public static final double SOURCE_POS =  0.9714;
+      public static final double OUTTAKE_POS = -0.4;
       
       public static final double PIVOT_TOLERANCE = 0.1;
 
@@ -88,6 +96,8 @@ public final class Constants {
 
       public static final double PIVOT_RAMP_RATE = 0.03;
       public static final double PIVOT_CURRENT_LIMIT = 100.;
+
+      public static final double CONTROLLER_DEADZONE = 0.1;
     }
 
     public static class RollerConstants{
@@ -103,10 +113,16 @@ public final class Constants {
       public static final double ROLLER_IN_SPEED = 0.5;
       public static final double ROLLER_OUT_SPEED = -0.5;
       public static final double ROLLER_OFF_SPEED = 0;
+
+      public static final double ROLLER_DUTY_CYCLE_IN_SPEED = 0.5;
+      public static final double ROLLER_DUTY_CYCLE_OUT_SPEED = -0.5;
+ 
       public static final double ROLLER_TOLERANCE = 0.1;
 
       public static final double ROLLER_RAMP_RATE = 0.02;
       public static final double ROLLER_CURRENT_LIMIT = 100.;
+
+      public static final double ROLLER_CONTROLLER_DEADZONE = 0.1;
     }
   }
 
@@ -158,7 +174,7 @@ public final class Constants {
     public static final double[] STEER_D = new double[] {0, 0, 0, 0};
     public static final double[] STEER_FF = new double[] {0.023,.02,0.025,0.03}; //{0.036, 0.024, 0.0182, 0.05};
     
-    public static final boolean DRIVE_DEBUG = false;
+    public static final boolean DRIVE_DEBUG = true;
     public static final boolean STEER_DEBUG = false;
     public static final boolean STATE_DEBUG = false;
   }
