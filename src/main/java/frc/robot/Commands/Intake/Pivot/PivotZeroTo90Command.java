@@ -14,6 +14,7 @@ public class PivotZeroTo90Command extends Command{
 
    @Override
    public void initialize(){
+       if(pivotSubsystem.getLimitSwitch()){pivotSubsystem.setEncoderZero();}
        pivotSubsystem.setPosition(Math.PI / 2.);
    }
 

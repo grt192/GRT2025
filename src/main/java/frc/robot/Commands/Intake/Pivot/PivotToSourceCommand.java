@@ -14,6 +14,7 @@ public class PivotToSourceCommand extends Command{
 
    @Override
    public void initialize(){
+       if(pivotSubsystem.getLimitSwitch()){pivotSubsystem.setEncoderZero();}
        pivotSubsystem.setPositionReferenceWithVoltage(PivotConstants.SOURCE_POS);
    }
 

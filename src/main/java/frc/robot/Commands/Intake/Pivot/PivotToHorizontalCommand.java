@@ -14,6 +14,7 @@ public class PivotToHorizontalCommand extends Command{
 
    @Override
    public void initialize(){
+       if(pivotSubsystem.getLimitSwitch()){pivotSubsystem.setEncoderZero();}
        pivotSubsystem.setPositionReferenceWithVoltage(PivotConstants.PIVOT_HORIZONTAL);
    }
 

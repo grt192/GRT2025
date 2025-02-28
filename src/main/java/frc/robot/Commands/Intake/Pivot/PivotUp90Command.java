@@ -14,6 +14,7 @@ public class PivotUp90Command extends Command{
 
    @Override
    public void initialize(){
+       if(pivotSubsystem.getLimitSwitch()){pivotSubsystem.setEncoderZero();}
        pivotSubsystem.setPositionReferenceWithVoltage(PivotConstants.PIVOT_MAX_POS);
    }
 
