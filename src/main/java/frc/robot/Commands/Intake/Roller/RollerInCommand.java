@@ -21,6 +21,7 @@ public class RollerInCommand extends Command{
     @Override
     public boolean isFinished(){
         return Math.abs(rollerSubsystem.getClosedLoopError())
-            < RollerConstants.ROLLER_TOLERANCE;
+            < RollerConstants.ROLLER_TOLERANCE
+            || rollerSubsystem.getIntakeSensor();
     }
 }
