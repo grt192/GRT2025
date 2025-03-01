@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.controllers.PS5DriveController;
 
 import java.util.EnumSet;
+import java.util.jar.Attributes.Name;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -124,9 +125,11 @@ public class RobotContainer {
     constructDriverCameras();
     constructNetworkTableListeners();
 
+    NamedCommands.registerCommand("PivotToHorizontal", new PivotToHorizontalCommand(pivotSubsystem));
     NamedCommands.registerCommand("ElevatorToL4", new ElevatorToL4Command(elevatorSubsystem));
     NamedCommands.registerCommand("RollerIntake", new RollerInTillSensorCommand(rollerSubsystem));
     NamedCommands.registerCommand("PivotToOuttake", new PivotToOuttakeCommand(pivotSubsystem));
+    NamedCommands.registerCommand("RollerOuttake", new RollerOutCommand(rollerSubsystem));
     autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
       (stream) -> isCompetition
       ? stream.filter(auto -> auto.getName().startsWith("Pine"))
