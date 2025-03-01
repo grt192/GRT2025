@@ -131,7 +131,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("ElevatorToAlgae", new ElevatorToAlgaeCommand(elevatorSubsystem));
     NamedCommands.registerCommand("PivotToHorizontal", new PivotToHorizontalCommand(pivotSubsystem));
     NamedCommands.registerCommand("ElevatorToL4", new ElevatorToL4Command(elevatorSubsystem));
-    NamedCommands.registerCommand("RollerIntake", new RollerInTillSensorCommand(rollerSubsystem));
+    NamedCommands.registerCommand("RollerIntake", new RollerInCommand(rollerSubsystem));
     NamedCommands.registerCommand("PivotToOuttake", new PivotToOuttakeCommand(pivotSubsystem));
     NamedCommands.registerCommand("RollerOuttake", new RollerOutCommand(rollerSubsystem));
     autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(

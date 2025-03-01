@@ -112,7 +112,7 @@ public final class Constants {
       public static final double ROLLER_KS = 0;
       public static final double ROLLER_KV = 0;
 
-      public static final double ROLLER_IN_SPEED = 0.5;
+      public static final double ROLLER_IN_SPEED = 0.08;
       public static final double ROLLER_OUT_SPEED = -0.5;
       public static final double ROLLER_OFF_SPEED = 0;
 
