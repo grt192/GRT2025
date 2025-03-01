@@ -314,14 +314,14 @@ public class RobotContainer {
 
     rollerSubsystem.setDefaultCommand(new ConditionalCommand(
       new InstantCommand( () -> {
-        //ps5 trigger's range is -1 to 1, with non-input position being -1. This maps the range -1 to 1 to 0 to 1.
-        rollerSubsystem.setRollerSpeed(.25 * (mechController.getL2Axis() + 1.) / 2.); 
+      //ps5 trigger's range is -1 to 1, with non-input position being -1. This maps the range -1 to 1 to 0 to 1.
+      rollerSubsystem.setRollerSpeed(.25 * (mechController.getR2Axis() + 1.) / 2.); 
       }, rollerSubsystem), 
       new InstantCommand( () -> {
-        rollerSubsystem.setRollerSpeed(.15 * (mechController.getL2Axis() - mechController.getR2Axis()));
+      rollerSubsystem.setRollerSpeed(.15 * (mechController.getR2Axis() - mechController.getL2Axis()));
       }, rollerSubsystem), 
       () -> rollerSubsystem.getIntakeSensor()));
-  }
+    }
   //Binds the intake commands to the mech controller
   private void bindIntake(){
     // mechController.R1().onTrue(new PivotZeroTo90Command(pivotSubsystem));
