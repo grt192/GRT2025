@@ -38,7 +38,7 @@ public final class Constants {
 
     public static final double CLIMB_TOLLERANCE = 0.1;
 
-    public static final double CLIMB_CURRENT_LIMIT = 60.;
+    public static final double CLIMB_CURRENT_LIMIT = 80.;
 
     public static final double CLIMB_SPEED = 0.2;
 
