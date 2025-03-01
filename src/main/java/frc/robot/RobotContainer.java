@@ -52,6 +52,7 @@ import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.IntakeConstans.PivotConstants;
 import frc.robot.Constants.IntakeConstans.RollerConstants;
+import frc.robot.Commands.Elevator.ElevatorToAlgaeCommand;
 import frc.robot.Commands.Elevator.ElevatorToGroundCommand;
 import frc.robot.Commands.Elevator.ElevatorToL1Command;
 import frc.robot.Commands.Elevator.ElevatorToL2Command;
@@ -125,6 +126,8 @@ public class RobotContainer {
     constructDriverCameras();
     constructNetworkTableListeners();
 
+    NamedCommands.registerCommand("ElevatorToGround", nes ElevatorToGroundCommand(elevatorSubsystem));
+    NamedCommands.registerCommand("ElevatorToAlgae", new ElevatorToAlgaeCommand(elevatorSubsystem));
     NamedCommands.registerCommand("PivotToHorizontal", new PivotToHorizontalCommand(pivotSubsystem));
     NamedCommands.registerCommand("ElevatorToL4", new ElevatorToL4Command(elevatorSubsystem));
     NamedCommands.registerCommand("RollerIntake", new RollerInTillSensorCommand(rollerSubsystem));
