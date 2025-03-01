@@ -77,7 +77,7 @@ public class ElevatorSubsystem extends SubsystemBase {
       motor.setPosition(0);
       // motor.setPower(0);
     }
-    System.out.println(motor.getPosition());
+    // System.out.println(motor.getPosition());
     motor.logStats();
     zeroLimitSwitch.logStats();
     if(DebugConstants.MASTER_DEBUG || ElevatorConstants.ELEVATOR_DEBUG) {

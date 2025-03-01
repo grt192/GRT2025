@@ -30,9 +30,9 @@ public final class Constants {
   public static class ElevatorConstants {
     
     public static final double dutyCycletoticks = 123.;
-    public static final double SOURCE_POS = 26.4755; //change
+    public static final double SOURCE_POS = 44.9; //change
     public static final double L1_POS = 0.3 * dutyCycletoticks; //change
-    public static final double L2_POS = 49.014;
+    public static final double L2_POS = 72.44;
     // public static final double L2_POS = 0.5 * dutyCycletoticks; //change
     public static final double L3_POS = 78.318;
     // public static final double L3_POS = 0.6 * dutyCycletoticks; //change
@@ -64,7 +64,7 @@ public final class Constants {
     public static final double TICKS_TO_DIST = 2. * Math.PI * AXLE_RADIUS / GEAR_RATIO;
     public static final double DIST_TO_TICKS = 1. / TICKS_TO_DIST;
 
-    public static final boolean ELEVATOR_DEBUG = true;
+    public static final boolean ELEVATOR_DEBUG = false;
 
     public static final double CONTROLLER_DEADZONE = 0.1;
   }
@@ -74,10 +74,10 @@ public final class Constants {
       public static final int PIVOT_CAN_ID = 14;
       public static final String PIVOT_CAN_NAME = "rio";
 
-      public static final double PIVOT_KP = 5.4;
+      public static final double PIVOT_KP = 5.5;
       public static final double PIVOT_KI = 0.;
       public static final double PIVOT_KD = .6;
-      public static final double PIVOT_KG = 600.;
+      public static final double PIVOT_KG = 800.;
       public static final double PIVOT_KV = 0.;
       public static final double PIVOT_KS = 0.;
 

@@ -264,11 +264,11 @@ public class RobotContainer {
       new PivotToOuttakeCommand(pivotSubsystem)
     );
     
-    mechController.povLeft().onTrue(
-      new PivotToHorizontalCommand(pivotSubsystem)
-    );
+    // mechController.povLeft().onTrue(
+    //   new PivotToHorizontalCommand(pivotSubsystem)
+    // );
 
-    mechController.povRight().onTrue(
+    mechController.povUp().onTrue(
       new PivotToSourceCommand(pivotSubsystem)
     );
 
@@ -276,27 +276,31 @@ public class RobotContainer {
       new PivotUp90Command(pivotSubsystem)
     );
 
-    mechController.povUp().onTrue(
-      new ConditionalCommand(
-        new ParallelCommandGroup(
-          new ElevatorToGroundCommand(elevatorSubsystem),
-          new PivotUp90Command(pivotSubsystem)
-        ),
-        new SequentialCommandGroup(
-          new ParallelCommandGroup(
-            new ElevatorToSourceCommand(elevatorSubsystem),
-            new PivotToSourceCommand(pivotSubsystem)
-          ),
-          new RollerInTillSensorCommand(rollerSubsystem),
-          new WaitCommand(1),
-          new ParallelCommandGroup(
-            new ElevatorToGroundCommand(elevatorSubsystem),
-            new PivotUp90Command(pivotSubsystem)
-          )
-        ),
-        rollerSubsystem::getIntakeSensor
-      )
+    mechController.povRight().onTrue(
+      new PivotToHorizontalCommand(pivotSubsystem)
     );
+
+    // mechController.povUp().onTrue(
+    //   new ConditionalCommand(
+    //     new ParallelCommandGroup(
+    //       new ElevatorToGroundCommand(elevatorSubsystem),
+    //       new PivotUp90Command(pivotSubsystem)
+    //     ),
+    //     new SequentialCommandGroup(
+    //       new ParallelCommandGroup(
+    //         new ElevatorToSourceCommand(elevatorSubsystem),
+    //         new PivotToSourceCommand(pivotSubsystem)
+    //       ),
+    //       new RollerInTillSensorCommand(rollerSubsystem),
+    //       new WaitCommand(1),
+    //       new ParallelCommandGroup(
+    //         new ElevatorToGroundCommand(elevatorSubsystem),
+    //         new PivotUp90Command(pivotSubsystem)
+    //       )
+    //     ),
+    //     rollerSubsystem::getIntakeSensor
+    //   )
+    // );
   }
 
   private void bindRollers(){
@@ -325,7 +329,7 @@ public class RobotContainer {
       rollerSubsystem.setRollerSpeed(.25 * (mechController.getR2Axis() + 1.) / 2.); 
       }, rollerSubsystem), 
       new InstantCommand( () -> {
-      rollerSubsystem.setRollerSpeed(.15 * (mechController.getR2Axis() - mechController.getL2Axis()));
+      rollerSubsystem.setRollerSpeed(.07 * (mechController.getR2Axis() - mechController.getL2Axis()));
       }, rollerSubsystem), 
       () -> rollerSubsystem.getIntakeSensor()));
     }
