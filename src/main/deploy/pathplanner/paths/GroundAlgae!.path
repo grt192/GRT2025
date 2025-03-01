@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.866037686513236,
-        "y": 1.2058325242815322
+        "x": 6.8142593712490624,
+        "y": 1.37063339182652
       },
       "isLocked": false,
       "linkedName": "Start 3"
     },
     {
       "anchor": {
-        "x": 5.868987268518517,
-        "y": 0.6712409577546293
+        "x": 1.9843871729651164,
+        "y": 2.1612690770348832
       },
       "prevControl": {
-        "x": 6.063482349537035,
-        "y": 0.8312044270833338
+        "x": 2.2446844819928966,
+        "y": 2.1223118287709952
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "GroundAlg"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 179.58087686920524
+    "rotation": 178.99933267345406
   },
   "reversed": false,
   "folder": "Leave 3",
