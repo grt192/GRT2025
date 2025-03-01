@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.353417455570371,
+        "y": 2.9016652894087804
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.156149484903008,
+        "y": 2.748090070871478
+      },
+      "isLocked": false,
+      "linkedName": "F Pose"
+    },
+    {
+      "anchor": {
+        "x": 1.794698860583811,
+        "y": 0.7145353912965606
+      },
+      "prevControl": {
+        "x": 1.9997079889030844,
+        "y": 0.8576131928793767
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "RS 3"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.227,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -131.45989203999167
+  },
+  "reversed": false,
+  "folder": "Right Source",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 120.55527012197697
+  },
+  "useDefaultConstraints": true
+}

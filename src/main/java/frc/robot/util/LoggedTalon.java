@@ -98,6 +98,9 @@ public class LoggedTalon{
         motor.setControl(new PositionTorqueCurrentFOC(position));
     }
 
+    public void setSpeed(double speed) {
+        motor.set(speed);
+    }
     /**
      * Sets the motor's position reference with voltage
      * @param position position reference
@@ -164,6 +167,18 @@ public class LoggedTalon{
             boolean error = motor.setPosition(position) == StatusCode.OK;
             if (!error) break;
         }
+    }
+
+
+    public void setPower(double power) {
+        motor.set(power);
+    }
+
+    /**
+     * Resets the encoder position to zero
+     */
+    public void resetEncoder() {
+        motor.setPosition(0.0);
     }
 
     /**
@@ -350,6 +365,10 @@ public class LoggedTalon{
         temperaturePublisher.set(motor.getDeviceTemp().getValueAsDouble());
         targetPositionPublisher.set(targetPosition);
         targetVelocityPublisher.set(targetVelocity);
+
+        targetDutyCyclePublisher.set(targetDutyCycle);
+        targetTorqueCurrentFOCPublisher.set(targetTorqueCurrentFOC);
+
         closedLoopErrorPublisher.set(motor.getClosedLoopError().getValueAsDouble());
     }    
 
@@ -384,6 +403,13 @@ public class LoggedTalon{
         targetPositionLogEntry.append(targetPosition, GRTUtil.getFPGATime());
 
         targetVelocityLogEntry.append(targetVelocity, GRTUtil.getFPGATime());
+
+
+        targetTorqueCurrentFOCLogEntry.append(
+            targetTorqueCurrentFOC, GRTUtil.getFPGATime()
+        );
+
+        targetDutyCycleLogEntry.append(targetDutyCycle, GRTUtil.getFPGATime());
 
         closedLoopErrorLogEntry.append(
             motor.getClosedLoopError().getValueAsDouble(), GRTUtil.getFPGATime()
