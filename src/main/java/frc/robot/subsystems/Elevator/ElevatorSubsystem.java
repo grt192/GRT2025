@@ -1,6 +1,7 @@
 package frc.robot.subsystems.Elevator;
 
 
+import com.ctre.phoenix6.configs.ClosedLoopGeneralConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -94,8 +95,9 @@ public class ElevatorSubsystem extends SubsystemBase {
       arbFF = ElevatorConstants.arbFF;
     }
     else {
-      arbFF = 0;
+      // arbFF = -20;
     }
+    arbFF = ElevatorConstants.arbFF;
     motor.setPositionReferenceWithArbFF(positionReference, arbFF);
   }
 
@@ -125,5 +127,9 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public boolean getLimitSwitch(){
     return !zeroLimitSwitch.get();
+  }
+
+  public double getPosition() {
+    return motor.getPosition();
   }
 }

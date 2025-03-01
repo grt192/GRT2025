@@ -17,6 +17,11 @@ public class ElevatorToSourceCommand extends Command {
         elevatorSubsystem.setPositionReference(ElevatorConstants.SOURCE_POS);
     }
 
+    // @Override
+    // public void end(boolean interrupted) {
+    //     elevatorSubsystem.setPositionReference(elevatorSubsystem.getPosition());
+    // }
+
     @Override
     public boolean isFinished() {
         return elevatorSubsystem.getClosedLoopError()

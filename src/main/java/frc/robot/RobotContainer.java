@@ -206,18 +206,26 @@ public class RobotContainer {
     //   }, elevatorSubsystem)
     // );
 
-    // manualElevatorTrigger = new Trigger(
-    //   () -> mechController.getRightY() >= ElevatorConstants.CONTROLLER_DEADZONE
-    // );
+    manualElevatorTrigger = new Trigger(
+      () -> Math.abs(mechController.getRightY()) >= ElevatorConstants.CONTROLLER_DEADZONE
+    );
 
-    // manualElevatorTrigger.onTrue(
-    //   new InstantCommand(
-    //     () -> {
-    //       elevatorSubsystem.setDutyCycle(mechController.getRightY());
-    //     },
-    //     elevatorSubsystem
-    //   ).handleInterrupt(() -> elevatorSubsystem.setDutyCycle(0))
-    // );
+    manualElevatorTrigger.onTrue(
+      new InstantCommand(
+        () -> {
+          elevatorSubsystem.setPower(-mechController.getRightY());
+        },
+        elevatorSubsystem
+      ).handleInterrupt(() -> elevatorSubsystem.setPower(0))
+    );
+    manualElevatorTrigger.toggleOnFalse(
+      new InstantCommand(
+        () -> {
+          elevatorSubsystem.setPower(0);
+        },
+        elevatorSubsystem
+      )
+    );
 
     mechController.R1().onTrue(new ElevatorToLimitSwitchCommand(elevatorSubsystem));
     mechController.triangle().onTrue(new ElevatorToL4Command(elevatorSubsystem));
@@ -258,6 +266,10 @@ public class RobotContainer {
 
     mechController.povRight().onTrue(
       new PivotToSourceCommand(pivotSubsystem)
+    );
+
+    mechController.L1().onTrue(
+      new PivotUp90Command(pivotSubsystem)
     );
 
     // mechController.povUp().onTrue(
@@ -304,14 +316,14 @@ public class RobotContainer {
 
     rollerSubsystem.setDefaultCommand(new ConditionalCommand(
       new InstantCommand( () -> {
-        //ps5 trigger's range is -1 to 1, with non-input position being -1. This maps the range -1 to 1 to 0 to 1.
-        rollerSubsystem.setRollerSpeed(.25 * (mechController.getL2Axis() + 1.) / 2.); 
+      //ps5 trigger's range is -1 to 1, with non-input position being -1. This maps the range -1 to 1 to 0 to 1.
+      rollerSubsystem.setRollerSpeed(.25 * (mechController.getR2Axis() + 1.) / 2.); 
       }, rollerSubsystem), 
       new InstantCommand( () -> {
-        rollerSubsystem.setRollerSpeed(.15 * (mechController.getL2Axis() - mechController.getR2Axis()));
+      rollerSubsystem.setRollerSpeed(.15 * (mechController.getR2Axis() - mechController.getL2Axis()));
       }, rollerSubsystem), 
       () -> rollerSubsystem.getIntakeSensor()));
-  }
+    }
   //Binds the intake commands to the mech controller
   private void bindIntake(){
     // mechController.R1().onTrue(new PivotZeroTo90Command(pivotSubsystem));
@@ -341,9 +353,6 @@ public class RobotContainer {
     //     () -> pivotSubsystem.getPosition() > 0
     //     ));
 
-    // mechController.L1().onTrue(
-    //   new PivotUp90Command(pivotSubsystem)
-    // );
     // mechController.povDown().onTrue(
     //   new PivotToOuttakeCommand(pivotSubsystem)
     // );
