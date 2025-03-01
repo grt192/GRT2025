@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.027643710844272,
-        "y": 5.267737777819212
+        "x": 5.0474614285582655,
+        "y": 5.330592111769679
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.231840753730309,
-        "y": 5.411972197000619
+        "x": 5.251658471444303,
+        "y": 5.474826530951086
       },
       "isLocked": false,
       "linkedName": "J Pose"
@@ -45,7 +45,7 @@
     "rotation": 124.96220039303158
   },
   "reversed": false,
-  "folder": "Top Source",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": -119.6087870647367

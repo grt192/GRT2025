@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Leave 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "1J!"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorToL4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PivotToOuttake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RollerOuttake"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Pinnacles",
+  "choreoAuto": false
+}
