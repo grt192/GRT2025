@@ -13,7 +13,7 @@ public class ElevatorToAlgaeCommand extends Command {
 
     @Override
     public void initialize() {
-        elevatorSubsystem.setPositionReference(ElevatorConstants.Algae_POS);
+        elevatorSubsystem.setPositionReference(ElevatorConstants.L1_POS);
     }
 
     // @Override

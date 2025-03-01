@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 1.9843871729651164,
-        "y": 2.1612690770348832
+        "x": 2.2331609738372094,
+        "y": 2.1381199127906974
       },
       "prevControl": {
-        "x": 2.2446844819928966,
-        "y": 2.1223118287709952
+        "x": 2.4934582828649896,
+        "y": 2.0991626645268093
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "GroundAlg"
+      "linkedName": "groundAlg1"
     }
   ],
   "rotationTargets": [],

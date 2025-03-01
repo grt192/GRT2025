@@ -127,7 +127,7 @@ public class RobotContainer {
     constructDriverCameras();
     constructNetworkTableListeners();
 
-    NamedCommands.registerCommand("ElevatorToGround", nes ElevatorToGroundCommand(elevatorSubsystem));
+    NamedCommands.registerCommand("ElevatorToGround", new ElevatorToGroundCommand(elevatorSubsystem));
     NamedCommands.registerCommand("ElevatorToAlgae", new ElevatorToAlgaeCommand(elevatorSubsystem));
     NamedCommands.registerCommand("PivotToHorizontal", new PivotToHorizontalCommand(pivotSubsystem));
     NamedCommands.registerCommand("ElevatorToL4", new ElevatorToL4Command(elevatorSubsystem));
