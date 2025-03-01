@@ -15,24 +15,6 @@
           "data": {
             "pathName": "1J!"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ElevatorToL4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "PivotToOuttake"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "RollerOuttake"
-          }
         }
       ]
     }
