@@ -9,6 +9,7 @@ import frc.robot.controllers.PS5DriveController;
 import java.util.EnumSet;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.cscore.MjpegServer;
@@ -124,6 +125,9 @@ public class RobotContainer {
     constructDriverCameras();
     constructNetworkTableListeners();
 
+    NamedCommands.registerCommand("ElevatorToL4", new ElevatorToL4Command(elevatorSubsystem));
+    NamedCommands.registerCommand("RollerIntake", new RollerInTillSensorCommand(rollerSubsystem));
+    NamedCommands.registerCommand("PivotToOuttake", new PivotToOuttakeCommand(pivotSubsystem));
     autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
       (stream) -> isCompetition
       ? stream.filter(auto -> auto.getName().startsWith("Pine"))
