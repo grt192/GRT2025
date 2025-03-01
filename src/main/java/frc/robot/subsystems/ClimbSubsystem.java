@@ -67,7 +67,7 @@ public class ClimbSubsystem extends SubsystemBase {
    */
   public void stop() {
     // motor.setVelocityReference(0);
-    motor.setDutyCycle(CLIMB_SPEED);
+    motor.setDutyCycle(0);
   }
 
   /**
