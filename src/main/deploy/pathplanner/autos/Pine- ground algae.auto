@@ -29,27 +29,79 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "GroundAlgAlign"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "GroundAlgAlign"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RollerIntake"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "RollerIntake"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RollerIntake"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.0
+                }
+              }
+            ]
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "ElevatorToGround"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ElevatorToGround"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RollerIntake"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "GroundAlgPros!"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "GroundAlgPros!"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RollerIntake"
+                }
+              }
+            ]
           }
         },
         {
@@ -57,15 +109,15 @@
           "data": {
             "commands": [
               {
-                "type": "wait",
-                "data": {
-                  "waitTime": 5.0
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "RollerOuttake"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 6.0
                 }
               }
             ]
