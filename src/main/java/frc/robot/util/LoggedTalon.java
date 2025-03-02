@@ -101,7 +101,6 @@ public class LoggedTalon{
     public void setSpeed(double speed) {
         motor.set(speed);
     }
-
     /**
      * Sets the motor's position reference with voltage
      * @param position position reference
@@ -169,6 +168,7 @@ public class LoggedTalon{
             if (!error) break;
         }
     }
+
 
     public void setPower(double power) {
         motor.set(power);
@@ -365,8 +365,10 @@ public class LoggedTalon{
         temperaturePublisher.set(motor.getDeviceTemp().getValueAsDouble());
         targetPositionPublisher.set(targetPosition);
         targetVelocityPublisher.set(targetVelocity);
+
         targetDutyCyclePublisher.set(targetDutyCycle);
         targetTorqueCurrentFOCPublisher.set(targetTorqueCurrentFOC);
+
         closedLoopErrorPublisher.set(motor.getClosedLoopError().getValueAsDouble());
     }    
 
@@ -401,6 +403,7 @@ public class LoggedTalon{
         targetPositionLogEntry.append(targetPosition, GRTUtil.getFPGATime());
 
         targetVelocityLogEntry.append(targetVelocity, GRTUtil.getFPGATime());
+
 
         targetTorqueCurrentFOCLogEntry.append(
             targetTorqueCurrentFOC, GRTUtil.getFPGATime()

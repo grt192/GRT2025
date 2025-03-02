@@ -27,6 +27,25 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
 
+
+  public static class ClimbConstants{
+    public static int MOTOR_ID = 9;
+    
+    public static final double kP = 0.0;
+    public static final double kI = 0.0;
+    public static final double kD = 0.0;
+    public static final double kS = 10.;
+    public static final double kV = 0.0;
+
+    public static final double CLIMB_TOLLERANCE = 0.1;
+
+    public static final double CLIMB_CURRENT_LIMIT = 80.;
+
+    public static final double CLIMB_SPEED = 0.2;
+
+    public static final boolean CLIMB_DEBUG = false;
+  }
+
   public static class ElevatorConstants {
     
     public static final double dutyCycletoticks = 123.;
@@ -191,6 +210,11 @@ public final class Constants {
     public static final boolean MASTER_DEBUG = false;
     public static final boolean PIVOT_DEBUG = false;
     public static final boolean ROLLER_DEBUG = false;
+  }
+
+
+  public static class DebugConstants{
+    public static final boolean MASTER_DEBUG = true;
   }
 
 

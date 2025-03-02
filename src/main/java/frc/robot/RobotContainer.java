@@ -29,6 +29,16 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.ClimbSubsystem;
+import frc.robot.subsystems.Vision.VisionSubsystem;
+import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.Commands.Climb.StartClimbCommand;
+import frc.robot.Commands.Climb.StopClimbCommand;
+
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
@@ -50,6 +60,7 @@ import frc.robot.Commands.Intake.Roller.RollerInTillSensorCommand;
 import frc.robot.Commands.Intake.Roller.RollerOutCommand;
 import frc.robot.Commands.Intake.Roller.RollerStopCommand;
 import frc.robot.Constants.ElevatorConstants;
+
 import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.IntakeConstans.PivotConstants;
 import frc.robot.Constants.IntakeConstans.RollerConstants;
@@ -69,6 +80,11 @@ import frc.robot.Commands.Elevator.ElevatorToSourceCommand;
  */
 public class RobotContainer {
 
+
+  private Trigger climbTrigger;
+
+  private final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
+
   private final SendableChooser<Command> autoChooser;
   private boolean isCompetition = true;
 
@@ -83,6 +99,7 @@ public class RobotContainer {
   private final RollerSubsystem rollerSubsystem = new RollerSubsystem();
 
   private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
   // private final VisionSubsystem visionSubsystem1 = new VisionSubsystem(
@@ -119,8 +136,12 @@ public class RobotContainer {
   public RobotContainer() {
     constructDriveController(); 
     constructMechController();
+
+    bindClimb();
+
     bindElevator();
     bindIntake();
+
     // startLog();
     setVisionDataInterface();
     configureBindings();
@@ -187,8 +208,7 @@ public class RobotContainer {
   }
 
   /**
-   * Constructs the drive controller based on the name of the controller at port
-   * 0
+   * Constructs the drive controller at port 0
    */
   private void constructDriveController(){
     driveController = new PS5DriveController();
@@ -196,13 +216,20 @@ public class RobotContainer {
   }
 
   /**
-   * Constructs mech controller
+   * Constructs mech controller at port 1
    */
   private void constructMechController(){
     mechController = new CommandPS5Controller(1);
   }
 
   /**
+   * Binds climb commands to mech controller
+   */
+  private void bindClimb(){
+    climbTrigger = mechController.create().and(mechController.options());
+    climbTrigger.onTrue(new StartClimbCommand(climbSubsystem));
+    climbTrigger.onFalse(new StopClimbCommand(climbSubsystem));
+  /*
    * Binds elevator commands to mech controller
    */
   private void bindElevator(){
