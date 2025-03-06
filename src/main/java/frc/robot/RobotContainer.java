@@ -122,9 +122,9 @@ public class RobotContainer {
     bindElevator();
     bindIntake();
     // startLog();
-    setVisionDataInterface();
+    // setVisionDataInterface();
     configureBindings();
-    constructDriverCameras();
+    // constructDriverCameras();
     constructNetworkTableListeners();
 
     NamedCommands.registerCommand("ElevatorToGround", new ElevatorToGroundCommand(elevatorSubsystem));
@@ -225,7 +225,7 @@ public class RobotContainer {
         elevatorSubsystem
       ).handleInterrupt(() -> elevatorSubsystem.setPower(0))
     );
-    manualElevatorTrigger.toggleOnFalse(
+    manualElevatorTrigger.onFalse( //toggleonFalse
       new InstantCommand(
         () -> {
           elevatorSubsystem.setPower(0);
@@ -250,18 +250,27 @@ public class RobotContainer {
     //   )
     // );
     
-    // manualPivotTrigger = new Trigger(
-    //   () -> mechController.getLeftY() >= PivotConstants.CONTROLLER_DEADZONE
-    // );
+    manualPivotTrigger = new Trigger(
+      () -> Math.abs(mechController.getLeftY()) >= PivotConstants.CONTROLLER_DEADZONE
+    );
 
-    // manualPivotTrigger.onTrue(
-    //   new InstantCommand(
-    //     () -> {
-    //       pivotSubsystem.setDutyCycle(mechController.getLeftY());
-    //     },
-    //     pivotSubsystem
-    //   )
-    // );
+    manualPivotTrigger.onTrue(
+      new InstantCommand(
+        () -> {
+          pivotSubsystem.setDutyCycle(-mechController.getLeftY());
+        },
+        pivotSubsystem
+      )
+    );
+
+    manualPivotTrigger.onFalse(
+      new InstantCommand(
+        () -> {
+          pivotSubsystem.setDutyCycle(0);
+        },
+        pivotSubsystem
+      )
+    );
 
     mechController.povDown().onTrue(
       new PivotToOuttakeCommand(pivotSubsystem)
@@ -329,10 +338,10 @@ public class RobotContainer {
     rollerSubsystem.setDefaultCommand(new ConditionalCommand(
       new InstantCommand( () -> {
       //ps5 trigger's range is -1 to 1, with non-input position being -1. This maps the range -1 to 1 to 0 to 1.
-      rollerSubsystem.setRollerSpeed(.25 * (mechController.getR2Axis() + 1.) / 2.); 
+      rollerSubsystem.setRollerSpeed(.4 * (mechController.getR2Axis() + 1.) / 2.); 
       }, rollerSubsystem), 
       new InstantCommand( () -> {
-      rollerSubsystem.setRollerSpeed(.07 * (mechController.getR2Axis() - mechController.getL2Axis()));
+      rollerSubsystem.setRollerSpeed(.1 * (mechController.getR2Axis() - mechController.getL2Axis()));
       }, rollerSubsystem), 
       () -> rollerSubsystem.getIntakeSensor()));
     }
