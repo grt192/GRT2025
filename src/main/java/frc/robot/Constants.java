@@ -212,11 +212,6 @@ public final class Constants {
   }
 
 
-  public static class DebugConstants{
-    public static final boolean MASTER_DEBUG = true;
-  }
-
-
   public static class VisionConstants{
 
     public static final double FIELD_X = 17.5482504;

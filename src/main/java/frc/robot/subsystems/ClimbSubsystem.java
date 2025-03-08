@@ -77,4 +77,8 @@ public class ClimbSubsystem extends SubsystemBase {
   public double getClosedLoopError(){
     return motor.getClosedLoopError();
   }
+
+  public void setTorqueCurrentFOC(double current) {
+    motor.setTorqueCurrentFOC(current);
+  }
 }

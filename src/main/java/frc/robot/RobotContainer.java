@@ -226,9 +226,12 @@ public class RobotContainer {
    * Binds climb commands to mech controller
    */
   private void bindClimb(){
-    climbTrigger = mechController.create().and(mechController.options());
-    climbTrigger.onTrue(new StartClimbCommand(climbSubsystem));
-    climbTrigger.onFalse(new StopClimbCommand(climbSubsystem));
+    climbSubsystem.setDefaultCommand(
+      new InstantCommand( () -> {
+        climbSubsystem.setTorqueCurrentFOC(mechController.getLeftY() * 80.);
+      }, climbSubsystem)
+    );
+  }
   /*
    * Binds elevator commands to mech controller
    */
