@@ -10,29 +10,27 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.AlignSubsystem;
 import frc.robot.subsystems.FieldManagementSubsystem.FieldManagementSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.util.AlignUtil;
 import frc.robot.Constants.IntakeConstants.ReefAlignConstants;
-import frc.robot.subsystems.AlignSubsystem;
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.Constants.IntakeConstants.AligningConstants;
 
 public class LRReefAlignCommand extends Command{
     static SwerveSubsystem swerveSubsystem;
     static FieldManagementSubsystem fmsSubsystem;
-    static AlignSubsystem alignSubsystem;
+    static AlignUtil alignSubsystem;
     static List<Pose2d> currentRightPoseList;
     static List<Pose2d> currentLeftPoseList;
     Boolean isRight;
     static PathPlannerPath getAlignPath;
     private static String followPath;
     
-    public LRReefAlignCommand(SwerveSubsystem swerveSubsystem, FieldManagementSubsystem fmsSubsystem, AlignSubsystem alignSubsystem, Boolean isRight) {
-        this.addRequirements(swerveSubsystem); 
+    public LRReefAlignCommand(SwerveSubsystem swerveSubsystem, FieldManagementSubsystem fmsSubsystem, Boolean isRight) {
         this.swerveSubsystem = swerveSubsystem;
         this.fmsSubsystem = fmsSubsystem;
-        this.alignSubsystem = alignSubsystem;
+        alignSubsystem = new AlignUtil(swerveSubsystem, swerveSubsystem.getRobotPosition());
         this.isRight = isRight;
     }
 

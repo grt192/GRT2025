@@ -80,10 +80,6 @@ public class PS5DriveController extends BaseDriveController{
         this.deadZone = deadZone;
     }
 
-    @Override
-    public Trigger getAlignToReef() {
-        return cross;
-    }
 
     @Override
     public Trigger getAlignToSource() {

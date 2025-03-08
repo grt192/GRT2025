@@ -94,11 +94,6 @@ public class XboxDriveController extends BaseDriveController {
     }
 
     @Override
-    public Trigger getAlignToReef() {
-        return (Trigger) xButton;
-    }
-
-    @Override
     public Trigger getAlignToSource() {
         return (Trigger) aButton;
     }

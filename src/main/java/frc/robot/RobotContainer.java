@@ -7,7 +7,6 @@ package frc.robot;
 // import frc.robot.commands.pivot.SetPivotVerticalCommand;
 // import frc.robot.commands.pivot.SetPivotZeroCommand;
 import frc.robot.controllers.BaseDriveController;
-import frc.robot.controllers.DualJoystickDriveController;
 import frc.robot.controllers.PS5DriveController;
 import frc.robot.controllers.XboxDriveController;
 
@@ -31,12 +30,12 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.subsystems.AlignSubsystem;
 import frc.robot.subsystems.FieldManagementSubsystem.FieldManagementSubsystem;
 import frc.robot.subsystems.Vision.VisionSubsystem;
 import frc.robot.subsystems.intake.pivot.PivotSubsystem;
 import frc.robot.subsystems.intake.rollers.RollerSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.util.AlignUtil;
 import frc.robot.commands.intake.SetRollersOuttakeCommand;
 import frc.robot.commands.pivot.SetPivotOuttakeCommand;
 import frc.robot.commands.pivot.SetPivotVerticalCommand;
@@ -58,8 +57,8 @@ public class RobotContainer {
   private boolean isCompetition = true;
 
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
-  private final PivotSubsystem pivotSubsystem = new PivotSubsystem();
-  private final RollerSubsystem rollerSubsystem = new RollerSubsystem();
+  // private final PivotSubsystem pivotSubsystem = new PivotSubsystem();
+  // private final RollerSubsystem rollerSubsystem = new RollerSubsystem();
   private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(
     VisionConstants.cameraConfigs[1]
   );
@@ -69,10 +68,9 @@ public class RobotContainer {
   private final VisionSubsystem visionSubsystem4 = new VisionSubsystem(
     VisionConstants.cameraConfigs[3]
   );
-  private final AlignSubsystem alignSubsystem = new AlignSubsystem();
 
   private CommandPS5Controller mechController;
-  private Trigger aButton, lTrigger, rTrigger, lBumper, rBumper, sourceBumpers;
+  private Trigger aButton, lTrigger, rTrigger, lBumper, rBumper, driveLBumper, driveRBumper;
 
   private final FieldManagementSubsystem fmsSubsystem = new FieldManagementSubsystem();
 
@@ -87,16 +85,19 @@ public class RobotContainer {
     lBumper = new Trigger(mechController.L1());
     rBumper = new Trigger(mechController.R1());
 
-    bindSourceAlign();
+    driveLBumper = new Trigger(() -> driveController.getLeftBumper());
+    driveRBumper = new Trigger(() -> driveController.getRightBumper());
+   
+
 
     constructDriveController(); 
     // startLog();
     setVisionDataInterface();
     configureBindings();
     
-    NamedCommands.registerCommand("PivotToOuttake", new SetPivotOuttakeCommand(pivotSubsystem));
-    NamedCommands.registerCommand("PivotToVertical", new SetPivotVerticalCommand(pivotSubsystem));
-    NamedCommands.registerCommand("RollerOuttake", new SetRollersOuttakeCommand(rollerSubsystem));
+    // NamedCommands.registerCommand("PivotToOuttake", new SetPivotOuttakeCommand(pivotSubsystem));
+    // NamedCommands.registerCommand("PivotToVertical", new SetPivotVerticalCommand(pivotSubsystem));
+    // NamedCommands.registerCommand("RollerOuttake", new SetRollersOuttakeCommand(rollerSubsystem));
     autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
       (stream) -> isCompetition
         ? stream.filter(auto -> auto.getName().startsWith("Test"))
@@ -142,15 +143,24 @@ public class RobotContainer {
     );
 
     //cross
-    driveController.getAlignToReef().onTrue(
-      new LRReefAlignCommand(swerveSubsystem, fmsSubsystem, alignSubsystem, false)
-      .onlyWhile(() -> driveController.getForwardPower() <= 0.05 && driveController.getLeftPower() <= 0.05));
+    // driveController.getAlignToReef().onTrue(
+    //   new LRReefAlignCommand(swerveSubsystem, fmsSubsystem, alignSubsystem, false)
+    //   .onlyWhile(() -> driveController.getForwardPower() <= 0.05 && driveController.getLeftPower() <= 0.05));
 
     // square
     // // visionSubsystem.setInterface(swerveSubsystem::addVisionMeasurements);
-    driveController.getAlignToSource().onTrue(
-      new SourceAlignCommand(swerveSubsystem, fmsSubsystem, alignSubsystem).onlyWhile(() -> driveController.getForwardPower() 
+    driveLBumper.onTrue(
+      new LRReefAlignCommand(swerveSubsystem, fmsSubsystem, false).onlyWhile(() -> driveController.getForwardPower() 
       <= 0.05 && driveController.getLeftPower() <= 0.05));
+    
+    driveRBumper.onTrue(
+      new LRReefAlignCommand(swerveSubsystem, fmsSubsystem, true).onlyWhile(() -> driveController.getForwardPower() 
+      <= 0.05 && driveController.getLeftPower() <= 0.05));
+    
+    
+    driveLBumper.and(driveRBumper).onTrue(
+        new SourceAlignCommand(swerveSubsystem, fmsSubsystem)
+        .onlyWhile(() -> driveController.getForwardPower() <= 0.05 && driveController.getLeftPower() <= 0.05));
     
     
     // source align after configure bindings
@@ -220,18 +230,9 @@ public class RobotContainer {
     else if(DriverStation.getJoystickName(0).equals("DualSense Wireless Controller")){
         driveController = new PS5DriveController();
     }
-    else{
-        driveController = new DualJoystickDriveController();
-    }
     driveController.setDeadZone(0.05);
   }
 
-  private void bindSourceAlign(){
-    sourceBumpers = driveController.getL1().and(driveController.getR1());
-    sourceBumpers.whileTrue(
-      new SourceAlignCommand(swerveSubsystem, fmsSubsystem, alignSubsystem)
-      .onlyWhile(() -> driveController.getForwardPower() <= 0.05 && driveController.getLeftPower() <= 0.05));
-  }
 
   /**
    * Starts datalog at /u/logs

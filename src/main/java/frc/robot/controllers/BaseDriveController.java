@@ -65,10 +65,6 @@ public abstract class BaseDriveController {
 
     public abstract void setDeadZone(double deadZone);
 
-    public abstract Trigger getAlignToReef();
-
     public abstract Trigger getAlignToSource();
 
-    public abstract Trigger getL1();
-    public abstract Trigger getL2();    
 }

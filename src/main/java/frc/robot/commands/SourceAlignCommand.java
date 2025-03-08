@@ -12,23 +12,22 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.FieldManagementSubsystem.FieldManagementSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
-import frc.robot.subsystems.AlignSubsystem;
+import frc.robot.util.AlignUtil;
 import frc.robot.Constants.IntakeConstants.SourceAlignConstants;
 
 public class SourceAlignCommand extends Command {
     private final SwerveSubsystem swerveSubsystem;
     private final FieldManagementSubsystem fmsSubsystem;
-    private final AlignSubsystem alignSubsystem;
+    private final AlignUtil alignSubsystem;
     static String followPath;
     static List<Pose2d> currentPoseList;
     static Pose2d currentPose;
     
 
-    public SourceAlignCommand(SwerveSubsystem swerveSubsystem, FieldManagementSubsystem fmsSubsystem, AlignSubsystem alignSubsystem){
-        this.addRequirements(swerveSubsystem); 
+    public SourceAlignCommand(SwerveSubsystem swerveSubsystem, FieldManagementSubsystem fmsSubsystem){
         this.swerveSubsystem = swerveSubsystem;
         this.fmsSubsystem = fmsSubsystem;
-        this.alignSubsystem = alignSubsystem;
+        this.alignSubsystem = new AlignUtil(swerveSubsystem, swerveSubsystem.getRobotPosition());
 
     }
 
