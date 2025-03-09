@@ -11,13 +11,17 @@ import com.pathplanner.lib.path.Waypoint;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.Constants.IntakeConstants.AligningConstants;
+import frc.robot.Constants.IntakeConstants.ReefAlignConstants;
+import frc.robot.commands.swerve.DriveBackwardsCommand;
 
 public class AlignUtil {
 
@@ -46,39 +50,53 @@ public class AlignUtil {
      * @param pathName name of the path
      */
 
-    public Command runAlignPath (String pathName) {
-        Translation2d currentTrans = currentPosition.getTranslation();
+    public Command runAlignPath (String pathName, Pose2d currentPos) {
+        Translation2d currentTrans = currentPos.getTranslation();
         Translation2d pathStartTrans = getAlignPath(pathName).getStartingHolonomicPose().get().getTranslation();
 
-        // if (currentTrans.getDistance(pathStartTrans) > AligningConstants.distanceTolerance) {
-        //     PathPlannerPath path = getAlignPath(pathName);
-        //     if (path == null) {
-        //         return Commands.none();
-        //     }
-        //     //System.out.print(pathName);
-        //     runAlignPath = AutoBuilder.pathfindThenFollowPath(
-        //         path,
-        //         constraints
-        //     );
-        //    System.out.println("kjk");
+        if (currentTrans.getDistance(pathStartTrans) < AligningConstants.distanceTolerance) {
+            int index = ReefAlignConstants.reefPathList.indexOf(pathName) / 2;
+            ChassisSpeeds drivePower = ReefAlignConstants.reefdirectionList.get(index);
+
+            PathPlannerPath path = getAlignPath(pathName);
+            if (path == null) {
+                return Commands.none();
+            }
+
+            Command alignPath = AutoBuilder.pathfindThenFollowPath(
+                path,
+                constraints);
+            alignPath.addRequirements(swerveSubsystem);
+            runAlignPath = (Command) new SequentialCommandGroup(
+                new DriveBackwardsCommand(swerveSubsystem, drivePower).withTimeout(.25),
+                alignPath
+            );
+        }
+        else {
+            PathPlannerPath path = getAlignPath(pathName);
+            if (path == null) {
+                return Commands.none();
+            }
+            runAlignPath = AutoBuilder.pathfindThenFollowPath(
+                path,
+                constraints);
+        }
+
+        // int index = ReefAlignConstants.reefPathList.indexOf(pathName) / 2;
+        // ChassisSpeeds drivePower = ReefAlignConstants.reefdirectionList.get(index);
+
+        // PathPlannerPath path = getAlignPath(pathName);
+        // if (path == null) {
+        //     return Commands.none();
         // }
-        // else {
-
-        //     // PathPlannerPath path = getAlignPath(pathName);
-        //     // System.out.println("meow");
-        //     // List<Waypoint> pathWaypoints = path.getWaypoints();
-        //     // GoalEndState goalEndState = path.getGoalEndState();
-        //     // PathPlannerPath onTheFlyPath = getAlignPath(pathWaypoints, goalEndState);
-
-        //     // runAlignPath = AutoBuilder.followPath(onTheFlyPath);
-
-        // }
-
-        PathPlannerPath path = getAlignPath(pathName);
-        Pose2d goalPose = path.getPathPoses().get(path.getPathPoses().size()-1);
-    
-        runAlignPath = AutoBuilder.pathfindToPose(goalPose, constraints);
-
+        // Command alignPath = AutoBuilder.pathfindThenFollowPath(
+        //     path,
+        //     constraints);
+        // alignPath.addRequirements(swerveSubsystem);
+        // runAlignPath = (Command) new SequentialCommandGroup(
+        //     new DriveBackwardsCommand(swerveSubsystem, drivePower).withTimeout(.25),
+        //     alignPath
+        // );
 
         return runAlignPath; 
 

@@ -22,6 +22,7 @@ import com.revrobotics.spark.config.MAXMotionConfig;
 import com.revrobotics.spark.config.SoftLimitConfig;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 import java.util.List;
 
@@ -275,12 +276,12 @@ public final class Constants {
 
 
     public final static List<Pose2d> blueLeftReefPoseList = List.of(
-        AlignUtil.getAlignPath(A_alignName).getStartingHolonomicPose().get(),
-        AlignUtil.getAlignPath(C_alignName).getStartingHolonomicPose().get(),
-        AlignUtil.getAlignPath(E_alignName).getStartingHolonomicPose().get(),
-        AlignUtil.getAlignPath(G_alignName).getStartingHolonomicPose().get(),
-        AlignUtil.getAlignPath(I_alignName).getStartingHolonomicPose().get(),
-        AlignUtil.getAlignPath(K_alignName).getStartingHolonomicPose().get()
+      AlignUtil.getAlignPath(A_alignName).getStartingHolonomicPose().get(),
+      AlignUtil.getAlignPath(C_alignName).getStartingHolonomicPose().get(),
+      AlignUtil.getAlignPath(E_alignName).getStartingHolonomicPose().get(),
+      AlignUtil.getAlignPath(G_alignName).getStartingHolonomicPose().get(),
+      AlignUtil.getAlignPath(I_alignName).getStartingHolonomicPose().get(),
+      AlignUtil.getAlignPath(K_alignName).getStartingHolonomicPose().get()
     );
     
     public final static List<Pose2d> blueRightReefPoseList = List.of(
@@ -340,6 +341,15 @@ public final class Constants {
         J_alignName,
         K_alignName,
         L_alignName
+    );
+
+    public final static List<ChassisSpeeds> reefdirectionList = List.of(
+      new ChassisSpeeds(-.5, 0, 0),
+      new ChassisSpeeds(-.25, -.25, 0),
+      new ChassisSpeeds(.25, -.25, 0),
+      new ChassisSpeeds(.5, 0, 0),
+      new ChassisSpeeds(.25, .25, 0),
+      new ChassisSpeeds(-.25, .25, 0)
     );
   }
 

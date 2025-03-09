@@ -56,12 +56,14 @@ public class LRReefAlignCommand extends Command{
             followPath = ReefAlignConstants.reefPathList.get(2 * index);
         }
         System.out.println("InITing");
-        alignSubsystem.runAlignPath(followPath).schedule();
+        alignSubsystem.runAlignPath(followPath, swerveSubsystem.getRobotPosition()).schedule();
     }
 
     @Override
     public void end(boolean interrupted) {
-        swerveSubsystem.getCurrentCommand().cancel();
+        if (swerveSubsystem.getCurrentCommand() != null) {
+            swerveSubsystem.getCurrentCommand().cancel();
+        }
     }
 
 }

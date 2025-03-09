@@ -77,6 +77,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    constructDriveController(); 
     mechController = new CommandPS5Controller(1);
     aButton = new Trigger(mechController.cross());
     lTrigger = new Trigger(mechController.L2());
@@ -88,9 +89,6 @@ public class RobotContainer {
     driveLBumper = new Trigger(() -> driveController.getLeftBumper());
     driveRBumper = new Trigger(() -> driveController.getRightBumper());
    
-
-
-    constructDriveController(); 
     // startLog();
     setVisionDataInterface();
     configureBindings();
@@ -224,12 +222,13 @@ public class RobotContainer {
    */
   private void constructDriveController(){
     DriverStation.refreshData();
-    if(DriverStation.getJoystickName(0).equals("Controller (Xbox One For Windows)")) {
-        driveController = new XboxDriveController();
-    }
-    else if(DriverStation.getJoystickName(0).equals("DualSense Wireless Controller")){
-        driveController = new PS5DriveController();
-    }
+    // if(DriverStation.getJoystickName(0).equals("Controller (Xbox One For Windows)")) {
+    //     driveController = new XboxDriveController();
+    // }
+    // else if(DriverStation.getJoystickName(0).equals("DualSense Wireless Controller")){
+    //     driveController = new PS5DriveController();
+    // }
+    driveController = new PS5DriveController();
     driveController.setDeadZone(0.05);
   }
 
