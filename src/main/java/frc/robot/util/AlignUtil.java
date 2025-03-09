@@ -2,6 +2,8 @@ package frc.robot.util;
 
 import java.util.List;
 
+import javax.print.attribute.standard.PresentationDirection;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
@@ -51,36 +53,52 @@ public class AlignUtil {
      */
 
     public Command runAlignPath (String pathName, Pose2d currentPos) {
-        Translation2d currentTrans = currentPos.getTranslation();
+        Translation2d currentTrans = swerveSubsystem.getRobotPosition().getTranslation();
         Translation2d pathStartTrans = getAlignPath(pathName).getStartingHolonomicPose().get().getTranslation();
 
-        if (currentTrans.getDistance(pathStartTrans) < AligningConstants.distanceTolerance) {
+        if (currentTrans.getDistance(pathStartTrans) <= AligningConstants.distanceTolerance) {
             int index = ReefAlignConstants.reefPathList.indexOf(pathName) / 2;
             ChassisSpeeds drivePower = ReefAlignConstants.reefdirectionList.get(index);
 
             PathPlannerPath path = getAlignPath(pathName);
             if (path == null) {
+                System.out.println("NOOO00000000000000O");
                 return Commands.none();
-            }
 
+            }
             Command alignPath = AutoBuilder.pathfindThenFollowPath(
                 path,
                 constraints);
+
+            System.out.println("XXXXXXXXXXXXXXXXXX");
             alignPath.addRequirements(swerveSubsystem);
+
+            // runAlignPath = (Command) new SequentialCommandGroup(
+            //     new DriveBackwardsCommand(swerveSubsystem, drivePower).withTimeout(.25),
+            //     alignPath
+            // );
+
             runAlignPath = (Command) new SequentialCommandGroup(
-                new DriveBackwardsCommand(swerveSubsystem, drivePower).withTimeout(.25),
-                alignPath
+                new DriveBackwardsCommand(swerveSubsystem, drivePower).until(
+                    () -> swerveSubsystem.getRobotPosition().getTranslation()
+                    .getDistance(pathStartTrans) > AligningConstants.distanceTolerance),
+                    alignPath
             );
+            
         }
         else {
             PathPlannerPath path = getAlignPath(pathName);
             if (path == null) {
+                System.out.println("NOOOOOOOOPOOOOOOO");
                 return Commands.none();
             }
+
+            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAA");
             runAlignPath = AutoBuilder.pathfindThenFollowPath(
                 path,
                 constraints);
         }
+
 
         // int index = ReefAlignConstants.reefPathList.indexOf(pathName) / 2;
         // ChassisSpeeds drivePower = ReefAlignConstants.reefdirectionList.get(index);
@@ -97,6 +115,25 @@ public class AlignUtil {
         //     new DriveBackwardsCommand(swerveSubsystem, drivePower).withTimeout(.25),
         //     alignPath
         // );
+
+        //TESTING PATHFIND TO PATH VS ON THE FLY PATH 
+        //ADD BOOLEAN onFLY 
+        // if (onFly) {
+        //     PathPlannerPath unusedPath = getAlignPath(pathName);
+        //     PathPlannerPath path = getAlignPath(
+        //         unusedPath.getWaypoints(), 
+        //         unusedPath.getGoalEndState()
+        //     );
+
+        //     runAlignPath = AutoBuilder.followPath(path);
+        // }
+        // else {
+        //     PathPlannerPath path = getAlignPath(pathName);
+        //     runAlignPath = AutoBuilder.pathfindThenFollowPath(
+        //         path,
+        //         constraints
+        //     );
+        // }
 
         return runAlignPath; 
 
@@ -127,4 +164,6 @@ public class AlignUtil {
         );
         return getAlignPath;
     }
+
+
 }

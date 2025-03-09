@@ -355,7 +355,7 @@ public final class Constants {
 
   public static class AligningConstants {
     // distance to use path on the fly instead of pathfinding (distance from starting position/node)
-    public static double distanceTolerance = 1; 
+    public static double distanceTolerance = .3 * Math.sqrt(2); 
   }
 }
 }
