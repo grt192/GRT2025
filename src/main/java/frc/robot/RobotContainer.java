@@ -32,23 +32,23 @@ import frc.robot.Constants.VisionConstants;
  */
 public class RobotContainer {
 
-  private BaseDriveController driveController;
+  // private BaseDriveController driveController;
 
-  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
-  private final VisionSubsystem visionSubsystem1 = new VisionSubsystem(
-    VisionConstants.cameraConfigs[0]
-  );
-  private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(
-    VisionConstants.cameraConfigs[1]
-  );
+  // private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  // private final VisionSubsystem visionSubsystem1 = new VisionSubsystem(
+  //   VisionConstants.cameraConfigs[0]
+  // );
+  // private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(
+  //   VisionConstants.cameraConfigs[1]
+  // );
   private final BatteryLEDSubsystem batteryLEDSubsystem = new BatteryLEDSubsystem(5,5);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    constructDriveController(); 
-    startLog();
-    setVisionDataInterface();
-    configureBindings();
+    // constructDriveController(); 
+    // startLog();
+    // setVisionDataInterface();
+    // configureBindings();
     scheduleBatteryLEDUpdate();
   }
 
@@ -61,31 +61,31 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-  private void configureBindings() {
-      /* Driving -- One joystick controls translation, the other rotation. If the robot-relative button is held down,
-      * the robot is controlled along its own axes, otherwise controls apply to the field axes by default. If the
-      * swerve aim button is held down, the robot will rotate automatically to always face a target, and only
-      * translation will be manually controllable. */
-    swerveSubsystem.setDefaultCommand(
-      new RunCommand(() -> {
-        swerveSubsystem.setDrivePowers(
-          driveController.getForwardPower(),
-          driveController.getLeftPower(),
-          driveController.getRotatePower()
-        );
-        }, 
-        swerveSubsystem
-      )
-    );
+  // private void configureBindings() {
+  //     /* Driving -- One joystick controls translation, the other rotation. If the robot-relative button is held down,
+  //     * the robot is controlled along its own axes, otherwise controls apply to the field axes by default. If the
+  //     * swerve aim button is held down, the robot will rotate automatically to always face a target, and only
+  //     * translation will be manually controllable. */
+  //   swerveSubsystem.setDefaultCommand(
+  //     new RunCommand(() -> {
+  //       swerveSubsystem.setDrivePowers(
+  //         driveController.getForwardPower(),
+  //         driveController.getLeftPower(),
+  //         driveController.getRotatePower()
+  //       );
+  //       }, 
+  //       swerveSubsystem
+  //     )
+  //   );
 
-    /* Pressing the button resets the field axes to the current robot axes. */
-    driveController.bindDriverHeadingReset(
-      () ->{
-        swerveSubsystem.resetDriverHeading();
-      },
-      swerveSubsystem
-    );
-  }
+  //   /* Pressing the button resets the field axes to the current robot axes. */
+  //   driveController.bindDriverHeadingReset(
+  //     () ->{
+  //       swerveSubsystem.resetDriverHeading();
+  //     },
+  //     swerveSubsystem
+  //   );
+  // }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -96,23 +96,23 @@ public class RobotContainer {
     return new PathPlannerAuto("Three Meters");
   }
 
-  /**
-   * Constructs the drive controller based on the name of the controller at port
-   * 0
-   */
-  private void constructDriveController(){
-    DriverStation.refreshData();
-    if(DriverStation.getJoystickName(0).equals("Controller (Xbox One For Windows)")) {
-        driveController = new XboxDriveController();
-    }
-    else if(DriverStation.getJoystickName(0).equals("DualSense Wireless Controller")){
-        driveController = new PS5DriveController();
-    }
-    else{
-        driveController = new DualJoystickDriveController();
-    }
-    driveController.setDeadZone(0.05);
-  }
+  // /**
+  //  * Constructs the drive controller based on the name of the controller at port
+  //  * 0
+  //  */
+  // private void constructDriveController(){
+  //   DriverStation.refreshData();
+  //   if(DriverStation.getJoystickName(0).equals("Controller (Xbox One For Windows)")) {
+  //       driveController = new XboxDriveController();
+  //   }
+  //   else if(DriverStation.getJoystickName(0).equals("DualSense Wireless Controller")){
+  //       driveController = new PS5DriveController();
+  //   }
+  //   else{
+  //       driveController = new DualJoystickDriveController();
+  //   }
+  //   driveController.setDeadZone(0.05);
+  // }
 
   /**
    * Starts datalog at /u/logs
@@ -122,13 +122,13 @@ public class RobotContainer {
     DriverStation.startDataLog(DataLogManager.getLog());
   }
 
-  /**
-   * Links vision and swerve
-   */
-  private void setVisionDataInterface(){
-    visionSubsystem1.setInterface(swerveSubsystem::addVisionMeasurements);
-    visionSubsystem2.setInterface(swerveSubsystem::addVisionMeasurements);
-  }
+  // /**
+  //  * Links vision and swerve
+  //  */
+  // private void setVisionDataInterface(){
+  //   visionSubsystem1.setInterface(swerveSubsystem::addVisionMeasurements);
+  //   visionSubsystem2.setInterface(swerveSubsystem::addVisionMeasurements);
+  // }
 
   /**
    * Schedules the battery LED update command
