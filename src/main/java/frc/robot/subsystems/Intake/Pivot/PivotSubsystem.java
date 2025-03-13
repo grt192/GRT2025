@@ -7,6 +7,8 @@ import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
@@ -21,6 +23,7 @@ public class PivotSubsystem extends SubsystemBase{
     
     private LoggedTalon pivotMotor;
     private double arbFF;
+    private final CANcoder pivotEncoder = new CANcoder(0);
 
     DigitalInput limitSwitch = new DigitalInput(PivotConstants.LimitSwitchID);
 
@@ -32,32 +35,33 @@ public class PivotSubsystem extends SubsystemBase{
 
 
     private TalonFXConfiguration pivotConfig = new TalonFXConfiguration()
-        .withSlot0(
-            new Slot0Configs()
-                .withKP(PivotConstants.PIVOT_KP)
-                .withKI(PivotConstants.PIVOT_KI)
-                .withKD(PivotConstants.PIVOT_KD)
-        )
-        .withClosedLoopRamps(
-            new ClosedLoopRampsConfigs()
-                .withTorqueClosedLoopRampPeriod(PivotConstants.PIVOT_RAMP_RATE)    
-        )
-        .withCurrentLimits(
-            new CurrentLimitsConfigs()
-                .withStatorCurrentLimit(PivotConstants.PIVOT_CURRENT_LIMIT)
-        )
-        .withFeedback(
-            new FeedbackConfigs()
-                // .withRotorToSensorRatio(PivotConstants.ROTOR_TO_SENSOR_RATIO)
-                .withSensorToMechanismRatio(PivotConstants.ROTOR_TO_SENSOR_RATIO)
-        )
-        .withSoftwareLimitSwitch(
-            new SoftwareLimitSwitchConfigs()
-                .withForwardSoftLimitEnable(false)
-                .withForwardSoftLimitThreshold(PivotConstants.PIVOT_MAX_POS)
-                .withReverseSoftLimitEnable(false)
-                .withReverseSoftLimitThreshold(PivotConstants.PIVOT_MIN_POS)
-        );
+      .withSlot0(
+          new Slot0Configs()
+              .withKP(PivotConstants.PIVOT_KP)
+              .withKI(PivotConstants.PIVOT_KI)
+              .withKD(PivotConstants.PIVOT_KD)
+      )
+      .withClosedLoopRamps(
+          new ClosedLoopRampsConfigs()
+              .withTorqueClosedLoopRampPeriod(PivotConstants.PIVOT_RAMP_RATE)
+      )
+      .withCurrentLimits(
+          new CurrentLimitsConfigs()
+              .withStatorCurrentLimit(PivotConstants.PIVOT_CURRENT_LIMIT)
+      )
+      .withFeedback(
+          new FeedbackConfigs()
+              .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANcoder)
+              .withFeedbackRemoteSensorID(pivotEncoder.getDeviceID()) 
+              .withSensorToMechanismRatio(PivotConstants.ROTOR_TO_SENSOR_RATIO)
+      )
+      .withSoftwareLimitSwitch(
+          new SoftwareLimitSwitchConfigs()
+              .withForwardSoftLimitEnable(false) 
+              .withForwardSoftLimitThreshold(PivotConstants.PIVOT_MAX_POS)
+              .withReverseSoftLimitEnable(false) 
+              .withReverseSoftLimitThreshold(PivotConstants.PIVOT_MIN_POS)
+      );
 
 
     public PivotSubsystem(){
@@ -72,6 +76,7 @@ public class PivotSubsystem extends SubsystemBase{
         pivotMotor.logStats();
         if(DebugConstants.MASTER_DEBUG || DebugConstants.PIVOT_DEBUG){
             pivotMotor.publishStats();
+            System.out.println("CANcoder Absolute Position: " + getPosition());
         }
         // System.out.println(Units.radiansToDegrees(pivotMotor.getPosition()));
     }
@@ -109,7 +114,7 @@ public class PivotSubsystem extends SubsystemBase{
     public double getPosition() {
         return pivotMotor.getPosition();
     }
-
+    
     public boolean getLimitSwitch(){
         return limitSwitch.get();
     }
@@ -131,7 +136,6 @@ public class PivotSubsystem extends SubsystemBase{
     }
 
     public void setEncoderZero(){
-        pivotMotor.resetEncoder();
+        pivotMotor.setPosition(0);
     }
-
 }
