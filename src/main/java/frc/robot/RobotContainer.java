@@ -61,6 +61,10 @@ import frc.robot.Commands.Elevator.ElevatorToL3Command;
 import frc.robot.Commands.Elevator.ElevatorToL4Command;
 import frc.robot.Commands.Elevator.ElevatorToLimitSwitchCommand;
 import frc.robot.Commands.Elevator.ElevatorToSourceCommand;
+import frc.robot.Commands.Climb.StartClimbCommand;
+import frc.robot.Commands.Climb.StopClimbCommand;
+import frc.robot.subsystems.Climb.ClimbSubsystem;
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -78,12 +82,16 @@ public class RobotContainer {
   private Trigger manualPivotTrigger;
   private Trigger manualRollerInTrigger;
   private Trigger manualRollerOutTrigger;
+  private Trigger climbTrigger;
   
   private final PivotSubsystem pivotSubsystem = new PivotSubsystem();
   private final RollerSubsystem rollerSubsystem = new RollerSubsystem();
 
   private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+
+  private final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
+
 
   // private final VisionSubsystem visionSubsystem1 = new VisionSubsystem(
   //   VisionConstants.cameraConfigs[0]
@@ -119,8 +127,11 @@ public class RobotContainer {
   public RobotContainer() {
     constructDriveController(); 
     constructMechController();
+
     bindElevator();
     bindIntake();
+    bindClimb();
+
     // startLog();
     // setVisionDataInterface();
     configureBindings();
@@ -200,6 +211,17 @@ public class RobotContainer {
    */
   private void constructMechController(){
     mechController = new CommandPS5Controller(1);
+  }
+
+  /**
+   * Binds climb commands to mech controller
+   */
+  private void bindClimb(){
+    climbSubsystem.setDefaultCommand(
+      new InstantCommand( () -> {
+        climbSubsystem.setTorqueCurrentFOC(mechController.getLeftY() * 80.);
+      }, climbSubsystem)
+    );
   }
 
   /**
