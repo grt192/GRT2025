@@ -4,15 +4,57 @@
 
 package frc.robot;
 
+// frc imports
 import frc.robot.controllers.PS5DriveController;
 
-import java.util.EnumSet;
-import java.util.jar.Attributes.Name;
+// Subsystems
+import frc.robot.subsystems.Elevator.ElevatorSubsystem;
+import frc.robot.subsystems.FieldManagementSubsystem.FieldManagementSubsystem;
+import frc.robot.subsystems.Intake.Pivot.PivotSubsystem;
+import frc.robot.subsystems.Intake.Roller.RollerSubsystem;
+import frc.robot.subsystems.Vision.VisionSubsystem;
+import frc.robot.subsystems.swerve.SwerveSubsystem;
+import frc.robot.subsystems.Climb.ClimbSubsystem;
 
+// Commands - Intake Pivot
+import frc.robot.Commands.Intake.Pivot.PivotToHorizontalCommand;
+import frc.robot.Commands.Intake.Pivot.PivotToOuttakeCommand;
+import frc.robot.Commands.Intake.Pivot.PivotToSourceCommand;
+import frc.robot.Commands.Intake.Pivot.PivotUp90Command;
+import frc.robot.Commands.Intake.Pivot.PivotZeroTo90Command;
+
+// Commands - Intake Roller
+import frc.robot.Commands.Intake.Roller.RollerInCommand;
+import frc.robot.Commands.Intake.Roller.RollerInTillSensorCommand;
+import frc.robot.Commands.Intake.Roller.RollerOutCommand;
+import frc.robot.Commands.Intake.Roller.RollerStopCommand;
+
+// Commands - Elevator
+import frc.robot.Commands.Elevator.ElevatorToAlgaeCommand;
+import frc.robot.Commands.Elevator.ElevatorToGroundCommand;
+import frc.robot.Commands.Elevator.ElevatorToL1Command;
+import frc.robot.Commands.Elevator.ElevatorToL2Command;
+import frc.robot.Commands.Elevator.ElevatorToL3Command;
+import frc.robot.Commands.Elevator.ElevatorToL4Command;
+import frc.robot.Commands.Elevator.ElevatorToLimitSwitchCommand;
+import frc.robot.Commands.Elevator.ElevatorToSourceCommand;
+
+// Commands - Climb
+import frc.robot.Commands.Climb.StartClimbCommand;
+import frc.robot.Commands.Climb.StopClimbCommand;
+
+// Constants
+import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.VisionConstants;
+import frc.robot.Constants.IntakeConstans.PivotConstants;
+import frc.robot.Constants.IntakeConstans.RollerConstants;
+
+// PathPlanner
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+// WPILib imports
 import edu.wpi.first.cscore.MjpegServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.networktables.NetworkTable;
@@ -34,36 +76,10 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.subsystems.Elevator.ElevatorSubsystem;
-import frc.robot.subsystems.FieldManagementSubsystem.FieldManagementSubsystem;
-import frc.robot.subsystems.Intake.Pivot.PivotSubsystem;
-import frc.robot.subsystems.Intake.Roller.RollerSubsystem;
-import frc.robot.subsystems.Vision.VisionSubsystem;
-import frc.robot.subsystems.swerve.SwerveSubsystem;
-import frc.robot.Commands.Intake.Pivot.PivotToHorizontalCommand;
-import frc.robot.Commands.Intake.Pivot.PivotToOuttakeCommand;
-import frc.robot.Commands.Intake.Pivot.PivotToSourceCommand;
-import frc.robot.Commands.Intake.Pivot.PivotUp90Command;
-import frc.robot.Commands.Intake.Pivot.PivotZeroTo90Command;
-import frc.robot.Commands.Intake.Roller.RollerInCommand;
-import frc.robot.Commands.Intake.Roller.RollerInTillSensorCommand;
-import frc.robot.Commands.Intake.Roller.RollerOutCommand;
-import frc.robot.Commands.Intake.Roller.RollerStopCommand;
-import frc.robot.Constants.ElevatorConstants;
-import frc.robot.Constants.VisionConstants;
-import frc.robot.Constants.IntakeConstans.PivotConstants;
-import frc.robot.Constants.IntakeConstans.RollerConstants;
-import frc.robot.Commands.Elevator.ElevatorToAlgaeCommand;
-import frc.robot.Commands.Elevator.ElevatorToGroundCommand;
-import frc.robot.Commands.Elevator.ElevatorToL1Command;
-import frc.robot.Commands.Elevator.ElevatorToL2Command;
-import frc.robot.Commands.Elevator.ElevatorToL3Command;
-import frc.robot.Commands.Elevator.ElevatorToL4Command;
-import frc.robot.Commands.Elevator.ElevatorToLimitSwitchCommand;
-import frc.robot.Commands.Elevator.ElevatorToSourceCommand;
-import frc.robot.Commands.Climb.StartClimbCommand;
-import frc.robot.Commands.Climb.StopClimbCommand;
-import frc.robot.subsystems.Climb.ClimbSubsystem;
+
+// Java Standard Library
+import java.util.EnumSet;
+import java.util.jar.Attributes.Name;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
