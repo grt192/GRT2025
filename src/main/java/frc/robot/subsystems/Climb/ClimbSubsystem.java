@@ -81,4 +81,8 @@ public class ClimbSubsystem extends SubsystemBase {
   public void setTorqueCurrentFOC(double current) {
     motor.setTorqueCurrentFOC(current);
   }
+
+  public void setPower(double power) {
+    motor.setPower(power);
+  }
 }

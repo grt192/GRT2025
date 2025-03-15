@@ -96,9 +96,8 @@ public class RobotContainer {
   private CommandPS5Controller mechController;
   private Trigger manualElevatorTrigger;
   private Trigger manualPivotTrigger;
-  private Trigger manualRollerInTrigger;
-  private Trigger manualRollerOutTrigger;
-  private Trigger climbTrigger;
+
+  private Trigger createTrigger, optionTrigger;
   
   private final PivotSubsystem pivotSubsystem = new PivotSubsystem();
   private final RollerSubsystem rollerSubsystem = new RollerSubsystem();
@@ -143,6 +142,9 @@ public class RobotContainer {
   public RobotContainer() {
     constructDriveController(); 
     constructMechController();
+
+    createTrigger = new Trigger(mechController.create());
+    optionTrigger = new Trigger(mechController.options());
 
     bindElevator();
     bindIntake();
@@ -233,11 +235,23 @@ public class RobotContainer {
    * Binds climb commands to mech controller
    */
   private void bindClimb(){
-    climbSubsystem.setDefaultCommand(
-      new InstantCommand( () -> {
-        climbSubsystem.setTorqueCurrentFOC(mechController.getLeftY() * 80.);
+    
+    createTrigger.and(optionTrigger).whileTrue(
+      new RunCommand(() -> {
+        climbSubsystem.setPower(.3);
+
+      }, climbSubsystem)
+    ).onFalse(
+      new RunCommand(() -> {
+        climbSubsystem.setPower(0);
       }, climbSubsystem)
     );
+
+    // climbSubsystem.setDefaultCommand(
+    //   new InstantCommand( () -> {
+    //     climbSubsystem.setTorqueCurrentFOC(mechController.getLeftY() * 80.);
+    //   }, climbSubsystem)
+    // );
   }
 
   /**
