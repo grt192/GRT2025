@@ -25,8 +25,7 @@ public class PivotSubsystem extends SubsystemBase{
     
     private LoggedTalon pivotMotor;
     private double arbFF;
-    private final CANcoder pivotEncoder = new CANcoder(0);
-
+    private final CANcoder pivotEncoder = new CANcoder(PivotConstants.ENCODER_ID); 
 
     ArmFeedforward feedforward = new ArmFeedforward(
         PivotConstants.PIVOT_KS,
@@ -115,9 +114,6 @@ public class PivotSubsystem extends SubsystemBase{
         return pivotMotor.getPosition();
     }
     
-    public boolean getLimitSwitch(){
-        return limitSwitch.get();
-    }
 
     public void setPower(double speed) {
         pivotMotor.setPower(speed);

@@ -93,6 +93,8 @@ public final class Constants {
 
     public static class PivotConstants{
       public static final int PIVOT_CAN_ID = 14;
+      public static final int ENCODER_ID = 0; //NEED TO CHANGE
+      
       public static final String PIVOT_CAN_NAME = "rio";
 
       public static final double PIVOT_KP = 5.5;
