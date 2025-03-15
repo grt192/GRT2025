@@ -9,6 +9,8 @@ import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
@@ -55,9 +57,9 @@ public class PivotSubsystem extends SubsystemBase{
       )
       .withSoftwareLimitSwitch(
           new SoftwareLimitSwitchConfigs()
-              .withForwardSoftLimitEnable(false) 
+              .withForwardSoftLimitEnable(true) 
               .withForwardSoftLimitThreshold(PivotConstants.PIVOT_MAX_POS)
-              .withReverseSoftLimitEnable(false) 
+              .withReverseSoftLimitEnable(true) 
               .withReverseSoftLimitThreshold(PivotConstants.PIVOT_MIN_POS)
       );
 
@@ -111,6 +113,10 @@ public class PivotSubsystem extends SubsystemBase{
 
     public double getPosition() {
         return pivotMotor.getPosition();
+    }
+    
+    public boolean getLimitSwitch(){
+        return limitSwitch.get();
     }
 
     public void setPower(double speed) {
