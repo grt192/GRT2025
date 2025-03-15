@@ -264,7 +264,7 @@ public class RobotContainer {
     );
 
     manualElevatorTrigger.onTrue(
-      new InstantCommand(
+      new RunCommand(
         () -> {
           elevatorSubsystem.setPower(-mechController.getRightY());
         },
@@ -272,7 +272,7 @@ public class RobotContainer {
       ).handleInterrupt(() -> elevatorSubsystem.setPower(0))
     );
     manualElevatorTrigger.onFalse( //toggleonFalse
-      new InstantCommand(
+      new RunCommand(
         () -> {
           elevatorSubsystem.setPower(0);
         },
