@@ -119,7 +119,7 @@ public class LoggedTalon{
     public void setPositionReferenceWithArbFF(double position, double arbFF){
         targetPosition = position;
         motor.setControl(
-            new PositionTorqueCurrentFOC(position).withFeedForward(arbFF)
+            new PositionTorqueCurrentFOC(position).withSlot(0).withFeedForward(arbFF)
         );
     }
 

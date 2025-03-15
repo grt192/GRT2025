@@ -48,16 +48,16 @@ public final class Constants {
     public static final int MOTOR_ID = 13; //change
     public static final int LIMIT_ID = 0; //change
 
-    public static final double kP = 2.2; //change
+    public static final double kP = 8; //change
     public static final double kI = 0; //change
-    public static final double kD = 0; //change
+    public static final double kD = .8; //change
     public static final double kS = 0;
-    public static final double arbFF = 18; //30; //chang
+    public static final double arbFF = 15; //30; //chang
 
     public static final double FORWARD_LIMIT = 123; //change
     public static final double REVERSE_LIMIT = 0; //change
 
-    public static final double CURRENT_LIMIT = 100;
+    public static final double CURRENT_LIMIT = 60;
 
     public static final double GEAR_RATIO = 20; //motor to axle
     public static final double AXLE_RADIUS = 6. * .289 * .0254; //in meters
@@ -65,7 +65,7 @@ public final class Constants {
     public static final double TICKS_TO_DIST = 2. * Math.PI * AXLE_RADIUS / GEAR_RATIO;
     public static final double DIST_TO_TICKS = 1. / TICKS_TO_DIST;
 
-    public static final boolean ELEVATOR_DEBUG = false;
+    public static final boolean ELEVATOR_DEBUG = true;
 
     public static final double CONTROLLER_DEADZONE = 0.1;
   }

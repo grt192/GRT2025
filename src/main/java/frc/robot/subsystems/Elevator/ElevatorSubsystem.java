@@ -55,12 +55,12 @@ public class ElevatorSubsystem extends SubsystemBase {
           .withForwardSoftLimitEnable(true)
           .withReverseSoftLimitThreshold(ElevatorConstants.REVERSE_LIMIT)
           .withForwardSoftLimitThreshold(ElevatorConstants.FORWARD_LIMIT)
-      )
-      .withCurrentLimits(
-        new CurrentLimitsConfigs()
-          .withStatorCurrentLimitEnable(true)
-          .withStatorCurrentLimit(ElevatorConstants.CURRENT_LIMIT)  
       );
+      // .withCurrentLimits(
+      //   new CurrentLimitsConfigs()
+      //     .withStatorCurrentLimitEnable(true)
+      //     .withStatorCurrentLimit(ElevatorConstants.CURRENT_LIMIT)  
+      // );
       
     motor = new LoggedTalon(
       ElevatorConstants.MOTOR_ID, "can", motorConfig 
@@ -77,7 +77,7 @@ public class ElevatorSubsystem extends SubsystemBase {
       motor.setPosition(0);
       // motor.setPower(0);
     }
-    // System.out.println(motor.getPosition());
+    System.out.println(motor.getPosition());
     motor.logStats();
     zeroLimitSwitch.logStats();
     if(DebugConstants.MASTER_DEBUG || ElevatorConstants.ELEVATOR_DEBUG) {
@@ -95,10 +95,9 @@ public class ElevatorSubsystem extends SubsystemBase {
       arbFF = ElevatorConstants.arbFF;
     }
     else {
-      // arbFF = -20;
+      arbFF = 0;
     }
-    arbFF = ElevatorConstants.arbFF;
-    motor.setPositionReferenceWithArbFF(positionReference, arbFF);
+    motor.setPositionReferenceWithArbFF(positionReference,arbFF);
   }
 
   public void setVelocityReference(double velocityReference){

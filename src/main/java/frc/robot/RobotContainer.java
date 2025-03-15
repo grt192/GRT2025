@@ -246,12 +246,6 @@ public class RobotContainer {
         climbSubsystem.setPower(0);
       }, climbSubsystem)
     );
-
-    // climbSubsystem.setDefaultCommand(
-    //   new InstantCommand( () -> {
-    //     climbSubsystem.setTorqueCurrentFOC(mechController.getLeftY() * 80.);
-    //   }, climbSubsystem)
-    // );
   }
 
   /**
