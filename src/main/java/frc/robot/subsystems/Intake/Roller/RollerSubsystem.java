@@ -9,6 +9,7 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,8 +19,8 @@ import frc.robot.util.LoggedTalon;
 
 public class RollerSubsystem extends SubsystemBase{
     private LoggedTalon rollerMotor;
-    // private LoggedBooleanSensor intakeSensor;
-    private DigitalInput intakeSensor;
+    private LoggedBooleanSensor coralSensor, algaeSensor;
+    // private DigitalInput coralSensor;
 
     private TalonFXConfiguration rollerConfig = new TalonFXConfiguration()
         .withSlot0(
@@ -33,6 +34,7 @@ public class RollerSubsystem extends SubsystemBase{
         .withMotorOutput(
             new MotorOutputConfigs()
             .withInverted(InvertedValue.Clockwise_Positive)
+            .withNeutralMode(NeutralModeValue.Brake)
         )
         .withClosedLoopRamps(
             new ClosedLoopRampsConfigs()
@@ -51,22 +53,27 @@ public class RollerSubsystem extends SubsystemBase{
         // intakeSensor = new LoggedBooleanSensor(
         //     "Intake Distance Sensor", 1
         // );
-        intakeSensor = new DigitalInput(1);
+        coralSensor = new LoggedBooleanSensor("coral sensor", 1);
+        algaeSensor = new LoggedBooleanSensor("algae sensor", 2);
     }
 
     @Override
     public void periodic(){
         rollerMotor.logStats();
         // intakeSensor.logStats();
-        System.out.println(intakeSensor.get());
+        // System.out.println(coralSensor.get());
         if(MASTER_DEBUG || ROLLER_DEBUG){
             rollerMotor.publishStats();
             // intakeSensor.publishStats();
         }
     }
 
-    public boolean getIntakeSensor() {
-        return !intakeSensor.get();
+    public boolean getCoralSensor() {
+        return !coralSensor.get();
+    }
+
+    public boolean getAlgaeSensor() {
+        return !algaeSensor.get();
     }
 
     /**

@@ -238,7 +238,7 @@ public class RobotContainer {
     
     createTrigger.and(optionTrigger).whileTrue(
       new RunCommand(() -> {
-        climbSubsystem.setPower(.3);
+        climbSubsystem.setTorqueCurrentFOC(60);
 
       }, climbSubsystem)
     ).onFalse(
@@ -371,7 +371,7 @@ public class RobotContainer {
       new InstantCommand( () -> {
       rollerSubsystem.setRollerSpeed(.1 * (mechController.getR2Axis() - mechController.getL2Axis()));
       }, rollerSubsystem), 
-      () -> rollerSubsystem.getIntakeSensor()));
+      () -> rollerSubsystem.getCoralSensor() || rollerSubsystem.getAlgaeSensor()));
     }
   //Binds the intake commands to the mech controller
   private void bindIntake(){
