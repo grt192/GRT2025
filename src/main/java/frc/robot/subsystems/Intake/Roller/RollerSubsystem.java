@@ -10,6 +10,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstans.RollerConstants;
 import frc.robot.util.LoggedBooleanSensor;
@@ -17,7 +18,8 @@ import frc.robot.util.LoggedTalon;
 
 public class RollerSubsystem extends SubsystemBase{
     private LoggedTalon rollerMotor;
-    private LoggedBooleanSensor intakeSensor;
+    // private LoggedBooleanSensor intakeSensor;
+    private DigitalInput intakeSensor;
 
     private TalonFXConfiguration rollerConfig = new TalonFXConfiguration()
         .withSlot0(
@@ -46,18 +48,20 @@ public class RollerSubsystem extends SubsystemBase{
             RollerConstants.ROLLER_CAN_ID, RollerConstants.ROLLER_CAN_NAME, rollerConfig
         );
 
-        intakeSensor = new LoggedBooleanSensor(
-            "Intake Distance Sensor", 1
-        );
+        // intakeSensor = new LoggedBooleanSensor(
+        //     "Intake Distance Sensor", 1
+        // );
+        intakeSensor = new DigitalInput(1);
     }
 
     @Override
     public void periodic(){
         rollerMotor.logStats();
-        intakeSensor.logStats();
+        // intakeSensor.logStats();
+        System.out.println(intakeSensor.get());
         if(MASTER_DEBUG || ROLLER_DEBUG){
             rollerMotor.publishStats();
-            intakeSensor.publishStats();
+            // intakeSensor.publishStats();
         }
     }
 

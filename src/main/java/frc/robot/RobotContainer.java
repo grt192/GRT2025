@@ -362,24 +362,6 @@ public class RobotContainer {
   }
 
   private void bindRollers(){
-    // manualRollerInTrigger = new Trigger(
-    //   () -> 
-    //     mechController.getL2Axis()
-    //       >= RollerConstants.ROLLER_CONTROLLER_DEADZONE
-    // );
-    // manualRollerOutTrigger = new Trigger(
-    //   () ->
-    //     mechController.getR2Axis()
-    //       >= RollerConstants.ROLLER_CONTROLLER_DEADZONE
-    // );
-
-    // manualRollerInTrigger.onTrue(
-    //   new RollerInCommand(rollerSubsystem)
-    // );
-
-    // manualRollerOutTrigger.onTrue(
-    //   new RollerOutCommand(rollerSubsystem)
-    // );
 
     rollerSubsystem.setDefaultCommand(new ConditionalCommand(
       new InstantCommand( () -> {
