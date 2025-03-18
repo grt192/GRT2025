@@ -65,7 +65,7 @@ public final class Constants {
     public static final double TICKS_TO_DIST = 2. * Math.PI * AXLE_RADIUS / GEAR_RATIO;
     public static final double DIST_TO_TICKS = 1. / TICKS_TO_DIST;
 
-    public static final boolean ELEVATOR_DEBUG = true;
+    public static final boolean ELEVATOR_DEBUG = false;
 
     public static final double CONTROLLER_DEADZONE = 0.1;
   }
@@ -111,7 +111,7 @@ public final class Constants {
       
       public static final double PIVOT_TOLERANCE = 0.1;
 
-      public static final double ROTOR_TO_SENSOR_RATIO = 20. / (2. * Math.PI);
+      public static final double ROTOR_TO_SENSOR_RATIO = (78. / 18.) / (2. * Math.PI);
       public static final double PIVOT_INIT_POS = Units.degreesToRadians(95.);
       public static final double PIVOT_HORIZONTAL = Units.degreesToRadians(0);
       public static final double PIVOT_MAX_POS = Units.degreesToRadians(95.);
@@ -211,7 +211,7 @@ public final class Constants {
 
   public static class DebugConstants{
     public static final boolean MASTER_DEBUG = false;
-    public static final boolean PIVOT_DEBUG = false;
+    public static final boolean PIVOT_DEBUG = true;
     public static final boolean ROLLER_DEBUG = false;
   }
 

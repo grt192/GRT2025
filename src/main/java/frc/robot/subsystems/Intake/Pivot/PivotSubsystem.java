@@ -53,14 +53,14 @@ public class PivotSubsystem extends SubsystemBase{
               .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANcoder)
               .withFeedbackRemoteSensorID(pivotEncoder.getDeviceID()) 
               .withSensorToMechanismRatio(PivotConstants.ROTOR_TO_SENSOR_RATIO)
-      )
-      .withSoftwareLimitSwitch(
-          new SoftwareLimitSwitchConfigs()
-              .withForwardSoftLimitEnable(true) 
-              .withForwardSoftLimitThreshold(PivotConstants.PIVOT_MAX_POS)
-              .withReverseSoftLimitEnable(true) 
-              .withReverseSoftLimitThreshold(PivotConstants.PIVOT_MIN_POS)
       );
+    //   .withSoftwareLimitSwitch(
+    //       new SoftwareLimitSwitchConfigs()
+    //           .withForwardSoftLimitEnable(true) 
+    //           .withForwardSoftLimitThreshold(PivotConstants.PIVOT_MAX_POS)
+    //           .withReverseSoftLimitEnable(true) 
+    //           .withReverseSoftLimitThreshold(PivotConstants.PIVOT_MIN_POS)
+    //   );
 
 
     public PivotSubsystem(){
