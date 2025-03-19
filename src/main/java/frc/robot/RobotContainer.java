@@ -98,6 +98,8 @@ public class RobotContainer {
   private Trigger manualPivotTrigger;
 
   private Trigger createTrigger, optionTrigger;
+  private Boolean hasPiece = false;
+  private Boolean yankAlgae = false;
   
   private final PivotSubsystem pivotSubsystem = new PivotSubsystem();
   private final RollerSubsystem rollerSubsystem = new RollerSubsystem();
@@ -365,54 +367,30 @@ public class RobotContainer {
 
     rollerSubsystem.setDefaultCommand(new ConditionalCommand(
       new InstantCommand( () -> {
+        System.out.println(hasPiece);
       //ps5 trigger's range is -1 to 1, with non-input position being -1. This maps the range -1 to 1 to 0 to 1.
-      rollerSubsystem.setRollerSpeed(.4 * (mechController.getR2Axis() + 1.) / 2.); 
+      // if (hasPiece == false) {
+      //   new InstantCommand( () -> {
+      //     rollerSubsystem.setRollerSpeed(.4);
+      //   }, rollerSubsystem);
+      // }
+      // else {
+        rollerSubsystem.setRollerSpeed(.4 * (mechController.getR2Axis() + 1.) / 2.); 
+      // }
+      hasPiece = true;
       }, rollerSubsystem), 
       new InstantCommand( () -> {
-      rollerSubsystem.setRollerSpeed(.1 * (mechController.getR2Axis() - mechController.getL2Axis()));
+        System.out.println(hasPiece);
+        rollerSubsystem.setRollerSpeed(.1 * (mechController.getR2Axis() - mechController.getL2Axis()));
+      hasPiece = false;
       }, rollerSubsystem), 
-      () -> rollerSubsystem.getCoralSensor() || rollerSubsystem.getAlgaeSensor()));
+      () -> rollerSubsystem.getCoralSensor() )); // 
     }
+
   //Binds the intake commands to the mech controller
   private void bindIntake(){
-    // mechController.R1().onTrue(new PivotZeroTo90Command(pivotSubsystem));
     bindPivot();
     bindRollers();
-    // rollerSubsystem.setDefaultCommand(new ConditionalCommand(
-    //   new InstantCommand( () -> {
-    //     //ps5 trigger's range is -1 to 1, with non-input position being -1. This maps the range -1 to 1 to 0 to 1.
-    //     rollerSubsystem.setRollerSpeed(.25 * (me   chController.getL2Axis() + 1.) / 2.); 
-    //   }, rollerSubsystem), 
-    //   new InstantCommand( () -> {
-    //     rollerSubsystem.setRollerSpeed(.15 * (mechController.getL2Axis() - mechController.getR2Axis()));
-    //   }, rollerSubsystem), 
-    //   () -> rollerSubsystem.getIntakeSensor()));
-      
-    // mechController.povUp().onTrue(
-    //   new ConditionalCommand(
-    //     new PivotToSourceCommand(pivotSubsystem),
-    //     new PivotToHorizontalCommand(pivotSubsystem).andThen(new PivotToSourceCommand(pivotSubsystem)),
-    //     () -> pivotSubsystem.getPosition() > 0
-    //     ));
-    
-    // mechController.L1().onTrue(
-    //   new ConditionalCommand(
-    //     new PivotUp90Command(pivotSubsystem),
-    //     new PivotToHorizontalCommand(pivotSubsystem).andThen(new PivotUp90Command(pivotSubsystem)),
-    //     () -> pivotSubsystem.getPosition() > 0
-    //     ));
-
-    // mechController.povDown().onTrue(
-    //   new PivotToOuttakeCommand(pivotSubsystem)
-    // );
-
-    // mechController.povRight().onTrue(
-    //   new PivotToSourceCommand(pivotSubsystem)
-    // );
-
-    // mechController.povUp().onTrue(
-    //   new PivotToHorizontalCommand(pivotSubsystem)
-    // );
   }
 
   /**
