@@ -108,23 +108,21 @@ public class RobotContainer {
   private final ClimbSubsystem climbSubsystem = new ClimbSubsystem();
 
 
-  // private final VisionSubsystem visionSubsystem1 = new VisionSubsystem(
-  //   VisionConstants.cameraConfigs[0]
-  // );
-  // private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(
-  //   VisionConstants.cameraConfigs[1]
-  // );
-  
+
   //driver camera stuff:
   private UsbCamera driverCamera;
   private MjpegServer driverCameraServer;
-  private UsbCamera driverCamera2;
 
   private NetworkTableInstance ntInstance;
   private NetworkTable testTable; 
   private NetworkTable FMStable;
   private NetworkTableEntry cameraSelectionEntry;
-
+  private NetworkTableEntry autonTableEntry;
+  private NetworkTableEntry autonTableSelection;
+  private final VisionSubsystem visionSubsystem1 = new VisionSubsystem(
+    VisionConstants.cameraConfigs[0]
+  );
+  
   private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(
     VisionConstants.cameraConfigs[1]
   );
@@ -151,9 +149,9 @@ public class RobotContainer {
     bindClimb();
 
     // startLog();
-    // setVisionDataInterface();
+    setVisionDataInterface();
     configureBindings();
-    // constructDriverCameras();
+    constructDriverCameras();
     constructNetworkTableListeners();
 
     NamedCommands.registerCommand("ElevatorToGround", new ElevatorToGroundCommand(elevatorSubsystem));
@@ -238,7 +236,7 @@ public class RobotContainer {
     
     createTrigger.and(optionTrigger).whileTrue(
       new RunCommand(() -> {
-        climbSubsystem.setPower(.3);
+        climbSubsystem.setPower(1);
 
       }, climbSubsystem)
     ).onFalse(
@@ -446,8 +444,8 @@ public class RobotContainer {
    */
   private void setVisionDataInterface(){
 
-    //visionSubsystem1.setInterface(swerveSubsystem::addVisionMeasurements);
-    //visionSubsystem2.setInterface(swerveSubsystem::addVisionMeasurements);
+    visionSubsystem1.setInterface(swerveSubsystem::addVisionMeasurements);
+    visionSubsystem2.setInterface(swerveSubsystem::addVisionMeasurements);
     visionSubsystem3.setInterface(swerveSubsystem::addVisionMeasurements);
     visionSubsystem4.setInterface(swerveSubsystem::addVisionMeasurements);
 
@@ -467,13 +465,13 @@ public class RobotContainer {
     } catch (Exception e) {
       System.out.print(e);
     }
-    try {
-      driverCamera2 = new UsbCamera("fisheye2", 1);
-      driverCamera2.setVideoMode(PixelFormat.kMJPEG, 160, 120, 30);
-      driverCamera2.setExposureManual(40);
-    } catch (Exception e) {
-      System.out.print(e);
-    }
+    // try {
+    //   driverCamera2 = new UsbCamera("fisheye2", 1);
+    //   driverCamera2.setVideoMode(PixelFormat.kMJPEG, 160, 120, 30);
+    //   driverCamera2.setExposureManual(40);
+    // } catch (Exception e) {
+    //   System.out.print(e);
+    // }
   }
 
   public void constructNetworkTableListeners(){
@@ -485,7 +483,9 @@ public class RobotContainer {
     //allianceEntry = FMStable.getEntry("IsRedAlliance");
     cameraSelectionEntry = testTable.getEntry("cameraSelection");
     // FMStable.addListener("IsRedAlliance", EnumSet.of(NetworkTableEvent.Kind.kValueAll), (table, key, event) -> {
-            
+    autonTableEntry = testTable.getEntry("autonList");
+    autonTableSelection = testTable.getEntry("autonSelection");
+
     //     });
     testTable.addListener("cameraSelection", EnumSet.of(NetworkTableEvent.Kind.kValueAll), (table, key, event) ->{
       if (event.valueData.value.getBoolean()){
@@ -496,11 +496,14 @@ public class RobotContainer {
       }
       else{
         //server1.setSource(camera2);
-        driverCameraServer.setSource(driverCamera2);
+        // driverCameraServer.setSource(driverCamera2);
 
         System.out.println("CAMERA2!");
 
       }
+    });
+    testTable.addListener("autonSelection", EnumSet.of(NetworkTableEvent.Kind.kValueAll), (table, key, event) ->{
+      System.out.println("selectedAuton");
     });
 
   }
