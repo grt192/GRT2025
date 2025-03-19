@@ -25,8 +25,6 @@ public class PivotSubsystem extends SubsystemBase{
     private double arbFF;
     private final CANcoder pivotEncoder = new CANcoder(0);
 
-    DigitalInput limitSwitch = new DigitalInput(PivotConstants.LimitSwitchID);
-
 
     ArmFeedforward feedforward = new ArmFeedforward(
         PivotConstants.PIVOT_KS,
@@ -113,10 +111,6 @@ public class PivotSubsystem extends SubsystemBase{
 
     public double getPosition() {
         return pivotMotor.getPosition();
-    }
-    
-    public boolean getLimitSwitch(){
-        return limitSwitch.get();
     }
 
     public void setPower(double speed) {

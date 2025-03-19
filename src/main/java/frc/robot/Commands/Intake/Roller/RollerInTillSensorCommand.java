@@ -25,6 +25,6 @@ public class RollerInTillSensorCommand extends Command{
 
     @Override
     public boolean isFinished(){
-        return rollerSubsystem.getIntakeSensor();
+        return rollerSubsystem.getCoralSensor();
     }
 }
