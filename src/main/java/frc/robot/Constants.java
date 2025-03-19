@@ -111,7 +111,7 @@ public final class Constants {
       
       public static final double PIVOT_TOLERANCE = 0.1;
 
-      public static final double ROTOR_TO_SENSOR_RATIO = (78. / 18.) / (2. * Math.PI);
+      public static final double ROTOR_TO_SENSOR_RATIO = (78. / 18.) / 360;
       public static final double PIVOT_INIT_POS = Units.degreesToRadians(95.);
       public static final double PIVOT_HORIZONTAL = Units.degreesToRadians(0);
       public static final double PIVOT_MAX_POS = Units.degreesToRadians(95.);
