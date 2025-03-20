@@ -14,6 +14,7 @@ import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.util.datalog.StructLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Vision.TimestampedVisionUpdate;
 import frc.robot.util.GRTUtil;
@@ -45,6 +46,7 @@ public class SwerveSubsystem extends SubsystemBase {
     private Rotation2d driverHeadingOffset = new Rotation2d();
 
     private final AHRS ahrs;
+    private Timer lockTimer;
 
     //logging
     private NetworkTableInstance ntInstance;
@@ -88,22 +90,45 @@ public class SwerveSubsystem extends SubsystemBase {
         if(STEER_DEBUG) {
             enableSteerDebug();
         }
+
+        lockTimer = new Timer();
     }
 
     @Override
     public void periodic() {
-        //update the swerve modules based on the current desired states from states[]
-        frontLeftModule.setDesiredState(states[0]);
-        frontRightModule.setDesiredState(states[1]);
-        backLeftModule.setDesiredState(states[2]);
-        backRightModule.setDesiredState(states[3]);
-
         //update the poseestimator with curent gyro reading      
         Rotation2d gyroAngle = getGyroHeading();
         estimatedPose = poseEstimator.update(
             gyroAngle,
             getModulePositions()
         );
+
+        // If all commanded velocities are 0, the system is idle (drivers / commands are
+        // not supplying input).
+        boolean isIdle = states[0].speedMetersPerSecond == 0.0
+            && states[1].speedMetersPerSecond == 0.0
+            && states[2].speedMetersPerSecond == 0.0
+            && states[3].speedMetersPerSecond == 0.0;
+
+        // Start lock timer when idle
+        if (isIdle) {
+            lockTimer.start();
+        } else {
+            lockTimer.stop();
+            lockTimer.reset();
+        }
+
+        // Lock the swerve module if the lock timeout has elapsed, or set them to their 
+        // setpoints if drivers are supplying non-idle input.
+        if (lockTimer.hasElapsed(1)) {
+            applyLock();
+        } else {
+            //update the swerve modules based on the current desired states from states[]
+            frontLeftModule.setDesiredState(states[0]);
+            frontRightModule.setDesiredState(states[1]);
+            backLeftModule.setDesiredState(states[2]);
+            backRightModule.setDesiredState(states[3]);
+        }
 
         //logging
         estimatedPoseLogEntry.append(estimatedPose, GRTUtil.getFPGATime()); 
@@ -131,6 +156,15 @@ public class SwerveSubsystem extends SubsystemBase {
             states, speeds,
             MAX_VEL, MAX_VEL, MAX_OMEGA
         );
+    }
+
+        /** Executes swerve X locking, putting swerve's wheels into an X configuration to prevent motion.
+     */
+    public void applyLock() {
+        frontLeftModule.setDesiredState(new SwerveModuleState(0.0, new Rotation2d(Math.PI / 4.0)));
+        frontRightModule.setDesiredState(new SwerveModuleState(0.0, new Rotation2d(-Math.PI / 4.0)));
+        backLeftModule.setDesiredState(new SwerveModuleState(0.0, new Rotation2d(-Math.PI / 4.0)));
+        backRightModule.setDesiredState(new SwerveModuleState(0.0, new Rotation2d(Math.PI / 4.0)));
     }
 
     public void addVisionMeasurements(TimestampedVisionUpdate update) {
