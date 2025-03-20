@@ -253,12 +253,6 @@ public class RobotContainer {
    */
   private void bindElevator(){
 
-    // elevatorSubsystem.setDefaultCommand(
-    //   new InstantCommand(() -> {
-    //     elevatorSubsystem.setPower(-mechController.getLeftY());
-    //   }, elevatorSubsystem)
-    // );
-
     manualElevatorTrigger = new Trigger(
       () -> Math.abs(mechController.getRightY()) >= ElevatorConstants.CONTROLLER_DEADZONE
     );
@@ -288,13 +282,6 @@ public class RobotContainer {
   }
 
   private void bindPivot(){
-    // pivotSubsystem.setDefaultCommand(
-    //   new InstantCommand(() -> {
-    //     pivotSubsystem.setDutyCycle(mechController.getRightY());
-    //   },
-    //   pivotSubsystem
-    //   )
-    // );
     
     manualPivotTrigger = new Trigger(
       () -> Math.abs(mechController.getLeftY()) >= PivotConstants.CONTROLLER_DEADZONE
