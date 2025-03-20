@@ -301,18 +301,18 @@ public class RobotContainer {
     );
 
     manualPivotTrigger.onTrue(
-      new InstantCommand(
+      new RunCommand(
         () -> {
-          pivotSubsystem.setDutyCycle(-mechController.getLeftY());
+          pivotSubsystem.setPower(-mechController.getLeftY());
         },
         pivotSubsystem
       )
     );
 
     manualPivotTrigger.onFalse(
-      new InstantCommand(
+      new RunCommand(
         () -> {
-          pivotSubsystem.setDutyCycle(0);
+          pivotSubsystem.setPower(0);
         },
         pivotSubsystem
       )

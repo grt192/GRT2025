@@ -106,9 +106,9 @@ public class LoggedTalon{
      * Sets the motor's position reference with voltage
      * @param position position reference
      */
-    public void setPositionReferenceWithVoltage(double position){
+    public void setPositionReferenceWithVoltage(double position, double arbFF){
         targetPosition = position;
-        motor.setControl(new PositionVoltage(position));
+        motor.setControl(new PositionVoltage(position).withFeedForward(arbFF));
     }
 
     /**
