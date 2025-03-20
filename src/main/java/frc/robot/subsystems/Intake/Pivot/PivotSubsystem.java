@@ -1,5 +1,6 @@
 package frc.robot.subsystems.Intake.Pivot;
 
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.ClosedLoopGeneralConfigs;
 import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
@@ -25,7 +26,8 @@ public class PivotSubsystem extends SubsystemBase{
     
     private LoggedTalon pivotMotor;
     private double arbFF;
-    private final CANcoder pivotEncoder = new CANcoder(PivotConstants.ENCODER_ID); 
+    private CANcoder pivotEncoder = new CANcoder(PivotConstants.ENCODER_ID);
+
 
     ArmFeedforward feedforward = new ArmFeedforward(
         PivotConstants.PIVOT_KS,
@@ -34,26 +36,26 @@ public class PivotSubsystem extends SubsystemBase{
 
 
     private TalonFXConfiguration pivotConfig = new TalonFXConfiguration()
+      .withFeedback(
+        new FeedbackConfigs()
+            .withFeedbackRemoteSensorID(pivotEncoder.getDeviceID())
+            .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANcoder)
+            .withSensorToMechanismRatio(PivotConstants.ROTOR_TO_SENSOR_RATIO))
       .withSlot0(
           new Slot0Configs()
               .withKP(PivotConstants.PIVOT_KP)
               .withKI(PivotConstants.PIVOT_KI)
               .withKD(PivotConstants.PIVOT_KD)
-      )
-      .withClosedLoopRamps(
-          new ClosedLoopRampsConfigs()
-              .withTorqueClosedLoopRampPeriod(PivotConstants.PIVOT_RAMP_RATE)
-      )
-      .withCurrentLimits(
-          new CurrentLimitsConfigs()
-              .withStatorCurrentLimit(PivotConstants.PIVOT_CURRENT_LIMIT)
-      )
-      .withFeedback(
-          new FeedbackConfigs()
-              .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANcoder)
-              .withFeedbackRemoteSensorID(pivotEncoder.getDeviceID()) 
-              .withSensorToMechanismRatio(PivotConstants.ROTOR_TO_SENSOR_RATIO)
       );
+    //   .withClosedLoopRamps(
+    //       new ClosedLoopRampsConfigs()
+    //           .withTorqueClosedLoopRampPeriod(PivotConstants.PIVOT_RAMP_RATE)
+    //   )
+    //   .withCurrentLimits(
+    //       new CurrentLimitsConfigs()
+    //           .withStatorCurrentLimit(PivotConstants.PIVOT_CURRENT_LIMIT)
+    //   );
+
     //   .withSoftwareLimitSwitch(
     //       new SoftwareLimitSwitchConfigs()
     //           .withForwardSoftLimitEnable(true) 
@@ -67,7 +69,6 @@ public class PivotSubsystem extends SubsystemBase{
         pivotMotor = new LoggedTalon(
             PivotConstants.PIVOT_CAN_ID, PivotConstants.PIVOT_CAN_NAME, pivotConfig
         );
-        pivotMotor.setPosition(PivotConstants.PIVOT_INIT_POS);
     }
 
     @Override
@@ -81,20 +82,30 @@ public class PivotSubsystem extends SubsystemBase{
     }
 
     public void setPositionReferenceWithVoltage(double position){
-        pivotMotor.setPositionReferenceWithVoltage(position);
+        if (position > pivotMotor.getPosition()) {
+            pivotMotor.setPositionReferenceWithVoltage(position, Math.cos(pivotMotor.getPosition()) * .7);
+        }
+        else {
+            pivotMotor.setPositionReferenceWithVoltage(position, 0);
+        }
+        arbFF = 0;
     }
 
     /**
-     * Sets the elevator to a specific position.
+     * Sets to a specific position.
      * @param positionReference target position
      */
     public void setPositionReference(double positionReference){
         if (positionReference > pivotMotor.getPosition()) {
-            arbFF = feedforward.calculate(positionReference, 5);
+            arbFF = feedforward.calculate(Units.degreesToRadians(positionReference), 1);
         }
         else {
-            arbFF = feedforward.calculate(positionReference, .1, .01);
+            // arbFF = 0;
+            // arbFF = feedforward.calculate(Units.degreesToRadians(positionReference), .01, .001);
+            arbFF = 0;
         }
+        arbFF = 0;
+
         pivotMotor.setPositionReferenceWithArbFF(positionReference, arbFF);
     }
 
@@ -112,8 +123,8 @@ public class PivotSubsystem extends SubsystemBase{
 
     public double getPosition() {
         return pivotMotor.getPosition();
+        // return pivotEncoder.getAbsolutePosition().getValueAsDouble();
     }
-    
 
     public void setPower(double speed) {
         pivotMotor.setPower(speed);
@@ -129,9 +140,5 @@ public class PivotSubsystem extends SubsystemBase{
 
     public void setPosition(double position){
         pivotMotor.setPosition(position);
-    }
-
-    public void setEncoderZero(){
-        pivotMotor.setPosition(0);
     }
 }
