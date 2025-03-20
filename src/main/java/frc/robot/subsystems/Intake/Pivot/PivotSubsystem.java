@@ -46,23 +46,23 @@ public class PivotSubsystem extends SubsystemBase{
               .withKP(PivotConstants.PIVOT_KP)
               .withKI(PivotConstants.PIVOT_KI)
               .withKD(PivotConstants.PIVOT_KD)
-      );
-    //   .withClosedLoopRamps(
-    //       new ClosedLoopRampsConfigs()
-    //           .withTorqueClosedLoopRampPeriod(PivotConstants.PIVOT_RAMP_RATE)
-    //   )
-    //   .withCurrentLimits(
-    //       new CurrentLimitsConfigs()
-    //           .withStatorCurrentLimit(PivotConstants.PIVOT_CURRENT_LIMIT)
-    //   );
+      )
+      .withClosedLoopRamps(
+          new ClosedLoopRampsConfigs()
+              .withTorqueClosedLoopRampPeriod(PivotConstants.PIVOT_RAMP_RATE)
+      )
+      .withCurrentLimits(
+          new CurrentLimitsConfigs()
+              .withStatorCurrentLimit(PivotConstants.PIVOT_CURRENT_LIMIT)
+      )
 
-    //   .withSoftwareLimitSwitch(
-    //       new SoftwareLimitSwitchConfigs()
-    //           .withForwardSoftLimitEnable(true) 
-    //           .withForwardSoftLimitThreshold(PivotConstants.PIVOT_MAX_POS)
-    //           .withReverseSoftLimitEnable(true) 
-    //           .withReverseSoftLimitThreshold(PivotConstants.PIVOT_MIN_POS)
-    //   );
+      .withSoftwareLimitSwitch(
+          new SoftwareLimitSwitchConfigs()
+              .withForwardSoftLimitEnable(true) 
+              .withForwardSoftLimitThreshold(PivotConstants.PIVOT_MAX_POS)
+              .withReverseSoftLimitEnable(true) 
+              .withReverseSoftLimitThreshold(PivotConstants.PIVOT_MIN_POS)
+      );
 
 
     public PivotSubsystem(){
@@ -83,7 +83,7 @@ public class PivotSubsystem extends SubsystemBase{
 
     public void setPositionReferenceWithVoltage(double position){
         if (position > pivotMotor.getPosition()) {
-            pivotMotor.setPositionReferenceWithVoltage(position, Math.cos(Math.toRadians(pivotMotor.getPosition())) * .7);
+            pivotMotor.setPositionReferenceWithVoltage(position, Math.cos(Math.toRadians(pivotMotor.getPosition())) * .4);
         }
         else {
             pivotMotor.setPositionReferenceWithVoltage(position, 0);
