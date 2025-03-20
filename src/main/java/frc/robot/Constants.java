@@ -250,7 +250,7 @@ public final class Constants {
         PoseStrategy.LOWEST_AMBIGUITY
       ),
       new CameraConfig(
-        "3",
+        "5",
         new Transform3d(
           0.031, -0.071,0.981,
           new Rotation3d(0, -Math.PI * 6.,  0)
