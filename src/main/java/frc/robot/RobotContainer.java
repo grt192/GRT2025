@@ -321,10 +321,6 @@ public class RobotContainer {
     mechController.povDown().onTrue(
       new PivotToOuttakeCommand(pivotSubsystem)
     );
-    
-    // mechController.povLeft().onTrue(
-    //   new PivotToHorizontalCommand(pivotSubsystem)
-    // );
 
     mechController.povUp().onTrue(
       new PivotToSourceCommand(pivotSubsystem)
@@ -337,48 +333,17 @@ public class RobotContainer {
     mechController.povRight().onTrue(
       new PivotToHorizontalCommand(pivotSubsystem)
     );
-
-    // mechController.povUp().onTrue(
-    //   new ConditionalCommand(
-    //     new ParallelCommandGroup(
-    //       new ElevatorToGroundCommand(elevatorSubsystem),
-    //       new PivotUp90Command(pivotSubsystem)
-    //     ),
-    //     new SequentialCommandGroup(
-    //       new ParallelCommandGroup(
-    //         new ElevatorToSourceCommand(elevatorSubsystem),
-    //         new PivotToSourceCommand(pivotSubsystem)
-    //       ),
-    //       new RollerInTillSensorCommand(rollerSubsystem),
-    //       new WaitCommand(1),
-    //       new ParallelCommandGroup(
-    //         new ElevatorToGroundCommand(elevatorSubsystem),
-    //         new PivotUp90Command(pivotSubsystem)
-    //       )
-    //     ),
-    //     rollerSubsystem::getIntakeSensor
-    //   )
-    // );
   }
 
   private void bindRollers(){
 
     rollerSubsystem.setDefaultCommand(new ConditionalCommand(
       new InstantCommand( () -> {
-        System.out.println(hasPiece);
-      //ps5 trigger's range is -1 to 1, with non-input position being -1. This maps the range -1 to 1 to 0 to 1.
-      // if (hasPiece == false) {
-      //   new InstantCommand( () -> {
-      //     rollerSubsystem.setRollerSpeed(.4);
-      //   }, rollerSubsystem);
-      // }
-      // else {
         rollerSubsystem.setRollerSpeed(.4 * (mechController.getR2Axis() + 1.) / 2.); 
-      // }
       hasPiece = true;
       }, rollerSubsystem), 
       new InstantCommand( () -> {
-        System.out.println(hasPiece);
+        // System.out.println(hasPiece);
         rollerSubsystem.setRollerSpeed(.1 * (mechController.getR2Axis() - mechController.getL2Axis()));
       hasPiece = false;
       }, rollerSubsystem), 

@@ -79,7 +79,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
     motor.logStats();
     zeroLimitSwitch.logStats();
-    // System.out.println(motor.getPosition());
+    System.out.println(motor.getPosition());
     if(DebugConstants.MASTER_DEBUG || ElevatorConstants.ELEVATOR_DEBUG) {
       motor.publishStats();
       zeroLimitSwitch.publishStats();

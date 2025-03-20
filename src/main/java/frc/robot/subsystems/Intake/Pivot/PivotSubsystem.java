@@ -5,6 +5,7 @@ import com.ctre.phoenix6.configs.ClosedLoopGeneralConfigs;
 import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -51,6 +52,11 @@ public class PivotSubsystem extends SubsystemBase{
           new ClosedLoopRampsConfigs()
               .withTorqueClosedLoopRampPeriod(PivotConstants.PIVOT_RAMP_RATE)
       )
+    //   .withMotionMagic(
+    //     new MotionMagicConfigs()
+    //         .withMotionMagicAcceleration(.1)
+    //         .withMotionMagicCruiseVelocity(.2)
+    //   )
       .withCurrentLimits(
           new CurrentLimitsConfigs()
               .withStatorCurrentLimit(PivotConstants.PIVOT_CURRENT_LIMIT)
@@ -76,14 +82,14 @@ public class PivotSubsystem extends SubsystemBase{
         pivotMotor.logStats();
         if(DebugConstants.MASTER_DEBUG || DebugConstants.PIVOT_DEBUG){
             pivotMotor.publishStats();
-            System.out.println("CANcoder Absolute Position: " + getPosition());
+            // System.out.println("CANcoder Absolute Position: " + getPosition());
         }
         // System.out.println(Units.radiansToDegrees(pivotMotor.getPosition()));
     }
 
     public void setPositionReferenceWithVoltage(double position){
         if (position > pivotMotor.getPosition()) {
-            pivotMotor.setPositionReferenceWithVoltage(position, Math.cos(Math.toRadians(pivotMotor.getPosition())) * .4);
+            pivotMotor.setPositionReferenceWithVoltage(position, Math.cos(Math.toRadians(pivotMotor.getPosition())) * .5);
         }
         else {
             pivotMotor.setPositionReferenceWithVoltage(position, 0);

@@ -97,7 +97,7 @@ public final class Constants {
       
       public static final String PIVOT_CAN_NAME = "rio";
 
-      public static final double PIVOT_KP = .09;
+      public static final double PIVOT_KP = .05;
       public static final double PIVOT_KI = 0.;
       public static final double PIVOT_KD = 0.00;
       public static final double PIVOT_KG = 200;
