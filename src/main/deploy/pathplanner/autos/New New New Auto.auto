@@ -1,0 +1,62 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3Alg!"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorToAlgae"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PivotToOuttake"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 4.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RollerIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PivotToHorizontal"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorToGround"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Pinnacles",
+  "choreoAuto": false
+}

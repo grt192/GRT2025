@@ -1,0 +1,132 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "GroundAlgae1!"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorToAlgae"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PivotToHorizontal"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "GroundAlgAlign"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RollerIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RollerIntake"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ElevatorToGround"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RollerIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "GroundAlgPros!"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RollerIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RollerOuttake"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 6.0
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Pinnacles",
+  "choreoAuto": false
+}

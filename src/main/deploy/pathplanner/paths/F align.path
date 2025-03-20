@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.541606626157407,
+        "y": 2.6097280092592587
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.4159863462477,
+        "y": 2.8258750547523834
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.353417455570371,
+        "y": 2.9016652894087804
+      },
+      "prevControl": {
+        "x": 5.4551823156264705,
+        "y": 2.673314871721922
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "F Pose"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.227,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 120.55527012197697
+  },
+  "reversed": false,
+  "folder": "Aligning",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 119.17499250550146
+  },
+  "useDefaultConstraints": true
+}
