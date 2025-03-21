@@ -18,6 +18,7 @@ import frc.robot.subsystems.Climb.ClimbSubsystem;
 
 // Commands - Intake Pivot
 import frc.robot.Commands.Intake.Pivot.PivotToHorizontalCommand;
+import frc.robot.Commands.Intake.Pivot.PivotToL4Command;
 import frc.robot.Commands.Intake.Pivot.PivotToOuttakeCommand;
 import frc.robot.Commands.Intake.Pivot.PivotToSourceCommand;
 import frc.robot.Commands.Intake.Pivot.PivotUp90Command;
@@ -274,14 +275,20 @@ public class RobotContainer {
       )
     );
 
-    mechController.R1().onTrue(new ElevatorToLimitSwitchCommand(elevatorSubsystem));
-    mechController.triangle().onTrue(new ElevatorToL4Command(elevatorSubsystem));
-    mechController.circle().onTrue(new ElevatorToL3Command(elevatorSubsystem));
-    mechController.square().onTrue(new ElevatorToL2Command(elevatorSubsystem));
-    mechController.cross().onTrue(new ElevatorToSourceCommand(elevatorSubsystem));
+    mechController.povDown().onTrue(new ElevatorToLimitSwitchCommand(elevatorSubsystem).alongWith(new PivotUp90Command(pivotSubsystem)));
+    mechController.povRight().onTrue(new ElevatorToAlgaeCommand(elevatorSubsystem).alongWith(new PivotToHorizontalCommand(pivotSubsystem)));
+    mechController.povUp().onTrue(new ElevatorToL4Command(elevatorSubsystem).alongWith(new PivotToSourceCommand(pivotSubsystem)));
+    mechController.povLeft().onTrue(new ElevatorToSourceCommand(elevatorSubsystem).alongWith(new PivotToSourceCommand(pivotSubsystem)));
+
+    //UPDATED
+    mechController.triangle().onTrue(new ElevatorToL4Command(elevatorSubsystem).andThen(new PivotToL4Command(pivotSubsystem)));
+    mechController.circle().onTrue(new ElevatorToL3Command(elevatorSubsystem).alongWith(new PivotToOuttakeCommand(pivotSubsystem)));
+    mechController.square().onTrue(new ElevatorToL2Command(elevatorSubsystem).alongWith(new PivotToOuttakeCommand(pivotSubsystem)));
+    mechController.cross().onTrue(new ElevatorToSourceCommand(elevatorSubsystem).alongWith(new PivotToSourceCommand(pivotSubsystem)));
+    //
   }
 
-  private void bindPivot(){
+  private void bindPivotOverride(){
     
     manualPivotTrigger = new Trigger(
       () -> Math.abs(mechController.getLeftY()) >= PivotConstants.CONTROLLER_DEADZONE
@@ -304,29 +311,13 @@ public class RobotContainer {
         pivotSubsystem
       )
     );
-
-    mechController.povDown().onTrue(
-      new PivotToOuttakeCommand(pivotSubsystem)
-    );
-
-    mechController.povUp().onTrue(
-      new PivotToSourceCommand(pivotSubsystem)
-    );
-
-    mechController.L1().onTrue(
-      new PivotUp90Command(pivotSubsystem)
-    );
-
-    mechController.povRight().onTrue(
-      new PivotToHorizontalCommand(pivotSubsystem)
-    );
   }
 
   private void bindRollers(){
 
     rollerSubsystem.setDefaultCommand(new ConditionalCommand(
       new InstantCommand( () -> {
-        rollerSubsystem.setRollerSpeed(.4 * (mechController.getR2Axis() + 1.) / 2.); 
+        rollerSubsystem.setRollerSpeed(.4 * ((mechController.getR2Axis() + 1.) / 2.)); 
       hasPiece = true;
       }, rollerSubsystem), 
       new InstantCommand( () -> {
@@ -339,7 +330,7 @@ public class RobotContainer {
 
   //Binds the intake commands to the mech controller
   private void bindIntake(){
-    bindPivot();
+    bindPivotOverride();
     bindRollers();
   }
 

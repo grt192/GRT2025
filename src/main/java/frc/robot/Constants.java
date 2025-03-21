@@ -30,12 +30,12 @@ public final class Constants {
   public static class ElevatorConstants {
     
     public static final double dutyCycletoticks = 123.;
-    public static final double SOURCE_POS = 44.9; //change
+    public static final double SOURCE_POS = 32.5; //change
     public static final double L1_POS = 0.3 * dutyCycletoticks; //change
-    public static final double L2_POS = 72.44;
-    public static final double algae_POS = 15;
+    public static final double L2_POS = 60;
+    public static final double algae_POS = 13;
     // public static final double L2_POS = 0.5 * dutyCycletoticks; //change
-    public static final double L3_POS = 78.318;
+    public static final double L3_POS = 90;
     // public static final double L3_POS = 0.6 * dutyCycletoticks; //change
     // public static final double L4_POS = 0.9 * dutyCycletoticks; //change
     public static final double L4_POS = 123.;
@@ -89,7 +89,7 @@ public final class Constants {
   }
 
   
-  public static class IntakeConstans{
+  public static class IntakeConstans {
 
     public static class PivotConstants{
       public static final int PIVOT_CAN_ID = 14;
@@ -97,7 +97,7 @@ public final class Constants {
       
       public static final String PIVOT_CAN_NAME = "rio";
 
-      public static final double PIVOT_KP = .05;
+      public static final double PIVOT_KP = .06;
       public static final double PIVOT_KI = 0.;
       public static final double PIVOT_KD = 0.00;
       public static final double PIVOT_KG = 200;
@@ -106,8 +106,9 @@ public final class Constants {
 
       public static final double PIVOT_MANUAL_SPEED = 0.15;
 
-      public static final double SOURCE_POS =  45;
+      public static final double SOURCE_POS =  40.13;
       public static final double OUTTAKE_POS = -35;
+      public static final double L4_POS = -10.289;
       
       public static final double PIVOT_TOLERANCE = 0.1;
 
