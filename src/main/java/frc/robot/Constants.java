@@ -1,11 +1,8 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
-
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -13,22 +10,19 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.Vision.CameraConfig;
 import frc.robot.util.PolynomialRegression;
-
 /**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants. This class should not be used for any other purpose. All constants should be declared
- * globally (i.e. public static). Do not put anything functional in this class.
+The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
+constants. This class should not be used for any other purpose. All constants should be declared
+globally (i.e. public static). Do not put anything functional in this class.
  *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
- * constants are needed, to reduce verbosity.
+<p>It is advised to statically import this class (or one of its inner classes) wherever the
+constants are needed, to reduce verbosity.
  */
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
-
   public static class ElevatorConstants {
-    
     public static final double dutyCycletoticks = 123.;
     public static final double SOURCE_POS = 32.5; //change
     public static final double L1_POS = 0.3 * dutyCycletoticks; //change
@@ -39,93 +33,64 @@ public final class Constants {
     // public static final double L3_POS = 0.6 * dutyCycletoticks; //change
     // public static final double L4_POS = 0.9 * dutyCycletoticks; //change
     public static final double L4_POS = 123.;
-    public static final double GROUND_POS = 0.0; 
-
+    public static final double GROUND_POS = 0.0;
     public static final double DUTY_CYCLE_TO_GROUND_SPEED = 0.3;
-
     public static final double ELEVATOR_TOLERANCE = 8; //change
-
     public static final int MOTOR_ID = 13; //change
     public static final int LIMIT_ID = 0; //change
-
     public static final double kP = 8; //change
     public static final double kI = 0; //change
     public static final double kD = .8; //change
     public static final double kS = 0;
     public static final double arbFF = 15; //30; //chang
-
     public static final double FORWARD_LIMIT = 123; //change
     public static final double REVERSE_LIMIT = 0; //change
-
     public static final double CURRENT_LIMIT = 60;
-
     public static final double GEAR_RATIO = 20; //motor to axle
     public static final double AXLE_RADIUS = 6. * .289 * .0254; //in meters
-
     public static final double TICKS_TO_DIST = 2. * Math.PI * AXLE_RADIUS / GEAR_RATIO;
     public static final double DIST_TO_TICKS = 1. / TICKS_TO_DIST;
-
     public static final boolean ELEVATOR_DEBUG = false;
-
     public static final double CONTROLLER_DEADZONE = 0.1;
   }
-
   public static class ClimbConstants{
     public static int MOTOR_ID = 9;
-    
     public static final double kP = 0.0;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double kS = 10.;
     public static final double kV = 0.0;
-
     public static final double CLIMB_TOLLERANCE = 0.1;
-
     public static final double CLIMB_CURRENT_LIMIT = 80.;
-
     public static final double CLIMB_SPEED = 0.2;
-
     public static final boolean CLIMB_DEBUG = false;
   }
-
-  
   public static class IntakeConstans {
-
     public static class PivotConstants{
       public static final int PIVOT_CAN_ID = 14;
       public static final int ENCODER_ID = 20; //NEED TO CHANGE
-      
       public static final String PIVOT_CAN_NAME = "rio";
-
       public static final double PIVOT_KP = .06;
       public static final double PIVOT_KI = 0.;
       public static final double PIVOT_KD = 0.00;
       public static final double PIVOT_KG = 200;
       public static final double PIVOT_KV = 0.;
       public static final double PIVOT_KS = 0.;
-
       public static final double PIVOT_MANUAL_SPEED = 0.15;
-
       public static final double SOURCE_POS =  40.13;
       public static final double OUTTAKE_POS = -35;
       public static final double L4_POS = -10.289;
-      
       public static final double PIVOT_TOLERANCE = 0.1;
-
       public static final double ROTOR_TO_SENSOR_RATIO = (78. / 18.) / 360.;
       // public static final double PIVOT_INIT_POS = Units.degreesToRadians(95.);
       public static final double PIVOT_HORIZONTAL = 0;
       public static final double PIVOT_MAX_POS = 90.;
       public static final double PIVOT_MIN_POS = -35.;
-
       public static final double PIVOT_RAMP_RATE = 0.03;
       public static final double PIVOT_CURRENT_LIMIT = 100.;
-
       public static final double CONTROLLER_DEADZONE = 0.1;
-
       // public static final int LimitSwitchID = 20;
     }
-
     public static class RollerConstants{
       public static final int ROLLER_CAN_ID = 16;
       public static final String ROLLER_CAN_NAME = "rio";
@@ -135,132 +100,103 @@ public final class Constants {
       public static final double ROLLER_KD = 0;
       public static final double ROLLER_KS = 0;
       public static final double ROLLER_KV = 0;
-
       public static final double ROLLER_IN_SPEED = 0.08;
       public static final double ROLLER_OUT_SPEED = -0.5;
       public static final double ROLLER_OFF_SPEED = 0;
-
       public static final double ROLLER_DUTY_CYCLE_IN_SPEED = 0.5;
       public static final double ROLLER_DUTY_CYCLE_OUT_SPEED = -0.5;
- 
       public static final double ROLLER_TOLERANCE = 0.1;
-
       public static final double ROLLER_RAMP_RATE = 0.02;
       public static final double ROLLER_CURRENT_LIMIT = 100.;
-
       public static final double ROLLER_CONTROLLER_DEADZONE = 0.1;
     }
   }
-
   /** Constants for the swerve subsystem. */
   public static class SwerveConstants {
     public static final int FL_DRIVE = 0;
     public static final int FL_STEER = 1;
     public static final double FL_OFFSET = 0;
-
     public static final int FR_DRIVE = 2;
     public static final int FR_STEER = 3;
     public static final double FR_OFFSET = 0;
-
     public static final int BL_DRIVE = 4;
     public static final int BL_STEER = 5;
     public static final double BL_OFFSET = 0;
-
     public static final int BR_DRIVE = 6;
     public static final int BR_STEER = 7;
     public static final double BR_OFFSET = 0;
-
     public static double MODULE_X_DIST = Units.inchesToMeters(33 / 2.0);
     public static double MODULE_Y_DIST = Units.inchesToMeters(27 / 2.0);
-
     public static final Translation2d FL_POS = new Translation2d(MODULE_X_DIST, MODULE_Y_DIST);
     public static final Translation2d FR_POS = new Translation2d(MODULE_X_DIST, -MODULE_Y_DIST);
     public static final Translation2d BL_POS = new Translation2d(-MODULE_X_DIST, MODULE_Y_DIST);
     public static final Translation2d BR_POS = new Translation2d(-MODULE_X_DIST, -MODULE_Y_DIST);
-
     public static final double DRIVE_GEAR_REDUCTION = 9. * 20. / 26.;
     public static final double DRIVE_WHEEL_CIRCUMFERENCE = Units.inchesToMeters(4 * Math.PI);
     public static final double MAX_VEL = 4800. / 6.923 / 60. * 2. * 2. * Math.PI * .0254; // Kraken speed / gear ratio / reduced to per second * circumference * convert to meters
     public static final double MAX_OMEGA = MAX_VEL / FL_POS.getNorm();
-
-
     public static final double PEAK_CURRENT = 60; //Recomended by CTRE for avarage current
     public static final double RAMP_RATE = 0;
     // public static final double KT = 0.01937; // Torque constant in Nm/A, refer to ctre Motor Performance Analysis Report
-
     public static final double[] DRIVE_P = new double[] {9.5, 9.5, 9,5, 9.5}; //.32
-    public static final double[] DRIVE_I = new double[] {0, 0, 0, 0}; 
+    public static final double[] DRIVE_I = new double[] {0, 0, 0, 0};
     public static final double[] DRIVE_D = new double[] {0.1, 0.1, 0.1, 0.1};
     public static final double[] DRIVE_S = new double[] {5, 5, 5, 5};//{0.16, 0.1499, 0.1499, 0.1499};
     public static final double[] DRIVE_V = new double[] {0.0, 0.0, 0.0, 0.0}; //{0.11, 0.112, 0.112, 0.112};
-
-
     public static final double[] STEER_P = new double[] {5.62, 5.5, 5.45, 5.54};
     public static final double[] STEER_I = new double[] {0, 0, 0, 0};
     public static final double[] STEER_D = new double[] {0, 0, 0, 0};
     public static final double[] STEER_FF = new double[] {0.023,.02,0.025,0.03}; //{0.036, 0.024, 0.0182, 0.05};
-    
     public static final boolean DRIVE_DEBUG = false;
     public static final boolean STEER_DEBUG = false;
     public static final boolean STATE_DEBUG = false;
   }
-
   public static class LoggingConstants{
     public static final String SWERVE_TABLE = "SwerveStats";
     public static final String SENSOR_TABLE = "Sensors";
   }
-
   public static class DebugConstants{
     public static final boolean MASTER_DEBUG = false;
     public static final boolean PIVOT_DEBUG = true;
     public static final boolean ROLLER_DEBUG = false;
   }
-
-
   public static class VisionConstants{
-
     public static final double FIELD_X = 17.5482504;
     public static final double FIELD_Y = 8.05561;
     public static final double ROBOT_RADIUS = 0.762;
-
     public static final double[] STD_DEV_DIST = new double[] {
-      0.75, 1.00, 1.3, 1.69, 2., 2.51, 2.78, 3.07, 3.54, 4.1, 4.52 
+      0.75, 1.00, 1.3, 1.69, 2., 2.51, 2.78, 3.07, 3.54, 4.1, 4.52
     };
-
     public static final double[] X_STD_DEV = new double[] {
       0.002, 0.005, 0.007, 0.014, 0.029, 0.074, 0.101, 0.12, 0.151, 0.204, 0.287
     };
-
     public static final double[] Y_STD_DEV = new double[] {
       0.002, 0.005, 0.013, 0.020, 0.067, 0.080, 0.095, 0.160, 0.206, 0.259, 0.288
     };
-
     public static final double[] O_STD_DEV = new double[] {
       0.002, 0.004, 0.005, 0.011, 0.031, 0.4, 1.72, 1.89, 2.05, 2.443, 2.804
     };
-
     public static final Pose3d[] CAMERA_POSES = new Pose3d[] {
       new Pose3d(0.20, 0, 0.20, new Rotation3d(0, 0, 0))
     };
-
-    public static final CameraConfig[] cameraConfigs = new CameraConfig[]{
+    public static final CameraConfig[] cameraConfigs = new CameraConfig[]{//back top
       new CameraConfig(
         "7",
         new Transform3d(
-          -0.019, -0.071, 0.981,
-          new Rotation3d(0, -Math.PI/6., Math.PI)
+          -0.019, -0.2413, 0.981,
+          new Rotation3d(0, -Math.PI/6., Math.PI*17./18.)
         ),
         PoseStrategy.LOWEST_AMBIGUITY
       ),
-      new CameraConfig(
+      new CameraConfig(//front top
         "5",
         new Transform3d(
-          0.031, -0.071,0.981,
-          new Rotation3d(0, -Math.PI * 6.,  0)
+          0.031, -0.2413,0.981,
+          new Rotation3d(0, -Math.PI / 6.,  Math.PI/12)
         ),
         PoseStrategy.LOWEST_AMBIGUITY
       ),
-      new CameraConfig(
+      new CameraConfig(//right cam
           "4",
           new Transform3d(//11.3 in above ground
             0.235, -0.286, 0.220 ,
@@ -268,7 +204,7 @@ public final class Constants {
           ),
           PoseStrategy.LOWEST_AMBIGUITY
       ),
-      new CameraConfig(
+      new CameraConfig(//left cam with acrylic
           "2",
           new Transform3d(
             0.2921, 0.2921, 0.1651,
@@ -277,7 +213,6 @@ public final class Constants {
           PoseStrategy.LOWEST_AMBIGUITY
       )
     };
-
     public static final PolynomialRegression xStdDevModel = new PolynomialRegression(
       VisionConstants.STD_DEV_DIST,VisionConstants.X_STD_DEV,2);
     public static final PolynomialRegression yStdDevModel = new PolynomialRegression(
