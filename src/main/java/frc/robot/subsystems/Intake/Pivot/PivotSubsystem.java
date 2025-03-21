@@ -82,7 +82,7 @@ public class PivotSubsystem extends SubsystemBase{
         pivotMotor.logStats();
         if(DebugConstants.MASTER_DEBUG || DebugConstants.PIVOT_DEBUG){
             pivotMotor.publishStats();
-            // System.out.println("CANcoder Absolute Position: " + getPosition());
+            System.out.println("CANcoder Absolute Position: " + getPosition());
         }
         // System.out.println(Units.radiansToDegrees(pivotMotor.getPosition()));
     }

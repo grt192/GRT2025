@@ -276,8 +276,8 @@ public class RobotContainer {
     );
 
     mechController.povDown().onTrue(new ElevatorToLimitSwitchCommand(elevatorSubsystem).alongWith(new PivotUp90Command(pivotSubsystem)));
-    mechController.povRight().onTrue(new ElevatorToAlgaeCommand(elevatorSubsystem).alongWith(new PivotToHorizontalCommand(pivotSubsystem)));
-    mechController.povUp().onTrue(new ElevatorToL4Command(elevatorSubsystem).alongWith(new PivotToSourceCommand(pivotSubsystem)));
+    mechController.povRight().onTrue(new ElevatorToAlgaeCommand(elevatorSubsystem).alongWith(new PivotToL4Command(pivotSubsystem)));
+    mechController.povUp().onTrue((new PivotToSourceCommand(pivotSubsystem)).andThen(new ElevatorToL4Command(elevatorSubsystem)));
     mechController.povLeft().onTrue(new ElevatorToSourceCommand(elevatorSubsystem).alongWith(new PivotToSourceCommand(pivotSubsystem)));
 
     //UPDATED

@@ -27,13 +27,14 @@ public final class Constants {
     public static final double SOURCE_POS = 32.5; //change
     public static final double L1_POS = 0.3 * dutyCycletoticks; //change
     public static final double L2_POS = 60;
-    public static final double algae_POS = 13;
+    public static final double algae_POS = 54.696;
     // public static final double L2_POS = 0.5 * dutyCycletoticks; //change
     public static final double L3_POS = 90;
     // public static final double L3_POS = 0.6 * dutyCycletoticks; //change
     // public static final double L4_POS = 0.9 * dutyCycletoticks; //change
     public static final double L4_POS = 123.;
     public static final double GROUND_POS = 0.0;
+    public static final double GROUND_ALGAE_L_POS = 5.9;
     public static final double DUTY_CYCLE_TO_GROUND_SPEED = 0.3;
     public static final double ELEVATOR_TOLERANCE = 8; //change
     public static final int MOTOR_ID = 13; //change
@@ -70,7 +71,8 @@ public final class Constants {
       public static final int PIVOT_CAN_ID = 14;
       public static final int ENCODER_ID = 20; //NEED TO CHANGE
       public static final String PIVOT_CAN_NAME = "rio";
-      public static final double PIVOT_KP = .06;
+
+      public static final double PIVOT_KP = .07;
       public static final double PIVOT_KI = 0.;
       public static final double PIVOT_KD = 0.00;
       public static final double PIVOT_KG = 200;
@@ -80,6 +82,7 @@ public final class Constants {
       public static final double SOURCE_POS =  40.13;
       public static final double OUTTAKE_POS = -35;
       public static final double L4_POS = -10.289;
+      public static final double GROUND_ALGAE_PIVOT_POS = -18.8;
       public static final double PIVOT_TOLERANCE = 0.1;
       public static final double ROTOR_TO_SENSOR_RATIO = (78. / 18.) / 360.;
       // public static final double PIVOT_INIT_POS = Units.degreesToRadians(95.);
