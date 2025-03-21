@@ -34,6 +34,7 @@ import frc.robot.Commands.Intake.Roller.RollerStopCommand;
 
 // Commands - Elevator
 import frc.robot.Commands.Elevator.ElevatorToAlgaeCommand;
+import frc.robot.Commands.Elevator.ElevatorToGroundAlgaeCommand;
 import frc.robot.Commands.Elevator.ElevatorToGroundCommand;
 import frc.robot.Commands.Elevator.ElevatorToL1Command;
 import frc.robot.Commands.Elevator.ElevatorToL2Command;
@@ -41,8 +42,7 @@ import frc.robot.Commands.Elevator.ElevatorToL3Command;
 import frc.robot.Commands.Elevator.ElevatorToL4Command;
 import frc.robot.Commands.Elevator.ElevatorToLimitSwitchCommand;
 import frc.robot.Commands.Elevator.ElevatorToSourceCommand;
-import frc.robot.Commands.Elevator.ElevatorToGroundAlgaeCommand;
-
+import frc.robot.Commands.Align.LRReefAlignCommand;
 // Commands - Climb
 import frc.robot.Commands.Climb.StartClimbCommand;
 import frc.robot.Commands.Climb.StopClimbCommand;
@@ -100,6 +100,8 @@ public class RobotContainer {
   private CommandPS5Controller mechController;
   private Trigger manualElevatorTrigger;
   private Trigger manualPivotTrigger;
+  private Trigger aButton;
+  private Trigger driveLBumper, driveRBumper;
 
   private Trigger createTrigger, optionTrigger;
   private Boolean hasPiece = false;
@@ -149,6 +151,11 @@ public class RobotContainer {
 
     createTrigger = new Trigger(mechController.create());
     optionTrigger = new Trigger(mechController.options());
+    aButton = new Trigger(mechController.cross());
+
+    driveLBumper = new Trigger(() -> driveController.getLeftBumper());
+    driveRBumper = new Trigger(() -> driveController.getRightBumper());
+    
 
     bindElevator();
     bindIntake();
@@ -208,6 +215,17 @@ public class RobotContainer {
       },
       swerveSubsystem
     );
+
+    
+    driveLBumper.onTrue(
+      new LRReefAlignCommand(swerveSubsystem, fmsSubsystem, false).onlyWhile(() -> driveController.getForwardPower() 
+      <= 0.05 && driveController.getLeftPower() <= 0.05));
+    
+    driveRBumper.onTrue(
+      new LRReefAlignCommand(swerveSubsystem, fmsSubsystem, true).onlyWhile(() -> driveController.getForwardPower() 
+      <= 0.05 && driveController.getLeftPower() <= 0.05));
+    
+
   }
 
   /**
