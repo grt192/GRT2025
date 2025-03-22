@@ -212,7 +212,7 @@ public final class Constants {
           "2",
           new Transform3d(
             0.2921, 0.2921, 0.1651,
-            new Rotation3d(0, -Math.PI / 12., -Math.PI/9)
+            new Rotation3d(0, -Math.PI / 12., -Math.PI/9.)
           ),
           PoseStrategy.LOWEST_AMBIGUITY
       )
