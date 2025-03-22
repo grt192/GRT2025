@@ -46,11 +46,11 @@ public final class Constants {
     public static final double ELEVATOR_TOLERANCE = 8; //change
     public static final int MOTOR_ID = 13; //change
     public static final int LIMIT_ID = 0; //change
-    public static final double kP = 8; //change
+    public static final double kP = 8.1; //change
     public static final double kI = 0; //change
     public static final double kD = .8; //change
     public static final double kS = 0;
-    public static final double arbFF = 15; //30; //chang
+    public static final double arbFF = 25; //30; //chang
     public static final double FORWARD_LIMIT = 123; //change
     public static final double REVERSE_LIMIT = 0; //change
     public static final double CURRENT_LIMIT = 60;
@@ -87,7 +87,7 @@ public final class Constants {
       public static final double PIVOT_KS = 0.;
       public static final double PIVOT_MANUAL_SPEED = 0.15;
       public static final double SOURCE_POS =  40.13;
-      public static final double OUTTAKE_POS = -35;
+      public static final double OUTTAKE_POS = -22;
       public static final double L4_POS = -10.289;
       public static final double GROUND_ALGAE_PIVOT_POS = -18.8;
       public static final double BARGE_POS = 56.8;
@@ -361,6 +361,6 @@ public final class Constants {
     );
 
 
-    public static double distanceTolerance = .45; 
+    public static double distanceTolerance = .47; 
   }
 }

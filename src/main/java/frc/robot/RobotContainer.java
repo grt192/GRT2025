@@ -342,7 +342,7 @@ public class RobotContainer {
 
     rollerSubsystem.setDefaultCommand(new ConditionalCommand(
       new InstantCommand( () -> {
-        rollerSubsystem.setRollerSpeed(.4 * ((mechController.getR2Axis() + 1.) / 2.)); 
+        rollerSubsystem.setRollerSpeed(.8 * ((mechController.getR2Axis() + 1.) / 2.)); 
       hasPiece = true;
       }, rollerSubsystem), 
       new InstantCommand( () -> {

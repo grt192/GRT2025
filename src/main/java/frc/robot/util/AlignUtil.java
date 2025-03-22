@@ -95,8 +95,8 @@ public class AlignUtil {
         }
 
         //TESTING PATHFIND TO PATH VS ON THE FLY PATH 
-        //ADD BOOLEAN onFLY 
-        // if (onFly) {
+        //Right is also on the fly
+        // if (isRight) {
         //     PathPlannerPath unusedPath = getAlignPath(pathName);
         //     PathPlannerPath path = getAlignPath(
         //         unusedPath.getWaypoints(), 

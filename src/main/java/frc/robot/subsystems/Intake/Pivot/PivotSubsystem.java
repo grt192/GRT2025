@@ -89,7 +89,7 @@ public class PivotSubsystem extends SubsystemBase{
 
     public void setPositionReferenceWithVoltage(double position){
         if (position > pivotMotor.getPosition()) {
-            pivotMotor.setPositionReferenceWithVoltage(position, Math.cos(Math.toRadians(pivotMotor.getPosition())) * .5);
+            pivotMotor.setPositionReferenceWithVoltage(position, Math.cos(Math.toRadians(pivotMotor.getPosition())) * .45);
         }
         else {
             pivotMotor.setPositionReferenceWithVoltage(position, 0);

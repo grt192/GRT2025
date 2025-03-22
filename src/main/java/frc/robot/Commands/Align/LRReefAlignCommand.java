@@ -24,7 +24,6 @@ public class LRReefAlignCommand extends Command{
     static List<Pose2d> currentRightPoseList;
     static List<Pose2d> currentLeftPoseList;
     Boolean isRight;
-    Boolean onFly;
     static PathPlannerPath getAlignPath;
     private static String followPath;
     
@@ -46,20 +45,18 @@ public class LRReefAlignCommand extends Command{
             currentLeftPoseList = AlignConstants.blueLeftReefPoseList;
         }
         if (isRight){
-            onFly = true;
             Pose2d closestRight = swerveSubsystem.getRobotPosition().nearest(currentRightPoseList);
             int index = currentRightPoseList.indexOf(closestRight);
             followPath = AlignConstants.reefPathList.get(2 * index + 1);
         }
         else {
-            onFly = false;
             Pose2d closestLeft = swerveSubsystem.getRobotPosition().nearest(currentLeftPoseList);
             // System.out.println(swerveSubsystem.getRobotPosition());
             int index = currentLeftPoseList.indexOf(closestLeft);
             followPath = AlignConstants.reefPathList.get(2 * index);
         }
         System.out.println("InITing");
-        alignSubsystem.runAlignPath(followPath, swerveSubsystem.getRobotPosition(), onFly).schedule();
+        alignSubsystem.runAlignPath(followPath, swerveSubsystem.getRobotPosition(), isRight).schedule();
     }
 
     @Override
