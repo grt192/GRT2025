@@ -21,7 +21,7 @@ import frc.robot.Commands.Intake.Pivot.PivotToHorizontalCommand;
 import frc.robot.Commands.Intake.Pivot.PivotToL4Command;
 import frc.robot.Commands.Intake.Pivot.PivotToOuttakeCommand;
 import frc.robot.Commands.Intake.Pivot.PivotToSourceCommand;
-import frc.robot.Commands.Intake.Pivot.PivotUp90Command;
+import frc.robot.Commands.Intake.Pivot.PivotUp87Command;
 import frc.robot.Commands.Intake.Pivot.PivotToBarge;
 import frc.robot.Commands.Intake.Pivot.PivotToGroundAlgaeCommand;
 import frc.robot.Commands.Intake.Pivot.PivotZeroTo90Command;
@@ -297,7 +297,7 @@ public class RobotContainer {
       )
     );
 
-    mechController.povDown().onTrue(new ElevatorToLimitSwitchCommand(elevatorSubsystem).alongWith(new PivotUp90Command(pivotSubsystem)));
+    mechController.povDown().onTrue(new ElevatorToLimitSwitchCommand(elevatorSubsystem).alongWith(new PivotUp87Command(pivotSubsystem)));
     mechController.povRight().onTrue(new ElevatorToAlgaeCommand(elevatorSubsystem).alongWith(new PivotToL4Command(pivotSubsystem)));
 
     mechController.povUp().onTrue((new PivotToBarge(pivotSubsystem)).andThen(new ElevatorToL4Command(elevatorSubsystem)));
@@ -342,7 +342,12 @@ public class RobotContainer {
 
     rollerSubsystem.setDefaultCommand(new ConditionalCommand(
       new InstantCommand( () -> {
-        rollerSubsystem.setRollerSpeed(.8 * ((mechController.getR2Axis() + 1.) / 2.)); 
+        if (((mechController.getR2Axis() + 1.) / 2.) > .05) {
+          rollerSubsystem.setRollerSpeed(.8 * ((mechController.getR2Axis() + 1.) / 2.)); 
+        }
+        else {
+          rollerSubsystem.setRollerSpeed(-.1);
+        }
       hasPiece = true;
       }, rollerSubsystem), 
       new InstantCommand( () -> {
