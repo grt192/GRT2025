@@ -83,6 +83,7 @@ public final class Constants {
       public static final double OUTTAKE_POS = -35;
       public static final double L4_POS = -10.289;
       public static final double GROUND_ALGAE_PIVOT_POS = -18.8;
+      public static final double BARGE_POS = 56.8;
       public static final double PIVOT_TOLERANCE = 0.1;
       public static final double ROTOR_TO_SENSOR_RATIO = (78. / 18.) / 360.;
       // public static final double PIVOT_INIT_POS = Units.degreesToRadians(95.);

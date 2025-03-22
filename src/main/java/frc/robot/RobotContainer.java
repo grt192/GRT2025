@@ -22,6 +22,7 @@ import frc.robot.Commands.Intake.Pivot.PivotToL4Command;
 import frc.robot.Commands.Intake.Pivot.PivotToOuttakeCommand;
 import frc.robot.Commands.Intake.Pivot.PivotToSourceCommand;
 import frc.robot.Commands.Intake.Pivot.PivotUp90Command;
+import frc.robot.Commands.Intake.Pivot.PivotToBarge;
 import frc.robot.Commands.Intake.Pivot.PivotToGroundAlgaeCommand;
 import frc.robot.Commands.Intake.Pivot.PivotZeroTo90Command;
 
@@ -279,7 +280,8 @@ public class RobotContainer {
 
     mechController.povDown().onTrue(new ElevatorToLimitSwitchCommand(elevatorSubsystem).alongWith(new PivotUp90Command(pivotSubsystem)));
     mechController.povRight().onTrue(new ElevatorToAlgaeCommand(elevatorSubsystem).alongWith(new PivotToL4Command(pivotSubsystem)));
-    mechController.povUp().onTrue((new PivotToSourceCommand(pivotSubsystem)).andThen(new ElevatorToL4Command(elevatorSubsystem)));
+
+    mechController.povUp().onTrue((new PivotToBarge(pivotSubsystem)).andThen(new ElevatorToL4Command(elevatorSubsystem)));
     mechController.povLeft().onTrue(new ElevatorToSourceCommand(elevatorSubsystem).alongWith(new PivotToSourceCommand(pivotSubsystem)));
 
     //UPDATED
