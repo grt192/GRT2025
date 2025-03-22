@@ -361,6 +361,6 @@ public final class Constants {
     );
 
 
-    public static double distanceTolerance = .3 * Math.sqrt(2); 
+    public static double distanceTolerance = .45; 
   }
 }

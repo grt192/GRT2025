@@ -43,7 +43,7 @@ public class PS5DriveController extends BaseDriveController{
 
     @Override
     public boolean getDriverHeadingResetButton(){
-        return L1.getAsBoolean();
+        return cross.getAsBoolean();
     }
 
     @Override

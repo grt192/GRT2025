@@ -56,62 +56,62 @@ public class AlignUtil {
         Translation2d currentTrans = swerveSubsystem.getRobotPosition().getTranslation();
         Translation2d pathStartTrans = getAlignPath(pathName).getStartingHolonomicPose().get().getTranslation();
 
-        // if (currentTrans.getDistance(pathStartTrans) <= AlignConstants.distanceTolerance) {
-        //     int index = AlignConstants.reefPathList.indexOf(pathName) / 2;
-        //     ChassisSpeeds drivePower = AlignConstants.reefdirectionList.get(index);
+        if (Math.abs(currentTrans.getDistance(pathStartTrans)) <= AlignConstants.distanceTolerance) {
+            int index = AlignConstants.reefPathList.indexOf(pathName) / 2;
+            ChassisSpeeds drivePower = AlignConstants.reefdirectionList.get(index);
 
-        //     PathPlannerPath path = getAlignPath(pathName);
-        //     if (path == null) {
-        //         System.out.println("NOOO00000000000000O");
-        //         return Commands.none();
+            PathPlannerPath path = getAlignPath(pathName);
+            if (path == null) {
+                System.out.println("NOOO00000000000000O");
+                return Commands.none();
 
-        //     }
-        //     Command alignPath = AutoBuilder.pathfindThenFollowPath(
-        //         path,
-        //         constraints);
+            }
+            Command alignPath = AutoBuilder.pathfindThenFollowPath(
+                path,
+                constraints);
 
-        //     System.out.println("XXXXXXXXXXXXXXXXXX");
-        //     alignPath.addRequirements(swerveSubsystem);
+            System.out.println("XXXXXXXXXXXXXXXXXX");
+            alignPath.addRequirements(swerveSubsystem);
 
-        //     runAlignPath = (Command) new SequentialCommandGroup(
-        //         new DriveBackwardsCommand(swerveSubsystem, drivePower).until(
-        //             () -> swerveSubsystem.getRobotPosition().getTranslation()
-        //             .getDistance(pathStartTrans) > AlignConstants.distanceTolerance),
-        //             alignPath
-        //     );
-            
-        // }
-        // else {
-        //     PathPlannerPath path = getAlignPath(pathName);
-        //     if (path == null) {
-        //         System.out.println("NOOOOOOOOPOOOOOOO");
-        //         return Commands.none();
-        //     }
-
-        //     System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        //     runAlignPath = AutoBuilder.pathfindThenFollowPath(
-        //         path,
-        //         constraints);
-        // }
-
-        //TESTING PATHFIND TO PATH VS ON THE FLY PATH 
-        //ADD BOOLEAN onFLY 
-        if (onFly) {
-            PathPlannerPath unusedPath = getAlignPath(pathName);
-            PathPlannerPath path = getAlignPath(
-                unusedPath.getWaypoints(), 
-                unusedPath.getGoalEndState()
+            runAlignPath = (Command) new SequentialCommandGroup(
+                new DriveBackwardsCommand(swerveSubsystem, drivePower).until(
+                    () -> Math.abs(swerveSubsystem.getRobotPosition().getTranslation()
+                    .getDistance(pathStartTrans)) > AlignConstants.distanceTolerance),
+                    alignPath
             );
-
-            runAlignPath = AutoBuilder.followPath(path);
+            
         }
         else {
             PathPlannerPath path = getAlignPath(pathName);
+            if (path == null) {
+                System.out.println("NOOOOOOOOPOOOOOOO");
+                return Commands.none();
+            }
+
+            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAA");
             runAlignPath = AutoBuilder.pathfindThenFollowPath(
                 path,
-                constraints
-            );
+                constraints);
         }
+
+        //TESTING PATHFIND TO PATH VS ON THE FLY PATH 
+        //ADD BOOLEAN onFLY 
+        // if (onFly) {
+        //     PathPlannerPath unusedPath = getAlignPath(pathName);
+        //     PathPlannerPath path = getAlignPath(
+        //         unusedPath.getWaypoints(), 
+        //         unusedPath.getGoalEndState()
+        //     );
+
+        //     runAlignPath = AutoBuilder.followPath(path);
+        // }
+        // else {
+        //     PathPlannerPath path = getAlignPath(pathName);
+        //     runAlignPath = AutoBuilder.pathfindThenFollowPath(
+        //         path,
+        //         constraints
+        //     );
+        // }
 
         return runAlignPath; 
 
