@@ -22,6 +22,7 @@ import frc.robot.Commands.Intake.Pivot.PivotToL4Command;
 import frc.robot.Commands.Intake.Pivot.PivotToOuttakeCommand;
 import frc.robot.Commands.Intake.Pivot.PivotToSourceCommand;
 import frc.robot.Commands.Intake.Pivot.PivotUp90Command;
+import frc.robot.Commands.Intake.Pivot.PivotToGroundAlgaeCommand;
 import frc.robot.Commands.Intake.Pivot.PivotZeroTo90Command;
 
 // Commands - Intake Roller
@@ -39,6 +40,7 @@ import frc.robot.Commands.Elevator.ElevatorToL3Command;
 import frc.robot.Commands.Elevator.ElevatorToL4Command;
 import frc.robot.Commands.Elevator.ElevatorToLimitSwitchCommand;
 import frc.robot.Commands.Elevator.ElevatorToSourceCommand;
+import frc.robot.Commands.Elevator.ElevatorToGroundAlgaeCommand;
 
 // Commands - Climb
 import frc.robot.Commands.Climb.StartClimbCommand;
@@ -285,6 +287,7 @@ public class RobotContainer {
     mechController.circle().onTrue(new ElevatorToL3Command(elevatorSubsystem).alongWith(new PivotToOuttakeCommand(pivotSubsystem)));
     mechController.square().onTrue(new ElevatorToL2Command(elevatorSubsystem).alongWith(new PivotToOuttakeCommand(pivotSubsystem)));
     mechController.cross().onTrue(new ElevatorToSourceCommand(elevatorSubsystem).alongWith(new PivotToSourceCommand(pivotSubsystem)));
+    mechController.L1().onTrue(new ElevatorToGroundAlgaeCommand(elevatorSubsystem).alongWith(new PivotToGroundAlgaeCommand(pivotSubsystem)));
     //
   }
 
