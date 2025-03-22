@@ -20,7 +20,7 @@ public class PivotUp87Command extends Command{
 
    @Override
    public boolean isFinished(){
-        return Math.abs(pivotSubsystem.getClosedLoopError())
-            < PivotConstants.PIVOT_TOLERANCE;
-   }
+    return Math.abs(pivotSubsystem.getPosition() - (PivotConstants.PIVOT_MAX_POS - 3))
+    < 8;
+}
 }

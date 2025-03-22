@@ -21,6 +21,6 @@ public class PivotToSourceCommand extends Command{
    @Override
    public boolean isFinished(){
         return Math.abs(pivotSubsystem.getPosition() - PivotConstants.SOURCE_POS)
-            < 10;
+            < 8;
    }
 }

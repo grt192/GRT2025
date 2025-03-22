@@ -20,7 +20,7 @@ public class PivotToL4Command extends Command{
 
    @Override
    public boolean isFinished(){
-        return Math.abs(pivotSubsystem.getClosedLoopError())
-            < PivotConstants.PIVOT_TOLERANCE;
-   }
+    return Math.abs(pivotSubsystem.getPosition() - PivotConstants.L4_POS)
+    < 8;
+}
 }

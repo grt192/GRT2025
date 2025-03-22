@@ -20,7 +20,7 @@ public class PivotToHorizontalCommand extends Command{
 
    @Override
    public boolean isFinished(){
-        return Math.abs(pivotSubsystem.getClosedLoopError())
-            < PivotConstants.PIVOT_TOLERANCE;
-   }
+    return Math.abs(pivotSubsystem.getPosition() - PivotConstants.PIVOT_HORIZONTAL)
+    < 8;
+}
 }

@@ -24,7 +24,7 @@ public class ElevatorToSourceCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return elevatorSubsystem.getClosedLoopError()
-            < ElevatorConstants.ELEVATOR_TOLERANCE;
+        return Math.abs(elevatorSubsystem.getPosition() - ElevatorConstants.SOURCE_POS)
+            < 5;
     }
 }

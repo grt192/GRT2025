@@ -24,7 +24,7 @@ public class ElevatorToGroundAlgaeCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return Math.abs(elevatorSubsystem.getPosition() - ElevatorConstants.L4_POS)
+        return Math.abs(elevatorSubsystem.getPosition() - ElevatorConstants.GROUND_ALGAE_L_POS)
             < 5;
     }
 }
