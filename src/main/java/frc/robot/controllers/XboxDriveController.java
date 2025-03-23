@@ -74,8 +74,8 @@ public class XboxDriveController extends BaseDriveController {
     }
 
     @Override
-    public boolean getRelativeMode() {
-        return driveController.getRightTriggerAxis() > .1;
+    public Trigger getRelativeMode() {
+        return null;
     }
 
     @Override

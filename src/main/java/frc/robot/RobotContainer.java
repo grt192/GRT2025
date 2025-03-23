@@ -42,6 +42,7 @@ import frc.robot.Commands.Elevator.ElevatorToL4Command;
 import frc.robot.Commands.Elevator.ElevatorToLimitSwitchCommand;
 import frc.robot.Commands.Elevator.ElevatorToSourceCommand;
 import frc.robot.Commands.Align.LRReefAlignCommand;
+import frc.robot.Commands.Align.SourceAlignCommand;
 // Commands - Climb
 import frc.robot.Commands.Climb.StartClimbCommand;
 import frc.robot.Commands.Climb.StopClimbCommand;
@@ -60,6 +61,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 // WPILib imports
 import edu.wpi.first.cscore.MjpegServer;
 import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableEvent;
@@ -81,6 +83,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Commands.Intake.Pivot.PivotToL4Command;
 
+import java.lang.constant.DirectMethodHandleDesc;
 // Java Standard Library
 import java.util.EnumSet;
 import java.util.jar.Attributes.Name;
@@ -100,7 +103,7 @@ public class RobotContainer {
   private CommandPS5Controller mechController;
   private Trigger manualElevatorTrigger;
   private Trigger manualPivotTrigger;
-  private Trigger aButton;
+  private Trigger cButton, oButton;
   private Trigger driveLBumper, driveRBumper;
 
   private Trigger createTrigger, optionTrigger;
@@ -151,7 +154,7 @@ public class RobotContainer {
 
     createTrigger = new Trigger(mechController.create());
     optionTrigger = new Trigger(mechController.options());
-    aButton = new Trigger(mechController.cross());
+    cButton = new Trigger(mechController.cross());
 
     driveLBumper = new Trigger(() -> driveController.getLeftBumper());
     driveRBumper = new Trigger(() -> driveController.getRightBumper());
@@ -207,6 +210,18 @@ public class RobotContainer {
         swerveSubsystem
       )
     );
+      
+    driveController.getRelativeMode().whileTrue(
+      new RunCommand(
+        () -> {
+          swerveSubsystem.setRobotRelativeDrivePowers(
+            driveController.getForwardPower(),
+            driveController.getLeftPower(),
+            driveController.getRotatePower()
+          );
+          }, swerveSubsystem)
+    );
+
 
     /* Pressing the button resets the field axes to the current robot axes. */
     driveController.bindDriverHeadingReset(
@@ -224,7 +239,11 @@ public class RobotContainer {
     driveRBumper.onTrue(
       new LRReefAlignCommand(swerveSubsystem, fmsSubsystem, true).onlyWhile(() -> driveController.getForwardPower() 
       <= 0.05 && driveController.getLeftPower() <= 0.05));
-    
+
+    // driveLBumper.and(driveRBumper).onTrue(
+    //   new SourceAlignCommand(swerveSubsystem, fmsSubsystem).onlyWhile(() -> driveController.getForwardPower() 
+    //   <= 0.05 && driveController.getLeftPower() <= 0.05));
+  
 
   }
 
@@ -306,7 +325,7 @@ public class RobotContainer {
     mechController.triangle().onTrue(new ElevatorToL4Command(elevatorSubsystem).andThen(new PivotToL4Command(pivotSubsystem)));
     mechController.circle().onTrue(new ElevatorToL3Command(elevatorSubsystem).alongWith(new PivotToOuttakeCommand(pivotSubsystem)));
     mechController.square().onTrue(new ElevatorToL2Command(elevatorSubsystem).alongWith(new PivotToOuttakeCommand(pivotSubsystem)));
-    mechController.cross().onTrue(new ElevatorToSourceCommand(elevatorSubsystem).alongWith(new PivotToSourceCommand(pivotSubsystem)));
+    mechController.cross().onTrue(new ElevatorToSourceCommand(elevatorSubsystem).alongWith(new PivotToOuttakeCommand(pivotSubsystem)));
     mechController.L1().onTrue(new ElevatorToGroundAlgaeCommand(elevatorSubsystem).alongWith(new PivotToGroundAlgaeCommand(pivotSubsystem)));
     //
   }
@@ -345,7 +364,7 @@ public class RobotContainer {
           rollerSubsystem.setRollerSpeed(.8 * ((mechController.getR2Axis() + 1.) / 2.)); 
         }
         else {
-          rollerSubsystem.setRollerSpeed(-.1);
+          rollerSubsystem.setRollerSpeed(-.03);
         }
       hasPiece = true;
       }, rollerSubsystem), 

@@ -55,7 +55,7 @@ public abstract class BaseDriveController {
      *
      * @return true if relativeMode is active, false otherwise
      */
-    public abstract boolean getRelativeMode();
+    public abstract Trigger getRelativeMode();
 
     // public abstract boolean getAlignToReef();
 
