@@ -104,7 +104,7 @@ public class RobotContainer {
   private Trigger manualElevatorTrigger;
   private Trigger manualPivotTrigger;
   private Trigger cButton, oButton;
-  private Trigger driveLBumper, driveRBumper;
+  private Trigger driveLBumper, driveRBumper, driveRTrigger;
 
   private Trigger createTrigger, optionTrigger;
   private Boolean hasPiece = false;
@@ -158,6 +158,7 @@ public class RobotContainer {
 
     driveLBumper = new Trigger(() -> driveController.getLeftBumper());
     driveRBumper = new Trigger(() -> driveController.getRightBumper());
+    driveRTrigger = new Trigger(() -> (driveController.getRightTrigger()));
     
 
     bindElevator();
@@ -240,9 +241,9 @@ public class RobotContainer {
       new LRReefAlignCommand(swerveSubsystem, fmsSubsystem, true).onlyWhile(() -> driveController.getForwardPower() 
       <= 0.05 && driveController.getLeftPower() <= 0.05));
 
-    // driveLBumper.and(driveRBumper).onTrue(
-    //   new SourceAlignCommand(swerveSubsystem, fmsSubsystem).onlyWhile(() -> driveController.getForwardPower() 
-    //   <= 0.05 && driveController.getLeftPower() <= 0.05));
+    driveRTrigger.onTrue(
+      new SourceAlignCommand(swerveSubsystem, fmsSubsystem).onlyWhile(() -> driveController.getForwardPower() 
+      <= 0.05 && driveController.getLeftPower() <= 0.05));
   
 
   }
@@ -279,7 +280,7 @@ public class RobotContainer {
     
     createTrigger.and(optionTrigger).whileTrue(
       new RunCommand(() -> {
-        climbSubsystem.setTorqueCurrentFOC(60);
+        climbSubsystem.setTorqueCurrentFOC(80);
 
       }, climbSubsystem)
     ).onFalse(

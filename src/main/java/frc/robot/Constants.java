@@ -31,7 +31,7 @@ public final class Constants {
   }
   public static class ElevatorConstants {
     public static final double dutyCycletoticks = 123.;
-    public static final double SOURCE_POS = 32.5; //change
+    public static final double SOURCE_POS = 33.6; //change
     public static final double L1_POS = 0.3 * dutyCycletoticks; //change
     public static final double L2_POS = 60;
     public static final double algae_POS = 54.696;

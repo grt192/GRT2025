@@ -12,6 +12,7 @@ import frc.robot.util.LoggedTalon;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -40,6 +41,11 @@ public class ClimbSubsystem extends SubsystemBase {
       .withMotorOutput(
         new MotorOutputConfigs()
           .withNeutralMode(NeutralModeValue.Brake)
+      )
+      .withSoftwareLimitSwitch(
+        new SoftwareLimitSwitchConfigs()
+          .withForwardSoftLimitEnable(true)
+          .withForwardSoftLimitThreshold(50)
       );
       
 
@@ -52,6 +58,7 @@ public class ClimbSubsystem extends SubsystemBase {
     if(DebugConstants.MASTER_DEBUG || ClimbConstants.CLIMB_DEBUG){
       motor.publishStats();
     }
+    System.out.println(motor.getPosition());
   }
 
   /**
