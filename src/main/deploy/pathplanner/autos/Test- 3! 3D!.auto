@@ -1,0 +1,49 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Leave 3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3D!"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorToL4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PivotToOuttake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RollerOuttake"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Testing",
+  "choreoAuto": false
+}
