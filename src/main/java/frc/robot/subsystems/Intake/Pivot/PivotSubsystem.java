@@ -82,14 +82,14 @@ public class PivotSubsystem extends SubsystemBase{
         pivotMotor.logStats();
         if(DebugConstants.MASTER_DEBUG || DebugConstants.PIVOT_DEBUG){
             pivotMotor.publishStats();
-            System.out.println("CANcoder Absolute Position: " + getPosition());
+            // System.out.println("CANcoder Absolute Position: " + getPosition());
         }
         // System.out.println(Units.radiansToDegrees(pivotMotor.getPosition()));
     }
 
     public void setPositionReferenceWithVoltage(double position){
         if (position > pivotMotor.getPosition()) {
-            pivotMotor.setPositionReferenceWithVoltage(position, Math.cos(Math.toRadians(pivotMotor.getPosition())) * .5);
+            pivotMotor.setPositionReferenceWithVoltage(position, Math.cos(Math.toRadians(pivotMotor.getPosition())) * .45);
         }
         else {
             pivotMotor.setPositionReferenceWithVoltage(position, 0);

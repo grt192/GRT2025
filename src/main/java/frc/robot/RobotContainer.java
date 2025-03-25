@@ -21,10 +21,9 @@ import frc.robot.Commands.Intake.Pivot.PivotToHorizontalCommand;
 import frc.robot.Commands.Intake.Pivot.PivotToL4Command;
 import frc.robot.Commands.Intake.Pivot.PivotToOuttakeCommand;
 import frc.robot.Commands.Intake.Pivot.PivotToSourceCommand;
-import frc.robot.Commands.Intake.Pivot.PivotUp90Command;
+import frc.robot.Commands.Intake.Pivot.PivotUp87Command;
 import frc.robot.Commands.Intake.Pivot.PivotToBarge;
 import frc.robot.Commands.Intake.Pivot.PivotToGroundAlgaeCommand;
-import frc.robot.Commands.Intake.Pivot.PivotZeroTo90Command;
 
 // Commands - Intake Roller
 import frc.robot.Commands.Intake.Roller.RollerInCommand;
@@ -34,6 +33,7 @@ import frc.robot.Commands.Intake.Roller.RollerStopCommand;
 
 // Commands - Elevator
 import frc.robot.Commands.Elevator.ElevatorToAlgaeCommand;
+import frc.robot.Commands.Elevator.ElevatorToGroundAlgaeCommand;
 import frc.robot.Commands.Elevator.ElevatorToGroundCommand;
 import frc.robot.Commands.Elevator.ElevatorToL1Command;
 import frc.robot.Commands.Elevator.ElevatorToL2Command;
@@ -41,8 +41,8 @@ import frc.robot.Commands.Elevator.ElevatorToL3Command;
 import frc.robot.Commands.Elevator.ElevatorToL4Command;
 import frc.robot.Commands.Elevator.ElevatorToLimitSwitchCommand;
 import frc.robot.Commands.Elevator.ElevatorToSourceCommand;
-import frc.robot.Commands.Elevator.ElevatorToGroundAlgaeCommand;
-
+import frc.robot.Commands.Align.LRReefAlignCommand;
+import frc.robot.Commands.Align.SourceAlignCommand;
 // Commands - Climb
 import frc.robot.Commands.Climb.StartClimbCommand;
 import frc.robot.Commands.Climb.StopClimbCommand;
@@ -61,6 +61,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 // WPILib imports
 import edu.wpi.first.cscore.MjpegServer;
 import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableEvent;
@@ -80,7 +81,9 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Commands.Intake.Pivot.PivotToL4Command;
 
+import java.lang.constant.DirectMethodHandleDesc;
 // Java Standard Library
 import java.util.EnumSet;
 import java.util.jar.Attributes.Name;
@@ -100,6 +103,8 @@ public class RobotContainer {
   private CommandPS5Controller mechController;
   private Trigger manualElevatorTrigger;
   private Trigger manualPivotTrigger;
+  private Trigger cButton, oButton;
+  private Trigger driveLBumper, driveRBumper, driveRTrigger;
 
   private Trigger createTrigger, optionTrigger;
   private Boolean hasPiece = false;
@@ -149,6 +154,12 @@ public class RobotContainer {
 
     createTrigger = new Trigger(mechController.create());
     optionTrigger = new Trigger(mechController.options());
+    cButton = new Trigger(mechController.cross());
+
+    driveLBumper = new Trigger(() -> driveController.getLeftBumper());
+    driveRBumper = new Trigger(() -> driveController.getRightBumper());
+    driveRTrigger = new Trigger(() -> (driveController.getRightTrigger()));
+    
 
     bindElevator();
     bindIntake();
@@ -169,7 +180,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("RollerOuttake", new RollerOutCommand(rollerSubsystem));
     autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
       (stream) -> isCompetition
-      ? stream.filter(auto -> auto.getName().startsWith("Pine"))
+      ? stream.filter(auto -> auto.getName().startsWith("Test"))
       : stream
     );
     SmartDashboard.putData("AutoChooser", autoChooser);
@@ -200,6 +211,18 @@ public class RobotContainer {
         swerveSubsystem
       )
     );
+      
+    driveController.getRelativeMode().whileTrue(
+      new RunCommand(
+        () -> {
+          swerveSubsystem.setRobotRelativeDrivePowers(
+            driveController.getForwardPower(),
+            driveController.getLeftPower(),
+            driveController.getRotatePower()
+          );
+          }, swerveSubsystem)
+    );
+
 
     /* Pressing the button resets the field axes to the current robot axes. */
     driveController.bindDriverHeadingReset(
@@ -208,6 +231,21 @@ public class RobotContainer {
       },
       swerveSubsystem
     );
+
+    
+    driveLBumper.onTrue(
+      new LRReefAlignCommand(swerveSubsystem, fmsSubsystem, false).onlyWhile(() -> driveController.getForwardPower() 
+      <= 0.05 && driveController.getLeftPower() <= 0.05));
+    
+    driveRBumper.onTrue(
+      new LRReefAlignCommand(swerveSubsystem, fmsSubsystem, true).onlyWhile(() -> driveController.getForwardPower() 
+      <= 0.05 && driveController.getLeftPower() <= 0.05));
+
+    driveRTrigger.onTrue(
+      new SourceAlignCommand(swerveSubsystem, fmsSubsystem).onlyWhile(() -> driveController.getForwardPower() 
+      <= 0.05 && driveController.getLeftPower() <= 0.05));
+  
+
   }
 
   /**
@@ -242,7 +280,7 @@ public class RobotContainer {
     
     createTrigger.and(optionTrigger).whileTrue(
       new RunCommand(() -> {
-        climbSubsystem.setTorqueCurrentFOC(60);
+        climbSubsystem.setTorqueCurrentFOC(80);
 
       }, climbSubsystem)
     ).onFalse(
@@ -278,7 +316,7 @@ public class RobotContainer {
       )
     );
 
-    mechController.povDown().onTrue(new ElevatorToLimitSwitchCommand(elevatorSubsystem).alongWith(new PivotUp90Command(pivotSubsystem)));
+    mechController.povDown().onTrue(new ElevatorToLimitSwitchCommand(elevatorSubsystem).alongWith(new PivotUp87Command(pivotSubsystem)));
     mechController.povRight().onTrue(new ElevatorToAlgaeCommand(elevatorSubsystem).alongWith(new PivotToL4Command(pivotSubsystem)));
 
     mechController.povUp().onTrue((new PivotToBarge(pivotSubsystem)).andThen(new ElevatorToL4Command(elevatorSubsystem)));
@@ -288,7 +326,7 @@ public class RobotContainer {
     mechController.triangle().onTrue(new ElevatorToL4Command(elevatorSubsystem).andThen(new PivotToL4Command(pivotSubsystem)));
     mechController.circle().onTrue(new ElevatorToL3Command(elevatorSubsystem).alongWith(new PivotToOuttakeCommand(pivotSubsystem)));
     mechController.square().onTrue(new ElevatorToL2Command(elevatorSubsystem).alongWith(new PivotToOuttakeCommand(pivotSubsystem)));
-    mechController.cross().onTrue(new ElevatorToSourceCommand(elevatorSubsystem).alongWith(new PivotToSourceCommand(pivotSubsystem)));
+    mechController.cross().onTrue(new ElevatorToSourceCommand(elevatorSubsystem).alongWith(new PivotToOuttakeCommand(pivotSubsystem)));
     mechController.L1().onTrue(new ElevatorToGroundAlgaeCommand(elevatorSubsystem).alongWith(new PivotToGroundAlgaeCommand(pivotSubsystem)));
     //
   }
@@ -316,13 +354,19 @@ public class RobotContainer {
         pivotSubsystem
       )
     );
+
   }
 
   private void bindRollers(){
 
     rollerSubsystem.setDefaultCommand(new ConditionalCommand(
       new InstantCommand( () -> {
-        rollerSubsystem.setRollerSpeed(.4 * ((mechController.getR2Axis() + 1.) / 2.)); 
+        if (((mechController.getR2Axis() + 1.) / 2.) > .05) {
+          rollerSubsystem.setRollerSpeed(.8 * ((mechController.getR2Axis() + 1.) / 2.)); 
+        }
+        else {
+          rollerSubsystem.setRollerSpeed(-.03);
+        }
       hasPiece = true;
       }, rollerSubsystem), 
       new InstantCommand( () -> {

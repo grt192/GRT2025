@@ -275,6 +275,27 @@ public class SwerveSubsystem extends SubsystemBase {
         );
     }
 
+        /**
+     * Sets the power of the drivetrain through PIDs. Relative to the robot with the intake in the front.
+     *
+     * @param xPower [-1, 1] The forward power.
+     * @param yPower [-1, 1] The left power.
+     * @param angularPower [-1, 1] The rotational power.
+     */
+    public void setRobotRelativeDrivePowers(double xPower, double yPower, double angularPower) {
+        ChassisSpeeds speeds = ChassisSpeeds.fromRobotRelativeSpeeds(
+            xPower * MAX_VEL, 
+            yPower * MAX_VEL, 
+            angularPower * MAX_OMEGA, 
+            new Rotation2d(0)
+        );
+
+        states = kinematics.toSwerveModuleStates(speeds);
+        SwerveDriveKinematics.desaturateWheelSpeeds(
+            states, speeds,
+            MAX_VEL, MAX_VEL, MAX_OMEGA);
+    }
+
     private void initNT() {
         ntInstance = NetworkTableInstance.getDefault();
         swerveTable = ntInstance.getTable(SWERVE_TABLE);
@@ -361,8 +382,8 @@ public class SwerveSubsystem extends SubsystemBase {
             
             //1.25/3.25
             new PPHolonomicDriveController(
-                new PIDConstants(1.25, 0, 0.0),
-                new PIDConstants(3.25, 0.0, 0.0)
+                new PIDConstants(1.34, 0, 0.0),
+                new PIDConstants(3.3, 0.0, 0.0)
             ),
 
             config,

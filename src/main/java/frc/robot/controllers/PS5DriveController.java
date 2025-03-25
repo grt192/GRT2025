@@ -43,7 +43,7 @@ public class PS5DriveController extends BaseDriveController{
 
     @Override
     public boolean getDriverHeadingResetButton(){
-        return L1.getAsBoolean();
+        return cross.getAsBoolean();
     }
 
     @Override
@@ -57,8 +57,12 @@ public class PS5DriveController extends BaseDriveController{
     }
 
     @Override
-    public boolean getRelativeMode(){
-        return R1.getAsBoolean();
+    public Trigger getRelativeMode(){
+        return square;
+    }
+
+    public boolean getRightTrigger() {
+        return driveController.getR2Axis() > .1;
     }
 
     @Override

@@ -4,10 +4,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.IntakeConstans.PivotConstants;
 import frc.robot.subsystems.Intake.Pivot.PivotSubsystem;
 
-public class PivotZeroTo90Command extends Command{
+public class PivotUp87Command extends Command{
    private final PivotSubsystem pivotSubsystem; 
 
-   public PivotZeroTo90Command(PivotSubsystem pivotSubsystem){
+   public PivotUp87Command(PivotSubsystem pivotSubsystem){
        this.pivotSubsystem = pivotSubsystem;
        this.addRequirements(pivotSubsystem);
    }
@@ -15,11 +15,12 @@ public class PivotZeroTo90Command extends Command{
    @Override
    public void initialize(){
     //    if(pivotSubsystem.getLimitSwitch()){pivotSubsystem.setEncoderZero();}
-       pivotSubsystem.setPosition(Math.PI / 2.);
+       pivotSubsystem.setPositionReferenceWithVoltage(PivotConstants.PIVOT_MAX_POS - 3);
    }
 
    @Override
    public boolean isFinished(){
-    return true;
-   }
+    return Math.abs(pivotSubsystem.getPosition() - (PivotConstants.PIVOT_MAX_POS - 3))
+    < 8;
+}
 }

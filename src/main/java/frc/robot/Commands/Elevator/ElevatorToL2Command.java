@@ -24,7 +24,7 @@ public class ElevatorToL2Command extends Command {
 
     @Override
     public boolean isFinished() {
-        return elevatorSubsystem.getClosedLoopError()
-            < ElevatorConstants.ELEVATOR_TOLERANCE;
+        return Math.abs(elevatorSubsystem.getPosition() - ElevatorConstants.L2_POS)
+            < 5;
     }
 }
