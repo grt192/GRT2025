@@ -335,30 +335,30 @@ public final class Constants {
 
 
     public static final List<Pose2d> blueSourcePoses = List.of(
-      AlignUtil.getAlignPath(LS_1alignName).getStartingHolonomicPose().get(),
+      // AlignUtil.getAlignPath(LS_1alignName).getStartingHolonomicPose().get(),
       AlignUtil.getAlignPath(LS_2alignName).getStartingHolonomicPose().get(),
-      AlignUtil.getAlignPath(LS_3alignName).getStartingHolonomicPose().get(),
-      AlignUtil.getAlignPath(RS_1alignName).getStartingHolonomicPose().get(),
-      AlignUtil.getAlignPath(RS_2alignName).getStartingHolonomicPose().get(),
-      AlignUtil.getAlignPath(RS_3alignName).getStartingHolonomicPose().get()
+      // AlignUtil.getAlignPath(LS_3alignName).getStartingHolonomicPose().get(),
+      // AlignUtil.getAlignPath(RS_1alignName).getStartingHolonomicPose().get(),
+      AlignUtil.getAlignPath(RS_2alignName).getStartingHolonomicPose().get()
+      // AlignUtil.getAlignPath(RS_3alignName).getStartingHolonomicPose().get()
     );
 
     public static final List<Pose2d> redSourcePoses = List.of(
-      AlignUtil.getAlignPath(LS_1alignName).flipPath().getStartingHolonomicPose().get(),
+      // AlignUtil.getAlignPath(LS_1alignName).flipPath().getStartingHolonomicPose().get(),
       AlignUtil.getAlignPath(LS_2alignName).flipPath().getStartingHolonomicPose().get(),
-      AlignUtil.getAlignPath(LS_3alignName).flipPath().getStartingHolonomicPose().get(),
-      AlignUtil.getAlignPath(RS_1alignName).flipPath().getStartingHolonomicPose().get(),
-      AlignUtil.getAlignPath(RS_2alignName).flipPath().getStartingHolonomicPose().get(),
-      AlignUtil.getAlignPath(RS_3alignName).flipPath().getStartingHolonomicPose().get()
+     // AlignUtil.getAlignPath(LS_3alignName).flipPath().getStartingHolonomicPose().get(),
+     // AlignUtil.getAlignPath(RS_1alignName).flipPath().getStartingHolonomicPose().get(),
+      AlignUtil.getAlignPath(RS_2alignName).flipPath().getStartingHolonomicPose().get()
+      //AlignUtil.getAlignPath(RS_3alignName).flipPath().getStartingHolonomicPose().get()
     );
 
     public static final List<String> sourcePathList = List.of(
-      LS_1alignName,
+     // LS_1alignName,
       LS_2alignName,
-      LS_3alignName,
-      RS_1alignName,
-      RS_2alignName,
-      RS_3alignName
+     // LS_3alignName,
+     // RS_1alignName,
+      RS_2alignName
+     // RS_3alignName
     );
 
 
