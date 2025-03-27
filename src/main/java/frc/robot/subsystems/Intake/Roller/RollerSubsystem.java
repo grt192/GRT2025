@@ -66,6 +66,8 @@ public class RollerSubsystem extends SubsystemBase{
             rollerMotor.publishStats();
             // intakeSensor.publishStats();
         }
+        // coralSensor.publishStats();
+        // algaeSensor.publishStats();
     }
 
     public boolean getCoralSensor() {

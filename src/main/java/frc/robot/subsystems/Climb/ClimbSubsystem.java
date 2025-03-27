@@ -45,7 +45,7 @@ public class ClimbSubsystem extends SubsystemBase {
       .withSoftwareLimitSwitch(
         new SoftwareLimitSwitchConfigs()
           .withForwardSoftLimitEnable(true)
-          .withForwardSoftLimitThreshold(50)
+          .withForwardSoftLimitThreshold(55)
       );
       
 

@@ -194,7 +194,7 @@ public final class Constants {
       new CameraConfig(
         "7",
         new Transform3d(
-          -0.019, -0.2413, 0.981,
+          -0.019, -0.3613, 0.981,
           new Rotation3d(0, -Math.PI/6., Math.PI*17./18.)
         ),
         PoseStrategy.LOWEST_AMBIGUITY
@@ -202,7 +202,8 @@ public final class Constants {
       new CameraConfig(//front top
         "5",
         new Transform3d(
-          0.031, -0.2413,0.981,
+          
+          0.031, -0.4013,0.981,
           new Rotation3d(0, -Math.PI / 6.,  Math.PI/12.)
         ),
         PoseStrategy.LOWEST_AMBIGUITY

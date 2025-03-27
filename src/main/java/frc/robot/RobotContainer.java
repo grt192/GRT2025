@@ -178,9 +178,13 @@ public class RobotContainer {
     NamedCommands.registerCommand("RollerIntake", new RollerInCommand(rollerSubsystem));
     NamedCommands.registerCommand("PivotToOuttake", new PivotToOuttakeCommand(pivotSubsystem));
     NamedCommands.registerCommand("RollerOuttake", new RollerOutCommand(rollerSubsystem));
+    NamedCommands.registerCommand("PivotToVertical", new PivotUp87Command(pivotSubsystem));
+    NamedCommands.registerCommand("ElevatorToL1", new ElevatorToL1Command(elevatorSubsystem));
+    NamedCommands.registerCommand("ElevatorToSource", new ElevatorToSourceCommand(elevatorSubsystem));
+    NamedCommands.registerCommand("PivotToSource",new PivotToSourceCommand(pivotSubsystem));
     autoChooser = AutoBuilder.buildAutoChooserWithOptionsModifier(
       (stream) -> isCompetition
-      ? stream.filter(auto -> auto.getName().startsWith("Test"))
+      ? stream.filter(auto -> auto.getName().startsWith("Ida"))
       : stream
     );
     SmartDashboard.putData("AutoChooser", autoChooser);

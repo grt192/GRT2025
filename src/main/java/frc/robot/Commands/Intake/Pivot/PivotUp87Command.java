@@ -9,7 +9,7 @@ public class PivotUp87Command extends Command{
 
    public PivotUp87Command(PivotSubsystem pivotSubsystem){
        this.pivotSubsystem = pivotSubsystem;
-       this.addRequirements(pivotSubsystem);
+       addRequirements(pivotSubsystem);
    }
 
    @Override

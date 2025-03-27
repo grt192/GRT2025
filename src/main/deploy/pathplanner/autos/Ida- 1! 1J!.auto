@@ -7,13 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3Alg!"
+            "pathName": "Leave 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "1J!"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.2
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ElevatorToAlgae"
+            "name": "ElevatorToL4"
           }
         },
         {
@@ -27,15 +39,15 @@
           "data": {
             "commands": [
               {
-                "type": "wait",
+                "type": "named",
                 "data": {
-                  "waitTime": 4.0
+                  "name": "RollerOuttake"
                 }
               },
               {
-                "type": "named",
+                "type": "wait",
                 "data": {
-                  "name": "RollerIntake"
+                  "waitTime": 3.0
                 }
               }
             ]
@@ -44,7 +56,7 @@
         {
           "type": "named",
           "data": {
-            "name": "PivotToHorizontal"
+            "name": "PivotToVertical"
           }
         },
         {
@@ -57,6 +69,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Pinnacles",
+  "folder": "idaho",
   "choreoAuto": false
 }
