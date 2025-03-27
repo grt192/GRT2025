@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.8132066218613536,
-        "y": 7.203961688045852
+        "x": 1.2592807553220524,
+        "y": 6.861288039028384
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.960853942178791,
-        "y": 7.002218611824931
+        "x": 1.4295121573340117,
+        "y": 6.678199891489985
       },
       "isLocked": false,
-      "linkedName": "LS 1"
+      "linkedName": "LS 2"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 5.241118344907407
       },
       "prevControl": {
-        "x": 3.408961792953674,
-        "y": 5.452170260222183
+        "x": 3.326912638391725,
+        "y": 5.366899929223477
       },
       "nextControl": null,
       "isLocked": false,
@@ -37,8 +37,8 @@
         "y": 3.0
       },
       "rotationOffset": 0.0,
-      "minWaypointRelativePos": 0.25,
-      "maxWaypointRelativePos": 0.75,
+      "minWaypointRelativePos": 0.24037812288993934,
+      "maxWaypointRelativePos": 0.6482106684672507,
       "name": "Point Towards Zone"
     }
   ],
@@ -59,7 +59,7 @@
   "folder": "Left Source",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 127.76528001028989
+    "rotation": 125.61785692942486
   },
   "useDefaultConstraints": true
 }

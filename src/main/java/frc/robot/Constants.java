@@ -39,7 +39,7 @@ public final class Constants {
     public static final double L3_POS = 90;
     // public static final double L3_POS = 0.6 * dutyCycletoticks; //change
     // public static final double L4_POS = 0.9 * dutyCycletoticks; //change
-    public static final double L4_POS = 123.;
+    public static final double L4_POS = 123.5;
     public static final double GROUND_POS = 0.0;
     public static final double GROUND_ALGAE_L_POS = 5.9;
     public static final double DUTY_CYCLE_TO_GROUND_SPEED = 0.3;
@@ -51,7 +51,7 @@ public final class Constants {
     public static final double kD = .8; //change
     public static final double kS = 0;
     public static final double arbFF = 25; //30; //chang
-    public static final double FORWARD_LIMIT = 123; //change
+    public static final double FORWARD_LIMIT = 123.5; //change
     public static final double REVERSE_LIMIT = 0; //change
     public static final double CURRENT_LIMIT = 60;
     public static final double GEAR_RATIO = 20; //motor to axle
@@ -79,7 +79,7 @@ public final class Constants {
       public static final int ENCODER_ID = 20; //NEED TO CHANGE
       public static final String PIVOT_CAN_NAME = "rio";
 
-      public static final double PIVOT_KP = .07;
+      public static final double PIVOT_KP = .075;
       public static final double PIVOT_KI = 0.;
       public static final double PIVOT_KD = 0.00;
       public static final double PIVOT_KG = 200;
@@ -88,7 +88,7 @@ public final class Constants {
       public static final double PIVOT_MANUAL_SPEED = 0.15;
       public static final double SOURCE_POS =  40.13;
       public static final double OUTTAKE_POS = -22;
-      public static final double L4_POS = -10.289;
+      public static final double L4_POS = -11.289;
       public static final double GROUND_ALGAE_PIVOT_POS = -18.8;
       public static final double BARGE_POS = 56.8;
       public static final double PIVOT_TOLERANCE = 0.1;
@@ -202,7 +202,7 @@ public final class Constants {
       new CameraConfig(//front top
         "5",
         new Transform3d(
-          
+
           0.031, -0.4013,0.981,
           new Rotation3d(0, -Math.PI / 6.,  Math.PI/12.)
         ),

@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 1.8132066218613536,
-        "y": 7.203961688045852
+        "x": 1.2592807553220524,
+        "y": 6.861288039028384
       },
       "prevControl": {
-        "x": 1.948452699759614,
-        "y": 6.993703517186459
+        "x": 1.394526833220313,
+        "y": 6.651029868168991
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "LS 1"
+      "linkedName": "LS 2"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 127.76528001028989
+    "rotation": 125.61785692942486
   },
   "reversed": false,
   "folder": "Left Source",

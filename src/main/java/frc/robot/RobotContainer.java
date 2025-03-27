@@ -344,7 +344,7 @@ public class RobotContainer {
     manualPivotTrigger.onTrue(
       new RunCommand(
         () -> {
-          pivotSubsystem.setPower(-mechController.getLeftY());
+          pivotSubsystem.setPower(mechController.getLeftY() * .8);
         },
         pivotSubsystem
       )
