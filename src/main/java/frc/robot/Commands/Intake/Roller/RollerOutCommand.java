@@ -20,7 +20,9 @@ public class RollerOutCommand extends Command{
 
     @Override
     public boolean isFinished(){
-        return Math.abs(rollerSubsystem.getClosedLoopError())
-            < RollerConstants.ROLLER_TOLERANCE;
+    //     return Math.abs(rollerSubsystem.getClosedLoopError())
+    //         < RollerConstants.ROLLER_TOLERANCE;
+    // }
+        return false;
     }
 }
