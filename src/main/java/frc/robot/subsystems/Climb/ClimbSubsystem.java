@@ -45,7 +45,7 @@ public class ClimbSubsystem extends SubsystemBase {
       .withSoftwareLimitSwitch(
         new SoftwareLimitSwitchConfigs()
           .withForwardSoftLimitEnable(true)
-          .withForwardSoftLimitThreshold(55)
+          .withForwardSoftLimitThreshold(60)
       );
       
 
@@ -58,7 +58,7 @@ public class ClimbSubsystem extends SubsystemBase {
     if(DebugConstants.MASTER_DEBUG || ClimbConstants.CLIMB_DEBUG){
       motor.publishStats();
     }
-    System.out.println(motor.getPosition());
+    // System.out.println(motor.getPosition());
   }
 
   /**

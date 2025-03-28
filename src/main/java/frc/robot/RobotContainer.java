@@ -35,6 +35,7 @@ import frc.robot.Commands.Intake.Roller.RollerStopCommand;
 import frc.robot.Commands.Elevator.ElevatorToAlgaeCommand;
 import frc.robot.Commands.Elevator.ElevatorToGroundAlgaeCommand;
 import frc.robot.Commands.Elevator.ElevatorToGroundCommand;
+import frc.robot.Commands.Elevator.ElevatorToHighAlgaeCommand;
 import frc.robot.Commands.Elevator.ElevatorToL1Command;
 import frc.robot.Commands.Elevator.ElevatorToL2Command;
 import frc.robot.Commands.Elevator.ElevatorToL3Command;
@@ -325,6 +326,8 @@ public class RobotContainer {
 
     mechController.povUp().onTrue((new PivotToBarge(pivotSubsystem)).andThen(new ElevatorToL4Command(elevatorSubsystem)));
     mechController.povLeft().onTrue(new ElevatorToSourceCommand(elevatorSubsystem).alongWith(new PivotToSourceCommand(pivotSubsystem)));
+    
+    mechController.R1().onTrue(new ElevatorToHighAlgaeCommand(elevatorSubsystem).alongWith(new PivotToL4Command(pivotSubsystem)));
 
     //UPDATED
     mechController.triangle().onTrue(new ElevatorToL4Command(elevatorSubsystem).andThen(new PivotToL4Command(pivotSubsystem)));
@@ -369,7 +372,7 @@ public class RobotContainer {
           rollerSubsystem.setRollerSpeed(.8 * ((mechController.getR2Axis() + 1.) / 2.)); 
         }
         else {
-          rollerSubsystem.setRollerSpeed(-.03);
+          rollerSubsystem.setRollerSpeed(-.04);
         }
       hasPiece = true;
       }, rollerSubsystem), 
@@ -378,7 +381,7 @@ public class RobotContainer {
         rollerSubsystem.setRollerSpeed(.1 * (mechController.getR2Axis() - mechController.getL2Axis()));
       hasPiece = false;
       }, rollerSubsystem), 
-      () -> rollerSubsystem.getCoralSensor() )); // 
+      () -> rollerSubsystem.getCoralSensor() || rollerSubsystem.getAlgaeSensor())); // 
     }
 
   //Binds the intake commands to the mech controller

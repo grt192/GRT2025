@@ -35,13 +35,14 @@ public final class Constants {
     public static final double L1_POS = 0.3 * dutyCycletoticks; //change
     public static final double L2_POS = 60;
     public static final double algae_POS = 54.696;
+    public static final double high_algae_POS = 83;
     // public static final double L2_POS = 0.5 * dutyCycletoticks; //change
     public static final double L3_POS = 90;
     // public static final double L3_POS = 0.6 * dutyCycletoticks; //change
     // public static final double L4_POS = 0.9 * dutyCycletoticks; //change
     public static final double L4_POS = 123.5;
     public static final double GROUND_POS = 0.0;
-    public static final double GROUND_ALGAE_L_POS = 5.9;
+    public static final double GROUND_ALGAE_L_POS = 8.076;
     public static final double DUTY_CYCLE_TO_GROUND_SPEED = 0.3;
     public static final double ELEVATOR_TOLERANCE = 8; //change
     public static final int MOTOR_ID = 13; //change
