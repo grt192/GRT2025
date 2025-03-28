@@ -53,7 +53,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 3.0
+                  "waitTime": 2.6
                 }
               }
             ]
@@ -145,6 +145,12 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.2
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "ElevatorToL4"
@@ -163,7 +169,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "RollerIntake"
+                  "name": "RollerOuttake"
                 }
               },
               {

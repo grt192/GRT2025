@@ -378,10 +378,10 @@ public class RobotContainer {
       }, rollerSubsystem), 
       new InstantCommand( () -> {
         // System.out.println(hasPiece);
-        rollerSubsystem.setRollerSpeed(.1 * (mechController.getR2Axis() - mechController.getL2Axis()));
+        rollerSubsystem.setRollerSpeed(.2 * (mechController.getR2Axis() - mechController.getL2Axis()));
       hasPiece = false;
       }, rollerSubsystem), 
-      () -> rollerSubsystem.getCoralSensor() || rollerSubsystem.getAlgaeSensor())); // 
+      () -> rollerSubsystem.getCoralSensor())); // 
     }
 
   //Binds the intake commands to the mech controller
