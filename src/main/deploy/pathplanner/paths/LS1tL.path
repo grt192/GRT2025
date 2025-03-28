@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4295121573340117,
-        "y": 6.678199891489985
+        "x": 1.4917671292384496,
+        "y": 6.677021609657031
       },
       "isLocked": false,
       "linkedName": "LS 2"
@@ -20,8 +20,8 @@
         "y": 5.241118344907407
       },
       "prevControl": {
-        "x": 3.326912638391725,
-        "y": 5.366899929223477
+        "x": 3.16875,
+        "y": 5.428999999999999
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,7 +29,21 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 2.3,
+        "maxAcceleration": 2.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [
     {
       "fieldPosition": {
@@ -37,8 +51,8 @@
         "y": 3.0
       },
       "rotationOffset": 0.0,
-      "minWaypointRelativePos": 0.24037812288993934,
-      "maxWaypointRelativePos": 0.6482106684672507,
+      "minWaypointRelativePos": 0.4317617866004963,
+      "maxWaypointRelativePos": 0.4635235732009959,
       "name": "Point Towards Zone"
     }
   ],
@@ -59,7 +73,7 @@
   "folder": "Left Source",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 125.61785692942486
+    "rotation": 126.71295602046197
   },
   "useDefaultConstraints": true
 }

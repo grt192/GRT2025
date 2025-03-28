@@ -168,7 +168,7 @@ public final class Constants {
   }
   public static class DebugConstants{
     public static final boolean MASTER_DEBUG = false;
-    public static final boolean PIVOT_DEBUG = true;
+    public static final boolean PIVOT_DEBUG = false;
     public static final boolean ROLLER_DEBUG = false;
   }
   public static class VisionConstants{
