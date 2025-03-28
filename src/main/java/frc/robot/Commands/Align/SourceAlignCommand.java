@@ -45,7 +45,7 @@ public class SourceAlignCommand extends Command {
     int index = currentPoseList.indexOf(currentPose);
     followPath = AlignConstants.sourcePathList.get(index);
     System.out.println(followPath);
-    alignSubsystem.runAlignPath(followPath, swerveSubsystem.getRobotPosition(), true ).schedule();
+    alignSubsystem.runAlignPath(followPath, swerveSubsystem.getRobotPosition()).schedule();
    }
 
    @Override

@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.5701782862421,
-        "y": 6.513201316704858
+        "x": 5.5521313796397385,
+        "y": 2.2311024495087337
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4029080963480471,
-        "y": 6.698998742878655
+        "x": 5.396406833940468,
+        "y": 2.4266781787461724
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.2592807553220524,
-        "y": 6.861288039028384
+        "x": 5.337835613400655,
+        "y": 2.637989987036026
       },
       "prevControl": {
-        "x": 1.387165545803479,
-        "y": 6.646473048016301
+        "x": 5.452538353563922,
+        "y": 2.4158565104976213
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "LS 2"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -35,7 +35,7 @@
       "minWaypointRelativePos": 0,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 2.2,
+        "maxVelocity": 2.0,
         "maxAcceleration": 3.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
@@ -56,13 +56,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 126.71295602046197
+    "rotation": 118.82697734220503
   },
   "reversed": false,
-  "folder": "Aligning",
+  "folder": "Algae Align",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 124.10590426803203
+    "rotation": 119.4148723418107
   },
   "useDefaultConstraints": true
 }

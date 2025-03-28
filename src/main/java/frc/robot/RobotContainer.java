@@ -42,6 +42,7 @@ import frc.robot.Commands.Elevator.ElevatorToL3Command;
 import frc.robot.Commands.Elevator.ElevatorToL4Command;
 import frc.robot.Commands.Elevator.ElevatorToLimitSwitchCommand;
 import frc.robot.Commands.Elevator.ElevatorToSourceCommand;
+import frc.robot.Commands.Align.AlgaeAlignCommand;
 import frc.robot.Commands.Align.LRReefAlignCommand;
 import frc.robot.Commands.Align.SourceAlignCommand;
 // Commands - Climb
@@ -105,7 +106,7 @@ public class RobotContainer {
   private Trigger manualElevatorTrigger;
   private Trigger manualPivotTrigger;
   private Trigger cButton, oButton;
-  private Trigger driveLBumper, driveRBumper, driveRTrigger;
+  private Trigger driveLBumper, driveRBumper, driveRTrigger,driveLTrigger;
 
   private Trigger createTrigger, optionTrigger;
   private Boolean hasPiece = false;
@@ -160,6 +161,7 @@ public class RobotContainer {
     driveLBumper = new Trigger(() -> driveController.getLeftBumper());
     driveRBumper = new Trigger(() -> driveController.getRightBumper());
     driveRTrigger = new Trigger(() -> (driveController.getRightTrigger()));
+    driveLTrigger = new Trigger(() -> (driveController.getLeftTrigger()));
     
 
     bindElevator();
@@ -249,7 +251,11 @@ public class RobotContainer {
     driveRTrigger.onTrue(
       new SourceAlignCommand(swerveSubsystem, fmsSubsystem).onlyWhile(() -> driveController.getForwardPower() 
       <= 0.05 && driveController.getLeftPower() <= 0.05));
-  
+    
+    driveLTrigger.onTrue(
+      new AlgaeAlignCommand(swerveSubsystem, fmsSubsystem).onlyWhile(() -> driveController.getForwardPower()
+      <= 0.05 && driveController.getLeftPower() <= 0.05));
+
 
   }
 

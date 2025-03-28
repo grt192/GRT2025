@@ -362,6 +362,41 @@ public final class Constants {
      // RS_3alignName
     );
 
+    public static String algae_1 = "Algae Align 1";
+    public static String algae_2 = "Algae Align 2";
+    public static String algae_3 = "Algae Align 3";
+    public static String algae_4 = "Algae Align 4";
+    public static String algae_5 = "Algae Align 5";
+    public static String algae_6 = "Algae Align 6";
+
+    public static List<String> algaeAlignNames = List.of(
+      algae_1,
+      algae_2,
+      algae_3,
+      algae_4,
+      algae_5,
+      algae_6
+    );
+
+    public static List<Pose2d> blueAlgaeAlignPoses = List.of(
+      AlignUtil.getAlignPath(algae_1).getStartingHolonomicPose().get(),
+      AlignUtil.getAlignPath(algae_2).getStartingHolonomicPose().get(),
+      AlignUtil.getAlignPath(algae_3).getStartingHolonomicPose().get(),
+      AlignUtil.getAlignPath(algae_4).getStartingHolonomicPose().get(),
+      AlignUtil.getAlignPath(algae_5).getStartingHolonomicPose().get(),
+      AlignUtil.getAlignPath(algae_6).getStartingHolonomicPose().get()
+    );
+
+    public static List<Pose2d> redAlgaeAlignPoses = List.of(
+      AlignUtil.getAlignPath(algae_1).flipPath().getStartingHolonomicPose().get(),
+      AlignUtil.getAlignPath(algae_2).flipPath().getStartingHolonomicPose().get(),
+      AlignUtil.getAlignPath(algae_3).flipPath().getStartingHolonomicPose().get(),
+      AlignUtil.getAlignPath(algae_4).flipPath().getStartingHolonomicPose().get(),
+      AlignUtil.getAlignPath(algae_5).flipPath().getStartingHolonomicPose().get(),
+      AlignUtil.getAlignPath(algae_6).flipPath().getStartingHolonomicPose().get()
+    );
+    
+
 
     public static double distanceTolerance = .47; 
   }

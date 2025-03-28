@@ -52,7 +52,7 @@ public class AlignUtil {
      * @param pathName name of the path
      */
 
-    public Command runAlignPath (String pathName, Pose2d currentPos, Boolean onFly) {
+    public Command runAlignPath (String pathName, Pose2d currentPose) {
         Translation2d currentTrans = swerveSubsystem.getRobotPosition().getTranslation();
         Translation2d pathStartTrans = getAlignPath(pathName).getStartingHolonomicPose().get().getTranslation();
 

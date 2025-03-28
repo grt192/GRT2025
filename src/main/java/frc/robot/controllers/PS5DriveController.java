@@ -65,6 +65,10 @@ public class PS5DriveController extends BaseDriveController{
         return driveController.getR2Axis() > .1;
     }
 
+    public boolean getLeftTrigger(){
+        return driveController.getL2Axis() > .1;
+    }
+
     @Override
     public void bindDriverHeadingReset(
         Runnable command, Subsystem requiredSubsystem

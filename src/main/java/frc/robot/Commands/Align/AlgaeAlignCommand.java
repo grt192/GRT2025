@@ -17,44 +17,33 @@ import frc.robot.util.AlignUtil;
 import frc.robot.Constants.AlignConstants;
 import edu.wpi.first.math.geometry.Translation2d;
 
-public class LRReefAlignCommand extends Command{
+public class AlgaeAlignCommand extends Command{
     static SwerveSubsystem swerveSubsystem;
     static FieldManagementSubsystem fmsSubsystem;
     static AlignUtil alignSubsystem;
-    static List<Pose2d> currentRightPoseList;
-    static List<Pose2d> currentLeftPoseList;
-    Boolean isRight;
+    static List<Pose2d> currentPoseList;
     static PathPlannerPath getAlignPath;
     private static String followPath;
     
-    public LRReefAlignCommand(SwerveSubsystem swerveSubsystem, FieldManagementSubsystem fmsSubsystem, Boolean isRight) {
+    public AlgaeAlignCommand (SwerveSubsystem swerveSubsystem, FieldManagementSubsystem fmsSubsystem) {
         this.swerveSubsystem = swerveSubsystem;
         this.fmsSubsystem = fmsSubsystem;
         alignSubsystem = new AlignUtil(swerveSubsystem, swerveSubsystem.getRobotPosition());
-        this.isRight = isRight;
     }
 
     @Override
     public void initialize() {
         if (fmsSubsystem.isRedAlliance()) {
-            currentRightPoseList = AlignConstants.redRightReefPoseList;
-            currentLeftPoseList = AlignConstants.redLeftReefPoseList;
+            currentPoseList = AlignConstants.redAlgaeAlignPoses;
         }
         else {
-            currentRightPoseList = AlignConstants.blueRightReefPoseList;
-            currentLeftPoseList = AlignConstants.blueLeftReefPoseList;
+            currentPoseList = AlignConstants.blueAlgaeAlignPoses;
         }
-        if (isRight){
-            Pose2d closestRight = swerveSubsystem.getRobotPosition().nearest(currentRightPoseList);
-            int index = currentRightPoseList.indexOf(closestRight);
-            followPath = AlignConstants.reefPathList.get(2 * index + 1);
-        }
-        else {
-            Pose2d closestLeft = swerveSubsystem.getRobotPosition().nearest(currentLeftPoseList);
-            // System.out.println(swerveSubsystem.getRobotPosition());
-            int index = currentLeftPoseList.indexOf(closestLeft);
-            followPath = AlignConstants.reefPathList.get(2 * index);
-        }
+        
+        Pose2d closestPose = swerveSubsystem.getRobotPosition().nearest(currentPoseList);
+        int index  = currentPoseList.indexOf(closestPose);
+        followPath = AlignConstants.algaeAlignNames.get(index);
+
         System.out.println("InITing");
         alignSubsystem.runAlignPath(followPath, swerveSubsystem.getRobotPosition()).schedule();
     }
