@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.846106557377049,
-        "y": 2.1763192223837198
+        "x": 1.8332096117650027,
+        "y": 2.2445452766765275
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0916929015902754,
-        "y": 2.1295501349863515
+        "x": 2.0787959559782294,
+        "y": 2.197776189279159
       },
       "isLocked": false,
       "linkedName": "GroundAlg"
@@ -60,7 +60,18 @@
       }
     }
   ],
-  "pointTowardsZones": [],
+  "pointTowardsZones": [
+    {
+      "fieldPosition": {
+        "x": 5.9,
+        "y": 0.0
+      },
+      "rotationOffset": 0.0,
+      "minWaypointRelativePos": 0.25,
+      "maxWaypointRelativePos": 0.75,
+      "name": "Point Towards Zone"
+    }
+  ],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.227,
@@ -78,7 +89,7 @@
   "folder": "Leave 3",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 178.99933267345406
+    "rotation": 179.99999999971465
   },
   "useDefaultConstraints": true
 }

@@ -25,7 +25,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.2
           }
         },
         {
@@ -74,6 +74,25 @@
                 "type": "named",
                 "data": {
                   "name": "ElevatorToGround"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RollerIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.2
                 }
               },
               {

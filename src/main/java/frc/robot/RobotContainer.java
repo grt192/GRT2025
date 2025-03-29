@@ -33,6 +33,7 @@ import frc.robot.Commands.Intake.Roller.RollerStopCommand;
 
 // Commands - Elevator
 import frc.robot.Commands.Elevator.ElevatorToAlgaeCommand;
+import frc.robot.Commands.Elevator.ElevatorToCoralAlgaeCommand;
 import frc.robot.Commands.Elevator.ElevatorToGroundAlgaeCommand;
 import frc.robot.Commands.Elevator.ElevatorToGroundCommand;
 import frc.robot.Commands.Elevator.ElevatorToHighAlgaeCommand;
@@ -106,7 +107,7 @@ public class RobotContainer {
   private Trigger manualElevatorTrigger;
   private Trigger manualPivotTrigger;
   private Trigger cButton, oButton;
-  private Trigger driveLBumper, driveRBumper, driveRTrigger,driveLTrigger;
+  private Trigger driveLBumper, driveRBumper, driveRTrigger, driveLTrigger;
 
   private Trigger createTrigger, optionTrigger;
   private Boolean hasPiece = false;
@@ -175,7 +176,7 @@ public class RobotContainer {
     constructNetworkTableListeners();
 
     NamedCommands.registerCommand("ElevatorToGround", new ElevatorToGroundCommand(elevatorSubsystem));
-    NamedCommands.registerCommand("ElevatorToAlgae", new ElevatorToAlgaeCommand(elevatorSubsystem));
+    NamedCommands.registerCommand("ElevatorToAlgae", new ElevatorToCoralAlgaeCommand(elevatorSubsystem));
     NamedCommands.registerCommand("PivotToHorizontal", new PivotToHorizontalCommand(pivotSubsystem));
     NamedCommands.registerCommand("ElevatorToL4", new ElevatorToL4Command(elevatorSubsystem));
     NamedCommands.registerCommand("RollerIntake", new RollerInCommand(rollerSubsystem));

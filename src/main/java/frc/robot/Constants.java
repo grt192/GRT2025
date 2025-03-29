@@ -36,6 +36,7 @@ public final class Constants {
     public static final double L2_POS = 60;
     public static final double algae_POS = 54.696;
     public static final double high_algae_POS = 83;
+    public static final double coralAlgae_POS = 15; 
     // public static final double L2_POS = 0.5 * dutyCycletoticks; //change
     public static final double L3_POS = 90;
     // public static final double L3_POS = 0.6 * dutyCycletoticks; //change
