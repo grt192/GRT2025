@@ -7,19 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Leave 2"
+            "pathName": "Leave 1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "2G!"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.2
+            "pathName": "1J!"
           }
         },
         {
@@ -35,19 +29,19 @@
           }
         },
         {
-          "type": "race",
+          "type": "deadline",
           "data": {
             "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.0
+                }
+              },
               {
                 "type": "named",
                 "data": {
                   "name": "RollerOuttake"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 3.0
                 }
               }
             ]
@@ -68,7 +62,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "G! Alg1!"
+            "pathName": "JtA1"
           }
         },
         {
@@ -84,51 +78,64 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "A1tA2"
+                }
+              },
               {
                 "type": "named",
                 "data": {
                   "name": "RollerIntake"
                 }
-              },
+              }
+            ]
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 3.0
+                  "waitTime": 1.0
                 }
               },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Alg1align"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
               {
                 "type": "named",
                 "data": {
                   "name": "RollerIntake"
                 }
-              },
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "alg1alignBack"
+                  "pathName": "A2tA1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RollerIntake"
                 }
               }
             ]
           }
         },
         {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -147,52 +154,52 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RollerIntake"
+                }
+              },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "algBarge"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RollerIntake"
+                  "pathName": "A1tB"
                 }
               }
             ]
           }
         },
         {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.2
-                }
-              },
               {
                 "type": "named",
                 "data": {
                   "name": "RollerIntake"
                 }
-              }
-            ]
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
+              },
               {
                 "type": "named",
                 "data": {
                   "name": "PivotToSource"
                 }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ElevatorToL4"
+                }
               },
               {
                 "type": "named",
@@ -207,35 +214,16 @@
           "type": "deadline",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "elevatorToL4"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RollerIntake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "RollerOuttake"
-                }
-              },
               {
                 "type": "wait",
                 "data": {
                   "waitTime": 2.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RollerOuttake"
                 }
               }
             ]

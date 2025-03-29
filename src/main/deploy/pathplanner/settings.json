@@ -3,12 +3,13 @@
   "robotLength": 0.991,
   "holonomicMode": true,
   "pathFolders": [
+    "Algae Align",
     "Aligning",
     "Leave 1",
     "Leave 2",
     "Leave 3",
     "Left Source",
-    "Algae Align",
+    "Idaho",
     "Right Source",
     "Testing"
   ],

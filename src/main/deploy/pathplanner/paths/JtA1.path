@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.295285011574073,
-        "y": 5.933031684027777
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 5.148632802873412,
-        "y": 5.730564082463434
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
         "x": 5.0496621817129625,
         "y": 5.456052879050926
       },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.182378150194821,
+        "y": 5.667917155676133
+      },
+      "isLocked": false,
+      "linkedName": "J Pose"
+    },
+    {
+      "anchor": {
+        "x": 5.271725743722708,
+        "y": 5.457413772516374
+      },
       "prevControl": {
-        "x": 5.190952640541398,
-        "y": 5.662297894127777
+        "x": 5.112581651518229,
+        "y": 5.264610354713649
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "J Pose"
+      "linkedName": "A1"
     }
   ],
   "rotationTargets": [],
@@ -35,7 +35,7 @@
       "minWaypointRelativePos": 0,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 2.2,
+        "maxVelocity": 1.5,
         "maxAcceleration": 3.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
@@ -59,10 +59,10 @@
     "rotation": -119.99999999999999
   },
   "reversed": false,
-  "folder": "Aligning",
+  "folder": "Idaho",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.6087870647367
+    "rotation": -119.99999999999999
   },
   "useDefaultConstraints": true
 }
