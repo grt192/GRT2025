@@ -27,8 +27,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.studica.frc.AHRS;
-import com.studica.frc.AHRS.NavXComType;
+import com.ctre.phoenix6.hardware.Pigeon2;
 
 public class SwerveSubsystem extends SubsystemBase {
 
@@ -45,7 +44,7 @@ public class SwerveSubsystem extends SubsystemBase {
     private final SwerveDrivePoseEstimator poseEstimator;
     private Rotation2d driverHeadingOffset = new Rotation2d();
 
-    private final AHRS ahrs;
+    private final Pigeon2 pigeon;
     private Timer lockTimer;
 
     //logging
@@ -63,10 +62,9 @@ public class SwerveSubsystem extends SubsystemBase {
         );
 
     public SwerveSubsystem() {
-        //initialize and reset the NavX gyro
-        ahrs = new AHRS(NavXComType.kMXP_SPI);
-        ahrs.reset();
-        ahrs.zeroYaw();
+        //initialize and reset the Pigeon gyro
+        pigeon = new Pigeon2(PIGEON_ID, "can");
+        pigeon.reset();
 
         frontLeftModule = new SwerveModule(FL_DRIVE, FL_STEER, FL_OFFSET);
         frontRightModule = new SwerveModule(FR_DRIVE, FR_STEER, FR_OFFSET);
@@ -209,7 +207,7 @@ public class SwerveSubsystem extends SubsystemBase {
      * @return The angle of the robot relative to the driver heading.
      */
     public Rotation2d getDriverHeading() {
-        Rotation2d robotHeading = ahrs.isConnected() ? getGyroHeading() : getRobotPosition().getRotation();
+        Rotation2d robotHeading = getGyroHeading();
         return robotHeading.minus(driverHeadingOffset);
     }
 
@@ -232,7 +230,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     /** Gets the gyro heading.*/
     private Rotation2d getGyroHeading() {
-        return Rotation2d.fromDegrees(-ahrs.getAngle()); // Might need to flip depending on the robot setup
+        return Rotation2d.fromDegrees(-pigeon.getYaw().getValueAsDouble()); // Might need to flip depending on the robot setup
     }
 
     /**

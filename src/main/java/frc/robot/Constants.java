@@ -126,6 +126,7 @@ public final class Constants {
   }
   /** Constants for the swerve subsystem. */
   public static class SwerveConstants {
+    public static final int PIGEON_ID = 8;
     public static final int FL_DRIVE = 0;
     public static final int FL_STEER = 1;
     public static final double FL_OFFSET = 0;
