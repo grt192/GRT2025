@@ -12,6 +12,7 @@ import frc.robot.subsystems.Elevator.ElevatorSubsystem;
 import frc.robot.subsystems.FieldManagementSubsystem.FieldManagementSubsystem;
 import frc.robot.subsystems.Intake.Pivot.PivotSubsystem;
 import frc.robot.subsystems.Intake.Roller.RollerSubsystem;
+import frc.robot.subsystems.Vision.TurretVisionSubsystem;
 import frc.robot.subsystems.Vision.VisionSubsystem;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.Climb.ClimbSubsystem;
@@ -133,20 +134,20 @@ public class RobotContainer {
   private NetworkTableEntry cameraSelectionEntry;
   private NetworkTableEntry autonTableEntry;
   private NetworkTableEntry autonTableSelection;
-  private final VisionSubsystem visionSubsystem1 = new VisionSubsystem(
+  private final TurretVisionSubsystem visionSubsystem1 = new TurretVisionSubsystem(
     VisionConstants.cameraConfigs[0]
   );
   
-  private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(
-    VisionConstants.cameraConfigs[1]
-  );
+  // private final VisionSubsystem visionSubsystem2 = new VisionSubsystem(
+  //   VisionConstants.cameraConfigs[1]
+  // );
 
-  private final VisionSubsystem visionSubsystem3 = new VisionSubsystem(
-    VisionConstants.cameraConfigs[2]
-  );
-  private final VisionSubsystem visionSubsystem4 = new VisionSubsystem(
-    VisionConstants.cameraConfigs[3]
-  );
+  // private final VisionSubsystem visionSubsystem3 = new VisionSubsystem(
+  //   VisionConstants.cameraConfigs[2]
+  // );
+  // private final VisionSubsystem visionSubsystem4 = new VisionSubsystem(
+  //   VisionConstants.cameraConfigs[3]
+  // );
 
   private final FieldManagementSubsystem fmsSubsystem = new FieldManagementSubsystem();
 
@@ -410,10 +411,10 @@ public class RobotContainer {
    */
   private void setVisionDataInterface(){
 
-    visionSubsystem1.setInterface(swerveSubsystem::addVisionMeasurements);
-    visionSubsystem2.setInterface(swerveSubsystem::addVisionMeasurements);
-    visionSubsystem3.setInterface(swerveSubsystem::addVisionMeasurements);
-    visionSubsystem4.setInterface(swerveSubsystem::addVisionMeasurements);
+    // visionSubsystem1.setInterface(swerveSubsystem::addVisionMeasurements);
+    // visionSubsystem2.setInterface(swerveSubsystem::addVisionMeasurements);
+    // visionSubsystem3.setInterface(swerveSubsystem::addVisionMeasurements);
+    // visionSubsystem4.setInterface(swerveSubsystem::addVisionMeasurements);
 
     // visionSubsystem2.setInterface(swerveSubsystem::addVisionMeasurements);
     // visionSubsystem3.setInterface(swerveSubsystem::addVisionMeasurements);

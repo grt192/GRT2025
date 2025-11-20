@@ -194,9 +194,9 @@ public final class Constants {
     };
     public static final CameraConfig[] cameraConfigs = new CameraConfig[]{//back top
       new CameraConfig(
-        "7",
+        "5",
         new Transform3d(
-          -0.019, -0.3613, 0.981,
+          -0.019, -0.3613, 0,
           new Rotation3d(0, -Math.PI/6., Math.PI*17./18.)
         ),
         PoseStrategy.LOWEST_AMBIGUITY
