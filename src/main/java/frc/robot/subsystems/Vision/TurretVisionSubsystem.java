@@ -110,7 +110,7 @@ public class TurretVisionSubsystem extends SubsystemBase {
         double deltaT = currentTimestamp-lastTimestamp;
         lastTimestamp = currentTimestamp;
         
-        Translation3d camTranslation = 
+        Translation3d translation = 
         closestTarget.getBestCameraToTarget().getTranslation();
 
         angleError = Math.toDegrees(Math.atan(translation.getY()/translation.getX()));
@@ -151,7 +151,7 @@ public class TurretVisionSubsystem extends SubsystemBase {
         // Initialize the camera with its name
         baseServo = new Servo(0);
         // turrServo = new Servo(1);
-        Translation3d translation = 
+        camTranslation = 
         closestTarget.getBestCameraToTarget().getTranslation();
 
 
