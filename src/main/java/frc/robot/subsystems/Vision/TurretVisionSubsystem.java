@@ -151,9 +151,7 @@ public class TurretVisionSubsystem extends SubsystemBase {
         // Initialize the camera with its name
         baseServo = new Servo(0);
         // turrServo = new Servo(1);
-        camTranslation = 
-        closestTarget.getBestCameraToTarget().getTranslation();
-
+        camTranslation = (cameraConfig.getCameraPose()).getTranslation();
 
         // azimuth = 90;
         setBaseAngle(0);
