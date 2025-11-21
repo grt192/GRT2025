@@ -195,9 +195,9 @@ public final class Constants {
     public static final CameraConfig[] cameraConfigs = new CameraConfig[]{//back top
       new CameraConfig(
         "5",
-        new Transform3d(
-          -0.019, -0.3613, 0,
-          new Rotation3d(0, -Math.PI/6., Math.PI*17./18.)
+        new Transform3d(//turret cam offsets
+          0.2286, -0.3048 , 0.3048 ,
+          new Rotation3d(0, 0, 0)
         ),
         PoseStrategy.LOWEST_AMBIGUITY
       ),
