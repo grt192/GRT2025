@@ -69,7 +69,7 @@ public class TurretVisionSubsystem extends SubsystemBase {
     private double azimuthError;
     PhotonTrackedTarget closestTarget;
     private double lastTimestamp = 0.0;
-    Translation3d translation;
+    Translation3d camTranslation;
     int hasFound = 0;
     boolean hasFoundAtleast1 = false;
     boolean autoMode = true;
@@ -82,7 +82,7 @@ public class TurretVisionSubsystem extends SubsystemBase {
 
         // Rotation3d newCamRotation = EulerConversion.zxyToXyz(newAngle,0.0,0.0);
 
-        photonPoseEstimator.setRobotToCameraTransform(new Transform3d(translation,new Rotation3d(0,0,-newAngle)));
+        photonPoseEstimator.setRobotToCameraTransform(new Transform3d(camTranslation,new Rotation3d(0,0,-newAngle)));
 
         // angle  = newAngle;
         // azimuth = newTurrAngle;
@@ -110,7 +110,7 @@ public class TurretVisionSubsystem extends SubsystemBase {
         double deltaT = currentTimestamp-lastTimestamp;
         lastTimestamp = currentTimestamp;
         
-        Translation3d translation = 
+        Translation3d camTranslation = 
         closestTarget.getBestCameraToTarget().getTranslation();
 
         angleError = Math.toDegrees(Math.atan(translation.getY()/translation.getX()));
