@@ -138,7 +138,7 @@ public class TurretVisionSubsystem extends SubsystemBase {
     public void sweep(){
         if (autoMode){
         angle = 0;
-        // angle += angleSweepSpeed;
+        angle += angleSweepSpeed;
         // azimuth += azimuthSweepSpeed;
         if (angle >= servoFOV){angle = servoFOV;angleSweepSpeed = -5;}else if (angle <= -servoFOV){angle = -servoFOV;angleSweepSpeed = 5;}
         if (azimuth >= servoFOV){azimuth = servoFOV;azimuthSweepSpeed = -3;}else if (azimuth <= -servoFOV){azimuth = -servoFOV;azimuthSweepSpeed = 3;}
