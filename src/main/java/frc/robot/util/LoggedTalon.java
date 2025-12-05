@@ -20,6 +20,8 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEvent;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.util.datalog.DoubleLogEntry;
+import frc.robot.util.PIDScoreGame;
+
 import edu.wpi.first.wpilibj.DataLogManager;
 
 import static frc.robot.Constants.DebugConstants.MASTER_DEBUG;
@@ -28,11 +30,13 @@ public class LoggedTalon{
     private final TalonFX motor;
 
     private final int canId;
+
     private double[] pidsvg = new double[6];
 
     private NetworkTableInstance ntInstance;
     private NetworkTable motorStatsTable;
 
+    private PIDScoreGame PIDgame;
     private DoublePublisher positionPublisher;
     private DoublePublisher veloPublisher;
     private DoublePublisher appliedVlotsPublisher;
@@ -87,6 +91,7 @@ public class LoggedTalon{
         if(MASTER_DEBUG){
             enableDebug();
         }
+        PIDgame = new PIDScoreGame("elevatir", 0.1,0.1);
     }
 
     /**
@@ -95,6 +100,7 @@ public class LoggedTalon{
      */
     public void setPositionReference(double position){
         targetPosition = position;
+        PIDgame.setDesiredPosition(position);
         motor.setControl(new PositionTorqueCurrentFOC(position));
     }
 
@@ -368,6 +374,9 @@ public class LoggedTalon{
         targetDutyCyclePublisher.set(targetDutyCycle);
         targetTorqueCurrentFOCPublisher.set(targetTorqueCurrentFOC);
         closedLoopErrorPublisher.set(motor.getClosedLoopError().getValueAsDouble());
+
+        PIDgame.setCurrentPosition(motor.getPosition().getValueAsDouble());
+
     }    
 
     /**
