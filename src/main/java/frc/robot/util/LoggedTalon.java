@@ -91,7 +91,7 @@ public class LoggedTalon{
         if(MASTER_DEBUG){
             enableDebug();
         }
-        PIDgame = new PIDScoreGame("elevatir", 0.1,0.1);
+        PIDgame = new PIDScoreGame("elevatir", 3.0,3.0);
     }
 
     /**
@@ -100,7 +100,6 @@ public class LoggedTalon{
      */
     public void setPositionReference(double position){
         targetPosition = position;
-        PIDgame.setDesiredPosition(position);
         motor.setControl(new PositionTorqueCurrentFOC(position));
     }
 
@@ -114,6 +113,7 @@ public class LoggedTalon{
      */
     public void setPositionReferenceWithVoltage(double position, double arbFF){
         targetPosition = position;
+
         motor.setControl(new PositionVoltage(position).withFeedForward(arbFF));
     }
 
@@ -124,9 +124,11 @@ public class LoggedTalon{
      */
     public void setPositionReferenceWithArbFF(double position, double arbFF){
         targetPosition = position;
+
         motor.setControl(
             new PositionTorqueCurrentFOC(position).withSlot(0).withFeedForward(arbFF)
         );
+
     }
 
     /**
@@ -376,6 +378,7 @@ public class LoggedTalon{
         closedLoopErrorPublisher.set(motor.getClosedLoopError().getValueAsDouble());
 
         PIDgame.setCurrentPosition(motor.getPosition().getValueAsDouble());
+        PIDgame.setDesiredPosition(targetPosition);
 
     }    
 

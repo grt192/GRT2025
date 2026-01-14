@@ -28,7 +28,7 @@ public class PIDScoreGame{
     private double desiredPos;
     private double velo;
     private double posError;
-    private boolean won;
+    private boolean won = false;
     private double timeForAction;
     private double veloMax;
     private double positionTolerance;
@@ -41,7 +41,6 @@ public class PIDScoreGame{
         initNT(name);
         this.veloMax = veloMax;
         this.positionTolerance = positionTolerance;
-        // initLogs(name);
     }
 
     /**
@@ -62,6 +61,7 @@ public class PIDScoreGame{
                 timeForAction = Timer.getFPGATimestamp() - setDesiredTimeStamp;
                 timeForActionPublisher.set(timeForAction);
                 won = true;
+                System.out.println("win");
             }
         }
 
@@ -71,8 +71,12 @@ public class PIDScoreGame{
      */
 
     public void setDesiredPosition(double desiredPos){
-        setDesiredTimeStamp = RobotController.getFPGATime();
+        if (won == true){
+        setDesiredTimeStamp = Timer.getFPGATimestamp();
+        }
         desiredPosPublisher.set(desiredPos);
+        this.desiredPos = desiredPos;
+
         won = false;
     }
 
